@@ -1,5 +1,6 @@
 import Card from "../components/card/Index";
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 
 const fetchedData = [
   {
@@ -69,6 +70,9 @@ const dateFormatter = (date: string): string => {
   return `${arr[0]}년 ${arr[1]}월 ${arr[2]}일`;
 };
 
+const BREAK_POINTS = [768, 1058, 1464, 1920];
+const mq = BREAK_POINTS.map((bp) => `@media (min-width:${bp}px)`);
+
 export default function Home() {
   return (
     <Container>
@@ -100,10 +104,12 @@ const Container = styled.div`
   background-color: orange;
   display: flex;
   justify-content: center;
+  padding: 8px;
 `;
 
 const CardContainer = styled.div`
-  width: min(900px, 100%);
+  /* width: min(900px, 100%); */
+  width: 100%;
   background-color: yellow;
   display: flex;
   flex-wrap: wrap;
