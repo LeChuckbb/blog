@@ -16,11 +16,20 @@ const Header: React.FC = () => {
 const Container = styled.div`
   padding: 16px;
   background-color: blue;
-  width: min(1200px, 100%);
-  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 64px;
+  width: min(1024px, 100%);
+  ${(props) => props.theme.mq[1]} {
+    width: 1024px;
+  }
+  ${(props) => props.theme.mq[2]} {
+    width: 1376px;
+  }
+  ${(props) => props.theme.mq[3]} {
+    width: 1728px;
+  }
 `;
 
 export default Header;

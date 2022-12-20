@@ -78,7 +78,7 @@ const CardBox = styled.div`
   */
   ${(props) => props.theme.mq[0]} {
     width: 47%;
-    max-width: calc(50% - 0.5rem);
+    max-width: calc(50% - 8px);
   }
   // 1058px 이상일 때
   ${(props) => props.theme.mq[1]} {

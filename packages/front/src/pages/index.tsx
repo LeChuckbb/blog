@@ -1,4 +1,4 @@
-import Card from "../components/card/Index";
+import Card from "../components/Card";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
@@ -75,37 +75,35 @@ const mq = BREAK_POINTS.map((bp) => `@media (min-width:${bp}px)`);
 
 export default function Home() {
   return (
-    <Container>
-      <CardContainer>
-        {fetchedData.map((data) => {
-          return (
-            <Card key={data.id}>
-              <Card.Thumbnail />
-              <Card.SecondSection>
-                <Card.TitleWrapper>
-                  <Card.Title>{data.title}</Card.Title>
-                  <Card.SubTitle>{data.subTitle}</Card.SubTitle>
-                </Card.TitleWrapper>
-                <Card.Date>{dateFormatter(data.date)}</Card.Date>
-              </Card.SecondSection>
-              <Card.ThirdSection>
-                <Card.Tags>{data.tags}</Card.Tags>
-              </Card.ThirdSection>
-            </Card>
-          );
-        })}
-      </CardContainer>
-    </Container>
+    <CardContainer>
+      {fetchedData.map((data) => {
+        return (
+          <Card key={data.id}>
+            <Card.Thumbnail />
+            <Card.SecondSection>
+              <Card.TitleWrapper>
+                <Card.Title>{data.title}</Card.Title>
+                <Card.SubTitle>{data.subTitle}</Card.SubTitle>
+              </Card.TitleWrapper>
+              <Card.Date>{dateFormatter(data.date)}</Card.Date>
+            </Card.SecondSection>
+            <Card.ThirdSection>
+              <Card.Tags>{data.tags}</Card.Tags>
+            </Card.ThirdSection>
+          </Card>
+        );
+      })}
+    </CardContainer>
   );
 }
 
-const Container = styled.div`
-  width: min(1200px, 100%);
-  background-color: orange;
-  display: flex;
-  justify-content: center;
-  padding: 8px;
-`;
+// const Container = styled.div`
+//   width: 100%;
+//   background-color: orange;
+//   display: flex;
+//   justify-content: center;
+//   padding: 8px;
+// `;
 
 const CardContainer = styled.div`
   /* width: min(900px, 100%); */
@@ -114,4 +112,13 @@ const CardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+  ${(props) => props.theme.mq[1]} {
+    width: 1024px;
+  }
+  ${(props) => props.theme.mq[2]} {
+    width: 1376px;
+  }
+  ${(props) => props.theme.mq[3]} {
+    width: 1728px;
+  }
 `;
