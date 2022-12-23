@@ -6,6 +6,6 @@ declare module "@emotion/react" {
     colors: {
       primary: string;
     };
-    mq: number[];
+    mq: string[];
   }
 }
