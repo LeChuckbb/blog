@@ -12,7 +12,7 @@ const options = {
       },
     ],
   },
-  apis: ["./src/swagger.yaml"],
+  apis: ["./src/settings/swagger.yaml"],
 };
 
 export default options;

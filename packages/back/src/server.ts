@@ -1,11 +1,11 @@
 import express, { Application } from "express";
 import mongoose from "mongoose";
-import options from "./swagger";
+import options from "./settings/swagger";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 import router from "./router";
-import "./env";
+import "./settings/env";
 
 const { MONGO_URI } = process.env;
 

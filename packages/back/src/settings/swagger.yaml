@@ -4,6 +4,9 @@ info:
   title: blog
   description: 개인 블로그
 servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/LeChuckbb/blog/1.0.0
   - description: blog
     url: http://localhost:8000/api/v1
 tags:
@@ -48,7 +51,7 @@ paths:
     get:
       tags:
         - post
-      summary: 게시글을 ID로 받아오기
+      summary: ID로 게시글 가져오기 - 게시글 상세보기 (working)
       parameters:
         - name: id
           in: path
@@ -62,6 +65,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Post"
+    patch:
+      tags:
+        - post
+      summary: ID로 게시글 일부 수정하기 (working)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+    delete:
+      tags:
+        - post
+      summary: ID로 게시글 삭제하기 (working)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+
+  /posts/findByPage:
+    get:
+      tags:
+        - post
+      summary: 페이지 단위로 가져오기 for infinite scroll. ?page= (working)
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+
 components:
   schemas:
     Post:

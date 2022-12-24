@@ -29,19 +29,9 @@ router.get("/:id", controller.get(model));
 router.post("/", controller.create(model));
 
 // 게시글 수정
-router.put("/", async (req, res) => {
-  try {
-  } catch (e) {
-    console.error(e);
-  }
-});
+router.put("/", controller.update(model));
 
 // 게시글 삭제
-router.delete("/", async (req, res) => {
-  try {
-  } catch (e) {
-    console.error(e);
-  }
-});
+// router.delete("/", controller.remove(model));
 
 export default router;

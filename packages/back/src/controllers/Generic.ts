@@ -88,9 +88,14 @@ const update =
       });
   };
 
+const remove =
+  (model: Model<any>) =>
+  (req: Request, res: Response, next: NextFunction) => {};
+
 export default {
   create,
   getAll,
   get,
   update,
+  remove,
 };
