@@ -23,7 +23,7 @@ const getAll =
 
     model
       .find<Document>({})
-      // .populate(populate || [])
+      .populate(populate || [])
       .then((results) => {
         console.log(results);
         return res.status(200).json({ results });
@@ -89,8 +89,28 @@ const update =
   };
 
 const remove =
-  (model: Model<any>) =>
-  (req: Request, res: Response, next: NextFunction) => {};
+  (model: Model<any>) => (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+
+    console.log(id);
+    model
+      .deleteOne({ _id: id })
+      .then((result) => {
+        if (result.deletedCount === 1) {
+          console.log("delete 성공");
+          return res.status(200).json({ message: "delete 성공" });
+        } else {
+          console.log("delete 실패");
+          return res
+            .status(204)
+            .json({ message: "delete 실패. 없는 id입니다." });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return res.status(500).json({ error });
+      });
+  };
 
 export default {
   create,

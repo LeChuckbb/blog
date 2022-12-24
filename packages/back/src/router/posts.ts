@@ -22,16 +22,19 @@ router.get("/test", async (req, res) => {
 // 게시글 목록 가져오기
 router.get("/", controller.getAll(model));
 
-// 게시글 목록 가져오기 (id)
-router.get("/:id", controller.get(model));
-
 // 게시글 작성
 router.post("/", controller.create(model));
+
+// 게시글 목록 가져오기 (id)
+router.get("/:id", controller.get(model));
 
 // 게시글 수정
 router.put("/", controller.update(model));
 
 // 게시글 삭제
-// router.delete("/", controller.remove(model));
+router.delete("/:id", controller.remove(model));
+
+// page로 게시글 가져오기
+// router.get("/findByPage", controller.)
 
 export default router;

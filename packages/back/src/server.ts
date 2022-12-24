@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import mongoose from "mongoose";
 import options from "./settings/swagger";
+import cors from "cors";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
@@ -8,6 +9,9 @@ import router from "./router";
 import "./settings/env";
 
 const { MONGO_URI } = process.env;
+const corsOptions = {
+  origin: ["http://localhost:3000"],
+};
 
 const app: Application = express();
 // mongoose <-> MongoDB 연결
@@ -26,6 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 const specs = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
+app.use(cors(corsOptions));
 app.use("/api/v1", router);
 
 app.listen(8000, () => {
