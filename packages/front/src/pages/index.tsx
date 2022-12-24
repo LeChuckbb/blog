@@ -1,6 +1,7 @@
 import Card from "../components/Card";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
+import { useQuery } from "react-query";
 
 const fetchedData = [
   {
@@ -74,6 +75,7 @@ const BREAK_POINTS = [768, 1058, 1464, 1920];
 const mq = BREAK_POINTS.map((bp) => `@media (min-width:${bp}px)`);
 
 export default function Home() {
+  const { data } = useQuery(["getPosts"]);
   return (
     <CardContainer>
       {fetchedData.map((data) => {

@@ -1,9 +1,8 @@
 import { Router } from "express";
-
-import Post from "./post";
+import Post from "./posts";
 
 const router = Router();
 
-router.use("/post", Post);
+router.use("/posts", Post);
 
 export default router;

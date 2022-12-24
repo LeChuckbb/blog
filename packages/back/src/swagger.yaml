@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: blog
+  description: 개인 블로그
+servers:
+  - description: blog
+    url: http://localhost:8000/api/v1
+tags:
+  - name: post
+    description: about posts
+paths:
+  /posts:
+    get:
+      tags:
+        - post
+      summary: 모든 게시글 가져오기
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: Invalid status value
+        "403":
+          description: Unknown
+    post:
+      tags:
+        - post
+      summary: 게시글 작성하기
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /posts/{id}:
+    get:
+      tags:
+        - post
+      summary: 게시글을 ID로 받아오기
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+components:
+  schemas:
+    Post:
+      type: object
+      properties:
+        _id:
+          type: string
+        image:
+          type: string
+        title:
+          type: string
+        subTitle:
+          type: string
+        date:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string

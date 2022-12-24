@@ -1,5 +1,5 @@
 import { Router } from "express";
-import model from "../models/Post";
+import model from "../models/Posts";
 import controller from "../controllers/Generic";
 
 const router = Router();
