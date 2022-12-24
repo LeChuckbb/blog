@@ -1,17 +1,20 @@
 import axiosInstance from ".";
 
+export const getPost = () => axiosInstance.get(`/posts`);
+
+export const createPost = (body: any) => axiosInstance.post("/posts", body);
+
 export const getPostByIdApi = (postId: string) =>
   axiosInstance.get(`/posts/${postId}`);
 
-// export const latestApi = () => axiosInstance.get("/movie/latest");
+export const updatePost = (postId: string) =>
+  axiosInstance.get(`/posts/${postId}`);
 
-// export const upcomingApi = () => axiosInstance.get("/movie/upcoming");
+export const deletePost = (postId: string) =>
+  axiosInstance.delete(`/posts/${postId}`);
 
-// export const nowPlayingApi = () => axiosInstance.get("/movie/now_playing");
-
-// export const topRatedApi = () => axiosInstance.get("/movie/top_rated");
-
-// export const popularApi = () => axiosInstance.get("/movie/popular");
+export const getPostByPage = (page: number) =>
+  axiosInstance.get(`/posts/findByAge?page=${page}`);
 
 export const detailApi = (movieId: string) =>
   axiosInstance.get(`/movie/${movieId}`);

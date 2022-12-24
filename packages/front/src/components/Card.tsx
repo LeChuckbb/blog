@@ -4,6 +4,7 @@ import React from "react";
 
 type Props = {
   children?: React.ReactNode;
+  img?: string;
 };
 
 const Card = ({ children, ...rest }: Props) => {
@@ -15,15 +16,25 @@ const Card = ({ children, ...rest }: Props) => {
   );
 };
 
-Card.Thumbnail = ({ children }: Props) => {
+const myLoader = ({ src, width, quality }: any) => {
+  return src;
+};
+
+Card.Thumbnail = ({ img, children }: Props) => {
   return (
-    // <Image
-    //   src="/thumbnail/thumb_redux.png"
-    //   alt="thumbnail"
-    //   width={320}
-    //   height={176}
-    // />
-    <img src="/thumbnail/thumb_redux.png" alt="hi" />
+    <div>
+      <Image
+        loader={myLoader}
+        src={`/thumbnail/${img}`}
+        alt="thumbnail"
+        width={320}
+        height={176}
+        sizes="(max-width: 768px) 100vw,
+          (max-width: 1200px) 50vw,
+          33vw"
+        unoptimized
+      />
+    </div>
   );
 };
 
@@ -84,23 +95,26 @@ const CardBox = styled.div`
   ${(props) => props.theme.mq[1]} {
     width: 30%;
     max-width: calc(33.3% - 8px);
+    max-height: 365px;
   }
   // 1464px 이상일 때
   ${(props) => props.theme.mq[2]} {
     width: 21%;
     max-width: calc(25% - 8px);
+    max-height: 365px;
   }
   // 1920px 이상일 때
   ${(props) => props.theme.mq[3]} {
     width: 16%;
     max-width: calc(20% - 8px);
+    max-height: 365px;
   }
 `;
 const CardBoxObj = styled.div((props) => ({}));
 
 const StyledTextSection = styled.div`
   padding: 8px 16px;
-  flex: 1 1 auto;
+  flex: 2 1 auto;
   height: 162px;
   display: flex;
   flex-direction: column;

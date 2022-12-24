@@ -32,6 +32,8 @@ canvas,
 svg {
   display: block;
   max-width: 100%;
+  object-fit: fill;
+  width: 100%;
 }
 button {
   background: none;
