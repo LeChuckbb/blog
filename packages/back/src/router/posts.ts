@@ -5,21 +5,6 @@ import { getPostByPage } from "../controllers/posts";
 
 const router = Router();
 
-router.get("/test", async (req, res) => {
-  try {
-    const post = new model({});
-
-    const staticRes = model.postSchemaStatic();
-    const hi = await model.findAll();
-
-    res.send(hi);
-    // res.json(hi);
-  } catch (e) {
-    console.log("test API 실패");
-    console.error(e);
-  }
-});
-
 // 게시글 목록 가져오기
 router.get("/", controller.getAll(model));
 

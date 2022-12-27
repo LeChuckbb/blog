@@ -1,15 +1,14 @@
-import mongoose, { Document, Model, modelNames } from "mongoose";
-import { NextFunction, Request, Response } from "express";
+import { Model } from "mongoose";
+import { Request, Response } from "express";
+import { Post } from "../models/Posts";
 
 const PAGE_SIZE = 8;
 
 export const getPostByPage =
-  (model: Model<any>) =>
-  async (req: Request, res: Response, next: NextFunction) => {
+  (model: Model<Post>) => async (req: Request, res: Response) => {
     try {
       const count = await model.count({});
       const page = Number(req.query.page);
-      // count - (page * PAGE_SIZE) <= 0(음수)이면, 다음 페이지가 없는 것.
       const IS_NEXT_PAGE_EXIST = count - page * PAGE_SIZE <= 0 ? null : true;
       const next = !IS_NEXT_PAGE_EXIST ? IS_NEXT_PAGE_EXIST : page;
       const prev = page === 1 ? null : page - 1;
@@ -30,5 +29,3 @@ export const getPostByPage =
       return res.status(500).json({ error });
     }
   };
-
-export const hi = "1";

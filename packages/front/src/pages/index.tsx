@@ -1,52 +1,14 @@
 import Card from "../components/Card";
 import styled from "@emotion/styled";
-import { useInfiniteQuery } from "react-query";
-import { UseQueryResult } from "react-query/types/react/types";
-import { getPost, getPostByPage } from "../apis/postApi";
-import { AxiosResponse } from "axios";
+import { useGetPostByPageQuery } from "../hooks/query/useGetPostByPageQuery";
 
 const dateFormatter = (date: string): string => {
   const arr = date.split("-");
   return `${arr[0]}년 ${arr[1]}월 ${arr[2]}일`;
 };
 
-// const usePokemonQuery = <T>(id?: string): UseQueryResult<AxiosResponse<T>, Error> =>
-//   useQuery(id ? ['pokemon', id] : 'pokemon', () => pokemonApi(id));
-
-// const useEvolutionChainQuery = (
-//   url?: string
-// ): UseQueryResult<AxiosResponse<EvolutionChainResponse>, Error> =>
-//   useQuery(["evolution", { url }], getPost());
-
-// const useSearchQuery = (searchValue?: string) => {
-//   const { getSearchAPI } = useAPI();
-//   return useInfiniteQuery(
-//     [QUERY_KEY, searchValue],
-//     ({ pageParam = `articles/search/?query=${searchValue}` }) =>
-//       getSearchAPI(pageParam),
-//     {
-//       refetchOnMount: false,
-//       refetchOnWindowFocus: false,
-//       enabled: false,
-//       getNextPageParam: (lastPage) => lastPage?.next?.replace("http", "https"),
-//     }
-//   );
-// };
-
 export default function Home() {
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
-    ["getPosts"],
-    ({ pageParam = 1 }) => getPostByPage(pageParam),
-    {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      getNextPageParam: (lastPage) => {
-        return lastPage.data.next === null ? null : lastPage.data.next + 1;
-      },
-    }
-  );
-
-  console.log(data);
+  const { data, fetchNextPage, hasNextPage } = useGetPostByPageQuery();
 
   return (
     <CardContainer>
@@ -79,7 +41,6 @@ export default function Home() {
 }
 
 const CardContainer = styled.div`
-  /* width: min(900px, 100%); */
   width: 100%;
   background-color: yellow;
   display: flex;

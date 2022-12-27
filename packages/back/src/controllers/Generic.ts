@@ -1,8 +1,10 @@
 import mongoose, { Document, Model } from "mongoose";
 import { NextFunction, Request, Response } from "express";
+import { Post } from "../models/Posts";
 
 const create =
-  (model: Model<any>) => (req: Request, res: Response, next: NextFunction) => {
+  (model: Model<Post | any>) =>
+  (req: Request, res: Response, next: NextFunction) => {
     console.log("Creating new document for " + model.modelName);
 
     const doc = new model({
@@ -17,7 +19,7 @@ const create =
   };
 
 const getAll =
-  (model: Model<any>, populate?: string[]) =>
+  (model: Model<Post | any>, populate?: string[]) =>
   (req: Request, res: Response, next: NextFunction) => {
     console.log("Getting all documents " + model.modelName);
 
@@ -35,7 +37,7 @@ const getAll =
   };
 
 const get =
-  (model: Model<any>, populate?: string[]) =>
+  (model: Model<Post | any>, populate?: string[]) =>
   (req: Request, res: Response, next: NextFunction) => {
     console.log("Getting document from  " + model.modelName + " by id");
 
@@ -60,7 +62,7 @@ const get =
   };
 
 const update =
-  (model: Model<any>, populate?: string[]) =>
+  (model: Model<Post | any>, populate?: string[]) =>
   (req: Request, res: Response, next: NextFunction) => {
     console.log("Updating document from  " + model.modelName + " by id");
 
@@ -89,7 +91,8 @@ const update =
   };
 
 const remove =
-  (model: Model<any>) => (req: Request, res: Response, next: NextFunction) => {
+  (model: Model<Post | any>) =>
+  (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
 
     console.log(id);

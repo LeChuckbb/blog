@@ -14,26 +14,20 @@ type CardProps = {
   fetchNext: () => void;
 };
 
-const Card = ({ children, isLastItem, fetchNext, ...rest }: CardProps) => {
+const Card = ({ children, isLastItem, fetchNext }: CardProps) => {
   const ref = useRef<HTMLDivElement | null>(null); // 감시할 엘리먼트
   const entry = useIntersectionObserver(ref, {});
-  const isIntersecting = !!entry?.isIntersecting; // 겹
+  const isIntersecting = !!entry?.isIntersecting;
 
   useEffect(() => {
-    // console.log(isLastItem);
-    // console.log(isIntersecting);
-    // console.log(entry);
     isLastItem && isIntersecting && fetchNext();
   }, [isLastItem, isIntersecting]);
-  return (
-    <CardBox ref={ref}>
-      {children}
-      {/*  */}
-    </CardBox>
-  );
+
+  return <CardBox ref={ref}>{children}</CardBox>;
 };
 
-const myLoader = ({ src, width, quality }: any) => {
+// loader를 사용해야만 console에 img 관련 warning이 출력되지 않음
+const myLoader = ({ src }: any) => {
   return src;
 };
 
@@ -89,7 +83,7 @@ Card.Tags = ({ children }: Props) => {
     </TagWrapper>
   );
 };
-1;
+
 const CardBox = styled.div`
   width: 100%;
   flex-grow: 1;
@@ -127,7 +121,6 @@ const CardBox = styled.div`
     max-height: 365px;
   }
 `;
-const CardBoxObj = styled.div((props) => ({}));
 
 const StyledTextSection = styled.div`
   padding: 8px 16px;
