@@ -14,13 +14,4 @@ export const deletePost = (postId: string) =>
   axiosInstance.delete(`/posts/${postId}`);
 
 export const getPostByPage = (page: number) =>
-  axiosInstance.get(`/posts/findByAge?page=${page}`);
-
-export const detailApi = (movieId: string) =>
-  axiosInstance.get(`/movie/${movieId}`);
-
-export const similarApi = (movieId: string) =>
-  axiosInstance.get(`/movie/${movieId}/similar`);
-
-export const searchApi = (query: string) =>
-  axiosInstance.get(`/search/movie?query=${query}`);
+  axiosInstance.get(`/posts/findByPage?page=${page}`);

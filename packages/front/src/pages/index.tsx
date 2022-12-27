@@ -1,6 +1,6 @@
 import Card from "../components/Card";
 import styled from "@emotion/styled";
-import { useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import { UseQueryResult } from "react-query/types/react/types";
 import { getPost, getPostByPage } from "../apis/postApi";
 import { AxiosResponse } from "axios";
@@ -18,30 +18,67 @@ const dateFormatter = (date: string): string => {
 // ): UseQueryResult<AxiosResponse<EvolutionChainResponse>, Error> =>
 //   useQuery(["evolution", { url }], getPost());
 
-export default function Home() {
-  const { data } = useQuery(["getPosts"], getPost);
+// const useSearchQuery = (searchValue?: string) => {
+//   const { getSearchAPI } = useAPI();
+//   return useInfiniteQuery(
+//     [QUERY_KEY, searchValue],
+//     ({ pageParam = `articles/search/?query=${searchValue}` }) =>
+//       getSearchAPI(pageParam),
+//     {
+//       refetchOnMount: false,
+//       refetchOnWindowFocus: false,
+//       enabled: false,
+//       getNextPageParam: (lastPage) => lastPage?.next?.replace("http", "https"),
+//     }
+//   );
+// };
 
-  console.log(data?.data?.results);
+export default function Home() {
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
+    ["getPosts"],
+    ({ pageParam = 1 }) => getPostByPage(pageParam),
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      getNextPageParam: (lastPage) => {
+        // console.log("--- LAST PAGE --- ");
+        // console.log(lastPage);
+        // console.log(lastPage.data.next);
+        return lastPage.data.next + 1;
+      },
+    }
+  );
+
+  console.log(data);
 
   return (
     <CardContainer>
-      {data?.data?.results?.map((post: any) => {
-        return (
-          <Card key={post._id}>
-            <Card.Thumbnail img={post.image} />
-            <Card.SecondSection>
-              <Card.TitleWrapper>
-                <Card.Title>{post.title}</Card.Title>
-                <Card.SubTitle>{post.subTitle}</Card.SubTitle>
-              </Card.TitleWrapper>
-              <Card.Date>{dateFormatter(post.date)}</Card.Date>
-            </Card.SecondSection>
-            <Card.ThirdSection>
-              <Card.Tags>{post.tags}</Card.Tags>
-            </Card.ThirdSection>
-          </Card>
-        );
-      })}
+      {data?.pages
+        .map((page: any) => page.data.results)
+        .flat()
+        .map((post: any, idx: number, arr) => {
+          console.log(arr);
+          console.log(idx);
+          return (
+            <Card
+              key={post._id}
+              fetchNext={fetchNextPage}
+              isLastItem={arr.length - 1 === idx}
+            >
+              <Card.Thumbnail img={post.image} />
+              <Card.SecondSection>
+                <Card.TitleWrapper>
+                  <Card.Title>{post.title}</Card.Title>
+                  <Card.SubTitle>{post.subTitle}</Card.SubTitle>
+                </Card.TitleWrapper>
+                <Card.Date>{dateFormatter(post.date)}</Card.Date>
+              </Card.SecondSection>
+              <Card.ThirdSection>
+                <Card.Tags>{post.tags}</Card.Tags>
+              </Card.ThirdSection>
+            </Card>
+          );
+        })}
     </CardContainer>
   );
 }

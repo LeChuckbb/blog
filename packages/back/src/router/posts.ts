@@ -1,6 +1,7 @@
 import { Router } from "express";
 import model from "../models/Posts";
 import controller from "../controllers/Generic";
+import { getPostByPage } from "../controllers/posts";
 
 const router = Router();
 
@@ -26,7 +27,8 @@ router.get("/", controller.getAll(model));
 router.post("/", controller.create(model));
 
 // 게시글 목록 가져오기 (id)
-router.get("/:id", controller.get(model));
+// ex) GET /artists/1, GET /artists/1/company/entertainment
+// router.get("/:id", controller.get(model));
 
 // 게시글 수정
 router.put("/", controller.update(model));
@@ -35,6 +37,7 @@ router.put("/", controller.update(model));
 router.delete("/:id", controller.remove(model));
 
 // page로 게시글 가져오기
-// router.get("/findByPage", controller.)
+// ex) GET /artists?name=hello
+router.get(`/findByPage`, getPostByPage(model));
 
 export default router;

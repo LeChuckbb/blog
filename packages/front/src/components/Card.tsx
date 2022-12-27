@@ -1,15 +1,32 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import React from "react";
+import React, { useRef, useEffect } from "react";
+import useIntersectionObserver from "../hooks/useIntersectionObserver";
 
 type Props = {
   children?: React.ReactNode;
   img?: string;
 };
 
-const Card = ({ children, ...rest }: Props) => {
+type CardProps = {
+  children?: React.ReactNode;
+  isLastItem: boolean;
+  fetchNext: () => void;
+};
+
+const Card = ({ children, isLastItem, fetchNext, ...rest }: CardProps) => {
+  const ref = useRef<HTMLDivElement | null>(null); // 감시할 엘리먼트
+  const entry = useIntersectionObserver(ref, {});
+  const isIntersecting = !!entry?.isIntersecting; // 겹
+
+  useEffect(() => {
+    // console.log(isLastItem);
+    // console.log(isIntersecting);
+    console.log(entry);
+    isLastItem && isIntersecting && fetchNext();
+  }, [isLastItem, isIntersecting]);
   return (
-    <CardBox>
+    <CardBox ref={ref}>
       {children}
       {/*  */}
     </CardBox>
