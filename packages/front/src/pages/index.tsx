@@ -41,10 +41,7 @@ export default function Home() {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       getNextPageParam: (lastPage) => {
-        // console.log("--- LAST PAGE --- ");
-        // console.log(lastPage);
-        // console.log(lastPage.data.next);
-        return lastPage.data.next + 1;
+        return lastPage.data.next === null ? null : lastPage.data.next + 1;
       },
     }
   );
@@ -57,12 +54,10 @@ export default function Home() {
         .map((page: any) => page.data.results)
         .flat()
         .map((post: any, idx: number, arr) => {
-          console.log(arr);
-          console.log(idx);
           return (
             <Card
               key={post._id}
-              fetchNext={fetchNextPage}
+              fetchNext={() => hasNextPage && fetchNextPage()}
               isLastItem={arr.length - 1 === idx}
             >
               <Card.Thumbnail img={post.image} />

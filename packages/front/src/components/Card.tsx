@@ -22,7 +22,7 @@ const Card = ({ children, isLastItem, fetchNext, ...rest }: CardProps) => {
   useEffect(() => {
     // console.log(isLastItem);
     // console.log(isIntersecting);
-    console.log(entry);
+    // console.log(entry);
     isLastItem && isIntersecting && fetchNext();
   }, [isLastItem, isIntersecting]);
   return (
