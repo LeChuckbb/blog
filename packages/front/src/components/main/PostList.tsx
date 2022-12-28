@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useGetPostByPageQuery } from "../../hooks/query/useGetPostByPageQuery";
 import Card from "../Card";
+import PostTags from "./PostTags";
 
 const dateFormatter = (date: string): string => {
   const arr = date.split("-");
@@ -11,43 +12,44 @@ const PostList: React.FC = () => {
   const { data, fetchNextPage, hasNextPage } = useGetPostByPageQuery();
 
   return (
-    <CardContainer>
-      {data?.pages
-        .map((page: any) => page.data.results)
-        .flat()
-        .map((post: any, idx: number, arr) => {
-          return (
-            <Card
-              key={post._id}
-              fetchNext={() => hasNextPage && fetchNextPage()}
-              isLastItem={arr.length - 1 === idx}
-            >
-              <Card.Thumbnail img={post.image} />
-              <Card.SecondSection>
-                <Card.TitleWrapper>
-                  <Card.Title>{post.title}</Card.Title>
-                  <Card.SubTitle>{post.subTitle}</Card.SubTitle>
-                </Card.TitleWrapper>
-                <Card.Date>{dateFormatter(post.date)}</Card.Date>
-              </Card.SecondSection>
-              <Card.ThirdSection>
-                <Card.Tags>{post.tags}</Card.Tags>
-              </Card.ThirdSection>
-            </Card>
-          );
-        })}
-    </CardContainer>
+    <Container>
+      <PostTags />
+      <CardContainer>
+        {data?.pages
+          .map((page: any) => page.data.results)
+          .flat()
+          .map((post: any, idx: number, arr) => {
+            return (
+              <Card
+                key={post._id}
+                fetchNext={() => hasNextPage && fetchNextPage()}
+                isLastItem={arr.length - 1 === idx}
+              >
+                <Card.Thumbnail img={post.image} />
+                <Card.SecondSection>
+                  <Card.TitleWrapper>
+                    <Card.Title>{post.title}</Card.Title>
+                    <Card.SubTitle>{post.subTitle}</Card.SubTitle>
+                  </Card.TitleWrapper>
+                  <Card.Date>{dateFormatter(post.date)}</Card.Date>
+                </Card.SecondSection>
+                <Card.ThirdSection>
+                  <Card.Tags>{post.tags}</Card.Tags>
+                </Card.ThirdSection>
+              </Card>
+            );
+          })}
+      </CardContainer>
+    </Container>
   );
 };
 
 export default PostList;
 
-const CardContainer = styled.div`
+const Container = styled.div`
   width: 100%;
   background-color: yellow;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  overflow-x: scroll;
   ${(props) => props.theme.mq[1]} {
     width: 1024px;
   }
@@ -57,4 +59,11 @@ const CardContainer = styled.div`
   ${(props) => props.theme.mq[3]} {
     width: 1728px;
   }
+`;
+
+const CardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
 `;
