@@ -6,7 +6,13 @@ import theme from "../styles/theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        suspense: true,
+      },
+    },
+  });
 
   return (
     <QueryClientProvider client={queryClient}>
