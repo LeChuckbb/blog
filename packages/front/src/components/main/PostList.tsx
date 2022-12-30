@@ -22,6 +22,8 @@ const PostList: React.FC = () => {
             return (
               <Card
                 key={post._id}
+                id={post._id}
+                url={post.title}
                 fetchNext={() => hasNextPage && fetchNextPage()}
                 isLastItem={arr.length - 1 === idx}
               >

@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import React, { useRef, useEffect } from "react";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
+import Router, { useRouter } from "next/router";
 
 type Props = {
   children?: React.ReactNode;
@@ -11,19 +12,38 @@ type Props = {
 type CardProps = {
   children?: React.ReactNode;
   isLastItem: boolean;
+  id: string;
+  url: string;
   fetchNext: () => void;
 };
 
-const Card = ({ children, isLastItem, fetchNext }: CardProps) => {
+const Card = ({ children, id, url, isLastItem, fetchNext }: CardProps) => {
   const ref = useRef<HTMLDivElement | null>(null); // 감시할 엘리먼트
   const entry = useIntersectionObserver(ref, {});
   const isIntersecting = !!entry?.isIntersecting;
+  const router = useRouter();
 
   useEffect(() => {
     isLastItem && isIntersecting && fetchNext();
   }, [isLastItem, isIntersecting]);
 
-  return <CardBox ref={ref}>{children}</CardBox>;
+  const onClickHandler = (event: React.MouseEvent, id: string) => {
+    // console.log(event);
+    // console.log(event.target);
+    // console.log(id);
+    // event.stopPropagation();
+    router.push(`/post/${id}`, `/post/${url.replaceAll(" ", "-")}`);
+  };
+
+  return (
+    <CardBox
+      className="CardHere"
+      ref={ref}
+      onClick={(event) => onClickHandler(event, id)}
+    >
+      {children}
+    </CardBox>
+  );
 };
 
 // loader를 사용해야만 console에 img 관련 warning이 출력되지 않음
@@ -33,7 +53,7 @@ const myLoader = ({ src }: any) => {
 
 Card.Thumbnail = ({ img, children }: Props) => {
   return (
-    <div>
+    <div onClick={() => console.log("img div clicked!!!!@@@")}>
       <Image
         loader={myLoader}
         src={`/thumbnail/${img}`}

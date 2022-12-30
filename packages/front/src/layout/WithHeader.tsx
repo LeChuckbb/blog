@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
 import Footer from "./Footer";
 import Header from "./Header";
+import React from "react";
 
-type Props = {
+type Prop = {
   children: React.ReactNode;
 };
 
-const Layout = ({ children }: Props) => {
+const WithHeader = ({ children }: Prop) => {
   return (
     <Container>
       <Header />
@@ -23,4 +24,4 @@ const Container = styled.div`
   align-items: center;
 `;
 
-export default Layout;
+export default WithHeader;
