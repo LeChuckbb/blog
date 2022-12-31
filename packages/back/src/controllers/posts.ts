@@ -13,6 +13,7 @@ export const getPostByPage =
       const next = !IS_NEXT_PAGE_EXIST ? IS_NEXT_PAGE_EXIST : page;
       const prev = page === 1 ? null : page - 1;
 
+      // find에서 content는 제외
       const results = await model
         .find({})
         .skip(PAGE_SIZE * (page - 1))

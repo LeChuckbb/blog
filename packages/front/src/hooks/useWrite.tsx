@@ -1,9 +1,19 @@
-import { useState, useRef, FormEvent, MouseEvent } from "react";
+import React, {
+  useState,
+  useRef,
+  FormEvent,
+  MouseEvent,
+  MutableRefObject,
+} from "react";
+import { SubmitHandler } from "react-hook-form";
+import { toast } from "react-toastify";
+import { FormInterface } from "../pages/post/write";
 
 const useWrite = () => {
   const [tag, setTag] = useState("");
   const [tagsArray, setTagsArray] = useState(Array<string>);
-  const ref = useRef<any>(null);
+  const editorRef = useRef<any>(null);
+  const subPageRef = useRef<HTMLDivElement>(null);
 
   const onKeyDownHandler = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
@@ -20,21 +30,39 @@ const useWrite = () => {
     }
   };
 
-  const onSubmitHandler = (event: FormEvent) => {
+  const onValidSubmit: SubmitHandler<FormInterface> = (data: any) => {
     try {
-      event.preventDefault();
+      // toast 종료하기
+      toast.dismiss();
+      // data set하여 subPage로 props로 전달하기
       console.log("submit!!!");
+      console.log(data);
+
+      if (subPageRef.current != null) {
+        subPageRef.current.className = subPageRef.current.className.replace(
+          "hide",
+          "show"
+        );
+      }
+      data.title === "" && toast("제목을 입력해주세요", { toastId: "title" });
       // 본문을 markdown으로 저장
-      const editorIns = ref?.current?.getInstance();
+      const editorIns = editorRef?.current?.getInstance();
       const contentMark = editorIns.getMarkdown();
+      const contentHTML = editorIns.getHTML();
 
       if (contentMark?.length === 0) {
         throw new Error("본문 내용을 입력해주세요.");
       }
+
       console.log(contentMark);
+      console.log(contentHTML);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const onInvalidSubmit = (errors: any) => {
+    errors.title.message && toast(errors.title.message, { toastId: "title" });
   };
 
   const onClickRemoveTagHandler = (clickedIdx: number) => {
@@ -43,12 +71,14 @@ const useWrite = () => {
   };
 
   return {
-    ref,
+    editorRef,
+    subPageRef,
     tagsArray,
     tag,
     setTag,
     onKeyDownHandler,
-    onSubmitHandler,
+    onValidSubmit,
+    onInvalidSubmit,
     onClickRemoveTagHandler,
   };
 };

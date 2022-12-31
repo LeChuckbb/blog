@@ -1,16 +1,17 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface Post {
-  image: string;
+  thumbnailImg: string;
   urlSlug: string;
   title: string;
   subTitle: string;
   date: string;
+  content: string;
   tags: Array<String>;
 }
 
 const PostSchema: Schema = new Schema<Post>({
-  image: {
+  thumbnailImg: {
     type: String,
     required: true,
   },
@@ -29,6 +30,10 @@ const PostSchema: Schema = new Schema<Post>({
   date: {
     type: String,
     required: true,
+  },
+  content: {
+    type: String,
+    requried: true,
   },
   tags: {
     type: [String],

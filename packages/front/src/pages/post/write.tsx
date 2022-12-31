@@ -1,6 +1,10 @@
 import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
 import useWrite from "../../hooks/useWrite";
+import { useForm } from "react-hook-form";
+import WriteSubPage from "../../components/posts/WriteSubPage";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -9,22 +13,40 @@ const NoSsrEditor = dynamic(
   }
 );
 
+export interface FormInterface {
+  title: string;
+  tag: Array<string>;
+  // content: string?
+}
+
 const write: React.FC = () => {
   const {
-    ref,
+    editorRef,
+    subPageRef,
     tagsArray,
     tag,
     setTag,
     onKeyDownHandler,
-    onSubmitHandler,
+    onValidSubmit,
+    onInvalidSubmit,
     onClickRemoveTagHandler,
   } = useWrite();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInterface>();
+
   return (
     <Container>
-      <form onSubmit={onSubmitHandler}>
-        <Header>
-          <TitleInput type="text" placeholder="제목을 입력하세요" />
+      <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
+        <TitleWrapper>
+          <TitleInput
+            {...register("title", { required: "제목을 입력해주세요" })}
+            type="text"
+            placeholder="제목을 입력하세요"
+          />
           <TagsWrapper>
             {tagsArray?.map((el, idx) => (
               <Tag onClick={() => onClickRemoveTagHandler(idx)} key={idx}>
@@ -33,14 +55,15 @@ const write: React.FC = () => {
             ))}
             <TagInput
               type="text"
+              {...register("tag")}
               value={tag}
               placeholder="태그를 입력하세요"
               onChange={(event) => setTag(event.target.value)}
               onKeyDown={onKeyDownHandler}
             />
           </TagsWrapper>
-        </Header>
-        <NoSsrEditor content="" editorRef={ref} />
+        </TitleWrapper>
+        <NoSsrEditor content="" editorRef={editorRef} />
         <ButtonWrapper>
           <input
             type="button"
@@ -59,18 +82,21 @@ const write: React.FC = () => {
             }}
           />
         </ButtonWrapper>
+        <ToastContainer />
       </form>
+      <WriteSubPage subPageRef={subPageRef} />
     </Container>
   );
 };
 
+// -----------------------
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
 `;
 
-const Header = styled.div`
+const TitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
