@@ -25,6 +25,7 @@ const write: React.FC = () => {
     subPageRef,
     tagsArray,
     tag,
+    fetchBody,
     setTag,
     onKeyDownHandler,
     onValidSubmit,
@@ -84,7 +85,7 @@ const write: React.FC = () => {
         </ButtonWrapper>
         <ToastContainer />
       </form>
-      <WriteSubPage subPageRef={subPageRef} />
+      <WriteSubPage fetchBody={fetchBody} subPageRef={subPageRef} />
     </Container>
   );
 };

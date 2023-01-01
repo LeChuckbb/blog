@@ -3,6 +3,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { RefObject } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import { createPost } from "../../apis/postApi";
+import { useRouter } from "next/router";
 
 const onClickSubPageCancelHandler = (
   event: React.MouseEvent,
@@ -22,6 +24,7 @@ const onClickSubPageCancelHandler = (
 
 type Props = {
   subPageRef: RefObject<HTMLDivElement>;
+  fetchBody: any;
 };
 
 interface FormInterface {
@@ -31,15 +34,21 @@ interface FormInterface {
   date: string;
 }
 
-const WriteSubPage: React.FC<Props> = ({ subPageRef }) => {
+const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
   const { register, handleSubmit, formState } = useForm<FormInterface>();
+  const router = useRouter();
 
-  const onValidSubmit: SubmitHandler<FormInterface> = (data) => {
+  const onValidSubmit: SubmitHandler<FormInterface> = async (data) => {
     // toast 종료하기
     toast.dismiss();
     // POST API 호출하기
     console.log("SubPage 서브밋");
     console.log(data);
+
+    const res = await createPost({ ...data, ...fetchBody });
+    if (res.status === 201) {
+      router.push("/");
+    }
   };
 
   const onInvalidSubmit = (errors: any) => {
@@ -111,14 +120,14 @@ const SubPage = styled.div`
   background: white;
   position: absolute;
   top: 100vh;
-  transition: transform 0.3s;
+  transition: top 0.3s;
   display: flex;
   justify-content: center;
   align-items: center;
-  display: none;
+  transform: scale(0);
 
   &.show {
-    display: block;
-    transform: translateY(-100vh);
+    transform: scale(1);
+    top: 0vh;
   }
 `;

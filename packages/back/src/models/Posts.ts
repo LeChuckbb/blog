@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface Post {
-  thumbnailImg: string;
+  thumbnail: string;
   urlSlug: string;
   title: string;
   subTitle: string;
@@ -11,9 +11,8 @@ export interface Post {
 }
 
 const PostSchema: Schema = new Schema<Post>({
-  thumbnailImg: {
+  thumbnail: {
     type: String,
-    required: true,
   },
   urlSlug: {
     type: String,
@@ -25,7 +24,6 @@ const PostSchema: Schema = new Schema<Post>({
   },
   subTitle: {
     type: String,
-    required: true,
   },
   date: {
     type: String,
@@ -37,7 +35,6 @@ const PostSchema: Schema = new Schema<Post>({
   },
   tags: {
     type: [String],
-    required: false,
   },
 });
 

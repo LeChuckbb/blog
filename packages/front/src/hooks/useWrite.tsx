@@ -12,6 +12,7 @@ import { FormInterface } from "../pages/post/write";
 const useWrite = () => {
   const [tag, setTag] = useState("");
   const [tagsArray, setTagsArray] = useState(Array<string>);
+  const [fetchBody, setFetchBody] = useState({});
   const editorRef = useRef<any>(null);
   const subPageRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +45,6 @@ const useWrite = () => {
           "show"
         );
       }
-      data.title === "" && toast("제목을 입력해주세요", { toastId: "title" });
       // 본문을 markdown으로 저장
       const editorIns = editorRef?.current?.getInstance();
       const contentMark = editorIns.getMarkdown();
@@ -56,6 +56,12 @@ const useWrite = () => {
 
       console.log(contentMark);
       console.log(contentHTML);
+
+      setFetchBody({
+        title: data.title,
+        tags: tagsArray,
+        content: contentHTML,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -75,6 +81,7 @@ const useWrite = () => {
     subPageRef,
     tagsArray,
     tag,
+    fetchBody,
     setTag,
     onKeyDownHandler,
     onValidSubmit,
