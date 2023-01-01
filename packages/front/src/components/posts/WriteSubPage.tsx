@@ -57,6 +57,9 @@ const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
     errors.date.message && toast(errors.date.message, { toastId: "date" });
   };
 
+  console.log(fetchBody);
+  console.log(`/${fetchBody?.title?.replaceAll(" ", "-")}`);
+
   return (
     <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
       <SubPage className="SubPage hide" ref={subPageRef}>
@@ -83,6 +86,7 @@ const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
           <p>URL 설정</p>
           <input
             {...register("urlSlug", { required: "URL을 지정해주세요" })}
+            defaultValue={`/${fetchBody?.title?.replaceAll(" ", "-")}`}
             type="text"
           />
 

@@ -1,6 +1,7 @@
 import { Model } from "mongoose";
 import { Request, Response } from "express";
 import { Post } from "../models/Posts";
+import { decode } from "html-entities";
 
 const PAGE_SIZE = 8;
 
@@ -15,7 +16,7 @@ export const getPostByPage =
 
       // find에서 content는 제외
       const results = await model
-        .find({})
+        .find({}, { content: 0 })
         .skip(PAGE_SIZE * (page - 1))
         .limit(PAGE_SIZE);
 
@@ -25,6 +26,27 @@ export const getPostByPage =
         prev,
         results,
       });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error });
+    }
+  };
+
+export const getPostById =
+  (model: Model<Post>) => async (req: Request, res: Response) => {
+    try {
+      const id = req.query.id;
+      const results = await model.findOne(
+        { _id: id },
+        { thumbnail: 0, tags: 0, subTitle: 0 }
+      );
+      const resultObj = results?.toObject();
+      const resultBody = {
+        ...resultObj,
+        content: decode(results?.content),
+      };
+
+      return res.status(200).json(resultBody);
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error });

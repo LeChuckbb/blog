@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import React, { useRef, useEffect } from "react";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 type Props = {
   children?: React.ReactNode;
@@ -13,11 +13,11 @@ type CardProps = {
   children?: React.ReactNode;
   isLastItem: boolean;
   id: string;
-  url: string;
+  urlSlug: string;
   fetchNext: () => void;
 };
 
-const Card = ({ children, id, url, isLastItem, fetchNext }: CardProps) => {
+const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
   const ref = useRef<HTMLDivElement | null>(null); // 감시할 엘리먼트
   const entry = useIntersectionObserver(ref, {});
   const isIntersecting = !!entry?.isIntersecting;
@@ -28,11 +28,13 @@ const Card = ({ children, id, url, isLastItem, fetchNext }: CardProps) => {
   }, [isLastItem, isIntersecting]);
 
   const onClickHandler = (event: React.MouseEvent, id: string) => {
-    // console.log(event);
-    // console.log(event.target);
-    // console.log(id);
-    // event.stopPropagation();
-    router.push(`/post/${id}`, `/post/${url.replaceAll(" ", "-")}`);
+    router.push(
+      {
+        pathname: `/post${urlSlug}`,
+        query: { id },
+      },
+      `/post${urlSlug}`
+    );
   };
 
   return (

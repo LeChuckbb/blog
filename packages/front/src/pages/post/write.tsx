@@ -16,7 +16,7 @@ const NoSsrEditor = dynamic(
 export interface FormInterface {
   title: string;
   tag: Array<string>;
-  // content: string?
+  content: string;
 }
 
 const write: React.FC = () => {

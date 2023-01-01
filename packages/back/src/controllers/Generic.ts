@@ -1,15 +1,24 @@
 import mongoose, { Document, Model } from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import { Post } from "../models/Posts";
+import { encode } from "html-entities";
 
 const create =
   (model: Model<Post | any>) =>
   (req: Request, res: Response, next: NextFunction) => {
     console.log("Creating new document for " + model.modelName);
 
+    // req.body에서 content 항목이 있으면 encode하여 DB에 저장
+    const body = req?.body?.content
+      ? {
+          ...req.body,
+          content: encode(req.body.content),
+        }
+      : req.body;
+
     const doc = new model({
       _id: new mongoose.Types.ObjectId(),
-      ...req.body,
+      ...body,
     });
 
     return doc

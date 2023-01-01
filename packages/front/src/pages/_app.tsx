@@ -5,6 +5,8 @@ import Headerless from "../layout/Headerless";
 import { ThemeProvider } from "@emotion/react";
 import theme from "../styles/theme";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+// import { ReactQueryDevtools } from "react-query/devtools";
 import { NextPage } from "next";
 
 export type NextPageWithLayout = NextPage & {
@@ -35,6 +37,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen position="bottom-left" />
       <ThemeProvider theme={theme}>
         {getLayout(<Component {...pageProps} />)}
       </ThemeProvider>

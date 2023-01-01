@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  FormEvent,
-  MouseEvent,
-  MutableRefObject,
-} from "react";
+import React, { useState, useRef } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { FormInterface } from "../pages/post/write";
