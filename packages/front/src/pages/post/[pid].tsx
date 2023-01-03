@@ -2,36 +2,33 @@ import { useRouter } from "next/router";
 import WithHeader from "../../layout/WithHeader";
 import { useGetPostByIdQuery } from "../../hooks/query/useGetPostByIdQuery";
 import styled from "@emotion/styled";
-import { Viewer } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
-import "prismjs/themes/prism.css";
-import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
-import Prism from "prismjs";
+import dynamic from "next/dynamic";
+import { GetStaticProps, GetStaticPaths } from "next";
+import { getAllSlugs, getPostBySlug } from "../../apis/postApi";
 
-const PostDetail = () => {
-  const router = useRouter();
-  const { data } = useGetPostByIdQuery(router.query.id as string);
+const NoSSRViewer = dynamic(
+  () => import("../../components/posts/WriteViewer"),
+  {
+    ssr: false,
+  }
+);
+
+const PostDetail = ({ title, date, content }: any) => {
+  console.log(content);
 
   return (
     <Container>
       <HeadWrapper>
-        <h1 style={{ fontSize: "32px" }}>{data?.data.title}</h1>
+        <h1 style={{ fontSize: "32px" }}>{title}</h1>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span>{data?.data?.date}</span>
-          <div style={{ display: "flex", gap: "8px" }}>
-            <span>수정</span>
-            <span>삭제</span>
+          <span>{date}</span>
+          <div style={{ display: "flex", gap: "8px", color: "#808080" }}>
+            <span style={{ cursor: "pointer" }}>수정</span>
+            <span style={{ cursor: "pointer" }}>삭제</span>
           </div>
         </div>
       </HeadWrapper>
-      {data?.data.content && (
-        <Viewer
-          initialValue={data?.data?.content || ""}
-          plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
-        />
-      )}
-      {/* dangerouslySetInnerHTML={{ __html: data?.data.content }} */}
+      {content && <NoSSRViewer content={content} />}
     </Container>
   );
 };
@@ -41,6 +38,28 @@ PostDetail.getLayout = function getLayout(page: React.ReactElement) {
 };
 
 export default PostDetail;
+
+// 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
+export const getStaticPaths: GetStaticPaths = async ({}) => {
+  const res = await getAllSlugs();
+  const paths = res.data.map((el: any) => ({
+    params: { pid: el.urlSlug },
+  }));
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+// 빌드 시 데이터를 fetch하여 static 페이지를 생성
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const res = await getPostBySlug(params?.pid as string);
+
+  return {
+    props: res.data,
+  };
+};
 
 const Container = styled.div`
   display: flex;

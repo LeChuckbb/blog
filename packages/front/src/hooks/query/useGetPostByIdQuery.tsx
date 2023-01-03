@@ -13,11 +13,13 @@ type PostByIdType = {};
 
 export const useGetPostByIdQuery = (id: string) =>
   useQuery<AxiosResponse<any, Error>>(
-    ["postById"],
+    ["postById", id],
     () => getPostById(id as string),
     {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
       suspense: false,
+      staleTime: 5000000,
     }
   );

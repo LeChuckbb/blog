@@ -27,7 +27,7 @@ const PostList: React.FC = () => {
                 fetchNext={() => hasNextPage && fetchNextPage()}
                 isLastItem={arr.length - 1 === idx}
               >
-                <Card.Thumbnail img={post.image} />
+                <Card.Thumbnail img={post.thumbnail} />
                 <Card.SecondSection>
                   <Card.TitleWrapper>
                     <Card.Title>{post.title}</Card.Title>

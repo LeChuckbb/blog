@@ -52,3 +52,36 @@ export const getPostById =
       return res.status(500).json({ error });
     }
   };
+
+export const getPostBySlug =
+  (model: Model<Post>) => async (req: Request, res: Response) => {
+    try {
+      console.log("*** getPostBySlug *** ");
+      console.log(req.query);
+
+      const results = await model.findOne({ urlSlug: req.query.slug });
+      const resultObj = results?.toObject();
+      const resultBody = {
+        ...resultObj,
+        content: decode(results?.content),
+      };
+
+      return res.status(200).json(resultBody);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error });
+    }
+  };
+
+export const getAllSlugs =
+  (model: Model<Post>) => async (req: Request, res: Response) => {
+    try {
+      const results = await model.find({}, { urlSlug: 1 });
+      console.log(results);
+
+      return res.status(200).json(results);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error });
+    }
+  };

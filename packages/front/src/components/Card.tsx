@@ -30,10 +30,10 @@ const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
   const onClickHandler = (event: React.MouseEvent, id: string) => {
     router.push(
       {
-        pathname: `/post${urlSlug}`,
+        pathname: `/post/${urlSlug}`,
         query: { id },
       },
-      `/post${urlSlug}`
+      `/post/${urlSlug}`
     );
   };
 

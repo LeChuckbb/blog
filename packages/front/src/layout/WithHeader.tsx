@@ -18,7 +18,6 @@ const WithHeader = ({ children }: Prop) => {
 };
 
 const Container = styled.div`
-  background-color: red;
   display: flex;
   flex-direction: column;
   align-items: center;
