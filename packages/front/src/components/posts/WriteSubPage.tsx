@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { createPost } from "../../apis/postApi";
 import { useRouter } from "next/router";
+import { isAxiosError, AxiosError } from "axios";
 
 const onClickSubPageCancelHandler = (
   event: React.MouseEvent,
@@ -34,20 +35,38 @@ interface FormInterface {
   date: string;
 }
 
+const defaultDateHandler = () => {
+  const date = new Date();
+  console.log(date);
+  return new Intl.DateTimeFormat("kr", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  })
+    .format(date)
+    .replaceAll(". ", "-")
+    .slice(0, -1);
+};
+
 const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
   const { register, handleSubmit, formState } = useForm<FormInterface>();
   const router = useRouter();
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (data) => {
-    // toast 종료하기
-    toast.dismiss();
-    // POST API 호출하기
-    console.log("SubPage 서브밋");
-    console.log(data);
-
-    const res = await createPost({ ...data, ...fetchBody });
-    if (res.status === 201) {
-      router.push("/");
+    try {
+      // toast 종료하기
+      toast.dismiss();
+      // POST API 호출하기
+      const res = await createPost({ ...data, ...fetchBody });
+      if (res.status === 201) {
+        router.push("/");
+      }
+    } catch (err) {
+      if (isAxiosError(err)) {
+        console.log((err as AxiosError).response?.status);
+        (err as AxiosError).response?.status === 409 &&
+          toast("중복된 URL 입니다", { toastId: "duplicate" });
+      }
     }
   };
 
@@ -56,9 +75,6 @@ const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
       toast(errors.urlSlug.message, { toastId: "urlSlug" });
     errors.date.message && toast(errors.date.message, { toastId: "date" });
   };
-
-  console.log(fetchBody);
-  console.log(`/${fetchBody?.title?.replaceAll(" ", "-")}`);
 
   return (
     <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
@@ -80,19 +96,20 @@ const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
           <p>11월 독서</p>
           <textarea
             {...register("subTitle")}
-            defaultValue="생계형 개발자, SI에서 살아남기"
+            // defaultValue="생계형 개발자, SI에서 살아남기"
           ></textarea>
 
           <p>URL 설정</p>
           <input
             {...register("urlSlug", { required: "URL을 지정해주세요" })}
-            defaultValue={`/${fetchBody?.title?.replaceAll(" ", "-")}`}
+            defaultValue={`${fetchBody?.title?.replaceAll(" ", "-")}`}
             type="text"
           />
 
           <p>date 설정</p>
           <input
             {...register("date", { required: "날짜를 지정해주세요" })}
+            defaultValue={defaultDateHandler()}
             type="text"
           />
 

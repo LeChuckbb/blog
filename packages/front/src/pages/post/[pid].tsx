@@ -1,10 +1,8 @@
-import { useRouter } from "next/router";
 import WithHeader from "../../layout/WithHeader";
-import { useGetPostByIdQuery } from "../../hooks/query/useGetPostByIdQuery";
 import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { getAllSlugs, getPostBySlug } from "../../apis/postApi";
+import { getPostBySlug, getPost } from "../../apis/postApi";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -41,8 +39,8 @@ export default PostDetail;
 
 // 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
 export const getStaticPaths: GetStaticPaths = async ({}) => {
-  const res = await getAllSlugs();
-  const paths = res.data.map((el: any) => ({
+  const res = await getPost();
+  const paths = res.data.results.map((el: any) => ({
     params: { pid: el.urlSlug },
   }));
 
@@ -54,6 +52,7 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
 
 // 빌드 시 데이터를 fetch하여 static 페이지를 생성
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  console.log(params);
   const res = await getPostBySlug(params?.pid as string);
 
   return {

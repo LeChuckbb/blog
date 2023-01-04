@@ -17,6 +17,7 @@ const PostSchema: Schema = new Schema<Post>({
   urlSlug: {
     type: String,
     required: true,
+    unique: true,
   },
   title: {
     type: String,

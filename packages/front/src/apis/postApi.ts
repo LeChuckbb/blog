@@ -16,7 +16,5 @@ export const updatePost = (postId: string) =>
 export const deletePost = (postId: string) =>
   axiosInstance.delete(`/posts/${postId}`);
 
-export const getAllSlugs = () => axiosInstance.get(`/posts/slugs`);
-
 export const getPostBySlug = (slug: string) =>
   axiosInstance.get(`/posts/findBySlug?slug=${slug}`);

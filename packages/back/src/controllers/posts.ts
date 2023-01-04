@@ -72,16 +72,3 @@ export const getPostBySlug =
       return res.status(500).json({ error });
     }
   };
-
-export const getAllSlugs =
-  (model: Model<Post>) => async (req: Request, res: Response) => {
-    try {
-      const results = await model.find({}, { urlSlug: 1 });
-      console.log(results);
-
-      return res.status(200).json(results);
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error });
-    }
-  };
