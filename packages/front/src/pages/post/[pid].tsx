@@ -2,7 +2,11 @@ import WithHeader from "../../layout/WithHeader";
 import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { getPostBySlug, getPost } from "../../apis/postApi";
+import { getPostBySlug, getPost, deletePost } from "../../apis/postApi";
+import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { modalState } from "../../common/Modal/ModalSetter";
+import Modal from "../../common/Modal/Modal";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -11,8 +15,32 @@ const NoSSRViewer = dynamic(
   }
 );
 
+const DeleteModal = ({ confirmHandler }: any) => {
+  return (
+    <Modal>
+      <Modal.Title>포스트 삭제</Modal.Title>
+      <Modal.Content>정말로 삭제하시겠습니까?</Modal.Content>
+      <Modal.Buttons confirmHandler={confirmHandler} />
+    </Modal>
+  );
+};
+
 const PostDetail = ({ title, date, content }: any) => {
-  console.log(content);
+  const router = useRouter();
+  const [_, setModal] = useRecoilState(modalState);
+
+  const confirmHandler = async () => {
+    const res = await deletePost(router.query.pid as string);
+    router.push("/");
+    setModal({ isOpen: false, content });
+  };
+
+  const onClickDeleteHandler = async () => {
+    setModal({
+      isOpen: true,
+      content: <DeleteModal confirmHandler={confirmHandler} />,
+    });
+  };
 
   return (
     <Container>
@@ -22,7 +50,9 @@ const PostDetail = ({ title, date, content }: any) => {
           <span>{date}</span>
           <div style={{ display: "flex", gap: "8px", color: "#808080" }}>
             <span style={{ cursor: "pointer" }}>수정</span>
-            <span style={{ cursor: "pointer" }}>삭제</span>
+            <span style={{ cursor: "pointer" }} onClick={onClickDeleteHandler}>
+              삭제
+            </span>
           </div>
         </div>
       </HeadWrapper>

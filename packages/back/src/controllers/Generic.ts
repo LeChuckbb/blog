@@ -113,11 +113,11 @@ const update =
 const remove =
   (model: Model<Post | any>) =>
   (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-
-    console.log(id);
+    console.log("Removing ....");
+    console.log(req.params);
+    const slug = req.params.slug;
     model
-      .deleteOne({ _id: id })
+      .deleteOne({ urlSlug: slug })
       .then((result) => {
         if (result.deletedCount === 1) {
           console.log("delete 성공");

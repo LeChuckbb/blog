@@ -1,13 +1,14 @@
 import "../styles/reset.css";
 import type { AppProps } from "next/app";
-import WithHeader from "../layout/WithHeader";
-import Headerless from "../layout/Headerless";
 import { ThemeProvider } from "@emotion/react";
 import theme from "../styles/theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-// import { ReactQueryDevtools } from "react-query/devtools";
 import { NextPage } from "next";
+import Modal from "../common/Modal/Modal";
+import { useState } from "react";
+import { RecoilRoot } from "recoil";
+import ModalSetter from "../common/Modal/ModalSetter";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -39,7 +40,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen position="bottom-left" />
       <ThemeProvider theme={theme}>
-        {getLayout(<Component {...pageProps} />)}
+        <RecoilRoot>
+          {getLayout(<Component {...pageProps} />)}
+          <div className="modal-root">
+            <ModalSetter selector=".modal-root" />
+          </div>
+        </RecoilRoot>
       </ThemeProvider>
     </QueryClientProvider>
   );

@@ -26,7 +26,7 @@ router.get(`/findBySlug`, getPostBySlug(model));
 router.put("/", controller.update(model));
 
 // 게시글 삭제
-router.delete("/:id", controller.remove(model));
+router.delete("/:slug", controller.remove(model));
 
 // page로 게시글 가져오기
 // ex) GET /artists?name=hello
