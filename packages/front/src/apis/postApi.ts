@@ -10,8 +10,8 @@ export const getPostByPage = (page: number) =>
 
 export const createPost = (body: any) => axiosInstance.post("/posts", body);
 
-export const updatePost = (postId: string) =>
-  axiosInstance.get(`/posts/${postId}`);
+export const updatePost = (slug: string, body: any) =>
+  axiosInstance.patch(`/posts/${slug}`, body);
 
 export const deletePost = (postId: string) =>
   axiosInstance.delete(`/posts/${postId}`);

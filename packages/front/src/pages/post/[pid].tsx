@@ -30,6 +30,7 @@ const PostDetail = ({ title, date, content }: any) => {
   const [_, setModal] = useRecoilState(modalState);
 
   const confirmHandler = async () => {
+    // 삭제 에러처리 요망
     const res = await deletePost(router.query.pid as string);
     router.push("/");
     setModal({ isOpen: false, content });
@@ -42,6 +43,13 @@ const PostDetail = ({ title, date, content }: any) => {
     });
   };
 
+  const onClickUpdateHandler = () => {
+    // Editor 열기
+    // post/write?slug=xxx
+    console.log(title);
+    router.push({ pathname: "/post/write", query: { slug: title } });
+  };
+
   return (
     <Container>
       <HeadWrapper>
@@ -49,7 +57,9 @@ const PostDetail = ({ title, date, content }: any) => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>{date}</span>
           <div style={{ display: "flex", gap: "8px", color: "#808080" }}>
-            <span style={{ cursor: "pointer" }}>수정</span>
+            <span style={{ cursor: "pointer" }} onClick={onClickUpdateHandler}>
+              수정
+            </span>
             <span style={{ cursor: "pointer" }} onClick={onClickDeleteHandler}>
               삭제
             </span>

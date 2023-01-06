@@ -6,7 +6,6 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 
 const WriteViewer = ({ content }: any) => {
-  console.log(content);
   return (
     <Viewer
       initialValue={content || ""}

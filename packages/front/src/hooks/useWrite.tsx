@@ -1,21 +1,35 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { FormInterface } from "../pages/post/write";
 
-const useWrite = () => {
+interface Body {
+  title: string;
+  tags: string[];
+  content: any;
+}
+
+const useWrite = (data: any) => {
   const [tag, setTag] = useState("");
   const [tagsArray, setTagsArray] = useState(Array<string>);
-  const [fetchBody, setFetchBody] = useState({});
+  const [fetchBody, setFetchBody] = useState<Body>({
+    title: "",
+    tags: [],
+    content: undefined,
+  });
   const editorRef = useRef<any>(null);
   const subPageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (data?.tags != undefined) setTagsArray(data?.tags);
+  }, []);
 
   const onKeyDownHandler = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
       // 한글(복합문자) 입력시 끝 문자 이벤트가 한 번 더 발생하는 문제 방지
       if (event.nativeEvent.isComposing === false) {
         event.preventDefault(); // submit 방지
-        setTagsArray((prev) => {
+        setTagsArray((prev: any) => {
           // Set로 만들어서 배열 내 중복을 제거한 뒤 다시 배열로 반환
           const set = new Set([...prev, tag]);
           return Array.from(set);
@@ -30,8 +44,6 @@ const useWrite = () => {
       // toast 종료하기
       toast.dismiss();
       // data set하여 subPage로 props로 전달하기
-      console.log("submit!!!");
-      console.log(data);
 
       if (subPageRef.current != null) {
         subPageRef.current.className = subPageRef.current.className.replace(
@@ -44,12 +56,11 @@ const useWrite = () => {
       const contentMark = editorIns.getMarkdown();
       const contentHTML = editorIns.getHTML();
 
+      console.log(contentMark);
+
       if (contentMark?.length === 0) {
         throw new Error("본문 내용을 입력해주세요.");
       }
-
-      console.log(contentMark);
-      console.log(contentHTML);
 
       setFetchBody({
         title: data.title,
@@ -66,7 +77,9 @@ const useWrite = () => {
   };
 
   const onClickRemoveTagHandler = (clickedIdx: number) => {
-    const result = tagsArray.filter((el, index) => index !== clickedIdx);
+    const result = tagsArray.filter(
+      (_: any, index: any) => index !== clickedIdx
+    );
     setTagsArray(result);
   };
 

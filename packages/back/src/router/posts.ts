@@ -23,7 +23,7 @@ router.get("/findById", getPostById(model));
 router.get(`/findBySlug`, getPostBySlug(model));
 
 // 게시글 수정
-router.put("/", controller.update(model));
+router.patch("/:slug", controller.update(model));
 
 // 게시글 삭제
 router.delete("/:slug", controller.remove(model));

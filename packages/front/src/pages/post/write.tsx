@@ -5,6 +5,10 @@ import { useForm } from "react-hook-form";
 import WriteSubPage from "../../components/posts/WriteSubPage";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { GetServerSideProps } from "next";
+import { getPostBySlug } from "../../apis/postApi";
+import { NodeHtmlMarkdown } from "node-html-markdown";
+import { useRouter } from "next/router";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -19,7 +23,11 @@ export interface FormInterface {
   content: string;
 }
 
-const write: React.FC = () => {
+interface Props {
+  data?: any;
+}
+
+const write = ({ data }: Props) => {
   const {
     editorRef,
     subPageRef,
@@ -31,13 +39,17 @@ const write: React.FC = () => {
     onValidSubmit,
     onInvalidSubmit,
     onClickRemoveTagHandler,
-  } = useWrite();
+  } = useWrite(data);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormInterface>();
+
+  const router = useRouter();
+  const content = data?.content && NodeHtmlMarkdown.translate(data?.content);
+  const { title } = fetchBody;
 
   return (
     <Container>
@@ -47,6 +59,7 @@ const write: React.FC = () => {
             {...register("title", { required: "제목을 입력해주세요" })}
             type="text"
             placeholder="제목을 입력하세요"
+            defaultValue={data?.title}
           />
           <TagsWrapper>
             {tagsArray?.map((el, idx) => (
@@ -64,11 +77,12 @@ const write: React.FC = () => {
             />
           </TagsWrapper>
         </TitleWrapper>
-        <NoSsrEditor content="" editorRef={editorRef} />
+        <NoSsrEditor content={content} editorRef={editorRef} />
         <ButtonWrapper>
           <input
             type="button"
             value="나가기"
+            onClick={() => router.back()}
             style={{
               flex: "1 1 30%",
               backgroundColor: "green",
@@ -85,12 +99,26 @@ const write: React.FC = () => {
         </ButtonWrapper>
         <ToastContainer />
       </form>
-      <WriteSubPage fetchBody={fetchBody} subPageRef={subPageRef} />
+      <WriteSubPage
+        prevData={data}
+        fetchBody={fetchBody}
+        subPageRef={subPageRef}
+      />
     </Container>
   );
 };
 
-// -----------------------
+// post/write?slug=xxx (UPDATE)
+// query slug?=가 있으면 data fetch
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  if (Object.values(query).length === 0) return { props: { data: null } };
+  // 실패시 에러 처리 요망
+  const res = await getPostBySlug(query.slug as string);
+  return {
+    props: { data: res.data },
+  };
+};
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;

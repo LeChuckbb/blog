@@ -83,31 +83,31 @@ const get =
 
 const update =
   (model: Model<Post | any>, populate?: string[]) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    console.log("Updating document from  " + model.modelName + " by id");
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Updating document from  " + model.modelName + " by slug");
+    const slug = req.params.slug;
+    const body = req.body;
 
-    const id = req.params.id;
-
-    model
-      .findOne<Document>({ _id: id })
-      .populate(populate || [])
-      .then((result) => {
-        if (result) {
-          result.save(req.body);
-
-          return result.save().then((result) => {
-            console.log(result);
-            return res.status(200).json({ result });
-          });
-        } else {
-          console.log("Not Found");
-          return res.status(404).json({ message: "Not Found" });
+    try {
+      const result = await model.updateOne(
+        { urlSlug: slug },
+        {
+          $set: {
+            thumbnail: body.thumbnail,
+            urlSlug: body.urlSlug,
+            title: body.title,
+            subTitle: body.subTitle,
+            date: body.date,
+            content: body.content,
+            tags: body.tags,
+          },
         }
-      })
-      .catch((error) => {
-        console.log(error);
-        return res.status(500).json({ error });
-      });
+      );
+      return res.status(200).json({ result });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json(error);
+    }
   };
 
 const remove =

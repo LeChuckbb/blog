@@ -56,9 +56,6 @@ export const getPostById =
 export const getPostBySlug =
   (model: Model<Post>) => async (req: Request, res: Response) => {
     try {
-      console.log("*** getPostBySlug *** ");
-      console.log(req.query);
-
       const results = await model.findOne({ urlSlug: req.query.slug });
       const resultObj = results?.toObject();
       const resultBody = {

@@ -3,29 +3,14 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { RefObject } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { createPost } from "../../apis/postApi";
+import { createPost, updatePost } from "../../apis/postApi";
 import { useRouter } from "next/router";
 import { isAxiosError, AxiosError } from "axios";
-
-const onClickSubPageCancelHandler = (
-  event: React.MouseEvent,
-  subPageRef: RefObject<HTMLDivElement>
-) => {
-  event?.preventDefault(); // submit 방지
-  if (subPageRef.current != null) {
-    console.log(subPageRef);
-    console.log(subPageRef.current);
-    console.log(subPageRef.current.className);
-    subPageRef.current.className = subPageRef.current.className.replace(
-      "show",
-      "hide"
-    );
-  }
-};
 
 type Props = {
   subPageRef: RefObject<HTMLDivElement>;
   fetchBody: any;
+  prevData?: any;
 };
 
 interface FormInterface {
@@ -35,9 +20,22 @@ interface FormInterface {
   date: string;
 }
 
+const onClickSubPageCancelHandler = (
+  event: React.MouseEvent,
+  subPageRef: RefObject<HTMLDivElement>
+) => {
+  event?.preventDefault(); // submit 방지
+  if (subPageRef.current != null) {
+    subPageRef.current.className = subPageRef.current.className.replace(
+      "show",
+      "hide"
+    );
+  }
+};
+
 const defaultDateHandler = () => {
   const date = new Date();
-  console.log(date);
+
   return new Intl.DateTimeFormat("kr", {
     year: "numeric",
     month: "2-digit",
@@ -48,17 +46,35 @@ const defaultDateHandler = () => {
     .slice(0, -1);
 };
 
-const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
-  const { register, handleSubmit, formState } = useForm<FormInterface>();
+const WriteSubPage: React.FC<Props> = ({ prevData, fetchBody, subPageRef }) => {
+  const { register, handleSubmit } = useForm<FormInterface>({
+    defaultValues: {
+      thumbnail: prevData?.thumbnail ? prevData?.thumbnail : "",
+      subTitle: prevData?.subTitle ? prevData?.subTitle : "",
+      date: prevData?.date ? prevData?.date : defaultDateHandler(),
+    },
+  });
   const router = useRouter();
+  const isUpdate = router.query.slug === undefined ? false : true;
+
+  console.log(prevData);
+  console.log(fetchBody);
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (data) => {
     try {
+      console.log("ON VALID");
+      console.log(data);
       // toast 종료하기
       toast.dismiss();
       // POST API 호출하기
-      const res = await createPost({ ...data, ...fetchBody });
-      if (res.status === 201) {
+      const res = isUpdate
+        ? await updatePost(router.query.slug as string, {
+            ...data,
+            ...fetchBody,
+          })
+        : await createPost({ ...data, ...fetchBody });
+      console.log(res);
+      if (res.status === 200 || 201) {
         router.push("/");
       }
     } catch (err) {
@@ -71,9 +87,11 @@ const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
   };
 
   const onInvalidSubmit = (errors: any) => {
-    errors.urlSlug.message &&
+    console.log(errors);
+    console.log(errors.urlSlug.message);
+    errors?.urlSlug?.message &&
       toast(errors.urlSlug.message, { toastId: "urlSlug" });
-    errors.date.message && toast(errors.date.message, { toastId: "date" });
+    errors?.date?.message && toast(errors.date.message, { toastId: "date" });
   };
 
   return (
@@ -94,14 +112,12 @@ const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
           </div>
 
           <p>11월 독서</p>
-          <textarea
-            {...register("subTitle")}
-            // defaultValue="생계형 개발자, SI에서 살아남기"
-          ></textarea>
+          <textarea {...register("subTitle")} />
 
           <p>URL 설정</p>
           <input
             {...register("urlSlug", { required: "URL을 지정해주세요" })}
+            // defaultValue={`${title?.replaceAll(" ", "-")}`}
             defaultValue={`${fetchBody?.title?.replaceAll(" ", "-")}`}
             type="text"
           />
@@ -109,7 +125,6 @@ const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
           <p>date 설정</p>
           <input
             {...register("date", { required: "날짜를 지정해주세요" })}
-            defaultValue={defaultDateHandler()}
             type="text"
           />
 
@@ -119,8 +134,7 @@ const WriteSubPage: React.FC<Props> = ({ fetchBody, subPageRef }) => {
               value="취소"
               style={{
                 border: "2px solid yellow",
-                color: "white",
-                padding: "16px",
+                padding: "8px",
               }}
               onClick={(e) => onClickSubPageCancelHandler(e, subPageRef)}
             />
@@ -145,10 +159,8 @@ const SubPage = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: scale(0);
 
   &.show {
-    transform: scale(1);
     top: 0vh;
   }
 `;
