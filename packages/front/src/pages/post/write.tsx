@@ -49,7 +49,6 @@ const write = ({ data }: Props) => {
 
   const router = useRouter();
   const content = data?.content && NodeHtmlMarkdown.translate(data?.content);
-  const { title } = fetchBody;
 
   return (
     <Container>
@@ -113,6 +112,7 @@ const write = ({ data }: Props) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (Object.values(query).length === 0) return { props: { data: null } };
   // 실패시 에러 처리 요망
+  console.log(query);
   const res = await getPostBySlug(query.slug as string);
   return {
     props: { data: res.data },

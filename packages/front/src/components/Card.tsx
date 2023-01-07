@@ -28,6 +28,8 @@ const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
   }, [isLastItem, isIntersecting]);
 
   const onClickHandler = (event: React.MouseEvent, id: string) => {
+    console.log(urlSlug);
+    console.log(router);
     router.push(
       {
         pathname: `/post/${urlSlug}`,

@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { createPost, updatePost } from "../../apis/postApi";
 import { useRouter } from "next/router";
 import { isAxiosError, AxiosError } from "axios";
+import IconThumbnail from "../../../public/thumbnail.svg";
 
 type Props = {
   subPageRef: RefObject<HTMLDivElement>;
@@ -57,29 +58,20 @@ const WriteSubPage: React.FC<Props> = ({ prevData, fetchBody, subPageRef }) => {
   const router = useRouter();
   const isUpdate = router.query.slug === undefined ? false : true;
 
-  console.log(prevData);
-  console.log(fetchBody);
-
   const onValidSubmit: SubmitHandler<FormInterface> = async (data) => {
     try {
-      console.log("ON VALID");
-      console.log(data);
-      // toast 종료하기
-      toast.dismiss();
-      // POST API 호출하기
+      toast.dismiss(); // toast 종료하기
       const res = isUpdate
         ? await updatePost(router.query.slug as string, {
             ...data,
             ...fetchBody,
           })
         : await createPost({ ...data, ...fetchBody });
-      console.log(res);
       if (res.status === 200 || 201) {
         router.push("/");
       }
     } catch (err) {
       if (isAxiosError(err)) {
-        console.log((err as AxiosError).response?.status);
         (err as AxiosError).response?.status === 409 &&
           toast("중복된 URL 입니다", { toastId: "duplicate" });
       }
@@ -87,8 +79,6 @@ const WriteSubPage: React.FC<Props> = ({ prevData, fetchBody, subPageRef }) => {
   };
 
   const onInvalidSubmit = (errors: any) => {
-    console.log(errors);
-    console.log(errors.urlSlug.message);
     errors?.urlSlug?.message &&
       toast(errors.urlSlug.message, { toastId: "urlSlug" });
     errors?.date?.message && toast(errors.date.message, { toastId: "date" });
@@ -97,50 +87,68 @@ const WriteSubPage: React.FC<Props> = ({ prevData, fetchBody, subPageRef }) => {
   return (
     <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
       <SubPage className="SubPage hide" ref={subPageRef}>
-        <div
-          style={{
-            backgroundColor: "lightgrey",
-            width: "50%",
-            height: "50%",
-            padding: "32px",
-          }}
-        >
-          <p>포스트 미리보기</p>
-          <div>
-            <button>썸네일 업로드</button>
-            <input type="text" {...register("thumbnail")} />
-          </div>
+        <Container>
+          <ColumnWrapper>
+            <Box>
+              <label htmlFor="Thumbnail">포스트 미리보기</label>
+              <Thumbnail id="Thumbnail">
+                <IconThumbnail style={{ width: "auto" }} />
+                <ImageBtnLabel htmlFor="file">썸네일 업로드</ImageBtnLabel>
+                <input id="file" type="file" style={{ display: "none" }} />
+              </Thumbnail>
+            </Box>
 
-          <p>11월 독서</p>
-          <textarea {...register("subTitle")} />
+            <Box>
+              <label>썸네일 업로드</label>
+              <input type="text" {...register("thumbnail")} />
+            </Box>
+          </ColumnWrapper>
 
-          <p>URL 설정</p>
-          <input
-            {...register("urlSlug", { required: "URL을 지정해주세요" })}
-            // defaultValue={`${title?.replaceAll(" ", "-")}`}
-            defaultValue={`${fetchBody?.title?.replaceAll(" ", "-")}`}
-            type="text"
-          />
+          <VerticalLine />
 
-          <p>date 설정</p>
-          <input
-            {...register("date", { required: "날짜를 지정해주세요" })}
-            type="text"
-          />
+          <ColumnWrapper>
+            <Box>
+              <label htmlFor="textArea">11월 독서</label>
+              <TextArea
+                {...register("subTitle")}
+                id="textArea"
+                maxLength={150}
+              />
+            </Box>
 
-          <div>
-            <input
-              type="button"
-              value="취소"
-              style={{
-                border: "2px solid yellow",
-                padding: "8px",
-              }}
-              onClick={(e) => onClickSubPageCancelHandler(e, subPageRef)}
-            />
-            <input type="submit" value="수정하기" />
-          </div>
-        </div>
+            <Box>
+              <label htmlFor="urlSlug">URL 설정</label>
+              <input
+                id="urlSlug"
+                {...register("urlSlug", { required: "URL을 지정해주세요" })}
+                // defaultValue={`${title?.replaceAll(" ", "-")}`}
+                defaultValue={`${fetchBody?.title?.replaceAll(" ", "-")}`}
+                type="text"
+              />
+            </Box>
+
+            <Box>
+              <label htmlFor="date">date 설정</label>
+              <input
+                {...register("date", { required: "날짜를 지정해주세요" })}
+                type="text"
+                id="date"
+              />
+            </Box>
+            <ButtonWrapper>
+              <input
+                type="button"
+                value="취소"
+                style={{
+                  border: "2px solid yellow",
+                  padding: "8px",
+                }}
+                onClick={(e) => onClickSubPageCancelHandler(e, subPageRef)}
+              />
+              <input type="submit" value="수정하기" />
+            </ButtonWrapper>
+          </ColumnWrapper>
+        </Container>
       </SubPage>
       <ToastContainer />
     </form>
@@ -159,8 +167,62 @@ const SubPage = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  scale: 0;
 
   &.show {
     top: 0vh;
+    scale: 1;
   }
+`;
+
+const Container = styled.div`
+  background-color: lightgrey;
+  width: 50%;
+  height: 50%;
+  padding: 32px;
+  display: flex;
+`;
+
+const ColumnWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 100%;
+`;
+
+const ImageBtnLabel = styled.label`
+  cursor: pointer;
+  border: 2px solid navy;
+`;
+
+const VerticalLine = styled.div`
+  width: 1px;
+  height: 100%;
+  background-color: red;
+  margin-left: 32px;
+  margin-right: 32px;
+`;
+
+const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Thumbnail = styled.div`
+  width: 100%;
+  min-height: 200px;
+  background-color: #e9e9e9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+`;
+
+const TextArea = styled.textarea`
+  resize: none;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  gap: 8px;
 `;

@@ -51,9 +51,9 @@ const PostDetail = ({ title, date, content }: any) => {
   };
 
   return (
-    <Container>
+    <Container className="afjhkjafhs">
       <HeadWrapper>
-        <h1 style={{ fontSize: "32px" }}>{title}</h1>
+        <h1 style={{ fontSize: "48px", fontWeight: 700 }}>{title}</h1>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>{date}</span>
           <div style={{ display: "flex", gap: "8px", color: "#808080" }}>
@@ -79,6 +79,7 @@ export default PostDetail;
 
 // 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
 export const getStaticPaths: GetStaticPaths = async ({}) => {
+  console.log("hasfdasdf");
   const res = await getPost();
   const paths = res.data.results.map((el: any) => ({
     params: { pid: el.urlSlug },
@@ -92,7 +93,9 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
 
 // 빌드 시 데이터를 fetch하여 static 페이지를 생성
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  console.log("asdffdsa");
   console.log(params);
+  console.log(params?.pid);
   const res = await getPostBySlug(params?.pid as string);
 
   return {
@@ -107,6 +110,7 @@ const Container = styled.div`
   width: 100%;
   background-color: white;
   padding: 16px;
+  min-height: 100vh;
   ${(props) => props.theme.mq[1]} {
     width: 1024px;
   }

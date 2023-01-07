@@ -47,43 +47,31 @@ paths:
               schema:
                 type: object
 
-  /posts/{id}:
-    get:
-      tags:
-        - post
-      summary: ID로 게시글 가져오기 - 게시글 상세보기 (working)
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Post"
+  /posts/{slug}:
     patch:
       tags:
         - post
-      summary: ID로 게시글 일부 수정하기 (working)
+      summary: slug로 게시글 일부 수정하기
       parameters:
-        - name: id
+        - name: slug
           in: path
           required: true
           schema:
-            type: integer
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
       responses:
         "200":
           description: OK
     delete:
       tags:
         - post
-      summary: ID로 게시글 삭제하기 (working)
+      summary: slug로 게시글 삭제하기
       parameters:
-        - name: id
+        - name: slug
           in: path
           required: true
           schema:
@@ -92,11 +80,30 @@ paths:
         "200":
           description: OK
 
+  /posts/findBySlug:
+    get:
+      tags:
+        - post
+      summary: slug로 게시글 가져오기 - (게시글 상세보기 + 게시글 수정하기)
+      parameters:
+        - name: slug
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+
   /posts/findByPage:
     get:
       tags:
         - post
-      summary: 페이지 단위로 가져오기 for infinite scroll. ?page= (working)
+      summary: 페이지 단위로 가져오기 - (infinite scroll. 게시글 목록 가져오기) ?page=
       parameters:
         - name: id
           in: query
@@ -116,15 +123,19 @@ components:
     Post:
       type: object
       properties:
-        _id:
+        # _id:
+        # type: string
+        urlSlug:
           type: string
-        image:
+        thumbnail:
           type: string
         title:
           type: string
         subTitle:
           type: string
         date:
+          type: string
+        content:
           type: string
         tags:
           type: array
