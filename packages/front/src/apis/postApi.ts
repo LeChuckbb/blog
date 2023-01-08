@@ -15,3 +15,5 @@ export const getPostBySlug = (slug: string) =>
 
 export const getPostByPage = (page: number) =>
   axiosInstance.get(`/posts/findByPage?page=${page}`);
+
+export const getPostTags = () => axiosInstance.get(`/posts/tags`);

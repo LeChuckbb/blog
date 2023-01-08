@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-export interface Post {
+export interface Post extends mongoose.Document {
   thumbnail: string;
   urlSlug: string;
   title: string;
@@ -8,12 +8,11 @@ export interface Post {
   date: string;
   content: string;
   tags: Array<String>;
+  // tags: any;
 }
 
 const PostSchema: Schema = new Schema<Post>({
-  thumbnail: {
-    type: String,
-  },
+  thumbnail: String,
   urlSlug: {
     type: String,
     required: true,
@@ -23,9 +22,7 @@ const PostSchema: Schema = new Schema<Post>({
     type: String,
     required: true,
   },
-  subTitle: {
-    type: String,
-  },
+  subTitle: String,
   date: {
     type: String,
     required: true,
@@ -34,9 +31,11 @@ const PostSchema: Schema = new Schema<Post>({
     type: String,
     requried: true,
   },
-  tags: {
-    type: [String],
-  },
+  tags: [String],
+  // tags: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Tag",
+  // },
 });
 
-export default mongoose.model<Post>("posts", PostSchema);
+export default mongoose.model<Post>("Post", PostSchema);

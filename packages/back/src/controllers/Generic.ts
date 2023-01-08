@@ -4,40 +4,6 @@ import { Post } from "../models/Posts";
 import { encode } from "html-entities";
 import { MongoError } from "mongodb";
 
-const create =
-  (model: Model<Post | any>) =>
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      console.log("Creating new document for " + model.modelName);
-
-      // req.body에서 content 항목이 있으면 encode하여 DB에 저장
-      const body = req?.body?.content
-        ? {
-            ...req.body,
-            content: encode(req.body.content),
-          }
-        : req.body;
-
-      const doc = new model({
-        _id: new mongoose.Types.ObjectId(),
-        ...body,
-      });
-
-      const result = await doc.save();
-      return res.status(201).json({ result });
-    } catch (error) {
-      if (error instanceof Error.ValidationError) {
-        console.log("Mongoose Error Here");
-      } else if ((error as MongoError).code === 11000) {
-        return res.status(409).json({
-          message: "duplicate key error",
-          error: error,
-        });
-      }
-      return res.status(500).json({ error });
-    }
-  };
-
 const getAll =
   (model: Model<Post | any>, populate?: string[]) =>
   (req: Request, res: Response, next: NextFunction) => {
@@ -47,7 +13,6 @@ const getAll =
       .find<Document>({})
       .populate(populate || [])
       .then((results) => {
-        console.log(results);
         return res.status(200).json({ results });
       })
       .catch((error) => {
@@ -110,35 +75,8 @@ const update =
     }
   };
 
-const remove =
-  (model: Model<Post | any>) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    console.log("Removing ....");
-    console.log(req.params);
-    const slug = req.params.slug;
-    model
-      .deleteOne({ urlSlug: slug })
-      .then((result) => {
-        if (result.deletedCount === 1) {
-          console.log("delete 성공");
-          return res.status(200).json({ message: "delete 성공" });
-        } else {
-          console.log("delete 실패");
-          return res
-            .status(204)
-            .json({ message: "delete 실패. 없는 id입니다." });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        return res.status(500).json({ error });
-      });
-  };
-
 export default {
-  create,
   getAll,
   get,
   update,
-  remove,
 };

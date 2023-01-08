@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useGetPostByPageQuery } from "../../hooks/query/useGetPostByPageQuery";
+import { useGetPostTagsQuery } from "../../hooks/query/useGetPostTagsQuery";
 import Card from "../Card";
 import PostTags from "./PostTags";
 
@@ -10,6 +11,8 @@ const dateFormatter = (date: string): string => {
 
 const PostList: React.FC = () => {
   const { data, fetchNextPage, hasNextPage } = useGetPostByPageQuery();
+  const { data: tagsData } = useGetPostTagsQuery();
+  console.log(tagsData);
 
   return (
     <Container>
