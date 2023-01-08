@@ -8,8 +8,8 @@ import {
   getPostByPage,
   getPostBySlug,
   updatePost,
+  getPostTags,
 } from "../controllers/posts";
-import { getPostTags } from "../controllers/Tags";
 
 // 태그 목록 가져오기
 const router = Router();

@@ -6,6 +6,7 @@ import mongoose, { Document, Model, Error, Mongoose } from "mongoose";
 import { encode } from "html-entities";
 import { MongoError } from "mongodb";
 import modelTags from "../models/Tags";
+import modelPost from "../models/Posts";
 
 const PAGE_SIZE = 8;
 
@@ -175,6 +176,18 @@ export const deletePost =
         : res.status(200).json({ message: "삭제 성공." });
     } catch (error) {
       console.log("ERROR");
+      console.log(error);
+      return res.status(500).json({ error });
+    }
+  };
+
+export const getPostTags =
+  (model: Model<Tags>) => async (req: Request, res: Response) => {
+    try {
+      const tags = await model.find({});
+      const count = await modelPost.count();
+      return res.status(200).json({ count, tags });
+    } catch (error) {
       console.log(error);
       return res.status(500).json({ error });
     }

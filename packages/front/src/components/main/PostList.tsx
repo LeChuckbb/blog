@@ -3,6 +3,7 @@ import { useGetPostByPageQuery } from "../../hooks/query/useGetPostByPageQuery";
 import { useGetPostTagsQuery } from "../../hooks/query/useGetPostTagsQuery";
 import Card from "../Card";
 import PostTags from "./PostTags";
+import { useEffect, useState } from "react";
 
 const dateFormatter = (date: string): string => {
   const arr = date.split("-");
@@ -10,15 +11,23 @@ const dateFormatter = (date: string): string => {
 };
 
 const PostList: React.FC = () => {
-  const { data, fetchNextPage, hasNextPage } = useGetPostByPageQuery();
+  const {
+    data: postsData,
+    fetchNextPage,
+    hasNextPage,
+  } = useGetPostByPageQuery();
   const { data: tagsData } = useGetPostTagsQuery();
-  console.log(tagsData);
 
+  // const [cards, setCards] = useState();
+
+  // useEffect(() => {
+  //   setCards(postsData)
+  // },[])
   return (
     <Container>
-      <PostTags />
+      <PostTags tagsData={tagsData?.data} />
       <CardContainer>
-        {data?.pages
+        {postsData?.pages
           .map((page: any) => page.data.results)
           .flat()
           .map((post: any, idx: number, arr) => {
