@@ -1,25 +1,27 @@
 import styled from "@emotion/styled";
-import {
-  PostTagsType,
-  PostTagType,
-} from "../../hooks/query/useGetPostTagsQuery";
+import { PostTagsType } from "../../hooks/query/useGetPostTagsQuery";
 
 interface Props {
   tagsData?: PostTagsType;
+  setTag: (tag: string | any) => unknown;
 }
 
 const PostTags: React.FC<Props> = (props) => {
-  const { tagsData } = props;
-  console.log(tagsData);
+  const { tagsData, setTag } = props;
+
+  const onClickTagList = (tag: string) => {
+    setTag(tag);
+  };
+
   return (
     <Tag>
-      <TagLI>
-        전체보기
+      <TagLI onClick={() => onClickTagList("all")}>
+        all
         <Count>{tagsData?.count}</Count>
       </TagLI>
       {tagsData?.tags.map((tag: any) => {
         return (
-          <TagLI>
+          <TagLI key={tag._id} onClick={() => onClickTagList(tag.name)}>
             {tag.name}
             <Count>{tag.count}</Count>
           </TagLI>

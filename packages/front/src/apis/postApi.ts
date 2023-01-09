@@ -13,7 +13,7 @@ export const deletePost = (slug: string) =>
 export const getPostBySlug = (slug: string) =>
   axiosInstance.get(`/posts/findBySlug?slug=${slug}`);
 
-export const getPostByPage = (page: number) =>
-  axiosInstance.get(`/posts/findByPage?page=${page}`);
+export const getPostByPage = (page: number, tag: string) =>
+  axiosInstance.get(`/posts/findByPage?page=${page}&tag=${tag}`);
 
 export const getPostTags = () => axiosInstance.get(`/posts/tags`);

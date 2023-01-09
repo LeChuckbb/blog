@@ -9,15 +9,18 @@ type PostByPageType = {
   results: Array<object>;
 };
 
-export const useGetPostByPageQuery = () =>
-  useInfiniteQuery<AxiosResponse<PostByPageType, Error>>(
-    ["getPosts"],
-    ({ pageParam = 1 }) => getPostByPage(pageParam),
+export const useGetPostByPageQuery = (selectedTag: string) => {
+  return useInfiniteQuery<AxiosResponse<PostByPageType, Error>>(
+    ["getPosts", selectedTag],
+    ({ pageParam = 1 }) => getPostByPage(pageParam, selectedTag),
     {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
+      staleTime: 300000,
+      suspense: false,
       getNextPageParam: (lastPage) => {
-        return lastPage.data.next === null ? null : lastPage.data.next + 1;
+        return lastPage.data.next === null ? null : lastPage.data.next;
       },
     }
   );
+};

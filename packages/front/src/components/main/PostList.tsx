@@ -11,26 +11,22 @@ const dateFormatter = (date: string): string => {
 };
 
 const PostList: React.FC = () => {
+  const [selectedTag, setSelectedTag] = useState("all");
   const {
     data: postsData,
     fetchNextPage,
     hasNextPage,
-  } = useGetPostByPageQuery();
+  } = useGetPostByPageQuery(selectedTag);
   const { data: tagsData } = useGetPostTagsQuery();
 
-  // const [cards, setCards] = useState();
-
-  // useEffect(() => {
-  //   setCards(postsData)
-  // },[])
   return (
     <Container>
-      <PostTags tagsData={tagsData?.data} />
+      <PostTags tagsData={tagsData?.data} setTag={setSelectedTag} />
       <CardContainer>
         {postsData?.pages
           .map((page: any) => page.data.results)
           .flat()
-          .map((post: any, idx: number, arr) => {
+          .map((post: any, idx: number, arr: any) => {
             return (
               <Card
                 key={post._id}

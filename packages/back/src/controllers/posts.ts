@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Post } from "../models/Posts";
 import { Tags } from "../models/Tags";
 import { decode } from "html-entities";
-import mongoose, { Document, Model, Error, Mongoose } from "mongoose";
+import { Model, Error } from "mongoose";
 import { encode } from "html-entities";
 import { MongoError } from "mongodb";
 import modelTags from "../models/Tags";
@@ -13,17 +13,26 @@ const PAGE_SIZE = 8;
 export const getPostByPage =
   (model: Model<Post>) => async (req: Request, res: Response) => {
     try {
-      const count = await model.count({});
+      const tagQuery = req?.query?.tag;
+      const count =
+        tagQuery === "all"
+          ? await model.count({})
+          : await model.count({ tags: tagQuery });
       const page = Number(req.query.page);
       const IS_NEXT_PAGE_EXIST = count - page * PAGE_SIZE <= 0 ? null : true;
-      const next = !IS_NEXT_PAGE_EXIST ? IS_NEXT_PAGE_EXIST : page;
+      const next = !IS_NEXT_PAGE_EXIST ? IS_NEXT_PAGE_EXIST : page + 1;
       const prev = page === 1 ? null : page - 1;
 
-      // find에서 content는 제외
-      const results = await model
-        .find({}, { content: 0 })
-        .skip(PAGE_SIZE * (page - 1))
-        .limit(PAGE_SIZE);
+      const results =
+        tagQuery === "all"
+          ? await model
+              .find({}, { content: 0 })
+              .skip(PAGE_SIZE * (page - 1))
+              .limit(PAGE_SIZE)
+          : await model
+              .find({ tags: tagQuery }, { content: 0 })
+              .skip(PAGE_SIZE * (page - 1))
+              .limit(PAGE_SIZE);
 
       return res.status(200).json({
         count,
