@@ -4,9 +4,11 @@ import options from "./settings/swagger";
 import cors from "cors";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import cookies from "cookie-parser";
 
 import router from "./router";
 import "./settings/env";
+import "./auth/passport";
 
 const { MONGO_URI } = process.env;
 const corsOptions = {
@@ -23,6 +25,7 @@ mongoose
   .catch((e) => console.error(e));
 
 // body-parser like
+app.use(cookies());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
