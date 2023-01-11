@@ -7,6 +7,15 @@ import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../common/Modal/ModalSetter";
 import Modal from "../../common/Modal/Modal";
+import { AxiosError, isAxiosError } from "axios";
+
+// interface AError extends AxiosError {
+//   response: {
+//     data: {
+//       code: string;
+//     };
+//   };
+// }
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -30,10 +39,21 @@ const PostDetail = ({ title, date, content }: any) => {
   const [_, setModal] = useRecoilState(modalState);
 
   const confirmHandler = async () => {
-    // 삭제 에러처리 요망
-    const res = await deletePost(router.query.pid as string);
-    router.push("/");
-    setModal({ isOpen: false, content });
+    try {
+      // 삭제 에러처리 요망
+      const res = await deletePost(router.query.pid as string);
+      router.push("/");
+      setModal({ isOpen: false, content });
+    } catch (error) {
+      if (isAxiosError(error)) {
+        if ((error as AError).response?.data.code === "AUE004") {
+          console.log("hehre");
+          setModal({ isOpen: false, content });
+        }
+      }
+      console.log("error 캐치");
+      console.log(error);
+    }
   };
 
   const onClickDeleteHandler = async () => {
@@ -79,11 +99,12 @@ export default PostDetail;
 
 // 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
 export const getStaticPaths: GetStaticPaths = async ({}) => {
-  console.log("hasfdasdf");
   const res = await getPost();
   const paths = res.data.results.map((el: any) => ({
     params: { pid: el.urlSlug },
   }));
+
+  console.log(paths);
 
   return {
     paths,

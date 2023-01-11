@@ -23,7 +23,7 @@ module.exports = {
   refreshToken: () => {
     // refresh token 발급
     return jwt.sign({}, process.env.REFRESH_TOKEN_SECRET as string, {
-      expiresIn: "7d",
+      expiresIn: "0",
     });
   },
   refreshVerify: async (token: string, id: string) => {

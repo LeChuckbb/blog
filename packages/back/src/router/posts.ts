@@ -45,7 +45,8 @@ router.patch(
 // 게시글 삭제
 router.delete(
   "/:slug",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  authJWT,
   deletePost(model)
 );
 

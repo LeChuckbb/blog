@@ -1,11 +1,36 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import { toast } from "react-toastify";
 
 const axiosInstance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_HOST}`,
+  withCredentials: true,
   // params: {
   //   api_key: process.env.REACT_APP_API_KEY,
   //   languages: "ko-KR",
   // },
 });
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    console.log("ERROR 인터셉트");
+    if (error.response.data.code === "AUE003") {
+      // 재발급받은 access Token을 세팅하고,
+      axiosInstance.defaults.headers.common["Authorization"] =
+        error.response.data.accessToken;
+      error.config.headers["Authorization"] = error.response.data.accessToken;
+      // API 재요청하기
+      const config = error.config;
+      return axios.request(config);
+    } else if (error.response.data.code === "AUE004") {
+      // 권한이 없다는 토스트 띄우기 (모달 종료하고)
+      console.log("HERE");
+      toast("요청에 대한 권한이 없습니다");
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default axiosInstance;

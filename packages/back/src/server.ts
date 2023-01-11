@@ -13,6 +13,7 @@ import "./auth/passport";
 const { MONGO_URI } = process.env;
 const corsOptions = {
   origin: ["http://localhost:3000"],
+  credentials: true,
 };
 
 const app: Application = express();

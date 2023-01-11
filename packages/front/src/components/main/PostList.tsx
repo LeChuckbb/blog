@@ -6,7 +6,9 @@ import PostTags from "./PostTags";
 import { useEffect, useState } from "react";
 
 const dateFormatter = (date: string): string => {
-  const arr = date.split("-");
+  if (date == undefined) return "";
+
+  const arr = date?.split("-");
   return `${arr[0]}년 ${arr[1]}월 ${arr[2]}일`;
 };
 
@@ -41,7 +43,7 @@ const PostList: React.FC = () => {
                     <Card.Title>{post.title}</Card.Title>
                     <Card.SubTitle>{post.subTitle}</Card.SubTitle>
                   </Card.TitleWrapper>
-                  <Card.Date>{dateFormatter(post.date)}</Card.Date>
+                  <Card.Date>{dateFormatter(post?.date)}</Card.Date>
                 </Card.SecondSection>
                 <Card.ThirdSection>
                   <Card.Tags>{post.tags}</Card.Tags>

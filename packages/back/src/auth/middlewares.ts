@@ -18,14 +18,19 @@ const authJWT = async (req: any, res: any, next: any) => {
     if (!refreshToken) {
       // case4 -> 재로그인 유도
       console.log("CASE 4");
-      throw new Error("토큰이 모두 만료되었습니다. 재로그인해주세요.");
+      // throw new Error("토큰이 모두 만료되었습니다. 재로그인해주세요.");
+      return res.status(401).json({
+        message: "모든 토큰 만료. 재로그인 요망",
+        code: "AUE004",
+      });
     } else {
       // case 3 -> Refresh Token을 이용해서 Access Token 재발급
       console.log("CASE 3");
       const newAccessToken = jwt.accessToken("KenLiu");
-      return res.status(201).json({
+      return res.status(401).json({
         accessToken: newAccessToken,
         message: "accessToken 만료로 인한 재발급",
+        code: "AUE003",
       });
       // 1. accessToken을 response 로 전달.
       // 2. 이후 클라이언트에서 자동으로 accessToken을 갈아끼워 재요청을 보낼수 있게끔 해야함. 어떻게?
