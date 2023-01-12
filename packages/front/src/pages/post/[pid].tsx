@@ -9,14 +9,6 @@ import { modalState } from "../../common/Modal/ModalSetter";
 import Modal from "../../common/Modal/Modal";
 import { AxiosError, isAxiosError } from "axios";
 
-// interface AError extends AxiosError {
-//   response: {
-//     data: {
-//       code: string;
-//     };
-//   };
-// }
-
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
   {
@@ -45,9 +37,9 @@ const PostDetail = ({ title, date, content }: any) => {
       router.push("/");
       setModal({ isOpen: false, content });
     } catch (error) {
-      if (isAxiosError(error)) {
-        if ((error as AError).response?.data.code === "AUE004") {
-          console.log("hehre");
+      if (error instanceof AxiosError) {
+        if (error.response?.data.code === "AUE004") {
+          console.log(error);
           setModal({ isOpen: false, content });
         }
       }

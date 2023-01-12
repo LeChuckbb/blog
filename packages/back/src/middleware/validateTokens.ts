@@ -1,9 +1,11 @@
-const jwt = require("./jwtUtil");
+const Token = require("../util/token");
 import dayjs from "dayjs";
+import { AppError } from "../util/types";
+import { tryCatch } from "../util/tryCatch";
 
-const authJWT = async (req: any, res: any, next: any) => {
-  const accessToken = jwt.verify(req.headers.authorization);
-  const refreshToken = await jwt.refreshVerify(
+const ValidateTokens = tryCatch(async (req: any, res: any, next: any) => {
+  const accessToken = Token.verify(req.headers.authorization);
+  const refreshToken = await Token.refreshVerify(
     req.cookies.refreshToken,
     "KenLiu"
   );
@@ -11,27 +13,23 @@ const authJWT = async (req: any, res: any, next: any) => {
   /*
     case1. Access O Refresh O
     case2. Access O Refresh X
-    case3. Access X Refresh O
+    case3. Access X Refresh  O
     case4. Access X Refresh X
   */
   if (!accessToken) {
     if (!refreshToken) {
       // case4 -> 재로그인 유도
       console.log("CASE 4");
-      // throw new Error("토큰이 모두 만료되었습니다. 재로그인해주세요.");
-      return res.status(401).json({
-        message: "모든 토큰 만료. 재로그인 요망",
-        code: "AUE004",
-      });
+      throw new AppError("AUE004", "모든 토큰 만료. 재로그인 요망", 401);
     } else {
       // case 3 -> Refresh Token을 이용해서 Access Token 재발급
       console.log("CASE 3");
-      const newAccessToken = jwt.accessToken("KenLiu");
-      return res.status(401).json({
-        accessToken: newAccessToken,
-        message: "accessToken 만료로 인한 재발급",
-        code: "AUE003",
-      });
+      const newAccessToken = Token.accessToken("KenLiu");
+      throw new AppError(
+        "AUE003",
+        "accessToken 만료. RefreshToken을 이용한 재발급",
+        401
+      );
       // 1. accessToken을 response 로 전달.
       // 2. 이후 클라이언트에서 자동으로 accessToken을 갈아끼워 재요청을 보낼수 있게끔 해야함. 어떻게?
     }
@@ -39,7 +37,7 @@ const authJWT = async (req: any, res: any, next: any) => {
     if (!refreshToken) {
       // case 2 -> refresh Token 재발급
       console.log("CASE 2");
-      const newRefreshToken = jwt.refreshToken();
+      const newRefreshToken = Token.refreshToken();
 
       res.cookie("refreshToken", newRefreshToken, {
         secure: false,
@@ -54,6 +52,8 @@ const authJWT = async (req: any, res: any, next: any) => {
       next();
     }
   }
-};
+});
 
-module.exports = authJWT;
+// module.exports = authJWT;
+
+export default ValidateTokens;

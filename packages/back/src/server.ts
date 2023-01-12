@@ -8,7 +8,7 @@ import cookies from "cookie-parser";
 
 import router from "./router";
 import "./settings/env";
-import "./auth/passport";
+// import "./auth/passport";
 
 const { MONGO_URI } = process.env;
 const corsOptions = {

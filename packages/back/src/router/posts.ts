@@ -11,7 +11,7 @@ import {
   getPostTags,
 } from "../controllers/posts";
 import passport from "passport";
-const authJWT = require("../auth/middlewares");
+import ValidateTokens from "../middleware/validateTokens";
 
 // 태그 목록 가져오기
 const router = Router();
@@ -21,7 +21,7 @@ router.get("/", controller.getAll(model));
 // 게시글 작성
 router.post(
   "/",
-  authJWT,
+  ValidateTokens,
   // passport.authenticate("jwt", { session: false }),
   createPost(model)
 );
@@ -38,7 +38,8 @@ router.get(`/findBySlug`, getPostBySlug(model));
 */
 router.patch(
   "/:slug",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
+  ValidateTokens,
   updatePost(model)
 );
 
@@ -46,7 +47,7 @@ router.patch(
 router.delete(
   "/:slug",
   // passport.authenticate("jwt", { session: false }),
-  authJWT,
+  ValidateTokens,
   deletePost(model)
 );
 

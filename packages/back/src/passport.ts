@@ -1,7 +1,7 @@
 import passport from "passport";
 import passportJwt from "passport-jwt";
-import Auth from "../models/auth";
-const jwt = require("./jwtUtil");
+import Auth from "./models/auth";
+const Token = require("./util/token");
 
 const ExtractJwt = passportJwt.ExtractJwt;
 const StrategyJwt = passportJwt.Strategy;
@@ -17,8 +17,8 @@ passport.use(
       passReqToCallback: true,
     },
     async (req: any, jwtPayload: any, done: any) => {
-      const accessToken = jwt.verify(req.headers.authorization);
-      const refreshToken = await jwt.refreshVerify(
+      const accessToken = Token.verify(req.headers.authorization);
+      const refreshToken = await Token.refreshVerify(
         req.cookies.refreshToken,
         jwtPayload.id
       );
@@ -35,13 +35,13 @@ passport.use(
           throw new Error("토큰이 모두 만료되었습니다. 재로그인해주세요.");
         } else {
           // case 3 -> Refresh Token을 이용해서 Access Token 재발급
-          const newAccessToken = jwt.accessToken(jwtPayload.id);
+          const newAccessToken = Token.accessToken(jwtPayload.id);
           // ???
         }
       } else {
         if (!refreshToken) {
           // case 2 -> refresh Token 재발급
-          const newRefreshToken = jwt.refreshToken();
+          const newRefreshToken = Token.refreshToken();
         } else {
           // case 1 -> 모두가 유효한 경우, 검증 이상무 -> 그냥 넘김
         }

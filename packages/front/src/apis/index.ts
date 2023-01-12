@@ -1,5 +1,12 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+
+interface MyError extends Error {
+  config: AxiosRequestConfig;
+  code?: string;
+  request?: any;
+  response?: AxiosResponse;
+}
 
 const axiosInstance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_HOST}`,

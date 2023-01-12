@@ -11,6 +11,25 @@ export type LoginForm = {
   password: string;
 };
 
+export class MyError extends AxiosError {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
+class AppError {
+  code: string;
+  message: string;
+  constructor(code: string, message: any) {
+    this.message = message;
+    this.code = code;
+  }
+}
+interface CustomError {
+  code: string;
+  message: string;
+}
+
 const onClickBtnHandler = () => {
   console.log("onClick!");
 };
@@ -36,8 +55,10 @@ const Login = () => {
     } catch (err) {
       console.log("catch error");
       console.log(err);
-      if (isAxiosError(err)) {
-        // (err as AxiosError)?.response?.data?.code === AUE001
+      if (err instanceof AxiosError) {
+        const data = err?.response?.data as CustomError;
+        console.log(data);
+        if (data.code === "AUE001") console.log("HERE");
       }
     }
   };

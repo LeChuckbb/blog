@@ -3,7 +3,10 @@ import crypto from "crypto";
 import util from "util";
 import AuthModel from "../models/auth";
 import dayjs from "dayjs";
-const jwt = require("../auth/jwtUtil");
+import { AppError } from "../util/types";
+const Token = require("../util/token");
+
+import { tryCatch } from "../util/tryCatch";
 
 export const verifyPassword = async (
   password: string,
@@ -18,24 +21,23 @@ export const verifyPassword = async (
   return false;
 };
 
-// verifyAccessToken
-// verifyRefreshToken
 /*
   사용자가 입력한 ID/PW를 검증하여 성공시 refreshToken, accessToken을 발급.
   refreshToken은 쿠키로, accessToken은 response body에 실어서 반환한다.
 */
-export const login = () => async (req: Request, res: Response) => {
-  try {
+export const login = () =>
+  tryCatch(async (req: Request, res: Response) => {
     const { id, password } = req.body;
     const user = await AuthModel.findOne({ id: id });
+    if (!user) throw new AppError("AUE001", "존재하지 않는 아이디입니다.", 400);
 
-    if (!user) throw new Error("AUE001");
     const verifed = await verifyPassword(password, user.salt, user.hashedPwd);
-    if (!verifed) throw new Error("AUE002");
+    if (!verifed)
+      throw new AppError("AUE002", "비밀번호가 일치하지 않습니다.", 400);
 
     // accessToken & refreshToken 생성
-    const accessToken = jwt.accessToken(id);
-    const refreshToken = jwt.refreshToken();
+    const accessToken = Token.accessToken(id);
+    const refreshToken = Token.refreshToken();
 
     // refreshToken을 DB에 저장
     await AuthModel.updateOne({ id }, { $set: { refreshToken } });
@@ -47,19 +49,10 @@ export const login = () => async (req: Request, res: Response) => {
     });
 
     return res.status(200).json({ message: "ok", accessToken });
-  } catch (error: any) {
-    const err = error.toString();
-    if (err.includes("AUE001"))
-      return res
-        .status(400)
-        .json({ code: "AUE001", message: "존재하지 않는 아이디입니다." });
-    else if (err.includes("AUE002"))
-      return res
-        .status(400)
-        .json({ code: "AUE002", message: "비밀번호가 일치하지 않습니다." });
+  });
 
-    return res.status(500).json({ error });
-  }
+export const logout = () => {
+  return "hi";
 };
 
 export const isAuth = () => {
