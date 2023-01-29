@@ -8,6 +8,7 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../../common/Modal/ModalSetter";
 import Modal from "../../common/Modal/Modal";
 import { AxiosError, isAxiosError } from "axios";
+import { useIsAuthQuery } from "../../hooks/query/useIsAuthQuery";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -29,6 +30,8 @@ const DeleteModal = ({ confirmHandler }: any) => {
 const PostDetail = ({ title, date, content }: any) => {
   const router = useRouter();
   const [_, setModal] = useRecoilState(modalState);
+  // const { isError } = useIsAuthQuery();
+  const isError = true;
 
   const confirmHandler = async () => {
     try {
@@ -43,8 +46,6 @@ const PostDetail = ({ title, date, content }: any) => {
           setModal({ isOpen: false, content });
         }
       }
-      console.log("error 캐치");
-      console.log(error);
     }
   };
 
@@ -69,12 +70,22 @@ const PostDetail = ({ title, date, content }: any) => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>{date}</span>
           <div style={{ display: "flex", gap: "8px", color: "#808080" }}>
-            <span style={{ cursor: "pointer" }} onClick={onClickUpdateHandler}>
-              수정
-            </span>
-            <span style={{ cursor: "pointer" }} onClick={onClickDeleteHandler}>
-              삭제
-            </span>
+            {!isError && (
+              <>
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={onClickUpdateHandler}
+                >
+                  수정
+                </span>
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={onClickDeleteHandler}
+                >
+                  삭제
+                </span>
+              </>
+            )}
           </div>
         </div>
       </HeadWrapper>

@@ -15,11 +15,18 @@ import { AxiosError } from "axios";
 // }
 
 export class AppError extends Error {
-  errorCode: string;
-  statusCode: number;
-  constructor(errorCode: string, message: any, statusCode: number) {
+  errorCode: string; // POE002
+  statusCode: number; // 404
+  accessToken?: string;
+  constructor(
+    errorCode: string,
+    message: any,
+    statusCode: number,
+    accessToken?: string
+  ) {
     super(message);
     this.errorCode = errorCode;
     this.statusCode = statusCode;
+    this.accessToken = accessToken;
   }
 }

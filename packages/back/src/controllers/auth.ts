@@ -55,9 +55,11 @@ export const logout = () => {
   return "hi";
 };
 
-export const isAuth = () => {
-  return "hi";
-};
+export const isAuth = () =>
+  tryCatch(async (req: Request, res: Response) => {
+    console.log("isAuth");
+    return res.status(200).json({ result: true });
+  });
 
 /* hashed pwd 생성에 사용된 코드 */
 // const createSalt = () =>

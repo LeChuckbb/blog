@@ -1,8 +1,16 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
+import { useIsAuthQuery } from "../hooks/query/useIsAuthQuery";
+import { ErrorBoundary } from "react-error-boundary";
+import { isAuthorized } from "../apis/authApi";
 
 const Header: React.FC = () => {
+  const { data } = useIsAuthQuery();
+
+  console.log(data);
+
   return (
+    // <ErrorBoundary FallbackComponent={() => <div>hi</div>}>
     <Container>
       <div>
         <span>
@@ -10,12 +18,15 @@ const Header: React.FC = () => {
         </span>
       </div>
       <RightWrapper>
-        <Link href="http://localhost:3000/post/write">
-          <Button>새 글 작성</Button>
-        </Link>
+        {data?.status === 200 && (
+          <Link href="http://localhost:3000/post/write">
+            <Button>새 글 작성</Button>
+          </Link>
+        )}
         <button>야간모드</button>
       </RightWrapper>
     </Container>
+    // </ErrorBoundary>
   );
 };
 

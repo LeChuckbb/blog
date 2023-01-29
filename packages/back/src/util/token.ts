@@ -51,26 +51,30 @@ module.exports = {
   // access token 발급
   accessToken: (id: string) => {
     return jwt.sign({ id }, process.env.ACESS_TOKEN_SECRET as string, {
-      // expiresIn: "5m",
-      expiresIn: "0",
+      expiresIn: "5d",
+      // expiresIn: "0",
     });
   },
   verify: (token: string) => {
     // access token 검증
     let decoded: any;
+    console.log("Verifying...");
+    console.log(token);
+    console.log(process.env.ACESS_TOKEN_SECRET);
     try {
       decoded = jwt.verify(token, process.env.ACESS_TOKEN_SECRET as string);
       console.log(decoded);
       return true;
     } catch (err: any) {
+      console.log("verify Error");
       return false;
     }
   },
   refreshToken: () => {
     // refresh token 발급
     return jwt.sign({}, process.env.REFRESH_TOKEN_SECRET as string, {
-      // expiresIn: "7d",
-      expiresIn: "0",
+      expiresIn: "7d",
+      // expiresIn: "0",
     });
   },
   refreshVerify: async (token: string, id: string) => {
