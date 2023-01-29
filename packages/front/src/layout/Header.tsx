@@ -2,10 +2,18 @@ import styled from "@emotion/styled";
 import Link from "next/link";
 import { useIsAuthQuery } from "../hooks/query/useIsAuthQuery";
 import { ErrorBoundary } from "react-error-boundary";
-import { isAuthorized } from "../apis/authApi";
+// import { logoutAPI } from "../apis/authApi";
+import { useLogoutQuery } from "../hooks/query/useLogoutQuery";
 
 const Header: React.FC = () => {
   const { data } = useIsAuthQuery();
+  const { refetch } = useLogoutQuery();
+
+  const onClickLogoutHandler = async () => {
+    console.log("logout");
+    const response = await refetch();
+    console.log(response);
+  };
 
   console.log(data);
 
@@ -19,9 +27,12 @@ const Header: React.FC = () => {
       </div>
       <RightWrapper>
         {data?.status === 200 && (
-          <Link href="http://localhost:3000/post/write">
-            <Button>새 글 작성</Button>
-          </Link>
+          <>
+            <Link href="http://localhost:3000/post/write">
+              <Button>새 글 작성</Button>
+            </Link>
+            <button onClick={onClickLogoutHandler}>로그아웃</button>
+          </>
         )}
         <button>야간모드</button>
       </RightWrapper>

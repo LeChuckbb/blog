@@ -7,7 +7,7 @@ const router = Router();
 
 router.post("/liu", login());
 
-// router.get("/logout", logout());
+router.get("/logout", logout());
 
 router.get("/isAuth", ValidateTokens, isAuth());
 

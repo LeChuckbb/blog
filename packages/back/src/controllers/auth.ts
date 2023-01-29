@@ -51,9 +51,18 @@ export const login = () =>
     return res.status(200).json({ message: "ok", accessToken });
   });
 
-export const logout = () => {
-  return "hi";
-};
+export const logout = () =>
+  tryCatch(async (req: Request, res: Response) => {
+    console.log("logout");
+    const result = await AuthModel.findOneAndUpdate(
+      {
+        id: process.env.ADMIN_ID,
+      },
+      { $set: { refreshToken: "" } }
+    );
+    console.log(result);
+    return res.status(200).json({ result: true });
+  });
 
 export const isAuth = () =>
   tryCatch(async (req: Request, res: Response) => {

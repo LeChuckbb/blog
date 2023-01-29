@@ -58,7 +58,7 @@ module.exports = {
   verify: (token: string) => {
     // access token 검증
     let decoded: any;
-    console.log("Verifying...");
+    console.log("token Verifying...");
     console.log(token);
     console.log(process.env.ACESS_TOKEN_SECRET);
     try {
@@ -82,6 +82,9 @@ module.exports = {
     try {
       const data = await AuthModel.findOne({ id }, { _id: 0, refreshToken: 1 }); // refresh token 가져오기
       if (token === data?.refreshToken) {
+        console.log("refreshVerify 성공");
+        console.log(token);
+        console.log(data?.refreshToken);
         try {
           jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string);
           return true;
@@ -89,6 +92,7 @@ module.exports = {
           return false;
         }
       } else {
+        console.log("refreshVerify 실패");
         return false;
       }
     } catch (err) {
