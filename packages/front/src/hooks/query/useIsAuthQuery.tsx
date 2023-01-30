@@ -9,11 +9,9 @@ export const useIsAuthQuery = () =>
     [IS_AUTH_QUERYKEY],
     () => isAuthorized(),
     {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
       retry: false,
       cacheTime: 0,
+      suspense: true,
       // useErrorBoundary: true,
-      suspense: false,
     }
   );

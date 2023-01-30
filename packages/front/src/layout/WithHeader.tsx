@@ -1,16 +1,21 @@
 import styled from "@emotion/styled";
 import Footer from "./Footer";
 import Header from "./Header";
-import React from "react";
+import React, { Suspense } from "react";
+import { HeaderErrorBoundary } from "../hooks/\berror/HeaderErrorBoundary";
 
-type Prop = {
+type WithHeaderProps = {
   children: React.ReactNode;
 };
 
-const WithHeader = ({ children }: Prop) => {
+const WithHeader = ({ children }: WithHeaderProps) => {
   return (
     <Container>
-      <Header />
+      <HeaderErrorBoundary>
+        <Suspense fallback={<p>loading...</p>}>
+          <Header />
+        </Suspense>
+      </HeaderErrorBoundary>
       {children}
       <Footer />
     </Container>

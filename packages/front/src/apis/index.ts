@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 
 interface MyError extends Error {
@@ -22,7 +22,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("ERROR 인터셉트");
+    console.log("ERROR in axios intercept");
     if (error.response.data.code === "AUE003") {
       // AUE003 -> refreshToken은 유효한데 accessToken이 만료된 경우
       console.log("AUE003");
@@ -38,6 +38,7 @@ axiosInstance.interceptors.response.use(
       // 권한이 없다는 토스트 띄우기 (모달 종료하고)
       console.log("AUE004");
       toast("요청에 대한 권한이 없습니다");
+      return Promise.resolve(error);
     }
     return Promise.reject(error);
   }

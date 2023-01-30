@@ -12,13 +12,11 @@ export const useLogoutQuery = () => {
     [LOGOUT_QUERYKEY],
     () => logoutAPI(),
     {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
       retry: false,
       cacheTime: 0,
       enabled: false,
-      // useErrorBoundary: true,
       suspense: false,
+      useErrorBoundary: true,
       onSuccess: () => queryClient.invalidateQueries(IS_AUTH_QUERYKEY),
     }
   );
