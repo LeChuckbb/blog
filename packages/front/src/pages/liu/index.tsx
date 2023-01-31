@@ -1,9 +1,8 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "@emotion/styled";
 import { loginAPI } from "../../apis/authApi";
-import axios, { isAxiosError, AxiosError } from "axios";
+import { isAxiosError, AxiosError } from "axios";
 import axiosInstance from "../../apis";
-import { useRouter } from "next/router";
 import WithHeader from "../../layout/WithHeader";
 
 export type LoginForm = {
@@ -30,12 +29,7 @@ interface CustomError {
   message: string;
 }
 
-const onClickBtnHandler = () => {
-  console.log("onClick!");
-};
-
 const Login = () => {
-  const router = useRouter();
   const { register, handleSubmit } = useForm({
     defaultValues: {
       id: "",
@@ -45,13 +39,11 @@ const Login = () => {
 
   const onValidSubmit: SubmitHandler<LoginForm> = async (data: LoginForm) => {
     try {
-      console.log("onValid");
-      console.log(data);
       const result = await loginAPI(data);
       axiosInstance.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${result.data.accessToken}`;
-      router.push("/");
+      window.location.href = "/";
     } catch (err) {
       console.log("catch error");
       console.log(err);

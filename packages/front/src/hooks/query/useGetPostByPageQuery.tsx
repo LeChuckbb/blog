@@ -14,8 +14,6 @@ export const useGetPostByPageQuery = (selectedTag: string) => {
     ["getPosts", selectedTag],
     ({ pageParam = 1 }) => getPostByPage(pageParam, selectedTag),
     {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
       staleTime: 300000,
       suspense: false,
       getNextPageParam: (lastPage) => {

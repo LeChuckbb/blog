@@ -6,16 +6,16 @@ import { Request, Response, NextFunction } from "express";
 
 const ValidateTokens = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.headers);
+    console.log("validateTokens");
+
     const accessToken = Token.verify(req.headers.authorization);
     const refreshToken = await Token.refreshVerify(
       req.cookies.refreshToken,
       "KenLiu"
     );
 
-    console.log("validateTokens");
-    console.log(accessToken);
-    console.log(refreshToken);
+    // console.log(accessToken);
+    // console.log(refreshToken);
     /*
     case1. Access O Refresh O
     case2. Access O Refresh X
@@ -26,7 +26,7 @@ const ValidateTokens = tryCatch(
       if (!refreshToken) {
         // case4 -> 재로그인 유도
         console.log("CASE 4");
-        throw new AppError("AUE004", "모든 토큰 만료. 재로그인 요망", 401);
+        throw new AppError("AUE004", "모든 토큰 만료. 재로그인 요망", 202);
       } else {
         // case 3 -> Refresh Token을 이용해서 Access Token 재발급
         console.log("CASE 3");
@@ -34,7 +34,7 @@ const ValidateTokens = tryCatch(
         throw new AppError(
           "AUE003",
           "accessToken 만료. RefreshToken을 이용한 재발급",
-          401,
+          202,
           newAccessToken
         );
         // 1. accessToken을 response 로 전달.

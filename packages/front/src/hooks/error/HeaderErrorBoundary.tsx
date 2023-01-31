@@ -33,8 +33,7 @@ export class HeaderErrorBoundary extends React.Component<Props, State> {
   render() {
     const { shouldHandleError, shouldRethrowError } = this.state;
     const { children } = this.props;
-    console.log(this.state);
-    console.log(children);
+
     if (shouldRethrowError) {
       // Global APIErrorBoundary에 위임
       // throw this.state.error;

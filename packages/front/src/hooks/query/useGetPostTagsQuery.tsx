@@ -13,11 +13,6 @@ export type PostTagsType = {
 };
 
 export const useGetPostTagsQuery = () =>
-  useQuery<AxiosResponse<PostTagsType, Error>>(
-    ["getPostTags"],
-    () => getPostTags(),
-    {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-    }
+  useQuery<AxiosResponse<PostTagsType, Error>>(["getPostTags"], () =>
+    getPostTags()
   );

@@ -7,8 +7,9 @@ import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../common/Modal/ModalSetter";
 import Modal from "../../common/Modal/Modal";
-import { AxiosError, isAxiosError } from "axios";
-import { useIsAuthQuery } from "../../hooks/query/useIsAuthQuery";
+import { AxiosError } from "axios";
+import { isAuthorized } from "../../apis/authApi";
+import { useQuery } from "react-query";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -30,19 +31,19 @@ const DeleteModal = ({ confirmHandler }: any) => {
 const PostDetail = ({ title, date, content }: any) => {
   const router = useRouter();
   const [_, setModal] = useRecoilState(modalState);
-  // const { isError } = useIsAuthQuery();
-  const isError = true;
+  const { data } = useQuery(["isAuthNoSuspense"], () => isAuthorized(), {
+    suspense: false,
+  });
 
   const confirmHandler = async () => {
     try {
       // 삭제 에러처리 요망
-      const res = await deletePost(router.query.pid as string);
+      await deletePost(router.query.pid as string);
       router.push("/");
       setModal({ isOpen: false, content });
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.data.code === "AUE004") {
-          console.log(error);
           setModal({ isOpen: false, content });
         }
       }
@@ -59,18 +60,17 @@ const PostDetail = ({ title, date, content }: any) => {
   const onClickUpdateHandler = () => {
     // Editor 열기
     // post/write?slug=xxx
-    console.log(title);
     router.push({ pathname: "/post/write", query: { slug: title } });
   };
 
   return (
-    <Container className="afjhkjafhs">
+    <Container>
       <HeadWrapper>
         <h1 style={{ fontSize: "48px", fontWeight: 700 }}>{title}</h1>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>{date}</span>
           <div style={{ display: "flex", gap: "8px", color: "#808080" }}>
-            {!isError && (
+            {data?.status === 200 && (
               <>
                 <span
                   style={{ cursor: "pointer" }}
@@ -107,8 +107,6 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
     params: { pid: el.urlSlug },
   }));
 
-  console.log(paths);
-
   return {
     paths,
     fallback: false,
@@ -117,9 +115,6 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
 
 // 빌드 시 데이터를 fetch하여 static 페이지를 생성
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  console.log("asdffdsa");
-  console.log(params);
-  console.log(params?.pid);
   const res = await getPostBySlug(params?.pid as string);
 
   return {

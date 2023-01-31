@@ -8,10 +8,13 @@ const Header = () => {
   const { refetch } = useLogoutQuery();
 
   const onClickLogoutHandler = async () => {
-    console.log("logout");
     const response = await refetch();
-    console.log(response);
+    if (response.data?.status === 200) {
+      window.location.href = "/";
+    }
   };
+
+  console.log(data);
 
   return (
     <Container>
@@ -21,14 +24,14 @@ const Header = () => {
         </span>
       </div>
       <RightWrapper>
-        {/* {data?.status === 200 && ( */}
-        <>
-          <Link href="http://localhost:3000/post/write">
-            <Button>새 글 작성</Button>
-          </Link>
-          <button onClick={onClickLogoutHandler}>로그아웃</button>
-        </>
-        {/* )} */}
+        {data?.status === 200 && (
+          <>
+            <Link href="http://localhost:3000/post/write">
+              <Button>새 글 작성</Button>
+            </Link>
+            <button onClick={onClickLogoutHandler}>로그아웃</button>
+          </>
+        )}
         <button>야간모드</button>
       </RightWrapper>
     </Container>

@@ -56,8 +56,6 @@ const useWrite = (data: any) => {
       const contentMark = editorIns.getMarkdown();
       const contentHTML = editorIns.getHTML();
 
-      console.log(contentMark);
-
       if (contentMark?.length === 0) {
         throw new Error("본문 내용을 입력해주세요.");
       }
@@ -69,6 +67,7 @@ const useWrite = (data: any) => {
       });
     } catch (error) {
       console.log(error);
+      console.log("onValidSubmit Error");
     }
   };
 
