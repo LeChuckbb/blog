@@ -50,7 +50,7 @@ const Login = () => {
       if (err instanceof AxiosError) {
         const data = err?.response?.data as CustomError;
         console.log(data);
-        if (data.code === "AUE001") console.log("HERE");
+        if (data?.code === "AUE001") console.log("HERE");
       }
     }
   };

@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import Footer from "./Footer";
 import Header from "./Header";
 import React, { Suspense } from "react";
-import { HeaderErrorBoundary } from "../hooks/\berror/HeaderErrorBoundary";
+import HeaderErrorBoundary from "../hooks/\berror/HeaderErrorBoundary";
 
 type WithHeaderProps = {
   children: React.ReactNode;

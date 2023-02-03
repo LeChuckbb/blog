@@ -7,8 +7,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { NextPage } from "next";
 import { RecoilRoot } from "recoil";
 import ModalSetter from "../common/Modal/ModalSetter";
-import { APIErrorBoundary } from "../hooks/\berror/APIErrorBoundary";
-import WithHeader from "../layout/WithHeader";
+import GlobalErrorBoundary from "../hooks/\berror/GlobalErrorBoundary";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -17,6 +16,17 @@ export type NextPageWithLayout = NextPage & {
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 }; // 기존 AppProps타입에 Layout을 추가한 것.
+
+const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
+  console.log(error);
+
+  return (
+    <div role="alert">
+      <pre>서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.</pre>
+      <button onClick={resetErrorBoundary}>재시도</button>
+    </div>
+  );
+};
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const queryClient = new QueryClient({
@@ -43,12 +53,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <ReactQueryDevtools initialIsOpen position="bottom-left" />
       <ThemeProvider theme={theme}>
         <RecoilRoot>
-          {/* <APIErrorBoundary> */}
-          {getLayout(<Component {...pageProps} />)}
-          <div className="modal-root">
-            <ModalSetter selector=".modal-root" />
-          </div>
-          {/* </APIErrorBoundary> */}
+          <GlobalErrorBoundary>
+            {getLayout(<Component {...pageProps} />)}
+            <div className="modal-root">
+              <ModalSetter selector=".modal-root" />
+            </div>
+          </GlobalErrorBoundary>
         </RecoilRoot>
       </ThemeProvider>
     </QueryClientProvider>

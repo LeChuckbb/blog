@@ -1,50 +1,42 @@
+import { useQueryErrorResetBoundary } from "react-query";
 import { isAxiosError } from "axios";
+import { ErrorBoundary } from "react-error-boundary";
 import React from "react";
-import Header from "../../layout/Header";
 
-interface Props {
-  children?: React.ReactElement;
-}
-interface State {
-  shouldHandleError: boolean;
-  shouldRethrowError: boolean;
-  error: any;
-}
+const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
+  console.log(error);
+  // resetErrorBoundary -> onReset으로 전달한 것 = useQueryErrorResetBoundary
 
-export class HeaderErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      shouldHandleError: false,
-      shouldRethrowError: false,
-      error: null,
-    };
+  // 현재 AUE005 한 경우밖에 없음.
+  return (
+    <div role="alert">
+      <pre>{error?.response?.data?.message}</pre>
+      <button onClick={resetErrorBoundary}>재시도</button>
+    </div>
+  );
+};
+
+const onErrorHandler = (error: Error, info: any) => {
+  console.log(error);
+  if (isAxiosError(error) && error.response?.data.code === "AUE005") {
+    console.log("AUE005. do nothing");
+  } else {
+    throw error;
   }
+};
 
-  // 하위의 자손 컴포넌트에서 오류가 발생했을 때 호출된다.
-  static getDerivedStateFromError(error: any) {
-    if (isAxiosError(error)) {
-      return { shouldHandleError: false, shouldRethrowError: true, error };
-    }
+const HeaderErrorBoundary = ({ children }: any) => {
+  const { reset } = useQueryErrorResetBoundary();
 
-    return { shouldHandleError: true, shouldRethrowError: false };
-  }
+  return (
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onError={onErrorHandler}
+      onReset={reset}
+    >
+      {children}
+    </ErrorBoundary>
+  );
+};
 
-  render() {
-    const { shouldHandleError, shouldRethrowError } = this.state;
-    const { children } = this.props;
-
-    if (shouldRethrowError) {
-      // Global APIErrorBoundary에 위임
-      // throw this.state.error;
-      // return <Header />; // not working
-      return <div>hi</div>;
-    }
-
-    if (shouldHandleError) {
-      return <div>Header Error Boundary</div>;
-    }
-
-    return children;
-  }
-}
+export default HeaderErrorBoundary;

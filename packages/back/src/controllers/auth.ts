@@ -54,13 +54,16 @@ export const login = () =>
 export const logout = () =>
   tryCatch(async (req: Request, res: Response) => {
     console.log("logout");
-    const result = await AuthModel.findOneAndUpdate(
+    const logoutResult = await AuthModel.findOneAndUpdate(
       {
         id: process.env.ADMIN_ID,
       },
       { $set: { refreshToken: "" } }
     );
-    console.log(result);
+
+    if (!logoutResult)
+      throw new AppError("AUE005", "로그아웃에 실패했습니다.", 500);
+
     return res.status(200).json({ result: true });
   });
 
