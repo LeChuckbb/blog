@@ -3,10 +3,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { RefObject } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { createPost, updatePost } from "../../apis/postApi";
 import { useRouter } from "next/router";
 import { isAxiosError, AxiosError } from "axios";
 import IconThumbnail from "../../../public/thumbnail.svg";
+import { useCreatePostMutation } from "../../hooks/query/useCreatePostMutation";
+import { useUpdatePostMutation } from "../../hooks/query/useUpdatePostMutation";
 
 type Props = {
   subPageRef: RefObject<HTMLDivElement>;
@@ -57,25 +58,20 @@ const WriteSubPage: React.FC<Props> = ({ prevData, fetchBody, subPageRef }) => {
   });
   const router = useRouter();
   const isUpdate = router.query.slug === undefined ? false : true;
+  const { mutate: createPost } = useCreatePostMutation();
+  const { mutate: updatePost } = useUpdatePostMutation();
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (data) => {
-    try {
-      toast.dismiss(); // toast 종료하기
-      const res = isUpdate
-        ? await updatePost(router.query.slug as string, {
+    toast.dismiss(); // toast 종료하기
+    isUpdate
+      ? await updatePost({
+          slug: router.query.slug as string,
+          body: {
             ...data,
             ...fetchBody,
-          })
-        : await createPost({ ...data, ...fetchBody });
-      if (res.status === 200 || 201) {
-        router.push("/");
-      }
-    } catch (err) {
-      if (isAxiosError(err)) {
-        (err as AxiosError).response?.status === 409 &&
-          toast("중복된 URL 입니다", { toastId: "duplicate" });
-      }
-    }
+          },
+        })
+      : await createPost({ ...data, ...fetchBody });
   };
 
   const onInvalidSubmit = (errors: any) => {

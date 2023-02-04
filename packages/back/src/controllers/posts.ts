@@ -34,6 +34,8 @@ export const getPostByPage = (model: Model<Post>) =>
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE);
 
+    // throw new Error();
+
     return res.status(200).json({
       count,
       next,

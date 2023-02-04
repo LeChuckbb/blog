@@ -62,7 +62,7 @@ export const logout = () =>
     );
 
     if (!logoutResult)
-      throw new AppError("AUE005", "로그아웃에 실패했습니다.", 500);
+      throw new AppError("AUE005", "로그아웃에 실패했습니다.", 400);
 
     return res.status(200).json({ result: true });
   });

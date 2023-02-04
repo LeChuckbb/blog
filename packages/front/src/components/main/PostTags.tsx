@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { PostTagsType } from "../../hooks/query/useGetPostTagsQuery";
+import { useGetPostTagsQuery } from "../../hooks/query/useGetPostTagsQuery";
 
 interface Props {
   tagsData?: PostTagsType;
@@ -7,11 +8,14 @@ interface Props {
 }
 
 const PostTags: React.FC<Props> = (props) => {
-  const { tagsData, setTag } = props;
+  const { setTag } = props;
+  const { data } = useGetPostTagsQuery();
+  const tagsData = data?.data as PostTagsType;
 
   const onClickTagList = (tag: string) => {
     setTag(tag);
   };
+  console.log(tagsData);
 
   return (
     <Tag>

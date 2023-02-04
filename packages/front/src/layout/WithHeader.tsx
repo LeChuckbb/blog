@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import Footer from "./Footer";
 import Header from "./Header";
 import React, { Suspense } from "react";
-import HeaderErrorBoundary from "../hooks/\berror/HeaderErrorBoundary";
+import LocalErrorBoundary from "../hooks/error/LocalErrorBoundary";
 
 type WithHeaderProps = {
   children: React.ReactNode;
@@ -11,11 +11,11 @@ type WithHeaderProps = {
 const WithHeader = ({ children }: WithHeaderProps) => {
   return (
     <Container>
-      <HeaderErrorBoundary>
+      <LocalErrorBoundary>
         <Suspense fallback={<p>loading...</p>}>
           <Header />
         </Suspense>
-      </HeaderErrorBoundary>
+      </LocalErrorBoundary>
       {children}
       <Footer />
     </Container>

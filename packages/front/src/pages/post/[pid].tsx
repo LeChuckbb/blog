@@ -2,14 +2,10 @@ import WithHeader from "../../layout/WithHeader";
 import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { getPostBySlug, getPost, deletePost } from "../../apis/postApi";
-import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
-import { modalState } from "../../common/Modal/ModalSetter";
-import Modal from "../../common/Modal/Modal";
-import { AxiosError } from "axios";
-import { isAuthorized } from "../../apis/authApi";
-import { useQuery } from "react-query";
+import { getPostBySlug, getPost } from "../../apis/postApi";
+import PostMenu from "../../components/posts/PostMenu";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -18,78 +14,18 @@ const NoSSRViewer = dynamic(
   }
 );
 
-const DeleteModal = ({ confirmHandler }: any) => {
-  return (
-    <Modal>
-      <Modal.Title>포스트 삭제</Modal.Title>
-      <Modal.Content>정말로 삭제하시겠습니까?</Modal.Content>
-      <Modal.Buttons confirmHandler={confirmHandler} />
-    </Modal>
-  );
-};
-
 const PostDetail = ({ title, date, content }: any) => {
-  const router = useRouter();
-  const [_, setModal] = useRecoilState(modalState);
-  const { data } = useQuery(["isAuthNoSuspense"], () => isAuthorized(), {
-    suspense: false,
-  });
-
-  const confirmHandler = async () => {
-    try {
-      // 삭제 에러처리 요망
-      await deletePost(router.query.pid as string);
-      router.push("/");
-      setModal({ isOpen: false, content });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.data.code === "AUE004") {
-          setModal({ isOpen: false, content });
-        }
-      }
-    }
-  };
-
-  const onClickDeleteHandler = async () => {
-    setModal({
-      isOpen: true,
-      content: <DeleteModal confirmHandler={confirmHandler} />,
-    });
-  };
-
-  const onClickUpdateHandler = () => {
-    // Editor 열기
-    // post/write?slug=xxx
-    router.push({ pathname: "/post/write", query: { slug: title } });
-  };
-
   return (
     <Container>
       <HeadWrapper>
         <h1 style={{ fontSize: "48px", fontWeight: 700 }}>{title}</h1>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>{date}</span>
-          <div style={{ display: "flex", gap: "8px", color: "#808080" }}>
-            {data?.status === 200 && (
-              <>
-                <span
-                  style={{ cursor: "pointer" }}
-                  onClick={onClickUpdateHandler}
-                >
-                  수정
-                </span>
-                <span
-                  style={{ cursor: "pointer" }}
-                  onClick={onClickDeleteHandler}
-                >
-                  삭제
-                </span>
-              </>
-            )}
-          </div>
+          <PostMenu title={title} content={content} />
         </div>
       </HeadWrapper>
       {content && <NoSSRViewer content={content} />}
+      <ToastContainer />
     </Container>
   );
 };

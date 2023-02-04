@@ -7,10 +7,11 @@ const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
   console.log(error);
   // resetErrorBoundary -> onReset으로 전달한 것 = useQueryErrorResetBoundary
 
-  // 현재 AUE005 한 경우밖에 없음.
+  const customErrorMessage = error?.response?.data?.message;
+
   return (
     <div role="alert">
-      <pre>{error?.response?.data?.message}</pre>
+      <pre>{customErrorMessage ? customErrorMessage : error?.message}</pre>
       <button onClick={resetErrorBoundary}>재시도</button>
     </div>
   );
@@ -18,14 +19,20 @@ const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
 
 const onErrorHandler = (error: Error, info: any) => {
   console.log(error);
-  if (isAxiosError(error) && error.response?.data.code === "AUE005") {
-    console.log("AUE005. do nothing");
+  console.log(isAxiosError(error) && error?.response?.status);
+  // if (isAxiosError(error) && error.response?.status !== 500) {
+  if (isAxiosError(error)) {
+    console.log("axios Error.");
+    if (error.code === "ERR_NETWORK") {
+      window.location.href = "/error/network";
+    }
   } else {
+    // axios Error가 아닌 경우.. global로 위임
     throw error;
   }
 };
 
-const HeaderErrorBoundary = ({ children }: any) => {
+const LocalErrorBoundary = ({ children }: any) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -39,4 +46,4 @@ const HeaderErrorBoundary = ({ children }: any) => {
   );
 };
 
-export default HeaderErrorBoundary;
+export default LocalErrorBoundary;
