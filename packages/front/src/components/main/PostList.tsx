@@ -22,7 +22,7 @@ const PostList = ({ selectedTag }: Props) => {
   } = useGetPostByPageQuery(selectedTag);
 
   return (
-    <CardContainer>
+    <CardContainer className="CardContainer">
       {postsData?.pages
         .map((page: any) => page.data.results)
         .flat()

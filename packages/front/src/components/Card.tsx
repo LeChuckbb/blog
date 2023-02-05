@@ -114,6 +114,7 @@ const CardBox = styled.div`
   flex-direction: column;
   cursor: pointer;
   background-color: ${(props) => props.theme.colors.primary.primary};
+  color: ${(props) => props.theme.colors.primary.onPrimary};
   /* 
     768px 이상일 때, (두 개 카드 표시)
     1) 50% 미만 33% 이상의 백분율을 카드의 width로 부여.
@@ -163,14 +164,16 @@ const StyledTitle = styled.h2`
 
 const StyledDate = styled.span`
   /* color: #999; */
-  color: #acacac;
+  color: ${(props) => props.theme.colors.tertiary.container};
   font-size: 12px;
   font-weight: 700;
 `;
 
 const StyledTagsSection = styled.div`
+  min-height: 40px;
   padding: 8px 16px;
-  background-color: #efefef;
+  background-color: ${(props) => props.theme.colors.neutral.surface};
+  color: ${(props) => props.theme.colors.neutral.onSurface};
 `;
 
 const TagWrapper = styled.div`
@@ -182,8 +185,9 @@ const TagWrapper = styled.div`
 const Tag = styled.span`
   font-size: 12px;
   font-weight: 700;
-  color: #b92b27;
-  border: 1px solid #b92b27;
+  color: ${(props) => props.theme.colors.neutral.onSurface};
+  border: 1px solid;
+  border-color: ${(props) => props.theme.colors.neutralVariant.outline};
   border-radius: 6px;
   padding: 2px 4px;
 `;

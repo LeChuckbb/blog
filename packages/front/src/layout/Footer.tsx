@@ -11,7 +11,9 @@ const Footer: React.FC = () => {
 };
 
 const Container = styled.div`
-  background-color: aqua;
+  background-color: ${(props) => props.theme.colors.primary.primary};
+  color: ${(props) => props.theme.colors.primary.onPrimary};
+
   width: 100%;
 `;
 

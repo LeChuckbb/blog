@@ -4,11 +4,15 @@ import { useIsAuthQuery } from "../hooks/query/useIsAuthQuery";
 import { useLogoutQuery } from "../hooks/query/useLogoutQuery";
 import { useRecoilState } from "recoil";
 import { themeState } from "../recoil/atom";
+import IconDark from "../../public/icons/dark_mode.svg";
+import IconLight from "../../public/icons/light_mode.svg";
+import IconCreateNewPost from "../../public/icons/create.svg";
+import IconLogout from "../../public/icons/logout.svg";
 
 const Header = () => {
   const { data } = useIsAuthQuery();
   const { refetch } = useLogoutQuery();
-  const [_, setIsDarkMode] = useRecoilState(themeState);
+  const [isDarkMode, setIsDarkMode] = useRecoilState(themeState);
 
   const onClickLogoutHandler = async () => {
     const response = await refetch();
@@ -32,12 +36,18 @@ const Header = () => {
         {data?.status === 200 && (
           <>
             <Link href="http://localhost:3000/post/write">
-              <Button>새 글 작성</Button>
+              <IconContainerButton>
+                <IconCreateNewPost />
+              </IconContainerButton>
             </Link>
-            <button onClick={onClickLogoutHandler}>로그아웃</button>
+            <IconContainerButton onClick={onClickLogoutHandler}>
+              <IconLogout />
+            </IconContainerButton>
           </>
         )}
-        <button onClick={onClickThemeModeHandler}>야간모드</button>
+        <IconContainerButton onClick={onClickThemeModeHandler}>
+          {isDarkMode ? <IconDark /> : <IconLight />}
+        </IconContainerButton>
       </RightWrapper>
     </Container>
   );
@@ -45,7 +55,8 @@ const Header = () => {
 
 const Container = styled.div`
   padding: 16px;
-  background-color: aqua;
+  background-color: ${(props) => props.theme.colors.primary.primary};
+  color: ${(props) => props.theme.colors.primary.onPrimary};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -62,14 +73,16 @@ const Container = styled.div`
   }
 `;
 
-const Button = styled.button`
-  border: 1px solid black;
-  transition: all 0.125s ease-in;
-  padding: 8px;
-  border-radius: 16px;
+const IconContainerButton = styled.button`
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: 0.1s all;
   :hover {
-    background-color: black;
-    color: white;
+    background-color: ${(props) => props.theme.colors.secondary.container};
   }
 `;
 

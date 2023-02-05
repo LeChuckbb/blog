@@ -35,8 +35,8 @@ export default Home;
 
 const Container = styled.div`
   width: 100%;
-  background-color: yellow;
-  overflow-x: scroll;
+  background-color: ${(props) =>
+    props.theme.colors.neutralVariant.surfaceVariant};
   ${(props) => props.theme.mq[1]} {
     width: 1024px;
   }
@@ -46,11 +46,4 @@ const Container = styled.div`
   ${(props) => props.theme.mq[3]} {
     width: 1728px;
   }
-`;
-
-const CardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  width: 100%;
 `;

@@ -49,19 +49,26 @@ const Tag = styled.ul`
 const TagLI = styled.li`
   display: flex;
   gap: 4px;
-  border: 1px solid black;
+  border: 1px solid;
+  border-color: ${(props) => props.theme.colors.neutralVariant.outline};
   border-radius: 12px;
   cursor: pointer;
   padding: 4px 8px;
   transition: all 0.3s;
+  background-color: ${(props) => props.theme.colors.secondary.container};
+  color: ${(props) => props.theme.colors.secondary.onContainer};
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+
   :hover {
-    color: red;
-    background-color: aliceblue;
+    /* background-color: ${(props) =>
+      props.theme.colors.secondary.secondary}; */
+    /* color: ${(props) => props.theme.colors.secondary.onSecondary}; */
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
   }
 `;
 
 const Count = styled.span`
-  color: red;
+  color: ${(props) => props.theme.colors.primary.primary};
 `;
 
 export default PostTags;
