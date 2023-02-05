@@ -13,7 +13,9 @@ export const useUpdatePostMutation = () => {
     },
     onError: (error) => {
       if (isAxiosError(error) && error.response?.data?.code === "POE002") {
-        toast("수정 실패. 존재하지 않는 slug 입니다.", { toastId: "update" });
+        toast("업데이트 실패. 존재하지 않는 slug 입니다.", {
+          toastId: "update",
+        });
       }
     },
   });

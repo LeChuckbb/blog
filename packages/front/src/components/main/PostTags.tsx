@@ -15,7 +15,6 @@ const PostTags: React.FC<Props> = (props) => {
   const onClickTagList = (tag: string) => {
     setTag(tag);
   };
-  console.log(tagsData);
 
   return (
     <Tag>

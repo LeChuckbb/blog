@@ -2,10 +2,13 @@ import styled from "@emotion/styled";
 import Link from "next/link";
 import { useIsAuthQuery } from "../hooks/query/useIsAuthQuery";
 import { useLogoutQuery } from "../hooks/query/useLogoutQuery";
+import { useRecoilState } from "recoil";
+import { themeState } from "../recoil/atom";
 
 const Header = () => {
   const { data } = useIsAuthQuery();
   const { refetch } = useLogoutQuery();
+  const [_, setIsDarkMode] = useRecoilState(themeState);
 
   const onClickLogoutHandler = async () => {
     const response = await refetch();
@@ -14,7 +17,9 @@ const Header = () => {
     }
   };
 
-  console.log(data);
+  const onClickThemeModeHandler = () => {
+    setIsDarkMode((currentVal) => !currentVal);
+  };
 
   return (
     <Container>
@@ -32,7 +37,7 @@ const Header = () => {
             <button onClick={onClickLogoutHandler}>로그아웃</button>
           </>
         )}
-        <button>야간모드</button>
+        <button onClick={onClickThemeModeHandler}>야간모드</button>
       </RightWrapper>
     </Container>
   );

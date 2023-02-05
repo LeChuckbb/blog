@@ -4,11 +4,11 @@ import Header from "./Header";
 import React, { Suspense } from "react";
 import LocalErrorBoundary from "../hooks/error/LocalErrorBoundary";
 
-type WithHeaderProps = {
+type Props = {
   children: React.ReactNode;
 };
 
-const WithHeader = ({ children }: WithHeaderProps) => {
+const WithHeader = ({ children }: Props) => {
   return (
     <Container>
       <LocalErrorBoundary>

@@ -113,7 +113,7 @@ const CardBox = styled.div`
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  background-color: ${(props) => props.theme.colors.primary};
+  background-color: ${(props) => props.theme.colors.primary.primary};
   /* 
     768px 이상일 때, (두 개 카드 표시)
     1) 50% 미만 33% 이상의 백분율을 카드의 width로 부여.

@@ -1,13 +1,15 @@
 import "../styles/reset.css";
 import type { AppProps } from "next/app";
-import { ThemeProvider } from "@emotion/react";
-import theme from "../styles/theme";
+import { ThemeProvider, Global } from "@emotion/react";
+import { lightTheme, darkTheme } from "../styles/theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { NextPage } from "next";
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilState } from "recoil";
 import ModalSetter from "../common/Modal/ModalSetter";
 import GlobalErrorBoundary from "../hooks/\berror/GlobalErrorBoundary";
+import { themeState } from "../recoil/atom";
+import GlobalStyles from "../styles/glabals";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -17,14 +19,20 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 }; // 기존 AppProps타입에 Layout을 추가한 것.
 
-const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
-  console.log(error);
+const Wrapper = ({ Component, pageProps }: any) => {
+  const getLayout = Component.getLayout ?? ((page: any) => page);
+  const [isDarkMode, _] = useRecoilState(themeState);
 
   return (
-    <div role="alert">
-      <pre>서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.</pre>
-      <button onClick={resetErrorBoundary}>재시도</button>
-    </div>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <Global styles={GlobalStyles(isDarkMode ? darkTheme : lightTheme)} />
+      <GlobalErrorBoundary>
+        {getLayout(<Component {...pageProps} />)}
+        <div className="modal-root">
+          <ModalSetter selector=".modal-root" />
+        </div>
+      </GlobalErrorBoundary>
+    </ThemeProvider>
   );
 };
 
@@ -39,28 +47,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     },
   });
 
-  // const layouts = {
-  //   WithHeader: WithHeader: ,
-  //   Headerless: Headerless,
-  // };
-
-  // const NestedLayout = layouts[Component.layout] || WithHeader;
-  const getLayout = Component.getLayout ?? ((page) => page);
-  // const getLayout = Component.getLayout || WithHeader;
-
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen position="bottom-left" />
-      <ThemeProvider theme={theme}>
-        <RecoilRoot>
-          <GlobalErrorBoundary>
-            {getLayout(<Component {...pageProps} />)}
-            <div className="modal-root">
-              <ModalSetter selector=".modal-root" />
-            </div>
-          </GlobalErrorBoundary>
-        </RecoilRoot>
-      </ThemeProvider>
+      <RecoilRoot>
+        <Wrapper Component={Component} pageProps={pageProps} />
+      </RecoilRoot>
     </QueryClientProvider>
   );
 }
