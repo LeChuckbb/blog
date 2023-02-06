@@ -8,8 +8,8 @@ import { NextPage } from "next";
 import { RecoilRoot, useRecoilState } from "recoil";
 import ModalSetter from "../common/Modal/ModalSetter";
 import GlobalErrorBoundary from "../hooks/\berror/GlobalErrorBoundary";
-import { themeState } from "../recoil/atom";
 import GlobalStyles from "../styles/glabals";
+import useDarkMode from "../hooks/useDarkmode";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -21,7 +21,7 @@ type AppPropsWithLayout = AppProps & {
 
 const Wrapper = ({ Component, pageProps }: any) => {
   const getLayout = Component.getLayout ?? ((page: any) => page);
-  const [isDarkMode, _] = useRecoilState(themeState);
+  const { isDarkMode } = useDarkMode();
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>

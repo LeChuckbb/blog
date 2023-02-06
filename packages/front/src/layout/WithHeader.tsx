@@ -12,9 +12,9 @@ const WithHeader = ({ children }: Props) => {
   return (
     <Container>
       <LocalErrorBoundary>
-        <Suspense fallback={<p>loading...</p>}>
-          <Header />
-        </Suspense>
+        {/* <Suspense fallback={<p>loading...</p>}> */}
+        <Header />
+        {/* </Suspense> */}
       </LocalErrorBoundary>
       {children}
       <Footer />

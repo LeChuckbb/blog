@@ -2,29 +2,26 @@ import styled from "@emotion/styled";
 import Link from "next/link";
 import { useIsAuthQuery } from "../hooks/query/useIsAuthQuery";
 import { useLogoutQuery } from "../hooks/query/useLogoutQuery";
-import { useRecoilState } from "recoil";
-import { themeState } from "../recoil/atom";
 import IconDark from "../../public/icons/dark_mode.svg";
 import IconLight from "../../public/icons/light_mode.svg";
 import IconCreateNewPost from "../../public/icons/create.svg";
 import IconLogout from "../../public/icons/logout.svg";
 import lechuckLogo from "../../public/lechuck.jpeg";
 import Image from "next/image";
+import useDarkMode from "../hooks/useDarkmode";
 
 const Header = () => {
   const { data } = useIsAuthQuery();
   const { refetch } = useLogoutQuery();
-  const [isDarkMode, setIsDarkMode] = useRecoilState(themeState);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  // const isDarkMode = true;
+  // const toggleDarkMode = () => console.log("hi");
 
   const onClickLogoutHandler = async () => {
     const response = await refetch();
     if (response.data?.status === 200) {
       window.location.href = "/";
     }
-  };
-
-  const onClickThemeModeHandler = () => {
-    setIsDarkMode((currentVal) => !currentVal);
   };
 
   return (
@@ -54,7 +51,7 @@ const Header = () => {
             </IconContainerButton>
           </>
         )}
-        <IconContainerButton onClick={onClickThemeModeHandler}>
+        <IconContainerButton onClick={() => toggleDarkMode()}>
           {isDarkMode ? <IconDark /> : <IconLight />}
         </IconContainerButton>
       </RightWrapper>
