@@ -10,6 +10,7 @@ import { getPostBySlug } from "../../apis/postApi";
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import { useRouter } from "next/router";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
+import { useState } from "react";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -50,6 +51,17 @@ const write = ({ data }: Props) => {
 
   const router = useRouter();
   const content = data?.content && NodeHtmlMarkdown.translate(data?.content);
+  const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
+
+  const onTagFocusHandler = () => {
+    console.log("focus in");
+    setIsTagInputFocusIn(true);
+  };
+
+  const onTagFocusOutHandler = () => {
+    console.log("focus out");
+    setIsTagInputFocusIn(false);
+  };
 
   return (
     <Container>
@@ -68,57 +80,37 @@ const write = ({ data }: Props) => {
               </Tag>
             ))}
             <TagInput
-              type="text"
               {...register("tag")}
+              type="text"
               value={tag}
               placeholder="태그를 입력하세요"
               onChange={(event) => setTag(event.target.value)}
               onKeyDown={onKeyDownHandler}
+              autoComplete="off"
+              onFocus={onTagFocusHandler}
+              onBlur={onTagFocusOutHandler}
             />
+            {isTagInputFocusIn && (
+              <TagTooltip>
+                엔터를 입력하여 태그를 등록해주세요. <br />
+                등록된 태그를 클릭하면 삭제됩니다.
+              </TagTooltip>
+            )}
           </TagsWrapper>
         </TitleWrapper>
         <NoSsrEditor content={content} editorRef={editorRef} />
-        <ButtonWrapper>
-          <div
-            css={(theme) => ({
-              display: "flex",
-              gap: "8px",
-              cursor: "pointer",
-              padding: "4px",
-              ":hover": {
-                background: theme.colors.neutralVariant.surfaceVariant,
-              },
-            })}
+        <BottomButtonWrapper>
+          <LeftButtonSection
             onClick={() => router.back()}
+            css={(theme) => ({
+              fill: theme.colors.neutral.onBackground,
+            })}
           >
             <IconArrowPrev />
-            <input
-              type="button"
-              value="나가기"
-              css={(theme) => ({
-                background: "none",
-                border: "none",
-                lineHeight: "1.6",
-                cursor: "inherit",
-                color: theme.colors.neutral.onBackground,
-              })}
-            />
-          </div>
-          <input
-            type="submit"
-            value="출간하기"
-            css={(theme) => ({
-              background: theme.colors.primary.primary,
-              color: theme.colors.primary.onPrimary,
-              padding: "8px",
-              border: "none",
-              cursor: "pointer",
-              ":hover": {
-                opacity: 0.9,
-              },
-            })}
-          />
-        </ButtonWrapper>
+            <ExitButton type="button" value="나가기" />
+          </LeftButtonSection>
+          <CreateNewPostButton type="submit" value="출간하기" />
+        </BottomButtonWrapper>
         <ToastContainer />
       </form>
       <WriteSubPage
@@ -151,6 +143,7 @@ const TitleWrapper = styled.div`
   flex-direction: column;
   gap: 8px;
   padding: 32px;
+  position: relative;
 `;
 
 const TitleInput = styled.input`
@@ -161,12 +154,20 @@ const TitleInput = styled.input`
   line-height: 1.5;
   font-size: 42px;
   border: none;
+  background: ${(props) => props.theme.colors.neutral.background};
+  color: ${(props) => props.theme.colors.primary.onContainer};
+  transition: outline 0.1s, outline-color 0.1s;
+  :focus-visible {
+    outline: solid 2px;
+    outline-color: ${(props) => props.theme.colors.primary.container};
+  }
 `;
 
 const TagsWrapper = styled.div`
   display: flex;
   gap: 4px;
-  /* flex-wrap: wrap; */
+  height: 40px;
+  overflow: hidden;
 `;
 
 const Tag = styled.span`
@@ -175,7 +176,8 @@ const Tag = styled.span`
   align-items: center;
   padding: 8px 16px;
   border-radius: 16px;
-  background-color: aqua;
+  background-color: ${(props) => props.theme.colors.primary.primary};
+  color: ${(props) => props.theme.colors.primary.onPrimary};
   cursor: pointer;
   :hover {
     opacity: 0.7;
@@ -185,17 +187,66 @@ const Tag = styled.span`
 
 const TagInput = styled.input`
   font-size: 20px;
-  width: 100%;
+  /* width: 100%; */
+  flex-grow: 1;
   border: none;
+  background: ${(props) => props.theme.colors.neutral.background};
+  color: ${(props) => props.theme.colors.primary.onContainer};
+  transition: outline 0.1s, outline-color 0.1s;
+  :focus-visible {
+    outline-color: ${(props) => props.theme.colors.primary.container};
+  }
 `;
 
-const ButtonWrapper = styled.div`
+const TagTooltip = styled.div`
+  position: absolute;
+  background: ${(props) => props.theme.colors.primary.container};
+  color: ${(props) => props.theme.colors.primary.onContainer};
+  bottom: -32px;
+  font-size: 14px;
+  line-height: 1.2;
+  z-index: 9999;
+  padding: 14px 16px;
+  border-radius: 4px;
+`;
+
+const BottomButtonWrapper = styled.div`
   height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
   box-shadow: rgb(0 0 0 / 10%) 0px 0px 8px;
+`;
+
+const LeftButtonSection = styled.div`
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px;
+  :hover {
+    background: ${(props) => props.theme.colors.neutralVariant.surfaceVariant};
+  }
+`;
+
+const ExitButton = styled.input`
+  background: none;
+  border: none;
+  line-height: 1.6;
+  cursor: inherit;
+  color: ${(props) => props.theme.colors.neutral.onBackground};
+  fill: inherit;
+`;
+
+const CreateNewPostButton = styled.input`
+  background: ${(props) => props.theme.colors.primary.primary};
+  color: ${(props) => props.theme.colors.primary.onPrimary};
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  :hover {
+    opacity: 0.9;
+  }
 `;
 
 export default write;
