@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import { getPostBySlug } from "../../apis/postApi";
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import { useRouter } from "next/router";
+import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -78,22 +79,44 @@ const write = ({ data }: Props) => {
         </TitleWrapper>
         <NoSsrEditor content={content} editorRef={editorRef} />
         <ButtonWrapper>
-          <input
-            type="button"
-            value="나가기"
+          <div
+            css={(theme) => ({
+              display: "flex",
+              gap: "8px",
+              cursor: "pointer",
+              padding: "4px",
+              ":hover": {
+                background: theme.colors.neutralVariant.surfaceVariant,
+              },
+            })}
             onClick={() => router.back()}
-            style={{
-              flex: "1 1 30%",
-              backgroundColor: "green",
-            }}
-          />
+          >
+            <IconArrowPrev />
+            <input
+              type="button"
+              value="나가기"
+              css={(theme) => ({
+                background: "none",
+                border: "none",
+                lineHeight: "1.6",
+                cursor: "inherit",
+                color: theme.colors.neutral.onBackground,
+              })}
+            />
+          </div>
           <input
             type="submit"
             value="출간하기"
-            style={{
-              flex: "1 1 70%",
-              backgroundColor: "khaki",
-            }}
+            css={(theme) => ({
+              background: theme.colors.primary.primary,
+              color: theme.colors.primary.onPrimary,
+              padding: "8px",
+              border: "none",
+              cursor: "pointer",
+              ":hover": {
+                opacity: 0.9,
+              },
+            })}
           />
         </ButtonWrapper>
         <ToastContainer />
@@ -121,7 +144,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
 `;
 
 const TitleWrapper = styled.div`
@@ -168,8 +190,12 @@ const TagInput = styled.input`
 `;
 
 const ButtonWrapper = styled.div`
+  height: 64px;
   display: flex;
-  height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: rgb(0 0 0 / 10%) 0px 0px 8px;
 `;
 
 export default write;

@@ -33,7 +33,7 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
           initialEditType="markdown" // wysiwyg & markdown
           previewStyle={window.innerWidth > 1000 ? "vertical" : "tab"} // tab, vertical
           hideModeSwitch={true}
-          height="900px"
+          height={"calc(100vh - 64px - 168px)"}
           theme={""} // '' & 'dark'
           usageStatistics={false}
           toolbarItems={toolbarItems}

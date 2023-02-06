@@ -163,7 +163,6 @@ const StyledTitle = styled.h2`
 `;
 
 const StyledDate = styled.span`
-  /* color: #999; */
   color: ${(props) => props.theme.colors.tertiary.container};
   font-size: 12px;
   font-weight: 700;

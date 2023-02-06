@@ -8,6 +8,8 @@ import IconDark from "../../public/icons/dark_mode.svg";
 import IconLight from "../../public/icons/light_mode.svg";
 import IconCreateNewPost from "../../public/icons/create.svg";
 import IconLogout from "../../public/icons/logout.svg";
+import lechuckLogo from "../../public/lechuck.jpeg";
+import Image from "next/image";
 
 const Header = () => {
   const { data } = useIsAuthQuery();
@@ -27,10 +29,17 @@ const Header = () => {
 
   return (
     <Container>
-      <div>
-        <span>
-          <Link href="http://localhost:3000/">Lechuck</Link>
-        </span>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "4px",
+        }}
+      >
+        <div style={{ width: "48px", height: "48px" }}>
+          <Image src={lechuckLogo} style={{ borderRadius: "50%" }} />
+        </div>
+        <Link href="http://localhost:3000/">LeChuck</Link>
       </div>
       <RightWrapper>
         {data?.status === 200 && (
