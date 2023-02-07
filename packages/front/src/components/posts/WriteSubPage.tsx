@@ -4,7 +4,6 @@ import { RefObject } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { isAxiosError, AxiosError } from "axios";
 import IconThumbnail from "../../../public/thumbnail.svg";
 import { useCreatePostMutation } from "../../hooks/query/useCreatePostMutation";
 import { useUpdatePostMutation } from "../../hooks/query/useUpdatePostMutation";

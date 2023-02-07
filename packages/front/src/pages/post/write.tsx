@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
 import useWrite from "../../hooks/useWrite";
-import { useForm } from "react-hook-form";
+import { useForm, useController } from "react-hook-form";
 import WriteSubPage from "../../components/posts/WriteSubPage";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
@@ -43,15 +43,16 @@ const write = ({ data }: Props) => {
     onClickRemoveTagHandler,
   } = useWrite(data);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormInterface>();
-
+  const { register, handleSubmit } = useForm<FormInterface>();
   const router = useRouter();
   const content = data?.content && NodeHtmlMarkdown.translate(data?.content);
   const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
+
+  // const { handleSubmit: handle } = useController<FormInterface>({
+  //   defaultValue: {
+  //     email: "",
+  //   },
+  // });
 
   const onTagFocusHandler = () => {
     console.log("focus in");

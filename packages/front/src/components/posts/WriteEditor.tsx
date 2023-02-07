@@ -10,6 +10,7 @@ import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 import Prism from "prismjs";
 import { useRecoilState } from "recoil";
 import { themeState } from "../../recoil/atom";
+import useEditorStyles from "./useEditorStyles";
 interface Props {
   content: string;
   editorRef: React.MutableRefObject<any>;
@@ -26,24 +27,30 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
     ["scrollSync"],
   ];
   const [isDarkMode, _] = useRecoilState(themeState);
+  const { editorStyles } = useEditorStyles();
 
   return (
     <>
       {editorRef && (
-        <Editor
-          ref={editorRef}
-          initialValue={content || ""} // 글 수정 시 사용
-          initialEditType="markdown" // wysiwyg & markdown
-          previewStyle={window.innerWidth > 1000 ? "vertical" : "tab"} // tab, vertical
-          hideModeSwitch={true}
-          height={"calc(100vh - 64px - 178px)"}
-          theme={isDarkMode ? "dark" : ""} // '' & 'dark'
-          usageStatistics={false}
-          toolbarItems={toolbarItems}
-          useCommandShortcut={true}
-          plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
-          placeholder="Good day to write!"
-        />
+        <div css={editorStyles}>
+          <Editor
+            ref={editorRef}
+            initialValue={content || ""} // 글 수정 시 사용
+            initialEditType="markdown" // wysiwyg & markdown
+            previewStyle={window.innerWidth > 1000 ? "vertical" : "tab"} // tab, vertical
+            hideModeSwitch={true}
+            height={"calc(100vh - 64px - 178px)"}
+            theme={isDarkMode ? "dark" : ""} // '' & 'dark'
+            usageStatistics={false}
+            toolbarItems={toolbarItems}
+            useCommandShortcut={true}
+            plugins={[
+              colorSyntax,
+              [codeSyntaxHighlight, { highlighter: Prism }],
+            ]}
+            placeholder="Good day to write!"
+          />
+        </div>
       )}
     </>
   );

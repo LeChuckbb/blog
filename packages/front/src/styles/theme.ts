@@ -48,7 +48,7 @@ export const lightTheme = {
   },
   fonts: {
     family: {
-      brand: ["Spoqa Han Sans Neo", "sans-serif", "Gmarket Sans"].join(","),
+      brand: ["Do Hyeon", "Sunflower"].join(","),
       plain: [
         "system-ui",
         "-apple-system",
@@ -201,13 +201,8 @@ export const darkTheme = {
   },
   fonts: {
     family: {
-      brand: ["Spoqa Han Sans Neo", "sans-serif", "Gmarket Sans"].join(","),
-      plain: [
-        "system-ui",
-        "-apple-system",
-        "Noto Sans KR",
-        "Nanum Gothic",
-      ].join(","),
+      brand: ["Do Hyeon", "Sunflower"].join(","),
+      plain: ["-apple-system", "Noto Sans KR", "Nanum Gothic"].join(","),
     },
     display: {
       large: {

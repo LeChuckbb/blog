@@ -6,16 +6,12 @@ import IconDark from "../../public/icons/dark_mode.svg";
 import IconLight from "../../public/icons/light_mode.svg";
 import IconCreateNewPost from "../../public/icons/create.svg";
 import IconLogout from "../../public/icons/logout.svg";
-import lechuckLogo from "../../public/lechuck.jpeg";
-import Image from "next/image";
 import useDarkMode from "../hooks/useDarkMode";
 
 const Header = () => {
   const { data } = useIsAuthQuery();
   const { refetch } = useLogoutQuery();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
-  // const isDarkMode = true;
-  // const toggleDarkMode = () => console.log("hi");
 
   const onClickLogoutHandler = async () => {
     const response = await refetch();
@@ -26,40 +22,38 @@ const Header = () => {
 
   return (
     <Container>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "4px",
-        }}
-      >
-        <div style={{ width: "48px", height: "48px" }}>
-          <Image src={lechuckLogo} style={{ borderRadius: "50%" }} />
-        </div>
-        <Link href="http://localhost:3000/">LeChuck</Link>
-      </div>
-      <RightWrapper>
-        {data?.status === 200 && (
-          <>
-            <Link href="http://localhost:3000/post/write">
-              <IconContainerButton>
-                <IconCreateNewPost />
+      <InnerContainer className="HeaderContainer">
+        <LogoWrapper>
+          <Link href="http://localhost:3000/">LeChuck</Link>
+        </LogoWrapper>
+        <RightWrapper>
+          {data?.status === 200 && (
+            <>
+              <Link href="http://localhost:3000/post/write">
+                <IconContainerButton>
+                  <IconCreateNewPost />
+                </IconContainerButton>
+              </Link>
+              <IconContainerButton onClick={onClickLogoutHandler}>
+                <IconLogout />
               </IconContainerButton>
-            </Link>
-            <IconContainerButton onClick={onClickLogoutHandler}>
-              <IconLogout />
-            </IconContainerButton>
-          </>
-        )}
-        <IconContainerButton onClick={() => toggleDarkMode()}>
-          {isDarkMode ? <IconDark /> : <IconLight />}
-        </IconContainerButton>
-      </RightWrapper>
+            </>
+          )}
+          <IconContainerButton onClick={() => toggleDarkMode()}>
+            {isDarkMode ? <IconDark /> : <IconLight />}
+          </IconContainerButton>
+        </RightWrapper>
+      </InnerContainer>
     </Container>
   );
 };
 
 const Container = styled.div`
+  width: 100%;
+  background: ${(props) => props.theme.colors.primary.primary};
+`;
+
+const InnerContainer = styled.div`
   padding: 16px;
   background-color: ${(props) => props.theme.colors.primary.primary};
   color: ${(props) => props.theme.colors.primary.onPrimary};
@@ -68,6 +62,7 @@ const Container = styled.div`
   justify-content: space-between;
   height: 64px;
   width: min(1024px, 100%);
+  margin: 0 auto;
   ${(props) => props.theme.mq[1]} {
     width: 1024px;
   }
@@ -79,6 +74,17 @@ const Container = styled.div`
   }
 `;
 
+const LogoWrapper = styled.div`
+  display: "flex";
+  align-items: "center";
+  gap: "4px";
+  & a {
+    color: ${(props) => props.theme.colors.primary.onPrimary};
+    font-size: ${(props) => props.theme.fonts.headline.small.size};
+    font-family: ${(props) => props.theme.fonts.family.brand};
+  }
+`;
+
 const IconContainerButton = styled.button`
   width: 48px;
   height: 48px;
@@ -87,8 +93,11 @@ const IconContainerButton = styled.button`
   align-items: center;
   border-radius: 50%;
   transition: 0.1s all;
+  fill: ${(props) => props.theme.colors.primary.onPrimary};
   :hover {
-    background-color: ${(props) => props.theme.colors.secondary.container};
+    fill: ${(props) => props.theme.colors.primary.primary};
+    background-color: ${(props) => props.theme.colors.neutral.surface};
+    opacity: 0.8;
   }
 `;
 

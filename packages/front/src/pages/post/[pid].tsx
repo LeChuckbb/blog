@@ -62,20 +62,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 48px;
-  width: 100%;
   background-color: ${(props) => props.theme.colors.neutral.background};
   color: ${(props) => props.theme.colors.neutral.onBackground};
-  padding: 16px;
   min-height: 100vh;
-  ${(props) => props.theme.mq[1]} {
-    width: 1024px;
-  }
-  ${(props) => props.theme.mq[2]} {
-    width: 1376px;
-  }
-  ${(props) => props.theme.mq[3]} {
-    width: 1728px;
-  }
+  width: 100%;
+  max-width: 768px;
+  padding: 32px 0px;
 `;
 
 const HeadWrapper = styled.div`

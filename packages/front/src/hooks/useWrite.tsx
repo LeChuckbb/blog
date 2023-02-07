@@ -56,7 +56,12 @@ const useWrite = (data: any) => {
       const contentMark = editorIns.getMarkdown();
       const contentHTML = editorIns.getHTML();
 
+      console.log(contentMark);
+      console.log(contentHTML);
+
       if (contentMark?.length === 0) {
+        // subpage로 이동하지 말아야 함.
+        toast("본문 내용을 입력해주세요.", { toastId: "content" });
         throw new Error("본문 내용을 입력해주세요.");
       }
 
@@ -68,6 +73,7 @@ const useWrite = (data: any) => {
     } catch (error) {
       console.log(error);
       console.log("onValidSubmit Error");
+      throw error;
     }
   };
 
