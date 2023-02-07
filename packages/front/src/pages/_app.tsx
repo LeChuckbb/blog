@@ -9,7 +9,7 @@ import { RecoilRoot, useRecoilState } from "recoil";
 import ModalSetter from "../common/Modal/ModalSetter";
 import GlobalErrorBoundary from "../hooks/\berror/GlobalErrorBoundary";
 import GlobalStyles from "../styles/glabals";
-import useDarkMode from "../hooks/useDarkmode";
+import useDarkMode from "../hooks/useDarkMode";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;

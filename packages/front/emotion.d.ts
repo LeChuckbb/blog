@@ -41,6 +41,112 @@ declare module "@emotion/react" {
         outlineVariant: string;
       };
     };
+    fonts: {
+      family: {
+        brand: string;
+        plain: string;
+      };
+      display: {
+        large: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+        medium: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+        small: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+      };
+      headline: {
+        large: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+        medium: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+        small: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+      };
+      title: {
+        large: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+        medium: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+        small: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+      };
+      body: {
+        large: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+        medium: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+        small: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+      };
+      label: {
+        large: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+        medium: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+        small: {
+          size: string;
+          weight: string;
+          lineHeight: string;
+          letterSpacing: string;
+        };
+      };
+    };
     mq: string[];
   }
 }

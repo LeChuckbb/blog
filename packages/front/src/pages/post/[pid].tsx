@@ -17,7 +17,7 @@ const NoSSRViewer = dynamic(
 const PostDetail = ({ title, date, content }: any) => {
   return (
     <Container>
-      <HeadWrapper>
+      <HeadWrapper className="headWrapper">
         <h1 style={{ fontSize: "48px", fontWeight: 700 }}>{title}</h1>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>{date}</span>
@@ -63,7 +63,8 @@ const Container = styled.div`
   flex-direction: column;
   gap: 48px;
   width: 100%;
-  background-color: white;
+  background-color: ${(props) => props.theme.colors.neutral.background};
+  color: ${(props) => props.theme.colors.neutral.onBackground};
   padding: 16px;
   min-height: 100vh;
   ${(props) => props.theme.mq[1]} {

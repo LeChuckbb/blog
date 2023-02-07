@@ -8,7 +8,7 @@ import IconCreateNewPost from "../../public/icons/create.svg";
 import IconLogout from "../../public/icons/logout.svg";
 import lechuckLogo from "../../public/lechuck.jpeg";
 import Image from "next/image";
-import useDarkMode from "../hooks/useDarkmode";
+import useDarkMode from "../hooks/useDarkMode";
 
 const Header = () => {
   const { data } = useIsAuthQuery();

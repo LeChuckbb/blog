@@ -156,6 +156,7 @@ const TitleInput = styled.input`
   border: none;
   background: ${(props) => props.theme.colors.neutral.background};
   color: ${(props) => props.theme.colors.primary.onContainer};
+  border-radius: 4px;
   transition: outline 0.1s, outline-color 0.1s;
   :focus-visible {
     outline: solid 2px;
@@ -187,9 +188,9 @@ const Tag = styled.span`
 
 const TagInput = styled.input`
   font-size: 20px;
-  /* width: 100%; */
   flex-grow: 1;
   border: none;
+  border-radius: 4px;
   background: ${(props) => props.theme.colors.neutral.background};
   color: ${(props) => props.theme.colors.primary.onContainer};
   transition: outline 0.1s, outline-color 0.1s;
@@ -224,6 +225,7 @@ const LeftButtonSection = styled.div`
   gap: 8px;
   cursor: pointer;
   padding: 4px;
+  border-radius: 4px;
   :hover {
     background: ${(props) => props.theme.colors.neutralVariant.surfaceVariant};
   }
@@ -236,6 +238,7 @@ const ExitButton = styled.input`
   cursor: inherit;
   color: ${(props) => props.theme.colors.neutral.onBackground};
   fill: inherit;
+  border-radius: 4px;
 `;
 
 const CreateNewPostButton = styled.input`

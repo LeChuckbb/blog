@@ -60,4 +60,5 @@ const CardContainer = styled.div`
   flex-wrap: wrap;
   gap: 16px;
   width: 100%;
+  /* height: calc(100vh - 66px - 64px); */
 `;
