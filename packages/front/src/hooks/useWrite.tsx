@@ -6,16 +6,22 @@ import { FormInterface } from "../pages/post/write";
 interface Body {
   title: string;
   tags: string[];
-  content: any;
+  content: {
+    html: any;
+    markup: any;
+  };
 }
 
 const useWrite = (data: any) => {
   const [tag, setTag] = useState("");
   const [tagsArray, setTagsArray] = useState(Array<string>);
-  const [fetchBody, setFetchBody] = useState<Body>({
+  const [postFetchBody, setPostFetchBody] = useState<Body>({
     title: "",
     tags: [],
-    content: undefined,
+    content: {
+      html: "",
+      markup: "",
+    },
   });
   const editorRef = useRef<any>(null);
   const subPageRef = useRef<HTMLDivElement>(null);
@@ -49,9 +55,6 @@ const useWrite = (data: any) => {
       const contentMark = editorIns.getMarkdown();
       const contentHTML = editorIns.getHTML();
 
-      console.log(contentMark);
-      console.log(contentHTML);
-
       if (contentMark?.length === 0) {
         // subpage로 이동하지 말아야 함.
         toast("본문 내용을 입력해주세요.", { toastId: "content" });
@@ -65,10 +68,13 @@ const useWrite = (data: any) => {
         );
       }
 
-      setFetchBody({
+      setPostFetchBody({
         title: data.title,
         tags: tagsArray,
-        content: contentHTML,
+        content: {
+          html: contentHTML,
+          markup: contentMark,
+        },
       });
     } catch (error) {
       console.log(error);
@@ -92,7 +98,7 @@ const useWrite = (data: any) => {
     subPageRef,
     tagsArray,
     tag,
-    fetchBody,
+    postFetchBody,
     setTag,
     onKeyDownHandler,
     onValidSubmit,

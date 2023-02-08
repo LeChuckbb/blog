@@ -16,7 +16,7 @@ const DeleteModal = ({ confirmHandler }: any) => {
   );
 };
 
-const PostMenu = ({ title }: any) => {
+const PostMenu = ({ slug }: any) => {
   const router = useRouter();
   const [_, setModal] = useRecoilState(modalState);
   const { data } = useQuery(["isAuthNoSuspense"], () => isAuthorized(), {
@@ -36,7 +36,10 @@ const PostMenu = ({ title }: any) => {
   const onClickUpdateHandler = () => {
     // Editor 열기
     // post/write?slug=xxx
-    router.push({ pathname: "/post/write", query: { slug: title } });
+    router.push({
+      pathname: "/post/write",
+      query: { slug },
+    });
   };
 
   return (

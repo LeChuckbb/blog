@@ -27,7 +27,6 @@ const useDarkMode = () => {
     새로고침시 다크모드 또는 라이트모드를 적용시켜준다.
   */
   useEffect(() => {
-    console.log("useEFfect");
     const localTheme = window.localStorage.getItem("isDarkMode");
     if (localTheme != null) {
       if (localTheme === "true") {

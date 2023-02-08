@@ -19,13 +19,10 @@ const WriteViewer = ({ content }: any) => {
     );
   };
 
-  console.log("asdhnkiasdhkdasjh");
-  console.log(content);
-
   return (
     <div css={editorStyles}>
       <Viewer
-        initialValue={content || ""}
+        initialValue={content.html || ""}
         plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
         customHTMLRenderer={{
           htmlBlock: {

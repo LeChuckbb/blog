@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 export const useCreatePostMutation = () => {
   const router = useRouter();
 
-  return useMutation((body) => createPost(body), {
+  return useMutation((body: any) => createPost(body), {
     onSuccess: () => {
       router.push("/");
     },

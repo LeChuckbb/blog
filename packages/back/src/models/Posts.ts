@@ -6,7 +6,10 @@ export interface Post extends mongoose.Document {
   title: string;
   subTitle: string;
   date: string;
-  content: string;
+  content: {
+    markup: string;
+    html: string;
+  };
   tags: Array<String>;
   // tags: any;
 }
@@ -28,8 +31,14 @@ const PostSchema: Schema = new Schema<Post>({
     required: true,
   },
   content: {
-    type: String,
-    requried: true,
+    html: {
+      type: String,
+      required: true,
+    },
+    markup: {
+      type: String,
+      required: true,
+    },
   },
   tags: [String],
   // tags: {

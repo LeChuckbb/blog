@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { useGetPostTagsQuery } from "../../hooks/query/useGetPostTagsQuery";
 import { useGetPostByPageQuery } from "../../hooks/query/useGetPostByPageQuery";
 import Card from "../Card";
 

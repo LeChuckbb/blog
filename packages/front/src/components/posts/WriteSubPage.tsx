@@ -10,7 +10,7 @@ import { useUpdatePostMutation } from "../../hooks/query/useUpdatePostMutation";
 
 type Props = {
   subPageRef: RefObject<HTMLDivElement>;
-  fetchBody: any;
+  postFetchBody: any;
   prevData?: any;
 };
 
@@ -47,7 +47,11 @@ const defaultDateHandler = () => {
     .slice(0, -1);
 };
 
-const WriteSubPage: React.FC<Props> = ({ prevData, fetchBody, subPageRef }) => {
+const WriteSubPage: React.FC<Props> = ({
+  prevData,
+  postFetchBody,
+  subPageRef,
+}) => {
   const { register, handleSubmit } = useForm<FormInterface>({
     defaultValues: {
       thumbnail: prevData?.thumbnail ? prevData?.thumbnail : "",
@@ -60,17 +64,24 @@ const WriteSubPage: React.FC<Props> = ({ prevData, fetchBody, subPageRef }) => {
   const { mutate: createPost } = useCreatePostMutation();
   const { mutate: updatePost } = useUpdatePostMutation();
 
-  const onValidSubmit: SubmitHandler<FormInterface> = async (data) => {
+  const onValidSubmit: SubmitHandler<FormInterface> = async (formInputData) => {
     toast.dismiss(); // toast 종료하기
     isUpdate
       ? await updatePost({
           slug: router.query.slug as string,
           body: {
-            ...data,
-            ...fetchBody,
+            ...formInputData,
+            tags: postFetchBody.tags,
+            title: postFetchBody.title,
+            content: postFetchBody.content,
           },
         })
-      : await createPost({ ...data, ...fetchBody });
+      : await createPost({
+          ...formInputData,
+          tags: postFetchBody.tags,
+          title: postFetchBody.title,
+          content: postFetchBody.content,
+        });
   };
 
   const onInvalidSubmit = (errors: any) => {
@@ -117,7 +128,7 @@ const WriteSubPage: React.FC<Props> = ({ prevData, fetchBody, subPageRef }) => {
                 id="urlSlug"
                 {...register("urlSlug", { required: "URL을 지정해주세요" })}
                 // defaultValue={`${title?.replaceAll(" ", "-")}`}
-                defaultValue={`${fetchBody?.title?.replaceAll(" ", "-")}`}
+                defaultValue={`${postFetchBody?.title?.replaceAll(" ", "-")}`}
                 type="text"
               />
             </Box>

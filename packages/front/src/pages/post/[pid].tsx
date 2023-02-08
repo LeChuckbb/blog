@@ -14,15 +14,14 @@ const NoSSRViewer = dynamic(
   }
 );
 
-const PostDetail = ({ title, date, content }: any) => {
-  console.log(content);
+const PostDetail = ({ title, date, content, slug }: any) => {
   return (
     <Container>
       <HeadWrapper className="headWrapper">
         <h1 style={{ fontSize: "48px", fontWeight: 700 }}>{title}</h1>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>{date}</span>
-          <PostMenu title={title} />
+          <PostMenu slug={slug} />
         </div>
       </HeadWrapper>
       {content && <NoSSRViewer content={content} />}
@@ -55,7 +54,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const res = await getPostBySlug(params?.pid as string);
 
   return {
-    props: res.data,
+    props: { ...res.data, slug: params?.pid },
   };
 };
 

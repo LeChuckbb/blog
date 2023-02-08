@@ -8,7 +8,6 @@ import { ToastContainer } from "react-toastify";
 import { GetServerSideProps } from "next";
 import { getPostBySlug } from "../../apis/postApi";
 import { NodeHtmlMarkdown } from "node-html-markdown";
-import Mark from "markdown-it";
 import { useRouter } from "next/router";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { useState } from "react";
@@ -36,7 +35,7 @@ const write = ({ data }: Props) => {
     subPageRef,
     tagsArray,
     tag,
-    fetchBody,
+    postFetchBody,
     setTag,
     onKeyDownHandler,
     onValidSubmit,
@@ -47,22 +46,15 @@ const write = ({ data }: Props) => {
   const { register, handleSubmit } = useForm<FormInterface>();
 
   const router = useRouter();
-  const content = data?.content && NodeHtmlMarkdown.translate(data?.content);
-  // const mark = Mark({ html: true });
-  // const content = mark.render(data?.content);
-  // console.log(content);
-  // console.log(mark.render(content));
-  // console.log(mark.render("<h1>Hello</h1>"));
-  // console.log(mark.render("# 제목 테스트"));
+  const content = data?.content?.markup;
+  // const content = data?.content && NodeHtmlMarkdown.translate(data?.content);
   const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
 
   const onTagFocusHandler = () => {
-    console.log("focus in");
     setIsTagInputFocusIn(true);
   };
 
   const onTagFocusOutHandler = () => {
-    console.log("focus out");
     setIsTagInputFocusIn(false);
   };
 
@@ -118,7 +110,7 @@ const write = ({ data }: Props) => {
       </form>
       <WriteSubPage
         prevData={data}
-        fetchBody={fetchBody}
+        postFetchBody={postFetchBody}
         subPageRef={subPageRef}
       />
     </Container>
@@ -131,6 +123,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (Object.values(query).length === 0) return { props: { data: null } };
   // 실패시 에러 처리 요망
   const res = await getPostBySlug(query.slug as string);
+
   return {
     props: { data: res.data },
   };

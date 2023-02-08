@@ -34,8 +34,6 @@ export const getPostByPage = (model: Model<Post>) =>
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE);
 
-    // throw new Error();
-
     return res.status(200).json({
       count,
       next,
@@ -50,7 +48,10 @@ export const getPostBySlug = (model: Model<Post>) =>
     const resultObj = results?.toObject();
     const resultBody = {
       ...resultObj,
-      content: decode(results?.content),
+      content: {
+        html: decode(results?.content?.html),
+        markup: results?.content?.markup,
+      },
     };
 
     return res.status(200).json(resultBody);
@@ -76,7 +77,10 @@ export const createPost = (model: Model<Post>) =>
     const body = req?.body?.content
       ? {
           ...req.body,
-          content: encode(req.body.content),
+          content: {
+            html: encode(req.body.content.html),
+            markup: req.body.content.markup,
+          },
         }
       : req.body;
     const result = await model.create(body);
@@ -103,7 +107,10 @@ export const updatePost = (model: Model<Post>) =>
     const body = req?.body?.content
       ? {
           ...req.body,
-          content: encode(req.body.content),
+          content: {
+            html: encode(req.body.content.html),
+            markup: req.body.content.markup,
+          },
         }
       : req.body;
 
@@ -155,7 +162,6 @@ const deleteTags = (tags: Array<String>) => {
 
 export const deletePost = (model: Model<Post>) =>
   tryCatch(async (req: Request, res: Response) => {
-    console.log("DELETE POST");
     const slug = req.params.slug;
     // 1. post 삭제.
     const result = await model.findOneAndDelete({ urlSlug: slug });
