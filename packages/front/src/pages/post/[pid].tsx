@@ -15,13 +15,14 @@ const NoSSRViewer = dynamic(
 );
 
 const PostDetail = ({ title, date, content }: any) => {
+  console.log(content);
   return (
     <Container>
       <HeadWrapper className="headWrapper">
         <h1 style={{ fontSize: "48px", fontWeight: 700 }}>{title}</h1>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>{date}</span>
-          <PostMenu title={title} content={content} />
+          <PostMenu title={title} />
         </div>
       </HeadWrapper>
       {content && <NoSSRViewer content={content} />}

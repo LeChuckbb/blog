@@ -16,13 +16,13 @@ const DeleteModal = ({ confirmHandler }: any) => {
   );
 };
 
-const PostMenu = ({ title, content }: any) => {
+const PostMenu = ({ title }: any) => {
   const router = useRouter();
   const [_, setModal] = useRecoilState(modalState);
   const { data } = useQuery(["isAuthNoSuspense"], () => isAuthorized(), {
     suspense: false,
   });
-  const { mutate: deletePost } = useDeletePostMutation(content, setModal);
+  const { mutate: deletePost } = useDeletePostMutation(<></>, setModal);
   const confirmHanlder = async () =>
     await deletePost(router.query.pid as string);
 

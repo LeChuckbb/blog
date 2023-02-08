@@ -19,11 +19,30 @@ const WriteViewer = ({ content }: any) => {
     );
   };
 
+  console.log("asdhnkiasdhkdasjh");
+  console.log(content);
+
   return (
     <div css={editorStyles}>
       <Viewer
         initialValue={content || ""}
         plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
+        customHTMLRenderer={{
+          htmlBlock: {
+            iframe(node: any) {
+              return [
+                {
+                  type: "openTag",
+                  tagName: "iframe",
+                  outerNewLine: true,
+                  attributes: node.attrs,
+                },
+                { type: "html", content: node.childrenHTML },
+                { type: "closeTag", tagName: "iframe", outerNewLine: false },
+              ];
+            },
+          },
+        }}
       />
       {/* <FAB /> */}
     </div>

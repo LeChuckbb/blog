@@ -44,13 +44,6 @@ const useWrite = (data: any) => {
       // toast 종료하기
       toast.dismiss();
       // data set하여 subPage로 props로 전달하기
-
-      if (subPageRef.current != null) {
-        subPageRef.current.className = subPageRef.current.className.replace(
-          "hide",
-          "show"
-        );
-      }
       // 본문을 markdown으로 저장
       const editorIns = editorRef?.current?.getInstance();
       const contentMark = editorIns.getMarkdown();
@@ -65,6 +58,13 @@ const useWrite = (data: any) => {
         throw new Error("본문 내용을 입력해주세요.");
       }
 
+      if (subPageRef.current != null) {
+        subPageRef.current.className = subPageRef.current.className.replace(
+          "hide",
+          "show"
+        );
+      }
+
       setFetchBody({
         title: data.title,
         tags: tagsArray,
@@ -73,7 +73,6 @@ const useWrite = (data: any) => {
     } catch (error) {
       console.log(error);
       console.log("onValidSubmit Error");
-      throw error;
     }
   };
 

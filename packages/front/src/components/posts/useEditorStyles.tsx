@@ -36,6 +36,10 @@ const useEditorStyles = () => {
       line-height: ${theme.fonts.headline.small.lineHeight};
     }
 
+    .toastui-editor-contents br {
+      height: 0;
+    }
+
     .toastui-editor-contents p,
     div,
     span {

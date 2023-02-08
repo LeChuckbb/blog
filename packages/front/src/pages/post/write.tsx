@@ -1,13 +1,14 @@
 import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
 import useWrite from "../../hooks/useWrite";
-import { useForm, useController } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import WriteSubPage from "../../components/posts/WriteSubPage";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { GetServerSideProps } from "next";
 import { getPostBySlug } from "../../apis/postApi";
 import { NodeHtmlMarkdown } from "node-html-markdown";
+import Mark from "markdown-it";
 import { useRouter } from "next/router";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { useState } from "react";
@@ -44,15 +45,16 @@ const write = ({ data }: Props) => {
   } = useWrite(data);
 
   const { register, handleSubmit } = useForm<FormInterface>();
+
   const router = useRouter();
   const content = data?.content && NodeHtmlMarkdown.translate(data?.content);
+  // const mark = Mark({ html: true });
+  // const content = mark.render(data?.content);
+  // console.log(content);
+  // console.log(mark.render(content));
+  // console.log(mark.render("<h1>Hello</h1>"));
+  // console.log(mark.render("# 제목 테스트"));
   const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
-
-  // const { handleSubmit: handle } = useController<FormInterface>({
-  //   defaultValue: {
-  //     email: "",
-  //   },
-  // });
 
   const onTagFocusHandler = () => {
     console.log("focus in");

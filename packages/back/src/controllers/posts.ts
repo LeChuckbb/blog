@@ -100,7 +100,12 @@ const updateTags = async (
 export const updatePost = (model: Model<Post>) =>
   tryCatch(async (req: Request, res: Response) => {
     const slug = req.params.slug;
-    const body = req.body;
+    const body = req?.body?.content
+      ? {
+          ...req.body,
+          content: encode(req.body.content),
+        }
+      : req.body;
 
     const result = await model.findOneAndUpdate(
       { urlSlug: slug },
