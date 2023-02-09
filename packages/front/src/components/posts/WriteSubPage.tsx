@@ -127,7 +127,6 @@ const WriteSubPage: React.FC<Props> = ({
               <input
                 id="urlSlug"
                 {...register("urlSlug", { required: "URL을 지정해주세요" })}
-                // defaultValue={`${title?.replaceAll(" ", "-")}`}
                 defaultValue={`${postFetchBody?.title?.replaceAll(" ", "-")}`}
                 type="text"
               />

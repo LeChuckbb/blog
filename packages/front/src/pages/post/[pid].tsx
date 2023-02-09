@@ -14,9 +14,57 @@ const NoSSRViewer = dynamic(
   }
 );
 
+const getHTMLTags = (htmlString: string) => {
+  // 긴 HTML 문자열에서 h1,h2,h3 태그만 추출하기
+  const regex = /<(h[1-3]).*?>(.*?)<\/\1>/g;
+  const headers = htmlString.match(regex);
+
+  return headers != null
+    ? headers.map((str) => {
+        // (\w+) : captures its tag name. any word character +(반복)
+        // [^<]* :  ignores any attributes within the opening tag
+        // (.*) : captures the content
+        // <\/\1> : 오프닝 태그(group 1)와 똑같은 이름의 클로징 태그
+        const match = str.match(/<(\w+)[^<]*>(.*)<\/\1>/);
+        if (match) {
+          let tagName = match[1];
+          // content 내부의 모든 html tag를 제거한다
+          let content = match[2].replace(/<[^>]+>/g, "");
+          return { tag: tagName, content };
+        }
+      })
+    : null;
+};
+
 const PostDetail = ({ title, date, content, slug }: any) => {
+  const tocArray = getHTMLTags(content.html);
+  console.log(tocArray);
+
   return (
-    <Container>
+    <Container className="pidContainer">
+      {tocArray && (
+        <TocAbsoluteWrapper>
+          <TocStickyWrapper>
+            {tocArray.map((str) => {
+              let leftMargin = "0px";
+              if (str?.tag === "h2") {
+                leftMargin = "12px";
+              } else if (str?.tag === "h3") {
+                leftMargin = "24px";
+              }
+              return (
+                <div
+                  css={{
+                    marginLeft: leftMargin,
+                  }}
+                >
+                  <a href={`#${str?.content}`}>{str?.content}</a>
+                </div>
+              );
+            })}
+          </TocStickyWrapper>
+        </TocAbsoluteWrapper>
+      )}
       <HeadWrapper className="headWrapper">
         <h1 style={{ fontSize: "48px", fontWeight: 700 }}>{title}</h1>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -68,6 +116,7 @@ const Container = styled.div`
   width: 100%;
   max-width: 768px;
   padding: 32px 0px;
+  position: relative;
 `;
 
 const HeadWrapper = styled.div`
@@ -76,6 +125,29 @@ const HeadWrapper = styled.div`
   gap: 32px;
 `;
 
-const ContentWrapper = styled.div`
-  min-height: 900px;
+const TocAbsoluteWrapper = styled.div`
+  position: absolute;
+  height: 100%;
+  left: 100%;
+  margin-left: 36px;
+  font-size: ${(props) => props.theme.fonts.label.large.size};
+  line-height: ${(props) => props.theme.fonts.label.large.lineHeight};
+  color: ${(props) => props.theme.colors.neutralVariant.outline};
+  /* color: ${(props) => props.theme.colors.primary.primary}; */
+  display: flex;
+  width: max-content;
+`;
+
+const TocStickyWrapper = styled.div`
+  border-left: 2px solid;
+  border-left-color: ${(props) =>
+    props.theme.colors.neutralVariant.outlineVariant};
+  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: sticky;
+  top: 300px;
+  left: 0;
+  align-self: flex-start;
 `;

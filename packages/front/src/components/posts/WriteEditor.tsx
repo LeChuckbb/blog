@@ -50,23 +50,36 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
             ]}
             placeholder="Good day to write!"
             customHTMLRenderer={{
-              htmlBlock: {
-                iframe(node: any) {
-                  return [
-                    {
-                      type: "openTag",
-                      tagName: "iframe",
-                      outerNewLine: true,
-                      attributes: node.attrs,
+              iframe(node: any) {
+                return [
+                  {
+                    type: "openTag",
+                    tagName: "iframe",
+                    outerNewLine: true,
+                    attributes: node.attrs,
+                  },
+                  { type: "html", content: node.childrenHTML },
+                  {
+                    type: "closeTag",
+                    tagName: "iframe",
+                    outerNewLine: false,
+                  },
+                ];
+              },
+              heading(node: any, { entering, getChildrenText }) {
+                const tagName = `h${node.level}`;
+
+                if (entering) {
+                  return {
+                    type: "openTag",
+                    tagName,
+                    attributes: {
+                      // id: getChildrenText(node).trim().replace(/\s+/g, "-"),
+                      id: getChildrenText(node).trim(),
                     },
-                    { type: "html", content: node.childrenHTML },
-                    {
-                      type: "closeTag",
-                      tagName: "iframe",
-                      outerNewLine: false,
-                    },
-                  ];
-                },
+                  };
+                }
+                return { type: "closeTag", tagName };
               },
             }}
           />
