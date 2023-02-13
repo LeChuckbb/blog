@@ -33,8 +33,9 @@ axiosInstance.interceptors.response.use(
         return axiosInstance.request(config);
       } else if (response.data.code === "AUE004") {
         // 권한이 없다는 토스트 띄우기 (모달 종료하고)
+        // isAuth API 호출시에는 이 토스트가 출력되어선 안 된다.
         console.log("AUE004 인터셉터");
-        toast("요청에 대한 권한이 없습니다");
+        // toast("요청에 대한 권한이 없습니다");
       }
     }
     return response;

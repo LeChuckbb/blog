@@ -7,9 +7,14 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import useEditorStyles from "./useEditorStyles";
 import styled from "@emotion/styled";
 import IconArrowUp from "../../../public/icons/arrow_upward.svg";
+import { useEffect, useRef } from "react";
+import useIntersectionObservation from "../../hooks/useIntersectionObservation";
 
-const WriteViewer = ({ content }: any) => {
+const WriteViewer = ({ content, setObserverEntries }: any) => {
   const { editorStyles } = useEditorStyles();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const entry = useIntersectionObservation(ref, {});
+  // const isIntersecting = !!entry?.isIntersecting;
 
   const FAB = () => {
     return (
@@ -19,8 +24,12 @@ const WriteViewer = ({ content }: any) => {
     );
   };
 
+  useEffect(() => {
+    setObserverEntries(entry);
+  }, [entry]);
+
   return (
-    <div css={editorStyles}>
+    <div css={editorStyles} ref={ref}>
       <Viewer
         initialValue={content.html || ""}
         plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
@@ -43,6 +52,7 @@ const WriteViewer = ({ content }: any) => {
               return {
                 type: "openTag",
                 tagName,
+                classNames: [`tocAnchor`],
                 attributes: {
                   // id: getChildrenText(node).trim().replace(/\s+/g, "-"),
                   id: getChildrenText(node).trim(),

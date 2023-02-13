@@ -6,6 +6,8 @@ import { getPostBySlug, getPost } from "../../apis/postApi";
 import PostMenu from "../../components/posts/PostMenu";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRef, useEffect, useState } from "react";
+import useIntersectionObservation from "../../hooks/useIntersectionObservation";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -36,30 +38,48 @@ const getHTMLTags = (htmlString: string) => {
     : null;
 };
 
+const getLeftMarginByTagName = (tagName: string | undefined) => {
+  if (tagName === "h2") {
+    return "12px";
+  } else if (tagName === "h3") {
+    return "24px";
+  } else {
+    // h1
+    return "0px";
+  }
+};
+
 const PostDetail = ({ title, date, content, slug }: any) => {
   const tocArray = getHTMLTags(content.html);
-  console.log(tocArray);
+  const [observerEntry, setObserverEntry] =
+    useState<IntersectionObserverEntry>();
+
+  // 1. 긴 Toc 두줄로 만들기 (flex-wrap?)
+  // 2. 스크롤 이벤트 달아서 트래킹 활성화하기
+  // 3. 눌렀을 때 스크롤 자연스럽게
+  // 4. 호버/액티브 CSS 효과 추가하기
 
   return (
     <Container className="pidContainer">
       {tocArray && (
         <TocAbsoluteWrapper>
           <TocStickyWrapper>
-            {tocArray.map((str) => {
-              let leftMargin = "0px";
-              if (str?.tag === "h2") {
-                leftMargin = "12px";
-              } else if (str?.tag === "h3") {
-                leftMargin = "24px";
-              }
+            {tocArray.map((str, idx) => {
               return (
-                <div
+                <TocLineDiv
+                  key={idx}
                   css={{
-                    marginLeft: leftMargin,
+                    marginLeft: getLeftMarginByTagName(str?.tag),
+                    color:
+                      observerEntry?.target.textContent === str?.content
+                        ? "red"
+                        : "",
                   }}
                 >
-                  <a href={`#${str?.content}`}>{str?.content}</a>
-                </div>
+                  <TocAnchor href={`#${str?.content}`}>
+                    {str?.content}
+                  </TocAnchor>
+                </TocLineDiv>
               );
             })}
           </TocStickyWrapper>
@@ -72,7 +92,9 @@ const PostDetail = ({ title, date, content, slug }: any) => {
           <PostMenu slug={slug} />
         </div>
       </HeadWrapper>
-      {content && <NoSSRViewer content={content} />}
+      {content && (
+        <NoSSRViewer content={content} setObserverEntries={setObserverEntry} />
+      )}
       <ToastContainer />
     </Container>
   );
@@ -150,4 +172,12 @@ const TocStickyWrapper = styled.div`
   top: 300px;
   left: 0;
   align-self: flex-start;
+`;
+
+const TocLineDiv = styled.div`
+  display: flex;
+`;
+
+const TocAnchor = styled.a`
+  max-width: 240px;
 `;

@@ -73,6 +73,7 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
                   return {
                     type: "openTag",
                     tagName,
+                    classNames: [`tocAnchor`],
                     attributes: {
                       // id: getChildrenText(node).trim().replace(/\s+/g, "-"),
                       id: getChildrenText(node).trim(),
