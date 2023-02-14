@@ -6,8 +6,7 @@ import { getPostBySlug, getPost } from "../../apis/postApi";
 import PostMenu from "../../components/posts/PostMenu";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRef, useEffect, useState } from "react";
-import useIntersectionObservation from "../../hooks/useIntersectionObservation";
+import { useEffect, useState } from "react";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -53,6 +52,7 @@ const PostDetail = ({ title, date, content, slug }: any) => {
   const tocArray = getHTMLTags(content.html);
   const [observerEntry, setObserverEntry] =
     useState<IntersectionObserverEntry>();
+  const [anchorClickHandler, setAnchorClickHandler] = useState();
 
   // 1. 긴 Toc 두줄로 만들기 (flex-wrap?)
   // 2. 스크롤 이벤트 달아서 트래킹 활성화하기
@@ -68,15 +68,22 @@ const PostDetail = ({ title, date, content, slug }: any) => {
               return (
                 <TocLineDiv
                   key={idx}
-                  css={{
+                  css={(theme) => ({
                     marginLeft: getLeftMarginByTagName(str?.tag),
                     color:
                       observerEntry?.target.textContent === str?.content
-                        ? "red"
+                        ? theme.colors.primary.primary
                         : "",
-                  }}
+                    transform:
+                      observerEntry?.target.textContent === str?.content
+                        ? "scale(1.05)"
+                        : "",
+                  })}
                 >
-                  <TocAnchor href={`#${str?.content}`}>
+                  <TocAnchor
+                    href={`#${str?.content}`}
+                    onClick={anchorClickHandler}
+                  >
                     {str?.content}
                   </TocAnchor>
                 </TocLineDiv>
@@ -93,7 +100,11 @@ const PostDetail = ({ title, date, content, slug }: any) => {
         </div>
       </HeadWrapper>
       {content && (
-        <NoSSRViewer content={content} setObserverEntries={setObserverEntry} />
+        <NoSSRViewer
+          content={content}
+          setObserverEntries={setObserverEntry}
+          setAnchorClickHandler={setAnchorClickHandler}
+        />
       )}
       <ToastContainer />
     </Container>
@@ -137,7 +148,7 @@ const Container = styled.div`
   min-height: 100vh;
   width: 100%;
   max-width: 768px;
-  padding: 32px 0px;
+  padding: 32px 0px 72px;
   position: relative;
 `;
 
@@ -155,7 +166,6 @@ const TocAbsoluteWrapper = styled.div`
   font-size: ${(props) => props.theme.fonts.label.large.size};
   line-height: ${(props) => props.theme.fonts.label.large.lineHeight};
   color: ${(props) => props.theme.colors.neutralVariant.outline};
-  /* color: ${(props) => props.theme.colors.primary.primary}; */
   display: flex;
   width: max-content;
 `;
@@ -176,8 +186,12 @@ const TocStickyWrapper = styled.div`
 
 const TocLineDiv = styled.div`
   display: flex;
+  transition: all 0.125s ease-in 0s;
 `;
 
 const TocAnchor = styled.a`
   max-width: 240px;
+  :hover {
+    color: ${(props) => props.theme.colors.primary.primary};
+  }
 `;

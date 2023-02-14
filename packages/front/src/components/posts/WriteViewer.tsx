@@ -10,11 +10,15 @@ import IconArrowUp from "../../../public/icons/arrow_upward.svg";
 import { useEffect, useRef } from "react";
 import useIntersectionObservation from "../../hooks/useIntersectionObservation";
 
-const WriteViewer = ({ content, setObserverEntries }: any) => {
+const WriteViewer = ({
+  content,
+  setObserverEntries,
+  setAnchorClickHandler,
+}: any) => {
   const { editorStyles } = useEditorStyles();
   const ref = useRef<HTMLDivElement | null>(null);
-  const entry = useIntersectionObservation(ref, {});
-  // const isIntersecting = !!entry?.isIntersecting;
+  const { entry, anchorOnClickHandler, mouseWheelActiveRef, anchorClickedRef } =
+    useIntersectionObservation(ref, {});
 
   const FAB = () => {
     return (
@@ -24,9 +28,11 @@ const WriteViewer = ({ content, setObserverEntries }: any) => {
     );
   };
 
+  // 25분
   useEffect(() => {
     setObserverEntries(entry);
-  }, [entry]);
+    setAnchorClickHandler(() => anchorOnClickHandler);
+  }, [entry, anchorOnClickHandler]);
 
   return (
     <div css={editorStyles} ref={ref}>
