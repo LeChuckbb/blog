@@ -54,11 +54,6 @@ const PostDetail = ({ title, date, content, slug }: any) => {
     useState<IntersectionObserverEntry>();
   const [anchorClickHandler, setAnchorClickHandler] = useState();
 
-  // 1. 긴 Toc 두줄로 만들기 (flex-wrap?)
-  // 2. 스크롤 이벤트 달아서 트래킹 활성화하기
-  // 3. 눌렀을 때 스크롤 자연스럽게
-  // 4. 호버/액티브 CSS 효과 추가하기
-
   return (
     <Container className="pidContainer">
       {tocArray && (

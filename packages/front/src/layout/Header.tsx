@@ -8,7 +8,7 @@ import IconCreateNewPost from "../../public/icons/create.svg";
 import IconLogout from "../../public/icons/logout.svg";
 import useDarkMode from "../hooks/useDarkMode";
 
-const Header = () => {
+const Header = ({ scrollDirection }: any) => {
   const { data } = useIsAuthQuery();
   const { refetch } = useLogoutQuery();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -21,7 +21,7 @@ const Header = () => {
   };
 
   return (
-    <Container>
+    <Container scrollDirection={scrollDirection}>
       <InnerContainer className="HeaderContainer">
         <LogoWrapper>
           <Link href="http://localhost:3000/">LeChuck</Link>
@@ -48,9 +48,18 @@ const Header = () => {
   );
 };
 
-const Container = styled.div`
+interface ContainerProps {
+  scrollDirection: string;
+}
+
+const Container = styled.div<ContainerProps>`
   width: 100%;
+  position: fixed;
+  z-index: 100;
+  transition: all 0.3s;
   background: ${(props) => props.theme.colors.primary.primary};
+  transform: ${(props) =>
+    props.scrollDirection === "down" && "translateY(-64px)"};
 `;
 
 const InnerContainer = styled.div`
