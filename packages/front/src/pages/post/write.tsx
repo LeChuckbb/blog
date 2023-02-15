@@ -7,10 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { GetServerSideProps } from "next";
 import { getPostBySlug } from "../../apis/postApi";
-import { NodeHtmlMarkdown } from "node-html-markdown";
 import { useRouter } from "next/router";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { useState } from "react";
+import { Button } from "design/src/stories/Button";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -105,6 +105,7 @@ const write = ({ data }: Props) => {
             <ExitButton type="button" value="나가기" />
           </LeftButtonSection>
           <CreateNewPostButton type="submit" value="출간하기" />
+          <Button>출간하기</Button>
         </BottomButtonWrapper>
         <ToastContainer />
       </form>

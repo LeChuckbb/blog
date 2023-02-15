@@ -3,10 +3,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { RefObject } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { useRouter } from "next/router";
 import IconThumbnail from "../../../public/thumbnail.svg";
 import { useCreatePostMutation } from "../../hooks/query/useCreatePostMutation";
 import { useUpdatePostMutation } from "../../hooks/query/useUpdatePostMutation";
+import useWriteSubPage from "./useWriteSubPage";
 
 type Props = {
   subPageRef: RefObject<HTMLDivElement>;
@@ -21,52 +21,24 @@ interface FormInterface {
   date: string;
 }
 
-const onClickSubPageCancelHandler = (
-  event: React.MouseEvent,
-  subPageRef: RefObject<HTMLDivElement>
-) => {
-  event?.preventDefault(); // submit 방지
-  if (subPageRef.current != null) {
-    subPageRef.current.className = subPageRef.current.className.replace(
-      "show",
-      "hide"
-    );
-  }
-};
-
-const defaultDateHandler = () => {
-  const date = new Date();
-
-  return new Intl.DateTimeFormat("kr", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  })
-    .format(date)
-    .replaceAll(". ", "-")
-    .slice(0, -1);
-};
-
 const WriteSubPage: React.FC<Props> = ({
   prevData,
   postFetchBody,
   subPageRef,
 }) => {
-  const { register, handleSubmit } = useForm<FormInterface>({
-    defaultValues: {
-      thumbnail: prevData?.thumbnail ? prevData?.thumbnail : "",
-      subTitle: prevData?.subTitle ? prevData?.subTitle : "",
-      date: prevData?.date ? prevData?.date : defaultDateHandler(),
-    },
-  });
-  const router = useRouter();
-  const isUpdate = router.query.slug === undefined ? false : true;
+  const {
+    onClickSubPageCancelHandler,
+    register,
+    handleSubmit,
+    router,
+    isUpdatePost,
+  } = useWriteSubPage(prevData);
   const { mutate: createPost } = useCreatePostMutation();
   const { mutate: updatePost } = useUpdatePostMutation();
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (formInputData) => {
     toast.dismiss(); // toast 종료하기
-    isUpdate
+    isUpdatePost
       ? await updatePost({
           slug: router.query.slug as string,
           body: {
@@ -114,7 +86,7 @@ const WriteSubPage: React.FC<Props> = ({
 
           <ColumnWrapper>
             <Box>
-              <label htmlFor="textArea">11월 독서</label>
+              <label htmlFor="textArea">{prevData?.title}</label>
               <TextArea
                 {...register("subTitle")}
                 id="textArea"
@@ -141,16 +113,15 @@ const WriteSubPage: React.FC<Props> = ({
               />
             </Box>
             <ButtonWrapper>
-              <input
+              <CancelBtn
                 type="button"
                 value="취소"
-                style={{
-                  border: "2px solid yellow",
-                  padding: "8px",
-                }}
                 onClick={(e) => onClickSubPageCancelHandler(e, subPageRef)}
               />
-              <input type="submit" value="수정하기" />
+              <ConfirmBtn
+                type="submit"
+                value={isUpdatePost ? "수정" : "작성"}
+              />
             </ButtonWrapper>
           </ColumnWrapper>
         </Container>
@@ -165,7 +136,6 @@ export default WriteSubPage;
 const SubPage = styled.div`
   width: 100vw;
   height: 100vh;
-  background: white;
   position: absolute;
   top: 100vh;
   transition: top 0.3s;
@@ -173,6 +143,7 @@ const SubPage = styled.div`
   justify-content: center;
   align-items: center;
   scale: 0;
+  background-color: ${(props) => props.theme.colors.neutral.background};
 
   &.show {
     top: 0vh;
@@ -181,9 +152,9 @@ const SubPage = styled.div`
 `;
 
 const Container = styled.div`
-  background-color: lightgrey;
-  width: 50%;
-  height: 50%;
+  background-color: ${(props) => props.theme.colors.neutral.background};
+  width: 768px;
+  /* height: 50%; */
   padding: 32px;
   display: flex;
 `;
@@ -192,6 +163,7 @@ const ColumnWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 100%;
+  gap: 8px;
 `;
 
 const ImageBtnLabel = styled.label`
@@ -202,7 +174,9 @@ const ImageBtnLabel = styled.label`
 const VerticalLine = styled.div`
   width: 1px;
   height: 100%;
-  background-color: red;
+  min-height: 300px;
+  background-color: ${(props) =>
+    props.theme.colors.neutralVariant.outlineVariant};
   margin-left: 32px;
   margin-right: 32px;
 `;
@@ -230,4 +204,29 @@ const TextArea = styled.textarea`
 const ButtonWrapper = styled.div`
   display: flex;
   gap: 8px;
+  justify-content: flex-end;
+  margin-top: auto;
+`;
+
+const CancelBtn = styled.input`
+  border: 2px solid yellow;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  color: ${(props) => props.theme.colors.primary.primary};
+  background-color: ${(props) => props.theme.colors.neutral.background};
+  :hover {
+    opacity: 0.9;
+  }
+`;
+
+const ConfirmBtn = styled.input`
+  border: none;
+  padding: 8px 16px;
+  background-color: ${(props) => props.theme.colors.primary.primary};
+  color: ${(props) => props.theme.colors.primary.onPrimary};
+  cursor: pointer;
+  :hover {
+    opacity: 0.9;
+  }
 `;

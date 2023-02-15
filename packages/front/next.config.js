@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+
+const withTM = require("next-transpile-modules")(["design"]);
 const nextConfig = {
   reactStrictMode: false,
   images: {
@@ -17,4 +19,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withTM(nextConfig);

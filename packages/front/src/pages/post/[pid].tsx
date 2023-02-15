@@ -169,7 +169,7 @@ const TocStickyWrapper = styled.div`
   border-left: 2px solid;
   border-left-color: ${(props) =>
     props.theme.colors.neutralVariant.outlineVariant};
-  padding-left: 8px;
+  padding-left: 12px;
   display: flex;
   flex-direction: column;
   gap: 6px;
