@@ -337,11 +337,11 @@ export const darkTheme = {
       level5:
         "0px 8px 12px 6px rgba(0, 0, 0, 0.15), 0px 4px 4px rgba(0, 0, 0, 0.3)",
     },
-  },
-  stateLayer: {
-    hover: "0.08",
-    focus: "0.12",
-    active: "0.12",
+    stateLayer: {
+      hover: "0.08",
+      focus: "0.12",
+      active: "0.12",
+    },
   },
   mq: BREAK_POINTS.map((bp) => `@media (min-width:${bp}px)`),
 };

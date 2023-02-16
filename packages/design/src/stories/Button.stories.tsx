@@ -6,101 +6,75 @@ import styled from "@emotion/styled";
 import { ReactComponent as BackArrowIcon } from "../../public/arrow_back.svg";
 
 export default {
-  title: "Go/Button",
+  title: "blog/Button",
   component: Button,
 } as ComponentMeta<typeof Button>;
+
+type Props = {
+  args: any;
+  icon?: boolean;
+};
 
 const Template: ComponentStory<typeof Button> = (args) => (
   <ThemeProvider theme={lightTheme}>
     <FlexWrapper>
       <FlexContainer>
-        <Button {...args}>Button</Button>
-        <Button id="hover" {...args}>
-          Hover
-        </Button>
-        <Button id="focus" {...args}>
-          Focused
-        </Button>
-        <Button id="active" {...args}>
-          Actived
-        </Button>
-        <Button disabled {...args}>
-          Disabled
-        </Button>
+        <Buttons args={args} />
       </FlexContainer>
       <FlexContainer>
-        <Button icon {...args}>
-          <BackArrowIcon />
-          Button
-        </Button>
-        <Button id="hover" {...args}>
-          Hover
-        </Button>
-        <Button id="focus" {...args}>
-          Focused
-        </Button>
-        <Button id="active" {...args}>
-          Actived
-        </Button>
-        <Button disabled {...args}>
-          Disabled
-        </Button>
+        <Buttons args={args} icon={true} />
       </FlexContainer>
     </FlexWrapper>
   </ThemeProvider>
 );
 
+const Buttons = ({ args, icon }: Props) => {
+  return (
+    <>
+      <Button icon={icon} {...args}>
+        {icon && <BackArrowIcon />}Button
+      </Button>
+      <Button icon={icon} id="hover" {...args}>
+        {icon && <BackArrowIcon />} Hover
+      </Button>
+      <Button icon={icon} id="focus" {...args}>
+        {icon && <BackArrowIcon />}Focused
+      </Button>
+      <Button icon={icon} id="active" {...args}>
+        {icon && <BackArrowIcon />}Actived
+      </Button>
+      <Button icon={icon} disabled {...args}>
+        {icon && <BackArrowIcon />}Disabled
+      </Button>
+    </>
+  );
+};
+
+const PSEUDO = {
+  hover: "#hover",
+  focus: "#focus",
+  active: "#active",
+};
+
 export const Filled = Template.bind({});
-Filled.args = {
-  mode: "filled",
-};
-Filled.parameters = {
-  pseudo: {
-    hover: "#hover",
-    focus: "#focus",
-    active: "#active",
-  },
-};
+Filled.args = { mode: "filled" };
+Filled.parameters = { pseudo: PSEUDO };
 
 export const Outlined = Template.bind({});
 Outlined.args = { mode: "outlined" };
-Outlined.parameters = {
-  pseudo: {
-    hover: "#hover",
-    focus: "#focus",
-    active: "#active",
-  },
-};
+Outlined.parameters = { pseudo: PSEUDO };
 
 export const Text = Template.bind({});
 Text.args = { mode: "text" };
-Text.parameters = {
-  pseudo: {
-    hover: "#hover",
-    focus: "#focus",
-    active: "#active",
-  },
-};
+Text.parameters = { pseudo: PSEUDO };
 
 export const Elevated = Template.bind({});
 Elevated.args = { mode: "elevated" };
-Elevated.parameters = {
-  pseudo: {
-    hover: "#hover",
-    focus: "#focus",
-    active: "#active",
-  },
-};
+Elevated.parameters = { pseudo: PSEUDO };
 
 export const Tonal = Template.bind({});
 Tonal.args = { mode: "tonal" };
-Tonal.parameters = {
-  pseudo: {
-    hover: "#hover",
-    focus: "#focus",
-    active: "#active",
-  },
-};
+Tonal.parameters = { pseudo: PSEUDO };
 
 const FlexWrapper = styled.div`
   display: flex;

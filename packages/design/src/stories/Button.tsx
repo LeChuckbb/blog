@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import { css, Theme, useTheme } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
-import { ReactComponentElement } from "react";
 
 // type Size = "small" | "medium" | "large";
 // type Priority = "primary" | "secondary" | "tertiary" | "error";
@@ -18,12 +17,13 @@ export const Button = ({
   mode = "filled",
   children,
   icon,
+  type = "button",
   ...props
 }: ButtonProps) => {
   const { style, themesMode } = ButtonStyles(icon);
 
   return (
-    <button css={[style, themesMode[mode]]} {...props}>
+    <button type={type} css={[style, themesMode[mode]]} {...props}>
       <Layer id="stateLayer" />
       {children}
     </button>
@@ -34,17 +34,19 @@ const ButtonStyles = (icon: boolean | undefined) => {
   const theme = useTheme();
 
   const style = css`
+    height: 40px;
     position: relative;
     outline: none;
     border: none;
     cursor: pointer;
-    padding: ${icon ? "10px 24px 10px 16px" : "10px 24px"};
+    padding: ${icon === true ? "10px 24px 10px 16px" : "10px 24px"};
     border-radius: 100px;
     font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: ${icon && "8px"};
+    fill: ${theme.colors.primary.primary};
+    gap: ${icon === true && "8px"};
     &:hover,
     &:focus,
     &:active {
@@ -123,4 +125,5 @@ const Layer = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 100px;
+  left: 0px;
 `;

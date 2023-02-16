@@ -47,7 +47,6 @@ const write = ({ data }: Props) => {
 
   const router = useRouter();
   const content = data?.content?.markup;
-  // const content = data?.content && NodeHtmlMarkdown.translate(data?.content);
   const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
 
   const onTagFocusHandler = () => {
@@ -95,15 +94,10 @@ const write = ({ data }: Props) => {
         </TitleWrapper>
         <NoSsrEditor content={content} editorRef={editorRef} />
         <BottomButtonWrapper>
-          <LeftButtonSection
-            onClick={() => router.back()}
-            css={(theme) => ({
-              fill: theme.colors.neutral.onBackground,
-            })}
-          >
+          <Button icon mode="outlined" onClick={() => router.back()}>
             <IconArrowPrev />
-            <ExitButton type="button" value="나가기" />
-          </LeftButtonSection>
+            나가기
+          </Button>
           <Button type="submit">출간하기</Button>
         </BottomButtonWrapper>
         <ToastContainer />
@@ -214,27 +208,6 @@ const BottomButtonWrapper = styled.div`
   justify-content: space-between;
   padding: 0 24px;
   box-shadow: rgb(0 0 0 / 10%) 0px 0px 8px;
-`;
-
-const LeftButtonSection = styled.div`
-  display: flex;
-  gap: 8px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  :hover {
-    background: ${(props) => props.theme.colors.neutralVariant.surfaceVariant};
-  }
-`;
-
-const ExitButton = styled.input`
-  background: none;
-  border: none;
-  line-height: 1.6;
-  cursor: inherit;
-  color: ${(props) => props.theme.colors.neutral.onBackground};
-  fill: inherit;
-  border-radius: 4px;
 `;
 
 const CreateNewPostButton = styled.input`
