@@ -157,6 +157,25 @@ export const lightTheme = {
       },
     },
   },
+  shadow: {
+    elevation: {
+      level1:
+        "0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15)",
+      level2:
+        "0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
+      level3:
+        "0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3)",
+      level4:
+        "0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px rgba(0, 0, 0, 0.3)",
+      level5:
+        "0px 8px 12px 6px rgba(0, 0, 0, 0.15), 0px 4px 4px rgba(0, 0, 0, 0.3)",
+    },
+    stateLayer: {
+      hover: "0.08",
+      focus: "0.12",
+      active: "0.12",
+    },
+  },
   mq: BREAK_POINTS.map((bp) => `@media (min-width:${bp}px)`),
 };
 
@@ -304,6 +323,25 @@ export const darkTheme = {
         letterSpacing: "0.50px",
       },
     },
+  },
+  shadow: {
+    elevation: {
+      level1:
+        "0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px rgba(0, 0, 0, 0.3)",
+      level2:
+        "0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px rgba(0, 0, 0, 0.3)",
+      level3:
+        "0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3)",
+      level4:
+        "0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px rgba(0, 0, 0, 0.3)",
+      level5:
+        "0px 8px 12px 6px rgba(0, 0, 0, 0.15), 0px 4px 4px rgba(0, 0, 0, 0.3)",
+    },
+  },
+  stateLayer: {
+    hover: "0.08",
+    focus: "0.12",
+    active: "0.12",
   },
   mq: BREAK_POINTS.map((bp) => `@media (min-width:${bp}px)`),
 };

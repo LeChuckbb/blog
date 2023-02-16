@@ -104,8 +104,7 @@ const write = ({ data }: Props) => {
             <IconArrowPrev />
             <ExitButton type="button" value="나가기" />
           </LeftButtonSection>
-          <CreateNewPostButton type="submit" value="출간하기" />
-          <Button>출간하기</Button>
+          <Button type="submit">출간하기</Button>
         </BottomButtonWrapper>
         <ToastContainer />
       </form>

@@ -147,6 +147,20 @@ declare module "@emotion/react" {
         };
       };
     };
+    shadow: {
+      elevation: {
+        level1: string;
+        level2: string;
+        level3: string;
+        level4: string;
+        level5: string;
+      };
+      stateLayer: {
+        hover: string;
+        focus: string;
+        active: string;
+      };
+    };
     mq: string[];
   }
 }
