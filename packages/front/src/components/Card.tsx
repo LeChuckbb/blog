@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useRef, useEffect } from "react";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import { useRouter } from "next/router";
+import { Chip as TagChip } from "design/src/stories/Chip";
 
 type Props = {
   children?: React.ReactNode;
@@ -99,9 +100,13 @@ Card.Tags = ({ children }: Props) => {
   const arr = React.Children.toArray(children);
   return (
     <TagWrapper>
-      {arr.map((child, idx) => (
-        <Tag key={idx}>{child}</Tag>
-      ))}
+      <TagList>
+        {arr.map((child, idx) => (
+          <TagChip variant="filter" color="background" key={idx}>
+            {child}
+          </TagChip>
+        ))}
+      </TagList>
     </TagWrapper>
   );
 };
@@ -177,18 +182,28 @@ const StyledTagsSection = styled.div`
 
 const TagWrapper = styled.div`
   display: flex;
-  gap: 8px;
   overflow: hidden;
 `;
 
-const Tag = styled.span`
-  font-size: 12px;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.neutral.onSurface};
-  border: 1px solid;
-  border-color: ${(props) => props.theme.colors.neutralVariant.outline};
-  border-radius: 6px;
-  padding: 2px 4px;
+const TagList = styled.ul`
+  display: flex;
+  gap: 8px;
+
+  & li {
+    height: 24px;
+    font-size: 12px;
+    font-weight: 700;
+  }
 `;
+
+// const Tags = styled.span`
+//   font-size: 12px;
+//   font-weight: 700;
+//   color: ${(props) => props.theme.colors.neutral.onSurface};
+//   border: 1px solid;
+//   border-color: ${(props) => props.theme.colors.neutralVariant.outline};
+//   border-radius: 6px;
+//   padding: 2px 4px;
+// `;
 
 export default Card;

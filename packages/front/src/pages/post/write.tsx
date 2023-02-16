@@ -11,6 +11,8 @@ import { useRouter } from "next/router";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { useState } from "react";
 import { Button } from "design/src/stories/Button";
+import { Chip as TagChip } from "design/src/stories/Chip";
+import IconClear from "../../../public/icons/clear.svg";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -42,9 +44,7 @@ const write = ({ data }: Props) => {
     onInvalidSubmit,
     onClickRemoveTagHandler,
   } = useWrite(data);
-
   const { register, handleSubmit } = useForm<FormInterface>();
-
   const router = useRouter();
   const content = data?.content?.markup;
   const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
@@ -68,11 +68,17 @@ const write = ({ data }: Props) => {
             defaultValue={data?.title}
           />
           <TagsWrapper>
-            {tagsArray?.map((el, idx) => (
-              <Tag onClick={() => onClickRemoveTagHandler(idx)} key={idx}>
-                {el}
-              </Tag>
-            ))}
+            <TagList>
+              {tagsArray?.map((el, idx) => (
+                <TagChip
+                  variant="input"
+                  onClick={() => onClickRemoveTagHandler(idx)}
+                  key={idx}
+                >
+                  {el}
+                </TagChip>
+              ))}
+            </TagList>
             <TagInput
               {...register("tag")}
               type="text"
@@ -94,7 +100,7 @@ const write = ({ data }: Props) => {
         </TitleWrapper>
         <NoSsrEditor content={content} editorRef={editorRef} />
         <BottomButtonWrapper>
-          <Button icon mode="outlined" onClick={() => router.back()}>
+          <Button icon variant="outlined" onClick={() => router.back()}>
             <IconArrowPrev />
             나가기
           </Button>
@@ -159,21 +165,12 @@ const TagsWrapper = styled.div`
   gap: 4px;
   height: 40px;
   overflow: hidden;
+  align-items: center;
 `;
 
-const Tag = styled.span`
+const TagList = styled.ul`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 16px;
-  border-radius: 16px;
-  background-color: ${(props) => props.theme.colors.primary.primary};
-  color: ${(props) => props.theme.colors.primary.onPrimary};
-  cursor: pointer;
-  :hover {
-    opacity: 0.7;
-    transition: opacity 0.1s;
-  }
+  gap: 4px;
 `;
 
 const TagInput = styled.input`
@@ -208,17 +205,6 @@ const BottomButtonWrapper = styled.div`
   justify-content: space-between;
   padding: 0 24px;
   box-shadow: rgb(0 0 0 / 10%) 0px 0px 8px;
-`;
-
-const CreateNewPostButton = styled.input`
-  background: ${(props) => props.theme.colors.primary.primary};
-  color: ${(props) => props.theme.colors.primary.onPrimary};
-  padding: 8px;
-  border: none;
-  cursor: pointer;
-  :hover {
-    opacity: 0.9;
-  }
 `;
 
 export default write;

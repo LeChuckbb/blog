@@ -2,8 +2,8 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Button } from "./Button";
 import { ThemeProvider } from "@emotion/react";
 import { lightTheme } from "../styles/theme";
-import styled from "@emotion/styled";
 import { ReactComponent as BackArrowIcon } from "../../public/arrow_back.svg";
+import { FlexContainer, FlexWrapper } from "./Common";
 
 export default {
   title: "blog/Button",
@@ -17,14 +17,14 @@ type Props = {
 
 const Template: ComponentStory<typeof Button> = (args) => (
   <ThemeProvider theme={lightTheme}>
-    <FlexWrapper>
-      <FlexContainer>
+    <FlexContainer>
+      <FlexWrapper>
         <Buttons args={args} />
-      </FlexContainer>
-      <FlexContainer>
+      </FlexWrapper>
+      <FlexWrapper>
         <Buttons args={args} icon={true} />
-      </FlexContainer>
-    </FlexWrapper>
+      </FlexWrapper>
+    </FlexContainer>
   </ThemeProvider>
 );
 
@@ -57,32 +57,21 @@ const PSEUDO = {
 };
 
 export const Filled = Template.bind({});
-Filled.args = { mode: "filled" };
+Filled.args = { variant: "filled" };
 Filled.parameters = { pseudo: PSEUDO };
 
 export const Outlined = Template.bind({});
-Outlined.args = { mode: "outlined" };
+Outlined.args = { variant: "outlined" };
 Outlined.parameters = { pseudo: PSEUDO };
 
 export const Text = Template.bind({});
-Text.args = { mode: "text" };
+Text.args = { variant: "text" };
 Text.parameters = { pseudo: PSEUDO };
 
 export const Elevated = Template.bind({});
-Elevated.args = { mode: "elevated" };
+Elevated.args = { variant: "elevated" };
 Elevated.parameters = { pseudo: PSEUDO };
 
 export const Tonal = Template.bind({});
-Tonal.args = { mode: "tonal" };
+Tonal.args = { variant: "tonal" };
 Tonal.parameters = { pseudo: PSEUDO };
-
-const FlexWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const FlexContainer = styled.div`
-  display: flex;
-  gap: 8px;
-`;

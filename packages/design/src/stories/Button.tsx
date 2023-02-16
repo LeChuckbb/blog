@@ -1,20 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { css, useTheme } from "@emotion/react";
-import styled from "@emotion/styled";
-
-// type Size = "small" | "medium" | "large";
-// type Priority = "primary" | "secondary" | "tertiary" | "error";
-type Mode = "filled" | "outlined" | "text" | "elevated" | "tonal";
+import Layer from "./Layer";
+type Variant = "filled" | "outlined" | "text" | "elevated" | "tonal";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  // children: React.ReactNode;
-  mode?: Mode;
+  variant?: Variant;
   icon?: boolean;
   onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const Button = ({
-  mode = "filled",
+  variant = "filled",
   children,
   icon,
   type = "button",
@@ -23,8 +19,8 @@ export const Button = ({
   const { style, themesMode } = ButtonStyles(icon);
 
   return (
-    <button type={type} css={[style, themesMode[mode]]} {...props}>
-      <Layer id="stateLayer" />
+    <button type={type} css={[style, themesMode[variant]]} {...props}>
+      <Layer variant="button" />
       {children}
     </button>
   );
@@ -47,31 +43,14 @@ const ButtonStyles = (icon: boolean | undefined) => {
     justify-content: center;
     fill: ${theme.colors.primary.primary};
     gap: ${icon === true && "8px"};
-    &:hover,
-    &:focus,
-    &:active {
-      & #stateLayer {
-        background-color: ${theme.colors.primary.primary};
-      }
-    }
-    &:hover {
-      & #stateLayer {
-        opacity: ${theme.shadow.stateLayer.hover};
-      }
-    }
-    &:focus {
-      & #stateLayer {
-        opacity: ${theme.shadow.stateLayer.focus};
-      }
-    }
-    &:active {
-      & #stateLayer {
-        opacity: ${theme.shadow.stateLayer.active};
-      }
+    & svg {
+      width: 18px;
+      height: 18px;
     }
     &:disabled {
       background-color: ${theme.colors.neutralVariant.outlineVariant};
       color: ${theme.colors.neutralVariant.outline};
+      fill: ${theme.colors.neutralVariant.outline};
     }
   `;
 
@@ -79,6 +58,7 @@ const ButtonStyles = (icon: boolean | undefined) => {
     filled: css`
       background-color: ${theme.colors.primary.primary};
       color: ${theme.colors.primary.onPrimary};
+      fill: ${theme.colors.primary.onPrimary};
       &:hover {
         box-shadow: ${theme.shadow.elevation.level1};
       }
@@ -119,11 +99,3 @@ const ButtonStyles = (icon: boolean | undefined) => {
 
   return { style, themesMode };
 };
-
-const Layer = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 100px;
-  left: 0px;
-`;
