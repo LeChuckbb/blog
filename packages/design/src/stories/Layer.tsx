@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import styled from "@emotion/styled";
 import { css, useTheme } from "@emotion/react";
 
 type Variant = "chip" | "button";
@@ -9,7 +8,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 // stateLayer in Material design 3
-const Layer = ({ variant = "button" }: Props) => {
+const Layer = ({ variant = "button", children }: Props) => {
   const theme = useTheme();
 
   const style = css`
@@ -17,6 +16,9 @@ const Layer = ({ variant = "button" }: Props) => {
     width: 100%;
     height: 100%;
     left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &:hover,
     &:focus,
     &:active {
@@ -42,7 +44,11 @@ const Layer = ({ variant = "button" }: Props) => {
     `,
   };
 
-  return <div id="stateLayer" css={[style, themeVariant[variant]]} />;
+  return (
+    <div id="stateLayer" css={[style, themeVariant[variant]]}>
+      {children}
+    </div>
+  );
 };
 
 export default Layer;

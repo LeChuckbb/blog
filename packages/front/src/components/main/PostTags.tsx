@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { PostTagsType } from "../../hooks/query/useGetPostTagsQuery";
 import { useGetPostTagsQuery } from "../../hooks/query/useGetPostTagsQuery";
 import { Chip as Tag } from "design/src/stories/Chip";
+import Badge from "design/src/stories/Badge";
 
 interface Props {
   tagsData?: PostTagsType;
@@ -19,20 +20,20 @@ const PostTags: React.FC<Props> = (props) => {
 
   return (
     <TagList>
-      <Tag color="secondary" onClick={() => onClickTagList("all")}>
-        all
-        <Count>{tagsData?.count}</Count>
-      </Tag>
+      <Badge badgeContent={tagsData?.count}>
+        <Tag color="secondary" onClick={() => onClickTagList("all")}>
+          all
+          {/* <Count>{tagsData?.count}</Count> */}
+        </Tag>
+      </Badge>
       {tagsData?.tags.map((tag: any) => {
         return (
-          <Tag
-            color="secondary"
-            key={tag._id}
-            onClick={() => onClickTagList(tag.name)}
-          >
-            {tag.name}
-            <Count>{tag.count}</Count>
-          </Tag>
+          <Badge badgeContent={tag.count} key={tag._id}>
+            <Tag color="secondary" onClick={() => onClickTagList(tag.name)}>
+              {tag.name}
+              {/* <Count>{tag.count}</Count> */}
+            </Tag>
+          </Badge>
         );
       })}
     </TagList>
@@ -50,27 +51,6 @@ const TagList = styled.ul`
     display: none;
   }
 `;
-
-// const Tag = styled.li`
-//   display: flex;
-//   gap: 4px;
-//   border: 1px solid;
-//   border-color: ${(props) => props.theme.colors.neutralVariant.outline};
-//   border-radius: 12px;
-//   cursor: pointer;
-//   padding: 4px 8px;
-//   transition: all 0.3s;
-//   background-color: ${(props) => props.theme.colors.secondary.container};
-//   color: ${(props) => props.theme.colors.secondary.onContainer};
-//   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
-
-//   :hover {
-//     /* background-color: ${(props) =>
-//       props.theme.colors.secondary.secondary}; */
-//     /* color: ${(props) => props.theme.colors.secondary.onSecondary}; */
-//     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
-//   }
-// `;
 
 const Count = styled.span`
   color: ${(props) => props.theme.colors.primary.primary};

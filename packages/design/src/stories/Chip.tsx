@@ -16,7 +16,7 @@ export const Chip = ({
   color = "primary",
   ...props
 }: ButtonProps) => {
-  const { style, themeColor, themeVariant } = ChipStyle(variant);
+  const { style, themeColor } = ChipStyle(variant);
 
   return (
     <li css={[style, themeColor[color]]} {...props}>
@@ -48,8 +48,6 @@ const ChipStyle = (variant: Variant) => {
     }
   `;
 
-  const themeVariant = {};
-
   const themeColor = {
     primary: css`
       background-color: ${theme.colors.primary.primary};
@@ -68,5 +66,5 @@ const ChipStyle = (variant: Variant) => {
     `,
   };
 
-  return { style, themeColor, themeVariant };
+  return { style, themeColor };
 };

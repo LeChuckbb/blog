@@ -7,6 +7,7 @@ import IconLight from "../../public/icons/light_mode.svg";
 import IconCreateNewPost from "../../public/icons/create.svg";
 import IconLogout from "../../public/icons/logout.svg";
 import useDarkMode from "../hooks/useDarkMode";
+import IconButton from "design/src/stories/IconButton";
 
 const Header = ({ scrollDirection }: any) => {
   const { data } = useIsAuthQuery();
@@ -30,18 +31,20 @@ const Header = ({ scrollDirection }: any) => {
           {data?.status === 200 && (
             <>
               <Link href="http://localhost:3000/post/write">
-                <IconContainerButton>
-                  <IconCreateNewPost />
-                </IconContainerButton>
+                <a>
+                  <IconButton>
+                    <IconCreateNewPost />
+                  </IconButton>
+                </a>
               </Link>
-              <IconContainerButton onClick={onClickLogoutHandler}>
+              <IconButton onClick={onClickLogoutHandler}>
                 <IconLogout />
-              </IconContainerButton>
+              </IconButton>
             </>
           )}
-          <IconContainerButton onClick={() => toggleDarkMode()}>
+          <IconButton onClick={toggleDarkMode}>
             {isDarkMode ? <IconDark /> : <IconLight />}
-          </IconContainerButton>
+          </IconButton>
         </RightWrapper>
       </InnerContainer>
     </Container>
@@ -91,22 +94,6 @@ const LogoWrapper = styled.div`
     color: ${(props) => props.theme.colors.primary.onPrimary};
     font-size: ${(props) => props.theme.fonts.headline.small.size};
     font-family: ${(props) => props.theme.fonts.family.brand};
-  }
-`;
-
-const IconContainerButton = styled.button`
-  width: 48px;
-  height: 48px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  transition: 0.1s all;
-  fill: ${(props) => props.theme.colors.primary.onPrimary};
-  :hover {
-    fill: ${(props) => props.theme.colors.primary.primary};
-    background-color: ${(props) => props.theme.colors.neutral.surface};
-    opacity: 0.8;
   }
 `;
 

@@ -12,7 +12,6 @@ import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { useState } from "react";
 import { Button } from "design/src/stories/Button";
 import { Chip as TagChip } from "design/src/stories/Chip";
-import IconClear from "../../../public/icons/clear.svg";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -101,7 +100,7 @@ const write = ({ data }: Props) => {
         <NoSsrEditor content={content} editorRef={editorRef} />
         <BottomButtonWrapper>
           <Button icon variant="outlined" onClick={() => router.back()}>
-            <IconArrowPrev />
+            <IconArrowPrev width={18} height={18} />
             나가기
           </Button>
           <Button type="submit">출간하기</Button>

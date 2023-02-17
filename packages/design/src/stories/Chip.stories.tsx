@@ -2,7 +2,6 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Chip } from "./Chip";
 import { ThemeProvider } from "@emotion/react";
 import { lightTheme } from "../styles/theme";
-import styled from "@emotion/styled";
 import { FlexContainer, FlexWrapper } from "./Common";
 import { ReactComponent as IconClear } from "../../public/clear.svg";
 
@@ -15,20 +14,24 @@ const Template: ComponentStory<typeof Chip> = (args) => (
   <ThemeProvider theme={lightTheme}>
     <FlexContainer>
       <FlexWrapper>
-        <Chip>Chip</Chip>
-        <Chip>
+        <Chip {...args}>Chip</Chip>
+        <Chip {...args}>
           Chip <IconClear />
         </Chip>
       </FlexWrapper>
       <FlexWrapper>
-        <Chip color="secondary">Chip</Chip>
-        <Chip color="secondary">
+        <Chip {...args} color="secondary">
+          Chip
+        </Chip>
+        <Chip {...args} color="secondary">
           Chip <IconClear />
         </Chip>
       </FlexWrapper>
       <FlexWrapper>
-        <Chip color="background">Chip</Chip>
-        <Chip color="background">
+        <Chip {...args} color="background">
+          Chip
+        </Chip>
+        <Chip {...args} color="background">
           Chip <IconClear />
         </Chip>
       </FlexWrapper>
