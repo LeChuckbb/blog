@@ -1,3 +1,4 @@
+import "react-toastify/dist/ReactToastify.css";
 import "../styles/reset.css";
 import type { AppProps } from "next/app";
 import { ThemeProvider, Global } from "@emotion/react";

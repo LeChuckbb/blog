@@ -1,4 +1,5 @@
-import Modal from "../../common/Modal/Modal";
+// import Modal from "../../common/Modal/Modal";
+import Modal from "design/src/stories/Modal";
 import { useRecoilState } from "recoil";
 import { useQuery } from "react-query";
 import { isAuthorized } from "../../apis/authApi";
@@ -8,11 +9,16 @@ import { useDeletePostMutation } from "../../hooks/query/useDeletePostMutation";
 import { Button } from "design/src/stories/Button";
 
 const DeleteModal = ({ confirmHandler }: any) => {
+  const [{ content }, setModal] = useRecoilState(modalState);
   return (
     <Modal>
       <Modal.Title>포스트 삭제</Modal.Title>
       <Modal.Content>정말로 삭제하시겠습니까?</Modal.Content>
-      <Modal.Buttons confirmHandler={confirmHandler} />
+      <Modal.Buttons
+        confirmHandler={confirmHandler}
+        content={content}
+        setModal={setModal}
+      />
     </Modal>
   );
 };

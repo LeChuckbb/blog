@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { RefObject } from "react";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import IconThumbnail from "../../../public/thumbnail.svg";
 import { useCreatePostMutation } from "../../hooks/query/useCreatePostMutation";

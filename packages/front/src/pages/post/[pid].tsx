@@ -5,7 +5,6 @@ import { GetStaticProps, GetStaticPaths } from "next";
 import { getPostBySlug, getPost } from "../../apis/postApi";
 import PostMenu from "../../components/posts/PostMenu";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 
 const NoSSRViewer = dynamic(

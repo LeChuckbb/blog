@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import useWrite from "../../hooks/useWrite";
 import { useForm } from "react-hook-form";
 import WriteSubPage from "../../components/posts/WriteSubPage";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { GetServerSideProps } from "next";
 import { getPostBySlug } from "../../apis/postApi";
