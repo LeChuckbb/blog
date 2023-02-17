@@ -21,6 +21,8 @@
   -moz-tab-size: 4;
   tab-size: 4;
   font-family: "-apple-system", "Noto Sans KR", "Nanum Gothic";
+  --toastify-color-progress-light: #5252b6;
+  --toastify-color-progress-dark: #c1c1ff;
 }
 html,
 body {

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { FormInterface } from "../pages/post/write";
+import useMyToast from "./useMyToast";
 
 interface Body {
   title: string;
@@ -25,6 +26,7 @@ const useWrite = (data: any) => {
   });
   const editorRef = useRef<any>(null);
   const subPageRef = useRef<HTMLDivElement>(null);
+  const { callToast } = useMyToast();
 
   useEffect(() => {
     if (data?.tags != undefined) setTagsArray(data?.tags);
@@ -57,7 +59,7 @@ const useWrite = (data: any) => {
 
       if (contentMark?.length === 0) {
         // subpage로 이동하지 말아야 함.
-        toast("본문 내용을 입력해주세요.", { toastId: "content" });
+        callToast('본문 내용을 입력해주세요.', 'content')
         throw new Error("본문 내용을 입력해주세요.");
       }
 
@@ -83,7 +85,7 @@ const useWrite = (data: any) => {
   };
 
   const onInvalidSubmit = (errors: any) => {
-    errors.title.message && toast(errors.title.message, { toastId: "title" });
+    errors.title.message && callToast(errors.title.message, 'title');
   };
 
   const onClickRemoveTagHandler = (clickedIdx: number) => {

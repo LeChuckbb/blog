@@ -3,9 +3,11 @@ import { createPost } from "../../apis/postApi";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import useMyToast from "../useMyToast";
 
 export const useCreatePostMutation = () => {
   const router = useRouter();
+  const { callToast } = useMyToast();
 
   return useMutation((body: any) => createPost(body), {
     onSuccess: () => {
@@ -13,7 +15,7 @@ export const useCreatePostMutation = () => {
     },
     onError: (error) => {
       if (isAxiosError(error) && error.response?.data?.code === "POE001") {
-        toast("중복된 URL 입니다", { toastId: "create" });
+        callToast("중복된 URL 입니다.", "create");
       }
     },
   });

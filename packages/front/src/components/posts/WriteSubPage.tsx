@@ -6,6 +6,8 @@ import IconThumbnail from "../../../public/thumbnail.svg";
 import { useCreatePostMutation } from "../../hooks/query/useCreatePostMutation";
 import { useUpdatePostMutation } from "../../hooks/query/useUpdatePostMutation";
 import useWriteSubPage from "./useWriteSubPage";
+import useMyToast from "../../hooks/useMyToast";
+import { Button } from "design/src/stories/Button";
 
 type Props = {
   subPageRef: RefObject<HTMLDivElement>;
@@ -34,6 +36,7 @@ const WriteSubPage: React.FC<Props> = ({
   } = useWriteSubPage(prevData);
   const { mutate: createPost } = useCreatePostMutation();
   const { mutate: updatePost } = useUpdatePostMutation();
+  const { callToast } = useMyToast();
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (formInputData) => {
     toast.dismiss(); // toast 종료하기
@@ -56,9 +59,8 @@ const WriteSubPage: React.FC<Props> = ({
   };
 
   const onInvalidSubmit = (errors: any) => {
-    errors?.urlSlug?.message &&
-      toast(errors.urlSlug.message, { toastId: "urlSlug" });
-    errors?.date?.message && toast(errors.date.message, { toastId: "date" });
+    errors?.urlSlug?.message && callToast(errors.urlSlug.message, "urlSlug");
+    errors?.date?.message && callToast(errors.date.message, "date");
   };
 
   return (
@@ -112,15 +114,13 @@ const WriteSubPage: React.FC<Props> = ({
               />
             </Box>
             <ButtonWrapper>
-              <CancelBtn
-                type="button"
-                value="취소"
+              <Button
+                variant="outlined"
                 onClick={(e) => onClickSubPageCancelHandler(e, subPageRef)}
-              />
-              <ConfirmBtn
-                type="submit"
-                value={isUpdatePost ? "수정" : "작성"}
-              />
+              >
+                취소
+              </Button>
+              <Button type="submit">{isUpdatePost ? "수정" : "작성"}</Button>
             </ButtonWrapper>
           </ColumnWrapper>
         </Container>
@@ -205,27 +205,4 @@ const ButtonWrapper = styled.div`
   gap: 8px;
   justify-content: flex-end;
   margin-top: auto;
-`;
-
-const CancelBtn = styled.input`
-  border: 2px solid yellow;
-  padding: 8px 16px;
-  border: none;
-  cursor: pointer;
-  color: ${(props) => props.theme.colors.primary.primary};
-  background-color: ${(props) => props.theme.colors.neutral.background};
-  :hover {
-    opacity: 0.9;
-  }
-`;
-
-const ConfirmBtn = styled.input`
-  border: none;
-  padding: 8px 16px;
-  background-color: ${(props) => props.theme.colors.primary.primary};
-  color: ${(props) => props.theme.colors.primary.onPrimary};
-  cursor: pointer;
-  :hover {
-    opacity: 0.9;
-  }
 `;

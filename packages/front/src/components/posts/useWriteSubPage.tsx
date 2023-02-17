@@ -10,7 +10,7 @@ interface FormInterface {
 }
 
 const onClickSubPageCancelHandler = (
-  event: React.MouseEvent,
+  event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined,
   subPageRef: RefObject<HTMLDivElement>
 ) => {
   event?.preventDefault(); // submit 방지
