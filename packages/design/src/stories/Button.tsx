@@ -35,7 +35,7 @@ const ButtonStyles = (icon: boolean | undefined) => {
     outline: none;
     border: none;
     cursor: pointer;
-    padding: ${icon === true ? "10px 24px 10px 16px" : "10px 24px"};
+    padding: ${icon ? "0px 24px 0px 16px" : "0px 24px"};
     border-radius: 100px;
     font-weight: 500;
     display: flex;
@@ -76,6 +76,7 @@ const ButtonStyles = (icon: boolean | undefined) => {
     text: css`
       background-color: transparent;
       color: ${theme.colors.primary.primary};
+      padding: ${icon ? "0px 16px 0px 12px" : "0px 12px"};
       &:disabled {
         background-color: ${theme.colors.neutral.background};
       }

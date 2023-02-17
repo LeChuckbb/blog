@@ -17,6 +17,9 @@ const Template: ComponentStory<typeof IconButton> = (args) => (
         <IconButton {...args}>
           <IconClear />
         </IconButton>
+        <IconButton {...args} tooltip="tooltip">
+          <IconClear />
+        </IconButton>
       </FlexWrapper>
     </FlexContainer>
   </ThemeProvider>

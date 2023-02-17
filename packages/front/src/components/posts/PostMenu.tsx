@@ -5,6 +5,7 @@ import { isAuthorized } from "../../apis/authApi";
 import { useRouter } from "next/router";
 import { modalState } from "../../common/Modal/ModalSetter";
 import { useDeletePostMutation } from "../../hooks/query/useDeletePostMutation";
+import { Button } from "design/src/stories/Button";
 
 const DeleteModal = ({ confirmHandler }: any) => {
   return (
@@ -46,12 +47,12 @@ const PostMenu = ({ slug }: any) => {
     <div style={{ display: "flex", gap: "8px", color: "#808080" }}>
       {data?.status === 200 && (
         <>
-          <span style={{ cursor: "pointer" }} onClick={onClickUpdateHandler}>
+          <Button variant="text" onClick={onClickUpdateHandler}>
             수정
-          </span>
-          <span style={{ cursor: "pointer" }} onClick={onClickDeleteHandler}>
+          </Button>
+          <Button variant="text" onClick={onClickDeleteHandler}>
             삭제
-          </span>
+          </Button>
         </>
       )}
     </div>

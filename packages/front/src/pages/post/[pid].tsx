@@ -141,9 +141,9 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.neutral.background};
   color: ${(props) => props.theme.colors.neutral.onBackground};
   min-height: 100vh;
-  width: 100%;
-  max-width: 768px;
+  width: 768px;
   padding: 32px 0px 72px;
+
   position: relative;
 `;
 

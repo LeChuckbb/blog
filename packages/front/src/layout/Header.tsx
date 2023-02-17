@@ -32,17 +32,17 @@ const Header = ({ scrollDirection }: any) => {
             <>
               <Link href="http://localhost:3000/post/write">
                 <a>
-                  <IconButton>
+                  <IconButton tooltip="새 글 작성">
                     <IconCreateNewPost />
                   </IconButton>
                 </a>
               </Link>
-              <IconButton onClick={onClickLogoutHandler}>
+              <IconButton onClick={onClickLogoutHandler} tooltip="로그아웃">
                 <IconLogout />
               </IconButton>
             </>
           )}
-          <IconButton onClick={toggleDarkMode}>
+          <IconButton onClick={toggleDarkMode} tooltip="테마 전환">
             {isDarkMode ? <IconDark /> : <IconLight />}
           </IconButton>
         </RightWrapper>

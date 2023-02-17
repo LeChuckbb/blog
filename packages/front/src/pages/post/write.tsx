@@ -12,6 +12,7 @@ import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { useState } from "react";
 import { Button } from "design/src/stories/Button";
 import { Chip as TagChip } from "design/src/stories/Chip";
+import Tooltip from "design/src/stories/Tooltip";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -48,14 +49,8 @@ const write = ({ data }: Props) => {
   const content = data?.content?.markup;
   const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
 
-  const onTagFocusHandler = () => {
-    setIsTagInputFocusIn(true);
-  };
-
-  const onTagFocusOutHandler = () => {
-    setIsTagInputFocusIn(false);
-  };
-
+  const onTagFocusHandler = () => setIsTagInputFocusIn(true);
+  const onTagFocusOutHandler = () => setIsTagInputFocusIn(false);
   return (
     <Container>
       <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
@@ -90,10 +85,13 @@ const write = ({ data }: Props) => {
               onBlur={onTagFocusOutHandler}
             />
             {isTagInputFocusIn && (
-              <TagTooltip>
+              <Tooltip
+                variant="long"
+                css={{ position: "absolute", opacity: 1, bottom: "-16px" }}
+              >
                 엔터를 입력하여 태그를 등록해주세요. <br />
                 등록된 태그를 클릭하면 삭제됩니다.
-              </TagTooltip>
+              </Tooltip>
             )}
           </TagsWrapper>
         </TitleWrapper>
@@ -183,18 +181,6 @@ const TagInput = styled.input`
   :focus-visible {
     outline-color: ${(props) => props.theme.colors.primary.container};
   }
-`;
-
-const TagTooltip = styled.div`
-  position: absolute;
-  background: ${(props) => props.theme.colors.primary.container};
-  color: ${(props) => props.theme.colors.primary.onContainer};
-  bottom: -32px;
-  font-size: 14px;
-  line-height: 1.2;
-  z-index: 9999;
-  padding: 14px 16px;
-  border-radius: 4px;
 `;
 
 const BottomButtonWrapper = styled.div`
