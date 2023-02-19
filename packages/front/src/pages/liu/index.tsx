@@ -1,80 +1,79 @@
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, SubmitErrorHandler, useForm } from "react-hook-form";
 import styled from "@emotion/styled";
-import { loginAPI } from "../../apis/authApi";
-import { isAxiosError, AxiosError } from "axios";
-import axiosInstance from "../../apis";
 import WithHeader from "../../layout/WithHeader";
+import TextField from "design/src/stories/TextField";
+import { Button } from "design/src/stories/Button";
+import useMyToast from "../../hooks/useMyToast";
+import { ToastContainer } from "react-toastify";
+import { useLoginMutation } from "../../hooks/query/useLoginMutation";
 
 export type LoginForm = {
   id: string;
   password: string;
 };
 
-export class MyError extends AxiosError {
-  constructor(message: string) {
-    super(message);
-  }
-}
-
-class AppError {
-  code: string;
-  message: string;
-  constructor(code: string, message: any) {
-    this.message = message;
-    this.code = code;
-  }
-}
-interface CustomError {
-  code: string;
-  message: string;
-}
-
 const Login = () => {
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      id: "",
-      password: "",
-    },
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm<LoginForm>();
+  const { callToast } = useMyToast();
+  const { mutate: loginAPI } = useLoginMutation();
 
   const onValidSubmit: SubmitHandler<LoginForm> = async (data: LoginForm) => {
     try {
-      const result = await loginAPI(data);
-      axiosInstance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${result.data.accessToken}`;
-      window.location.href = "/";
+      await loginAPI(data);
     } catch (err) {
-      console.log("catch error");
+      console.log("catch Error!");
       console.log(err);
-      if (err instanceof AxiosError) {
-        const data = err?.response?.data as CustomError;
-        console.log(data);
-        if (data?.code === "AUE001") console.log("HERE");
-      }
     }
   };
 
-  const onInvalidSubmit = async () => {
+  const onInvalidSubmit: SubmitErrorHandler<LoginForm> = async (error) => {
     console.log("onInvalid");
+    error?.id?.message && callToast(error.id.message, "Id");
+    error?.password?.message && callToast(error.password.message, "password");
   };
 
+  console.log(errors);
+  console.log(getValues());
+
   return (
-    <Container>
-      <Form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
-        <InputWrapper>
-          <label htmlFor="id">ID</label>
-          <input id="id" type="text" {...register("id")} />
-        </InputWrapper>
+    <>
+      <Container>
+        <Form
+          autoComplete="new-password"
+          onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+        >
+          <TextField>
+            <TextField.InputBox>
+              <TextField.Input
+                id="id"
+                register={register}
+                registerOptions={{ required: "id를 입력해주세요" }}
+              />
+              <TextField.Label label="ID" inputId="id" />
+            </TextField.InputBox>
+          </TextField>
+          <TextField>
+            <TextField.InputBox>
+              <TextField.Input
+                id="password"
+                type="password"
+                register={register}
+                registerOptions={{ required: "password를 입력해주세요" }}
+              />
+              <TextField.Label label="password" inputId="password" />
+            </TextField.InputBox>
+          </TextField>
 
-        <InputWrapper>
-          <label htmlFor="password">Password</label>
-          <input id="password" type="password" {...register("password")} />
-        </InputWrapper>
-
-        <input type="submit" value="로그인" />
-      </Form>
-    </Container>
+          <Button type="submit">로그인</Button>
+        </Form>
+      </Container>
+      <ToastContainer />
+    </>
   );
 };
 

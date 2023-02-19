@@ -8,6 +8,7 @@ import { useUpdatePostMutation } from "../../hooks/query/useUpdatePostMutation";
 import useWriteSubPage from "./useWriteSubPage";
 import useMyToast from "../../hooks/useMyToast";
 import { Button } from "design/src/stories/Button";
+import TextField from "design/src/stories/TextField";
 
 type Props = {
   subPageRef: RefObject<HTMLDivElement>;
@@ -31,6 +32,7 @@ const WriteSubPage: React.FC<Props> = ({
     onClickSubPageCancelHandler,
     register,
     handleSubmit,
+    errors,
     router,
     isUpdatePost,
   } = useWriteSubPage(prevData);
@@ -63,6 +65,8 @@ const WriteSubPage: React.FC<Props> = ({
     errors?.date?.message && callToast(errors.date.message, "date");
   };
 
+  console.log(errors);
+
   return (
     <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
       <SubPage className="SubPage hide" ref={subPageRef}>
@@ -77,42 +81,51 @@ const WriteSubPage: React.FC<Props> = ({
               </Thumbnail>
             </Box>
 
-            <Box>
-              <label>썸네일 업로드</label>
-              <input type="text" {...register("thumbnail")} />
-            </Box>
+            <TextField>
+              <TextField.InputBox>
+                <TextField.Input id="thumbnail" register={register} />
+                <TextField.Label label="Thumbnail" inputId="thumbnail" />
+              </TextField.InputBox>
+            </TextField>
           </ColumnWrapper>
-
           <VerticalLine />
-
           <ColumnWrapper>
-            <Box>
-              <label htmlFor="textArea">{prevData?.title}</label>
-              <TextArea
-                {...register("subTitle")}
-                id="textArea"
-                maxLength={150}
-              />
-            </Box>
+            {/* textArea, count, maxLength */}
+            <TextField>
+              <TextField.InputBox>
+                <TextField.Input
+                  id="subTitle"
+                  register={register}
+                  registerOptions={{ maxLength: 150 }}
+                />
+                <TextField.Label label="Sub Title" inputId="subTitle" />
+              </TextField.InputBox>
+            </TextField>
+            <TextField />
 
-            <Box>
-              <label htmlFor="urlSlug">URL 설정</label>
-              <input
-                id="urlSlug"
-                {...register("urlSlug", { required: "URL을 지정해주세요" })}
-                defaultValue={`${postFetchBody?.title?.replaceAll(" ", "-")}`}
-                type="text"
-              />
-            </Box>
+            <TextField>
+              <TextField.InputBox>
+                <TextField.Input
+                  id="urlSlug"
+                  defaultValue={`${postFetchBody?.title?.replaceAll(" ", "-")}`}
+                  register={register}
+                  registerOptions={{ required: "URL Slug를 입력해주세요" }}
+                />
+                <TextField.Label label="URL Slug" inputId="urlSlug" />
+              </TextField.InputBox>
+            </TextField>
 
-            <Box>
-              <label htmlFor="date">date 설정</label>
-              <input
-                {...register("date", { required: "날짜를 지정해주세요" })}
-                type="text"
-                id="date"
-              />
-            </Box>
+            <TextField>
+              <TextField.InputBox>
+                <TextField.Input
+                  id="date"
+                  register={register}
+                  registerOptions={{ required: "Date 를 입력해주세요" }}
+                />
+                <TextField.Label label="Date" inputId="date" />
+              </TextField.InputBox>
+            </TextField>
+
             <ButtonWrapper>
               <Button
                 variant="outlined"

@@ -4,6 +4,7 @@
   padding: 0;
   font: inherit;
   color: inherit;
+  box-sizing: border-box;
 }
 *,
 :after,
@@ -48,6 +49,39 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+/* input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  background-color: red !important;
+} */
+input:-webkit-autofill {
+  -webkit-background-clip: text; /* autofill 배경색 제거 */
+  font-size: 16px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: inherit;
+}
+
+input:autofill {
+  font-size: 16px;
+}
+input:-webkit-autofill {
+  font-size: 16px !important;
+}
+
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-transition: background-color 9999s ease-out;
+  -webkit-box-shadow: 0 0 0px 1000px inherit inset !important;
+  -webkit-text-fill-color: inherit !important;
+} */
 
 /* Modal */
 .modal-enter {

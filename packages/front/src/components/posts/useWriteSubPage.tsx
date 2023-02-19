@@ -38,7 +38,11 @@ const defaultDateHandler = () => {
 const useWriteSubPage = (prevData: any) => {
   const router = useRouter();
   const isUpdatePost = router.query.slug === undefined ? false : true;
-  const { register, handleSubmit } = useForm<FormInterface>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInterface>({
     defaultValues: {
       thumbnail: prevData?.thumbnail ? prevData?.thumbnail : "",
       subTitle: prevData?.subTitle ? prevData?.subTitle : "",
@@ -50,6 +54,7 @@ const useWriteSubPage = (prevData: any) => {
     onClickSubPageCancelHandler,
     register,
     handleSubmit,
+    errors,
     router,
     isUpdatePost,
   };
