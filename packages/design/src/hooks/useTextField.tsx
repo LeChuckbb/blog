@@ -1,4 +1,4 @@
-import { useRef, useState, createContext, useEffect } from "react";
+import { useState, createContext } from "react";
 
 type Variant = "filled" | "outlined";
 
@@ -13,39 +13,21 @@ export interface ContextProps {
   onFocusHandler: any;
   onChangeHandler: any;
   onBlurHandler: any;
-  inputRef: any;
+  id: string;
 }
 
 export const Context = createContext<ContextProps>({
   onFocusHandler: () => {},
   onChangeHandler: () => {},
   onBlurHandler: () => {},
-  inputRef: null,
+  id: "",
 });
 
-const useTextField = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
+const useTextField = (id: any, getValues: any) => {
   const [isInputPopulated, setIsInputPopulated] = useState(
-    inputRef?.current?.value != undefined && inputRef?.current?.value != ""
-      ? true
-      : false
+    getValues && getValues(id) != "" ? true : false
   );
   const [isInputFocused, setIsInputFocused] = useState(false);
-
-  console.log(inputRef);
-  console.log(inputRef?.current);
-  console.log(inputRef?.current?.value);
-  console.log(isInputPopulated);
-
-  useEffect(() => {
-    console.log(inputRef?.current);
-    console.log(inputRef?.current?.value);
-    if (inputRef.current) {
-      inputRef.current.value === ""
-        ? setIsInputPopulated(false)
-        : setIsInputPopulated(true);
-    }
-  }, [inputRef]);
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
     event.target.value !== ""
@@ -58,7 +40,6 @@ const useTextField = () => {
     onChangeHandler,
     onFocusHandler,
     onBlurHandler,
-    inputRef,
     isInputPopulated,
     isInputFocused,
   };

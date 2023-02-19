@@ -32,6 +32,7 @@ const WriteSubPage: React.FC<Props> = ({
     onClickSubPageCancelHandler,
     register,
     handleSubmit,
+    getValues,
     errors,
     router,
     isUpdatePost,
@@ -39,6 +40,8 @@ const WriteSubPage: React.FC<Props> = ({
   const { mutate: createPost } = useCreatePostMutation();
   const { mutate: updatePost } = useUpdatePostMutation();
   const { callToast } = useMyToast();
+
+  console.log(errors);
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (formInputData) => {
     toast.dismiss(); // toast 종료하기
@@ -61,11 +64,11 @@ const WriteSubPage: React.FC<Props> = ({
   };
 
   const onInvalidSubmit = (errors: any) => {
+    console.log("onInvalid");
+    console.log(errors);
     errors?.urlSlug?.message && callToast(errors.urlSlug.message, "urlSlug");
     errors?.date?.message && callToast(errors.date.message, "date");
   };
-
-  console.log(errors);
 
   return (
     <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
@@ -81,48 +84,45 @@ const WriteSubPage: React.FC<Props> = ({
               </Thumbnail>
             </Box>
 
-            <TextField>
+            <TextField id="thumbnail" getValues={getValues}>
               <TextField.InputBox>
-                <TextField.Input id="thumbnail" register={register} />
-                <TextField.Label label="Thumbnail" inputId="thumbnail" />
+                <TextField.Input register={register} />
+                <TextField.Label label="Thumbnail" />
               </TextField.InputBox>
             </TextField>
           </ColumnWrapper>
           <VerticalLine />
           <ColumnWrapper>
             {/* textArea, count, maxLength */}
-            <TextField>
+            <TextField id="subTitle" getValues={getValues}>
               <TextField.InputBox>
                 <TextField.Input
-                  id="subTitle"
                   register={register}
                   registerOptions={{ maxLength: 150 }}
                 />
-                <TextField.Label label="Sub Title" inputId="subTitle" />
+                <TextField.Label label="Sub Title" />
               </TextField.InputBox>
+              <TextField.SupportBox>{errors}</TextField.SupportBox>
             </TextField>
-            <TextField />
 
-            <TextField>
+            <TextField id="urlSlug" getValues={getValues}>
               <TextField.InputBox>
                 <TextField.Input
-                  id="urlSlug"
                   defaultValue={`${postFetchBody?.title?.replaceAll(" ", "-")}`}
                   register={register}
                   registerOptions={{ required: "URL Slug를 입력해주세요" }}
                 />
-                <TextField.Label label="URL Slug" inputId="urlSlug" />
+                <TextField.Label label="URL Slug" />
               </TextField.InputBox>
             </TextField>
 
-            <TextField>
+            <TextField id="date" getValues={getValues}>
               <TextField.InputBox>
                 <TextField.Input
-                  id="date"
                   register={register}
                   registerOptions={{ required: "Date 를 입력해주세요" }}
                 />
-                <TextField.Label label="Date" inputId="date" />
+                <TextField.Label label="Date" />
               </TextField.InputBox>
             </TextField>
 

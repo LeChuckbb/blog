@@ -29,18 +29,20 @@ import useTextField, {
   3. Hovered (Populated) 라벨 up / 헬퍼텍스트 색상 변경
 */
 
-const TextField = ({ children }: any) => {
+type ContainerProps = {
+  children: React.ReactNode;
+  id: string;
+  getValues: (id: string) => any;
+};
+
+const TextField = ({ children, id, getValues }: ContainerProps) => {
   const {
     onChangeHandler,
     onFocusHandler,
     onBlurHandler,
-    inputRef,
     isInputPopulated,
     isInputFocused,
-  } = useTextField();
-
-  console.log(`populated : ${isInputPopulated}`);
-  console.log(`Focused : ${isInputFocused}`);
+  } = useTextField(id, getValues);
 
   return (
     <Context.Provider
@@ -48,7 +50,7 @@ const TextField = ({ children }: any) => {
         onChangeHandler,
         onFocusHandler,
         onBlurHandler,
-        inputRef,
+        id,
       }}
     >
       <Container
@@ -70,37 +72,38 @@ TextField.Input = ({
   children,
   variant = "filled",
   type = "text",
-  id,
   registerOptions,
   register,
   ...props
 }: TextFieldProps) => {
-  const { onFocusHandler, onChangeHandler, onBlurHandler, inputRef } =
+  const { onFocusHandler, onChangeHandler, onBlurHandler, id } =
     useContext<ContextProps>(Context);
-  const { ref } = register(id);
-  console.log(ref);
-  console.log(ref.current);
 
   return (
     <Input
-      id={id}
       type={type}
+      id={id}
       autoComplete="new-password"
-      onChange={onChangeHandler}
       onFocus={onFocusHandler}
-      onBlur={onBlurHandler}
-      ref={inputRef}
-      {...(register && register(id, registerOptions))}
+      {...(register &&
+        register(id, {
+          onChange: onChangeHandler,
+          onBlur: onBlurHandler,
+          ...registerOptions,
+        }))}
       {...props}
     ></Input>
   );
 };
 
-TextField.Label = ({ label, inputId }: any) => {
-  return <Label htmlFor={inputId}>{label}</Label>;
+TextField.Label = ({ label }: any) => {
+  const { id } = useContext<ContextProps>(Context);
+
+  return <Label htmlFor={id}>{label}</Label>;
 };
 
-TextField.SupportBox = () => {
+TextField.SupportBox = ({ children }: any) => {
+  console.log(children);
   return (
     <SupportBox>
       <HelperText>helper</HelperText>

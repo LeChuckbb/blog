@@ -37,9 +37,6 @@ const Login = () => {
     error?.password?.message && callToast(error.password.message, "password");
   };
 
-  console.log(errors);
-  console.log(getValues());
-
   return (
     <>
       <Container>
@@ -47,25 +44,23 @@ const Login = () => {
           autoComplete="new-password"
           onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
         >
-          <TextField>
+          <TextField id="id" getValues={getValues}>
             <TextField.InputBox>
               <TextField.Input
-                id="id"
                 register={register}
                 registerOptions={{ required: "id를 입력해주세요" }}
               />
-              <TextField.Label label="ID" inputId="id" />
+              <TextField.Label label="ID" />
             </TextField.InputBox>
           </TextField>
-          <TextField>
+          <TextField id="password" getValues={getValues}>
             <TextField.InputBox>
               <TextField.Input
-                id="password"
                 type="password"
                 register={register}
                 registerOptions={{ required: "password를 입력해주세요" }}
               />
-              <TextField.Label label="password" inputId="password" />
+              <TextField.Label label="password" />
             </TextField.InputBox>
           </TextField>
 

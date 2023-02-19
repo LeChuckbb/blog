@@ -1,6 +1,6 @@
 import { RefObject } from "react";
 import { useRouter } from "next/router";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 interface FormInterface {
   thumbnail: string;
@@ -42,6 +42,7 @@ const useWriteSubPage = (prevData: any) => {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<FormInterface>({
     defaultValues: {
       thumbnail: prevData?.thumbnail ? prevData?.thumbnail : "",
@@ -54,6 +55,7 @@ const useWriteSubPage = (prevData: any) => {
     onClickSubPageCancelHandler,
     register,
     handleSubmit,
+    getValues,
     errors,
     router,
     isUpdatePost,
