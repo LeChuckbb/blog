@@ -14,6 +14,7 @@ export type ContainerProps = {
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   register?: any;
+  ref?: any;
   registerOptions?: {};
 }
 

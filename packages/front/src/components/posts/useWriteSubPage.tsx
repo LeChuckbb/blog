@@ -2,11 +2,16 @@ import { RefObject } from "react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
-interface FormInterface {
+export type WriteSubPageProps = {
+  subPageRef: RefObject<HTMLDivElement>;
+  postFetchBody: any;
+  prevData?: any;
+};
+export interface FormInterface {
   thumbnail: string;
   subTitle: string;
   urlSlug: string;
-  date: string;
+  datePicker: Date;
 }
 
 const onClickSubPageCancelHandler = (
@@ -44,14 +49,18 @@ const useWriteSubPage = (prevData: any) => {
     formState: { errors },
     getValues,
     watch,
+    control,
   } = useForm<FormInterface>({
     mode: "onChange",
     defaultValues: {
       thumbnail: prevData?.thumbnail ? prevData?.thumbnail : "",
       subTitle: prevData?.subTitle ? prevData?.subTitle : "",
-      date: prevData?.date ? prevData?.date : defaultDateHandler(),
+      // datePicker: prevData?.date ? prevData?.date : defaultDateHandler(),
+      datePicker: prevData?.date ? new Date(prevData?.date) : new Date(),
     },
   });
+
+  console.log(defaultDateHandler());
 
   return {
     onClickSubPageCancelHandler,
@@ -59,6 +68,7 @@ const useWriteSubPage = (prevData: any) => {
     handleSubmit,
     getValues,
     watch,
+    control,
     errors,
     router,
     isUpdatePost,

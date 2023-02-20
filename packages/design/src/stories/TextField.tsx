@@ -26,6 +26,10 @@ const TextField = ({
     isInputFocused,
   } = useTextField(id, getValues);
 
+  console.log(id);
+  console.log(isInputPopulated);
+  console.log(getValues && getValues(id));
+
   return (
     <Context.Provider
       value={{
@@ -59,10 +63,18 @@ TextField.Input = ({
   type = "text",
   registerOptions,
   register,
+  ref,
+  onChange,
   ...props
 }: InputProps) => {
   const { onFocusHandler, onChangeHandler, onBlurHandler, id } =
     useContext<ContextProps>(Context);
+
+  // datePicker용 onChange + common onChagneHanlder
+  const ChangeHanlder = (event: any) => {
+    onChangeHandler(event);
+    onChange && onChange(event);
+  };
 
   return (
     <Input
@@ -70,12 +82,14 @@ TextField.Input = ({
       id={id}
       autoComplete="new-password"
       onFocus={onFocusHandler}
+      onChange={register === undefined && ChangeHanlder}
       {...(register &&
         register(id, {
-          onChange: onChangeHandler,
+          onChange: onChange ? onChange : onChangeHandler,
           onBlur: onBlurHandler,
           ...registerOptions,
         }))}
+      ref={ref}
       {...props}
     ></Input>
   );
@@ -132,6 +146,7 @@ const Container = styled.div<{
   height: ${(props) => (props.multiline ? "auto" : "56px")};
 
   & .Box {
+    padding: ${(props) => (props.multiline ? "16px" : "8px 16px")};
     border: ${(props) => props.variant === "outlined" && "1px solid"};
     border-bottom: ${(props) => props.variant === "filled" && "1px solid"};
     border-color: ${(props) =>
@@ -184,7 +199,6 @@ const Container = styled.div<{
 const Box = styled.div`
   box-sizing: border-box;
   position: relative;
-  padding: 8px 16px; // with icon => 8px 12px
   border-radius: 4px 4px 0px 0px;
   height: 100%;
   min-height: 56px;
@@ -223,7 +237,8 @@ const TextArea = styled.textarea`
   resize: none;
   outline: none;
   display: flex;
-  height: 92px;
+  min-height: 92px;
+  height: 100%;
 `;
 
 const SupportBox = styled.div`

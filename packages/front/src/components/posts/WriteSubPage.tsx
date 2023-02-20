@@ -1,29 +1,19 @@
 import styled from "@emotion/styled";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { RefObject } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import IconThumbnail from "../../../public/thumbnail.svg";
 import { useCreatePostMutation } from "../../hooks/query/useCreatePostMutation";
 import { useUpdatePostMutation } from "../../hooks/query/useUpdatePostMutation";
-import useWriteSubPage from "./useWriteSubPage";
+import useWriteSubPage, {
+  FormInterface,
+  WriteSubPageProps,
+} from "./useWriteSubPage";
 import useMyToast from "../../hooks/useMyToast";
 import { Button, ButtonLikeLabel } from "design/src/stories/Button";
 import TextField from "design/src/stories/TextField";
+import MyDatePicker from "design/src/stories/DatePicker";
 
-type Props = {
-  subPageRef: RefObject<HTMLDivElement>;
-  postFetchBody: any;
-  prevData?: any;
-};
-
-interface FormInterface {
-  thumbnail: string;
-  subTitle: string;
-  urlSlug: string;
-  date: string;
-}
-
-const WriteSubPage: React.FC<Props> = ({
+const WriteSubPage: React.FC<WriteSubPageProps> = ({
   prevData,
   postFetchBody,
   subPageRef,
@@ -36,6 +26,7 @@ const WriteSubPage: React.FC<Props> = ({
     watch,
     errors,
     router,
+    control,
     isUpdatePost,
   } = useWriteSubPage(prevData);
   const { mutate: createPost } = useCreatePostMutation();
@@ -127,15 +118,11 @@ const WriteSubPage: React.FC<Props> = ({
               </TextField.InputBox>
             </TextField>
 
-            <TextField id="date" getValues={getValues} variant="outlined">
-              <TextField.InputBox>
-                <TextField.Input
-                  register={register}
-                  registerOptions={{ required: "Date 를 입력해주세요" }}
-                />
-                <TextField.Label label="Date" />
-              </TextField.InputBox>
-            </TextField>
+            <MyDatePicker
+              id="datePicker"
+              getValues={getValues}
+              control={control}
+            />
 
             <ButtonWrapper>
               <Button
@@ -177,7 +164,6 @@ const SubPage = styled.div`
 const Container = styled.div`
   background-color: ${(props) => props.theme.colors.neutral.background};
   width: 768px;
-  /* height: 50%; */
   padding: 32px;
   display: flex;
 `;
@@ -187,11 +173,6 @@ const ColumnWrapper = styled.div`
   flex-direction: column;
   flex: 1 1 100%;
   gap: 16px;
-`;
-
-const ImageBtnLabel = styled.label`
-  cursor: pointer;
-  border: 2px solid navy;
 `;
 
 const VerticalLine = styled.div`

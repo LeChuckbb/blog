@@ -3,7 +3,6 @@ import { ThemeProvider } from "@emotion/react";
 import TextField from "./TextField";
 import { lightTheme } from "../styles/theme";
 import { FlexContainer, FlexWrapper } from "./Common";
-import { ReactComponent as IconClear } from "../../public/clear.svg";
 
 export default {
   title: "blog/TextField",
