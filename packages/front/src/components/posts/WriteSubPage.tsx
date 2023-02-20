@@ -66,7 +66,7 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
     <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
       <SubPage className="SubPage hide" ref={subPageRef}>
         <Container>
-          <ColumnWrapper>
+          <ColumnWrapper style={{ gap: "36px" }}>
             <Box>
               <label htmlFor="Thumbnail">포스트 미리보기</label>
               <Thumbnail id="Thumbnail">

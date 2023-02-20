@@ -13,7 +13,10 @@ export default {
 const Template: ComponentStory<typeof MyDatePicker> = (args) => (
   <ThemeProvider theme={lightTheme}>
     <FlexContainer>
-      <FlexWrapper>{/* <MyDatePicker /> */}</FlexWrapper>
+      <FlexWrapper>
+        {/* <MyDatePicker id="datePicker" getValues={getValues} control={control} /> */}
+        <MyDatePicker id="datePicker" />
+      </FlexWrapper>
     </FlexContainer>
   </ThemeProvider>
 );

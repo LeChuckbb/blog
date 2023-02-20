@@ -22,6 +22,7 @@ export interface ContextProps {
   onFocusHandler: any;
   onChangeHandler: any;
   onBlurHandler: any;
+  setPopulatedIfDateNull: any;
   id: string;
   errors: any;
 }
@@ -30,27 +31,40 @@ export const Context = createContext<ContextProps>({
   onFocusHandler: () => {},
   onChangeHandler: () => {},
   onBlurHandler: () => {},
+  setPopulatedIfDateNull: () => {},
   id: "",
   errors: {},
 });
 
 const useTextField = (id: any, getValues: any) => {
   const [isInputPopulated, setIsInputPopulated] = useState(
-    getValues && getValues(id) != "" ? true : false
+    getValues && getValues(id) !== "" ? true : false
   );
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("on CHANGE!!");
     event.target.value !== ""
       ? setIsInputPopulated(true)
       : setIsInputPopulated(false);
+  };
   const onFocusHandler = () => setIsInputFocused(true);
   const onBlurHandler = () => setIsInputFocused(false);
+
+  console.log(id);
+  console.log(isInputPopulated);
+  console.log(getValues("datePicker"));
+
+  const setPopulatedIfDateNull = () => {
+    if (getValues("datePicker") === null) setIsInputPopulated(false);
+    else setIsInputPopulated(true);
+  };
 
   return {
     onChangeHandler,
     onFocusHandler,
     onBlurHandler,
+    setPopulatedIfDateNull,
     isInputPopulated,
     isInputFocused,
   };

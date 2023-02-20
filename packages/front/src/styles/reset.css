@@ -101,3 +101,7 @@ input:-webkit-autofill:active {
   opacity: 0;
   transition: opacity 300ms;
 }
+
+.react-datepicker__input-container {
+  position: unset !important;
+}

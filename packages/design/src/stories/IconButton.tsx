@@ -29,10 +29,11 @@ const IconButton = ({
       onClick={onClick}
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseLeaveHandler}
+      type="button"
     >
       <Layer>{children}</Layer>
       {/* {tooltip && <Tooltip>{tooltip}</Tooltip>} */}
-      <Tooltip>{tooltip}</Tooltip>
+      {tooltip && <Tooltip>{tooltip}</Tooltip>}
     </button>
   );
 };

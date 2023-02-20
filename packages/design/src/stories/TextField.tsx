@@ -22,13 +22,10 @@ const TextField = ({
     onChangeHandler,
     onFocusHandler,
     onBlurHandler,
+    setPopulatedIfDateNull,
     isInputPopulated,
     isInputFocused,
   } = useTextField(id, getValues);
-
-  console.log(id);
-  console.log(isInputPopulated);
-  console.log(getValues && getValues(id));
 
   return (
     <Context.Provider
@@ -36,6 +33,7 @@ const TextField = ({
         onChangeHandler,
         onFocusHandler,
         onBlurHandler,
+        setPopulatedIfDateNull,
         errors,
         id,
       }}
@@ -55,8 +53,12 @@ const TextField = ({
   );
 };
 
-TextField.InputBox = ({ children }: any) => {
-  return <Box className="Box">{children}</Box>;
+TextField.InputBox = ({ children, ...props }: any) => {
+  return (
+    <Box className="Box" {...props}>
+      {children}
+    </Box>
+  );
 };
 
 TextField.Input = ({
@@ -67,14 +69,22 @@ TextField.Input = ({
   onChange,
   ...props
 }: InputProps) => {
-  const { onFocusHandler, onChangeHandler, onBlurHandler, id } =
-    useContext<ContextProps>(Context);
+  const {
+    onFocusHandler,
+    onChangeHandler,
+    onBlurHandler,
+    id,
+    setPopulatedIfDateNull,
+  } = useContext<ContextProps>(Context);
 
   // datePicker용 onChange + common onChagneHanlder
   const ChangeHanlder = (event: any) => {
+    console.log("onCHANGE");
     onChangeHandler(event);
     onChange && onChange(event);
   };
+
+  setPopulatedIfDateNull();
 
   return (
     <Input
@@ -83,13 +93,14 @@ TextField.Input = ({
       autoComplete="new-password"
       onFocus={onFocusHandler}
       onChange={register === undefined && ChangeHanlder}
+      onBlur={register === undefined && onBlurHandler}
       {...(register &&
         register(id, {
           onChange: onChange ? onChange : onChangeHandler,
           onBlur: onBlurHandler,
           ...registerOptions,
         }))}
-      ref={ref}
+      // ref={ref}
       {...props}
     ></Input>
   );
@@ -117,14 +128,16 @@ TextField.Label = ({ label }: any) => {
   return <Label htmlFor={id}>{label}</Label>;
 };
 
-TextField.SupportBox = ({ watch }: any) => {
+TextField.SupportBox = ({ watch, helper }: any) => {
   const { id, errors } = useContext<ContextProps>(Context);
-  const num = watch(id)?.length;
+  const num = watch !== undefined && watch(id)?.length;
 
   return (
     <SupportBox>
-      <HelperText>{errors?.message}</HelperText>
-      <Counter>{num}/150</Counter>
+      <HelperText className="helper">
+        {errors?.message !== undefined ? errors.message : helper}
+      </HelperText>
+      <Counter>{num && `${num}/150`}</Counter>
     </SupportBox>
   );
 };
@@ -164,7 +177,7 @@ const Container = styled.div<{
   }
   & label {
     color: ${(props) =>
-      props.errors != undefined
+      props.errors !== undefined
         ? props.theme.colors.error.error
         : props.isInputFocused
         ? props.theme.colors.primary.primary
@@ -174,7 +187,13 @@ const Container = styled.div<{
     padding: ${(props) => props.variant === "outlined" && "0px 4px"};
   }
   & input {
-    margin-top: ${(props) => (props.variant === "filled" ? "16px" : "8px")};
+    margin-top: ${(props) => (props.variant === "filled" ? "16px" : "4px")};
+  }
+  & .helper {
+    color: ${(props) =>
+      props.errors
+        ? props.theme.colors.error.error
+        : props.theme.colors.neutralVariant.outline};
   }
   & input:focus + label,
   & textarea:focus + label {
@@ -202,6 +221,8 @@ const Box = styled.div`
   border-radius: 4px 4px 0px 0px;
   height: 100%;
   min-height: 56px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Label = styled.label`
@@ -252,7 +273,6 @@ const SupportBox = styled.div`
 const HelperText = styled.p`
   margin: 0;
   letter-spacing: 0.4px;
-  color: ${(props) => props.theme.colors.error.error};
 `;
 
 const Counter = styled.p`
