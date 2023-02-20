@@ -14,8 +14,18 @@ const Template: ComponentStory<typeof TextField> = (args) => (
   <ThemeProvider theme={lightTheme}>
     <FlexContainer>
       <FlexWrapper>
-        <TextField {...args} label="id"></TextField>
-        <TextField {...args} type="password" label="password"></TextField>
+        <TextField {...args} id="id">
+          <TextField.InputBox>
+            <TextField.Input />
+            <TextField.Label label="ID" />
+          </TextField.InputBox>
+        </TextField>
+        <TextField {...args} id="password" multiline>
+          <TextField.InputBox>
+            <TextField.Area />
+            <TextField.Label label="Password" />
+          </TextField.InputBox>
+        </TextField>
       </FlexWrapper>
     </FlexContainer>
   </ThemeProvider>

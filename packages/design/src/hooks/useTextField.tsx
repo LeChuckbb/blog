@@ -1,10 +1,18 @@
 import { useState, createContext } from "react";
 
-type Variant = "filled" | "outlined";
+export type Variant = "outlined" | "filled";
 
-export interface TextFieldProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export type ContainerProps = {
+  children: React.ReactNode;
+  id: string;
+  getValues?: (id: string) => any;
   variant?: Variant;
+  support?: boolean;
+  multiline?: boolean;
+  errors?: any;
+};
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   register?: any;
   registerOptions?: {};
 }
@@ -14,6 +22,7 @@ export interface ContextProps {
   onChangeHandler: any;
   onBlurHandler: any;
   id: string;
+  errors: any;
 }
 
 export const Context = createContext<ContextProps>({
@@ -21,6 +30,7 @@ export const Context = createContext<ContextProps>({
   onChangeHandler: () => {},
   onBlurHandler: () => {},
   id: "",
+  errors: {},
 });
 
 const useTextField = (id: any, getValues: any) => {

@@ -1,41 +1,23 @@
-/** @jsxImportSource @emotion/react */
-import { css, useTheme } from "@emotion/react";
+/* eslint-disable react-hooks/rules-of-hooks */
 import styled from "@emotion/styled";
 import { useContext } from "react";
 import useTextField, {
-  TextFieldProps,
+  InputProps,
   ContextProps,
   Context,
+  ContainerProps,
+  Variant,
 } from "../hooks/useTextField";
 
-/* TextField 8가지 상태
-  1. Enabled (Empty)
-  2. Focused (Empty) 라벨 up / 라벨, 보더하단 색상 primary로 변경
-  3. Hovered (Empty)
-  4. Disabled (Empty)
-  
-  1. Enabled (Populated) 라벨 up
-  2. Focused (Populated) 라벨 up / 라벨, 보더하단 색상 primary로 변경
-  3. Hovered (Populated) 라벨 up
-  4. Disabled (Populated) 라벨 up
-
-  6가지 에러 상태
-  1. Enabled (Empty) 라벨, 보더하단, 헬퍼텍스트 색상 error로 변경
-  2. Focused (Empty) 라벨 up / 라벨, 보더하단, 헬퍼텍스트 색상 변경
-  3. Hovered (Empty) 헬퍼텍스트 색상 변경
-
-  1. Enabled (Populated) 라벨 up / 라벨, 보더하단, 헬퍼텍스트 색상 변경
-  2. Focused (Populated) 라벨 up / 라벨, 보더하단, 헬퍼텍스트 색상 변경
-  3. Hovered (Populated) 라벨 up / 헬퍼텍스트 색상 변경
-*/
-
-type ContainerProps = {
-  children: React.ReactNode;
-  id: string;
-  getValues: (id: string) => any;
-};
-
-const TextField = ({ children, id, getValues }: ContainerProps) => {
+const TextField = ({
+  children,
+  id,
+  getValues,
+  support = false,
+  multiline = false,
+  variant = "filled",
+  errors,
+}: ContainerProps) => {
   const {
     onChangeHandler,
     onFocusHandler,
@@ -50,6 +32,7 @@ const TextField = ({ children, id, getValues }: ContainerProps) => {
         onChangeHandler,
         onFocusHandler,
         onBlurHandler,
+        errors,
         id,
       }}
     >
@@ -57,6 +40,10 @@ const TextField = ({ children, id, getValues }: ContainerProps) => {
         className="Container"
         isInputPopulated={isInputPopulated}
         isInputFocused={isInputFocused}
+        support={support}
+        variant={variant}
+        errors={errors}
+        multiline={multiline}
       >
         {children}
       </Container>
@@ -69,13 +56,11 @@ TextField.InputBox = ({ children }: any) => {
 };
 
 TextField.Input = ({
-  children,
-  variant = "filled",
   type = "text",
   registerOptions,
   register,
   ...props
-}: TextFieldProps) => {
+}: InputProps) => {
   const { onFocusHandler, onChangeHandler, onBlurHandler, id } =
     useContext<ContextProps>(Context);
 
@@ -96,18 +81,36 @@ TextField.Input = ({
   );
 };
 
+TextField.Area = ({ register, registerOptions, ...props }: any) => {
+  const { id, onChangeHandler, onBlurHandler } =
+    useContext<ContextProps>(Context);
+  return (
+    <TextArea
+      {...(register &&
+        register(id, {
+          onChange: onChangeHandler,
+          onBlur: onBlurHandler,
+          ...registerOptions,
+        }))}
+      {...props}
+    />
+  );
+};
+
 TextField.Label = ({ label }: any) => {
   const { id } = useContext<ContextProps>(Context);
 
   return <Label htmlFor={id}>{label}</Label>;
 };
 
-TextField.SupportBox = ({ children }: any) => {
-  console.log(children);
+TextField.SupportBox = ({ watch }: any) => {
+  const { id, errors } = useContext<ContextProps>(Context);
+  const num = watch(id)?.length;
+
   return (
     <SupportBox>
-      <HelperText>helper</HelperText>
-      <Counter>5/20</Counter>
+      <HelperText>{errors?.message}</HelperText>
+      <Counter>{num}/150</Counter>
     </SupportBox>
   );
 };
@@ -117,33 +120,63 @@ export default TextField;
 const Container = styled.div<{
   isInputPopulated: boolean;
   isInputFocused: boolean;
+  variant: Variant;
+  support: boolean;
+  multiline: boolean;
+  errors: any;
 }>`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  margin-bottom: ${(props) => props.support && "24px"};
+  height: ${(props) => (props.multiline ? "auto" : "56px")};
 
   & .Box {
-    border-bottom-width: ${(props) => (props.isInputFocused ? "2px" : "1px")};
-    border-bottom-color: ${(props) =>
-      props.isInputPopulated || props.isInputFocused
+    border: ${(props) => props.variant === "outlined" && "1px solid"};
+    border-bottom: ${(props) => props.variant === "filled" && "1px solid"};
+    border-color: ${(props) =>
+      props.errors !== undefined
+        ? props.theme.colors.error.error
+        : props.isInputPopulated || props.isInputFocused
         ? props.theme.colors.primary.primary
-        : ""};
+        : props.theme.colors.neutralVariant.outline};
+    border-width: ${(props) => (props.isInputFocused ? "2px" : "1px")};
+
+    background-color: ${(props) =>
+      props.variant === "filled"
+        ? props.theme.colors.neutralVariant.surfaceVariant
+        : props.theme.colors.neutral.background};
   }
   & label {
     color: ${(props) =>
-      props.isInputFocused ? props.theme.colors.primary.primary : ""};
+      props.errors != undefined
+        ? props.theme.colors.error.error
+        : props.isInputFocused
+        ? props.theme.colors.primary.primary
+        : ""};
+    background-color: ${(props) =>
+      props.variant === "outlined" && props.theme.colors.neutral.background};
+    padding: ${(props) => props.variant === "outlined" && "0px 4px"};
   }
-
-  /* 
-    1. 인풋이 포커스되어있는 경우
-    2. 인풋이 valid하고, text가 차 있는 경우 (labelUp)
-  */
-  & input:focus + label {
-    transform: translate(0px, -12px);
+  & input {
+    margin-top: ${(props) => (props.variant === "filled" ? "16px" : "8px")};
+  }
+  & input:focus + label,
+  & textarea:focus + label {
+    transform: ${(props) =>
+      props.variant === "filled"
+        ? "translate(0px, -12px)"
+        : "translate(0px, -26px)"};
     font-size: 12px;
   }
-  & input + label {
-    transform: ${(props) => props.isInputPopulated && "translate(0px, -12px)"};
+  & input + label,
+  & textarea + label {
+    transform: ${(props) =>
+      props.isInputPopulated
+        ? props.variant === "filled"
+          ? "translate(0px, -12px)"
+          : "translate(0px, -26px)"
+        : ""};
     font-size: ${(props) => props.isInputPopulated && "12px"};
   }
 `;
@@ -151,33 +184,27 @@ const Container = styled.div<{
 const Box = styled.div`
   box-sizing: border-box;
   position: relative;
-  height: 56px;
   padding: 8px 16px; // with icon => 8px 12px
   border-radius: 4px 4px 0px 0px;
-  border-bottom: 1px solid;
-  border-bottom-color: ${(props) =>
-    props.theme.colors.neutralVariant
-      .onSurfaceVariant}; // enabled시 primary 변경
-  background-color: ${(props) =>
-    props.theme.colors.neutralVariant.surfaceVariant};
+  height: 100%;
+  min-height: 56px;
 `;
 
 const Label = styled.label`
   position: absolute;
-  top: 20px;
+  top: 16px;
   left: 16px;
   font-size: 16px;
+  letter-spacing: 0.4px;
   color: ${(props) =>
     props.theme.colors.neutralVariant
       .onSurfaceVariant}; // enabled시 primary로 변경
-  transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
-    font-size 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+  transition: all 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 `;
 
 const Input = styled.input`
   border: none;
   background-color: inherit;
-  margin-top: 20px;
   color: ${(props) => props.theme.colors.neutral.onSurface} !important;
   outline: none;
   font-size: 16px;
@@ -187,6 +214,16 @@ const Input = styled.input`
   :invalid + label {
     color: ${(props) => props.theme.colors.error.error};
   }
+`;
+
+const TextArea = styled.textarea`
+  border: none;
+  background: none;
+  width: 100%;
+  resize: none;
+  outline: none;
+  display: flex;
+  height: 92px;
 `;
 
 const SupportBox = styled.div`
@@ -199,6 +236,8 @@ const SupportBox = styled.div`
 
 const HelperText = styled.p`
   margin: 0;
+  letter-spacing: 0.4px;
+  color: ${(props) => props.theme.colors.error.error};
 `;
 
 const Counter = styled.p`

@@ -18,7 +18,12 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
     getValues,
-  } = useForm<LoginForm>();
+  } = useForm<LoginForm>({
+    defaultValues: {
+      id: "",
+      password: "",
+    },
+  });
   const { callToast } = useMyToast();
   const { mutate: loginAPI } = useLoginMutation();
 
@@ -53,7 +58,7 @@ const Login = () => {
               <TextField.Label label="ID" />
             </TextField.InputBox>
           </TextField>
-          <TextField id="password" getValues={getValues}>
+          <TextField id="password" getValues={getValues} variant="outlined">
             <TextField.InputBox>
               <TextField.Input
                 type="password"
@@ -86,7 +91,7 @@ const Container = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
   width: 400px;
 `;
 

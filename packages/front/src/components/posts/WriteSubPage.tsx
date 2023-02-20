@@ -7,7 +7,7 @@ import { useCreatePostMutation } from "../../hooks/query/useCreatePostMutation";
 import { useUpdatePostMutation } from "../../hooks/query/useUpdatePostMutation";
 import useWriteSubPage from "./useWriteSubPage";
 import useMyToast from "../../hooks/useMyToast";
-import { Button } from "design/src/stories/Button";
+import { Button, ButtonLikeLabel } from "design/src/stories/Button";
 import TextField from "design/src/stories/TextField";
 
 type Props = {
@@ -33,6 +33,7 @@ const WriteSubPage: React.FC<Props> = ({
     register,
     handleSubmit,
     getValues,
+    watch,
     errors,
     router,
     isUpdatePost,
@@ -40,8 +41,6 @@ const WriteSubPage: React.FC<Props> = ({
   const { mutate: createPost } = useCreatePostMutation();
   const { mutate: updatePost } = useUpdatePostMutation();
   const { callToast } = useMyToast();
-
-  console.log(errors);
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (formInputData) => {
     toast.dismiss(); // toast 종료하기
@@ -68,6 +67,8 @@ const WriteSubPage: React.FC<Props> = ({
     console.log(errors);
     errors?.urlSlug?.message && callToast(errors.urlSlug.message, "urlSlug");
     errors?.date?.message && callToast(errors.date.message, "date");
+    errors?.subTitle?.type === "maxLength" &&
+      callToast(errors.subTitle.message, "subTitle");
   };
 
   return (
@@ -79,12 +80,14 @@ const WriteSubPage: React.FC<Props> = ({
               <label htmlFor="Thumbnail">포스트 미리보기</label>
               <Thumbnail id="Thumbnail">
                 <IconThumbnail style={{ width: "auto" }} />
-                <ImageBtnLabel htmlFor="file">썸네일 업로드</ImageBtnLabel>
-                <input id="file" type="file" style={{ display: "none" }} />
+                <ButtonLikeLabel variant="tonal" htmlFor="file">
+                  썸네일 업로드
+                  <input id="file" type="file" style={{ display: "none" }} />
+                </ButtonLikeLabel>
               </Thumbnail>
             </Box>
 
-            <TextField id="thumbnail" getValues={getValues}>
+            <TextField id="thumbnail" getValues={getValues} variant="outlined">
               <TextField.InputBox>
                 <TextField.Input register={register} />
                 <TextField.Label label="Thumbnail" />
@@ -93,19 +96,27 @@ const WriteSubPage: React.FC<Props> = ({
           </ColumnWrapper>
           <VerticalLine />
           <ColumnWrapper>
-            {/* textArea, count, maxLength */}
-            <TextField id="subTitle" getValues={getValues}>
+            <TextField
+              id="subTitle"
+              getValues={getValues}
+              variant="outlined"
+              support
+              multiline
+              errors={errors?.subTitle}
+            >
               <TextField.InputBox>
-                <TextField.Input
+                <TextField.Area
                   register={register}
-                  registerOptions={{ maxLength: 150 }}
+                  registerOptions={{
+                    maxLength: { value: 150, message: "Max length is 150" },
+                  }}
                 />
                 <TextField.Label label="Sub Title" />
               </TextField.InputBox>
-              <TextField.SupportBox>{errors}</TextField.SupportBox>
+              <TextField.SupportBox watch={watch} />
             </TextField>
 
-            <TextField id="urlSlug" getValues={getValues}>
+            <TextField id="urlSlug" getValues={getValues} variant="outlined">
               <TextField.InputBox>
                 <TextField.Input
                   defaultValue={`${postFetchBody?.title?.replaceAll(" ", "-")}`}
@@ -116,7 +127,7 @@ const WriteSubPage: React.FC<Props> = ({
               </TextField.InputBox>
             </TextField>
 
-            <TextField id="date" getValues={getValues}>
+            <TextField id="date" getValues={getValues} variant="outlined">
               <TextField.InputBox>
                 <TextField.Input
                   register={register}
@@ -175,7 +186,7 @@ const ColumnWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 100%;
-  gap: 8px;
+  gap: 16px;
 `;
 
 const ImageBtnLabel = styled.label`
@@ -207,10 +218,6 @@ const Thumbnail = styled.div`
   justify-content: center;
   align-items: center;
   gap: 8px;
-`;
-
-const TextArea = styled.textarea`
-  resize: none;
 `;
 
 const ButtonWrapper = styled.div`

@@ -43,7 +43,9 @@ const useWriteSubPage = (prevData: any) => {
     handleSubmit,
     formState: { errors },
     getValues,
+    watch,
   } = useForm<FormInterface>({
+    mode: "onChange",
     defaultValues: {
       thumbnail: prevData?.thumbnail ? prevData?.thumbnail : "",
       subTitle: prevData?.subTitle ? prevData?.subTitle : "",
@@ -56,6 +58,7 @@ const useWriteSubPage = (prevData: any) => {
     register,
     handleSubmit,
     getValues,
+    watch,
     errors,
     router,
     isUpdatePost,

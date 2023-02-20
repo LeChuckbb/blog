@@ -26,6 +26,26 @@ export const Button = ({
   );
 };
 
+interface ButtonLikeLabelProps
+  extends React.LabelHTMLAttributes<HTMLLabelElement> {
+  variant?: Variant;
+}
+
+export const ButtonLikeLabel = ({
+  variant = "filled",
+  children,
+  ...props
+}: ButtonLikeLabelProps) => {
+  const { style, themesMode } = ButtonStyles(false);
+
+  return (
+    <label {...props} css={[style, themesMode[variant]]}>
+      <Layer variant="button" />
+      {children}
+    </label>
+  );
+};
+
 const ButtonStyles = (icon: boolean | undefined) => {
   const theme = useTheme();
 
