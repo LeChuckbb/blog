@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, useTheme } from "@emotion/react";
 
-type Variant = "chip" | "button";
+type Variant = "chip" | "button" | "card";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   variant?: Variant;
@@ -41,6 +41,9 @@ const Layer = ({ variant = "button", children }: Props) => {
     `,
     button: css`
       border-radius: 100px;
+    `,
+    card: css`
+      border-radius: 12px;
     `,
   };
 

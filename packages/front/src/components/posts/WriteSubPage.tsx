@@ -118,11 +118,7 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
               </TextField.InputBox>
             </TextField>
 
-            <MyDatePicker
-              id="datePicker"
-              getValues={getValues}
-              control={control}
-            />
+            <MyDatePicker id="date" getValues={getValues} control={control} />
 
             <ButtonWrapper>
               <Button
@@ -199,6 +195,7 @@ const Thumbnail = styled.div`
   justify-content: center;
   align-items: center;
   gap: 8px;
+  border-radius: 4px;
 `;
 
 const ButtonWrapper = styled.div`

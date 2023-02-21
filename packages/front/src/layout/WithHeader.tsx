@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import React from "react";
 import LocalErrorBoundary from "../hooks/error/LocalErrorBoundary";
-import useScrollDirection from "../hooks/useScrollDirection";
+import useScrollDirection from "design/src/hooks/useScrollDirection";
 
 type Props = {
   children: React.ReactNode;

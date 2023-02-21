@@ -16,6 +16,12 @@
     "jsxImportSource": "@emotion/react",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "../design/src/hooks/useIntersectionObservation.tsx",
+    "../design/src/hooks/useScrollDirection.tsx"
+  ],
   "exclude": ["node_modules"]
 }

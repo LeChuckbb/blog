@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useGetPostByPageQuery } from "../../hooks/query/useGetPostByPageQuery";
-import Card from "../Card";
+import Card from "design/src/stories/Card";
 
 interface Props {
   selectedTag: string;

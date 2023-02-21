@@ -51,12 +51,8 @@ const useTextField = (id: any, getValues: any) => {
   const onFocusHandler = () => setIsInputFocused(true);
   const onBlurHandler = () => setIsInputFocused(false);
 
-  console.log(id);
-  console.log(isInputPopulated);
-  console.log(getValues("datePicker"));
-
   const setPopulatedIfDateNull = () => {
-    if (getValues("datePicker") === null) setIsInputPopulated(false);
+    if (getValues("date") === null) setIsInputPopulated(false);
     else setIsInputPopulated(true);
   };
 

@@ -8,7 +8,7 @@ import useEditorStyles from "./useEditorStyles";
 import styled from "@emotion/styled";
 import IconArrowUp from "../../../public/icons/arrow_upward.svg";
 import { useEffect, useRef } from "react";
-import useIntersectionObservation from "../../hooks/useIntersectionObservation";
+import useIntersectionObservation from "design/src/hooks/useIntersectionObservation";
 
 const WriteViewer = ({
   content,

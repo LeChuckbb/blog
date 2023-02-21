@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
 import React, { useRef, useEffect } from "react";
-import useIntersectionObserver from "../hooks/useIntersectionObserver";
+import useIntersectionObservation from "../hooks/useIntersectionObservation";
 import { useRouter } from "next/router";
 import { Chip as TagChip } from "design/src/stories/Chip";
+import Layer from "design/src/stories/Layer";
 
 type Props = {
   children?: React.ReactNode;
@@ -20,8 +21,8 @@ type CardProps = {
 
 const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
   const ref = useRef<HTMLDivElement | null>(null); // 감시할 엘리먼트
-  const entry = useIntersectionObserver(ref, {});
-  const isIntersecting = !!entry?.isIntersecting;
+  const entry = useIntersectionObservation(ref, {});
+  const isIntersecting = !!entry?.entry?.isIntersecting;
   const router = useRouter();
 
   useEffect(() => {
@@ -44,6 +45,7 @@ const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
       ref={ref}
       onClick={(event) => onClickHandler(event, id)}
     >
+      <Layer variant="card" />
       {children}
     </CardBox>
   );
@@ -56,11 +58,15 @@ const myLoader = ({ src }: any) => {
 
 Card.Thumbnail = ({ img, children }: Props) => {
   return (
-    <div onClick={() => console.log("img div clicked!!!!@@@")}>
+    <div
+      className="imgDiv"
+      onClick={() => console.log("img div clicked!!!!@@@")}
+    >
       <Image
         loader={myLoader}
         src={`/thumbnail/${img}`}
         alt="thumbnail"
+        style={{ borderRadius: "12px 12px 0px 0px" }}
         width={320}
         height={176}
         sizes="(max-width: 768px) 100vw,
@@ -120,6 +126,12 @@ const CardBox = styled.div`
   cursor: pointer;
   background-color: ${(props) => props.theme.colors.primary.primary};
   color: ${(props) => props.theme.colors.primary.onPrimary};
+  box-shadow: ${(props) => props.theme.shadow.elevation.level1};
+  position: relative;
+  border-radius: 12px;
+  transition: all 0.3s;
+  top: 0px;
+
   /* 
     768px 이상일 때, (두 개 카드 표시)
     1) 50% 미만 33% 이상의 백분율을 카드의 width로 부여.
@@ -147,6 +159,11 @@ const CardBox = styled.div`
     width: 16%;
     max-width: calc(20% - 8px);
     max-height: 365px;
+  }
+
+  &:hover {
+    box-shadow: ${(props) => props.theme.shadow.elevation.level2};
+    top: -4px;
   }
 `;
 
@@ -178,6 +195,8 @@ const StyledTagsSection = styled.div`
   padding: 8px 16px;
   background-color: ${(props) => props.theme.colors.neutral.surface};
   color: ${(props) => props.theme.colors.neutral.onSurface};
+  border-radius: 0px 0px 12px 12px;
+  /* border-radius: 12px; */
 `;
 
 const TagWrapper = styled.div`
@@ -195,15 +214,5 @@ const TagList = styled.ul`
     font-weight: 700;
   }
 `;
-
-// const Tags = styled.span`
-//   font-size: 12px;
-//   font-weight: 700;
-//   color: ${(props) => props.theme.colors.neutral.onSurface};
-//   border: 1px solid;
-//   border-color: ${(props) => props.theme.colors.neutralVariant.outline};
-//   border-radius: 6px;
-//   padding: 2px 4px;
-// `;
 
 export default Card;

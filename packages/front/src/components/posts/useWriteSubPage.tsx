@@ -11,7 +11,7 @@ export interface FormInterface {
   thumbnail: string;
   subTitle: string;
   urlSlug: string;
-  datePicker: Date;
+  date: Date;
 }
 
 const onClickSubPageCancelHandler = (
@@ -55,8 +55,7 @@ const useWriteSubPage = (prevData: any) => {
     defaultValues: {
       thumbnail: prevData?.thumbnail ? prevData?.thumbnail : "",
       subTitle: prevData?.subTitle ? prevData?.subTitle : "",
-      // datePicker: prevData?.date ? prevData?.date : defaultDateHandler(),
-      datePicker: prevData?.date ? new Date(prevData?.date) : new Date(),
+      date: prevData?.date ? new Date(prevData?.date) : new Date(),
     },
   });
 

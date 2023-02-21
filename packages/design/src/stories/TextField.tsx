@@ -169,6 +169,8 @@ const Container = styled.div<{
         ? props.theme.colors.primary.primary
         : props.theme.colors.neutralVariant.outline};
     border-width: ${(props) => (props.isInputFocused ? "2px" : "1px")};
+    border-radius: ${(props) =>
+      props.variant === "filled" ? "4px 4px 0px 0px" : "4px"};
 
     background-color: ${(props) =>
       props.variant === "filled"
@@ -218,7 +220,6 @@ const Container = styled.div<{
 const Box = styled.div`
   box-sizing: border-box;
   position: relative;
-  border-radius: 4px 4px 0px 0px;
   height: 100%;
   min-height: 56px;
   display: flex;
