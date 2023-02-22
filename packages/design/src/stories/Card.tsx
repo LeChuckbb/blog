@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
 import React, { useRef, useEffect } from "react";
-import useIntersectionObservation from "../hooks/useIntersectionObservation";
+import useMainPageIntersectionObserver from "../hooks/useMainPageIntersectionObserver";
 import { useRouter } from "next/router";
 import { Chip as TagChip } from "design/src/stories/Chip";
 import Layer from "design/src/stories/Layer";
@@ -21,13 +21,13 @@ type CardProps = {
 
 const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
   const ref = useRef<HTMLDivElement | null>(null); // 감시할 엘리먼트
-  const entry = useIntersectionObservation(ref, {});
-  const isIntersecting = !!entry?.entry?.isIntersecting;
+  const entry = useMainPageIntersectionObserver(ref, {});
+  const isIntersecting = !!entry?.isIntersecting;
   const router = useRouter();
 
   useEffect(() => {
     isLastItem && isIntersecting && fetchNext();
-  }, [isLastItem, isIntersecting]);
+  }, [isLastItem, isIntersecting, fetchNext]);
 
   const onClickHandler = (event: React.MouseEvent, id: string) => {
     router.push(

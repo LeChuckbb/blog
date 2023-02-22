@@ -60,6 +60,24 @@ const useEditorStyles = () => {
       color: ${theme.colors.primary.primary};
     }
 
+    .toastui-editor-contents ol {
+      color: ${theme.colors.neutralVariant.onSurfaceVariant};
+      margin: 24px 0px;
+    }
+
+    .toastui-editor-contents table {
+      color: ${theme.colors.neutral.onBackground};
+    }
+    .toastui-editor-contents thead > tr > th {
+      background-color: ${theme.colors.primary.primary};
+      color: ${theme.colors.primary.onPrimary};
+    }
+
+    .toastui-editor-contents table th,
+    .toastui-editor-contents table td {
+      border-color: ${theme.colors.neutralVariant.outline};
+    }
+
     .toastui-editor-contents blockquote {
       margin: 32px 0;
       border-left: 4px solid;

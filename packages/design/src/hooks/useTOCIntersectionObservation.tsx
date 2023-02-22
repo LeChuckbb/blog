@@ -18,7 +18,7 @@ const anchorOnClickHandler = (
   // mouswWheelRef.current = false;
 };
 
-const useIntersectionObservation = (
+const useTOCIntersectionObservation = (
   targetRef: RefObject<Element> | null,
   options: IntersectionObserverInit = {
     threshold: 0, // target이 viewport와 0%만 겹처도 observer를 실행
@@ -75,4 +75,4 @@ const useIntersectionObservation = (
   return { entry, anchorOnClickHandler, mouseWheelActiveRef, anchorClickedRef };
 };
 
-export default useIntersectionObservation;
+export default useTOCIntersectionObservation;

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { RefObject, useEffect, useState } from "react";
 
-function useIntersectionObserver(
+function useMainPageIntersectionObserver(
   targetRef: RefObject<Element>,
   options: IntersectionObserverInit = {
     threshold: 0, // target이 viewport와 0%만 겹처도 observer를 실행
@@ -41,4 +41,4 @@ function useIntersectionObserver(
   return entry;
 }
 
-export default useIntersectionObserver;
+export default useMainPageIntersectionObserver;

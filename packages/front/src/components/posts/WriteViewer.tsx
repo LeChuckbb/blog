@@ -8,7 +8,7 @@ import useEditorStyles from "./useEditorStyles";
 import styled from "@emotion/styled";
 import IconArrowUp from "../../../public/icons/arrow_upward.svg";
 import { useEffect, useRef } from "react";
-import useIntersectionObservation from "design/src/hooks/useIntersectionObservation";
+import useTOCIntersectionObservation from "design/src/hooks/useTOCIntersectionObservation";
 
 const WriteViewer = ({
   content,
@@ -18,7 +18,7 @@ const WriteViewer = ({
   const { editorStyles } = useEditorStyles();
   const ref = useRef<HTMLDivElement | null>(null);
   const { entry, anchorOnClickHandler, mouseWheelActiveRef, anchorClickedRef } =
-    useIntersectionObservation(ref, {});
+    useTOCIntersectionObservation(ref, {});
 
   const FAB = () => {
     return (

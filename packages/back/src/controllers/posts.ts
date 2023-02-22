@@ -27,10 +27,12 @@ export const getPostByPage = (model: Model<Post>) =>
       tagQuery === "all"
         ? await model
             .find({}, { content: 0 })
+            .sort({ date: -1 })
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE)
         : await model
             .find({ tags: tagQuery }, { content: 0 })
+            .sort({ date: -1 })
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE);
 
