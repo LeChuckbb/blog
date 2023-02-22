@@ -37,8 +37,8 @@ const getHTMLTags = (htmlString: string) => {
     : null;
 };
 
-const PostDetail = ({ title, date, content, slug }: any) => {
-  const tocArray = getHTMLTags(content.html);
+const PostDetail = ({ title, date, html, slug }: any) => {
+  const tocArray = getHTMLTags(html);
   const [observerEntry, setObserverEntry] =
     useState<IntersectionObserverEntry>();
   const [anchorClickHandler, setAnchorClickHandler] = useState();
@@ -51,9 +51,9 @@ const PostDetail = ({ title, date, content, slug }: any) => {
         observerEntry={observerEntry}
       />
       <PostHead slug={slug} date={date} title={title} />
-      {content && (
+      {html && (
         <NoSSRViewer
-          content={content}
+          content={html}
           setObserverEntries={setObserverEntry}
           setAnchorClickHandler={setAnchorClickHandler}
         />

@@ -26,12 +26,12 @@ export const getPostByPage = (model: Model<Post>) =>
     const results =
       tagQuery === "all"
         ? await model
-            .find({}, { content: 0 })
+            .find({}, { html: 0, markup: 0 })
             .sort({ date: -1 })
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE)
         : await model
-            .find({ tags: tagQuery }, { content: 0 })
+            .find({ tags: tagQuery }, { html: 0, markup: 0 })
             .sort({ date: -1 })
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE);
@@ -50,10 +50,8 @@ export const getPostBySlug = (model: Model<Post>) =>
     const resultObj = results?.toObject();
     const resultBody = {
       ...resultObj,
-      content: {
-        html: decode(results?.content?.html),
-        markup: results?.content?.markup,
-      },
+      html: decode(results?.html),
+      markup: results?.markup,
     };
 
     return res.status(200).json(resultBody);
@@ -61,7 +59,9 @@ export const getPostBySlug = (model: Model<Post>) =>
 
 // 에러 처리 요망 (catch에서 잡아주는지?)
 const createTags = (tags: any) => {
-  tags.forEach(async (tag: string) => {
+  if (tags === "") return;
+
+  tags?.forEach(async (tag: string) => {
     // 1. tags collection에 동명의 tag document가 이미 존재하는 경우 -> count 증가
     const result = await modelTags.findOneAndUpdate(
       { name: tag },
@@ -76,17 +76,27 @@ export const createPost = (model: Model<Post>) =>
   tryCatch(async (req: Request, res: Response) => {
     // req.body에서 content 항목이 있으면 encode하여 DB에 저장
     // XSS 방지를 위해 HTML markup -> entity로 변경
-    const body = req?.body?.content
-      ? {
-          ...req.body,
-          content: {
-            html: encode(req.body.content.html),
-            markup: req.body.content.markup,
-          },
-        }
-      : req.body;
+    // const body = req?.body?.content
+    //   ? {
+    //       ...req.body,
+    //       content: {
+    //         html: encode(req.body.content.html),
+    //         markup: req.body.content.markup,
+    //       },
+    //     }
+    //   : req.body;
+    console.log(req.body);
+    console.log(req.file);
+    const body = {
+      ...req.body,
+      thumbnail: req.file,
+      html: encode(req.body.html),
+      markup: req.body.markup,
+    };
     const result = await model.create(body);
-    createTags(body.tags);
+    await createTags(body.tags);
+
+    console.log(body);
 
     return res.status(201).json({ result });
   });
@@ -95,9 +105,10 @@ const updateTags = async (
   currentTags: Array<String>,
   inputTags: Array<String>
 ) => {
+  console.log(inputTags);
   // [] or ['val1', 'val2'...]
-  const removeList = currentTags.filter((x) => !inputTags.includes(x));
-  const addList = inputTags.filter((x) => !currentTags.includes(x));
+  const removeList = currentTags?.filter((x) => !inputTags?.includes(x));
+  const addList = inputTags?.filter((x) => !currentTags?.includes(x));
 
   removeList.length !== 0 && (await deleteTags(removeList));
   addList.length !== 0 && (await createTags(addList));
@@ -106,15 +117,22 @@ const updateTags = async (
 export const updatePost = (model: Model<Post>) =>
   tryCatch(async (req: Request, res: Response) => {
     const slug = req.params.slug;
-    const body = req?.body?.content
-      ? {
-          ...req.body,
-          content: {
-            html: encode(req.body.content.html),
-            markup: req.body.content.markup,
-          },
-        }
-      : req.body;
+    // const body = req?.body?.content
+    //   ? {
+    //       ...req.body,
+    //       content: {
+    //         html: encode(req.body.content.html),
+    //         markup: req.body.content.markup,
+    //       },
+    //     }
+    //   : req.body;
+    const body = {
+      ...req.body,
+      html: encode(req.body.html),
+      markup: req.body.markup,
+    };
+
+    console.log(body);
 
     const result = await model.findOneAndUpdate(
       { urlSlug: slug },
@@ -125,7 +143,8 @@ export const updatePost = (model: Model<Post>) =>
           title: body.title,
           subTitle: body.subTitle,
           date: body.date,
-          content: body.content,
+          html: body.html,
+          markup: body.markup,
           tags: body.tags,
         },
       }

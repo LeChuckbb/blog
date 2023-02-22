@@ -1,21 +1,26 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface Post extends mongoose.Document {
-  thumbnail: string;
   urlSlug: string;
   title: string;
   subTitle: string;
   date: string;
-  content: {
-    markup: string;
-    html: string;
-  };
+  markup: string;
+  html: string;
   tags: Array<String>;
-  // tags: any;
+  thumbnail: {
+    fieldname: string;
+    orignalname: string;
+    encoding: string;
+    mimetype: string;
+    destination: string;
+    filename: string;
+    path: string;
+    size: number;
+  };
 }
 
 const PostSchema: Schema = new Schema<Post>({
-  thumbnail: String,
   urlSlug: {
     type: String,
     required: true,
@@ -30,21 +35,41 @@ const PostSchema: Schema = new Schema<Post>({
     type: String,
     required: true,
   },
-  content: {
-    html: {
-      type: String,
-      required: true,
-    },
-    markup: {
-      type: String,
-      required: true,
-    },
+  html: {
+    type: String,
+    required: true,
+  },
+  markup: {
+    type: String,
+    required: true,
   },
   tags: [String],
-  // tags: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Tag",
-  // },
+  thumbnail: {
+    fieldname: {
+      type: String,
+    },
+    orignalname: {
+      type: String,
+    },
+    encoding: {
+      type: String,
+    },
+    mimetype: {
+      type: String,
+    },
+    destination: {
+      type: String,
+    },
+    filename: {
+      type: String,
+    },
+    path: {
+      type: String,
+    },
+    size: {
+      type: Number,
+    },
+  },
 });
 
 export default mongoose.model<Post>("Post", PostSchema);
