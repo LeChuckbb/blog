@@ -3,9 +3,10 @@ import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
 import { GetStaticProps, GetStaticPaths } from "next";
 import { getPostBySlug, getPost } from "../../apis/postApi";
-import PostMenu from "../../components/posts/PostMenu";
+import PostHead from "../../components/posts/PostHead";
 import { ToastContainer } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import PostTableOfContents from "../../components/posts/PostTableOfContents";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -36,17 +37,6 @@ const getHTMLTags = (htmlString: string) => {
     : null;
 };
 
-const getLeftMarginByTagName = (tagName: string | undefined) => {
-  if (tagName === "h2") {
-    return "12px";
-  } else if (tagName === "h3") {
-    return "24px";
-  } else {
-    // h1
-    return "0px";
-  }
-};
-
 const PostDetail = ({ title, date, content, slug }: any) => {
   const tocArray = getHTMLTags(content.html);
   const [observerEntry, setObserverEntry] =
@@ -55,44 +45,12 @@ const PostDetail = ({ title, date, content, slug }: any) => {
 
   return (
     <Container className="pidContainer">
-      {tocArray && (
-        <TocAbsoluteWrapper>
-          <TocStickyWrapper>
-            {tocArray.map((str, idx) => {
-              return (
-                <TocLineDiv
-                  key={idx}
-                  css={(theme) => ({
-                    marginLeft: getLeftMarginByTagName(str?.tag),
-                    color:
-                      observerEntry?.target.textContent === str?.content
-                        ? theme.colors.primary.primary
-                        : "",
-                    transform:
-                      observerEntry?.target.textContent === str?.content
-                        ? "scale(1.05)"
-                        : "",
-                  })}
-                >
-                  <TocAnchor
-                    href={`#${str?.content}`}
-                    onClick={anchorClickHandler}
-                  >
-                    {str?.content}
-                  </TocAnchor>
-                </TocLineDiv>
-              );
-            })}
-          </TocStickyWrapper>
-        </TocAbsoluteWrapper>
-      )}
-      <HeadWrapper className="headWrapper">
-        <h1 style={{ fontSize: "48px", fontWeight: 700 }}>{title}</h1>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span>{date}</span>
-          <PostMenu slug={slug} />
-        </div>
-      </HeadWrapper>
+      <PostTableOfContents
+        tocArray={tocArray}
+        anchorClickHandler={anchorClickHandler}
+        observerEntry={observerEntry}
+      />
+      <PostHead slug={slug} date={date} title={title} />
       {content && (
         <NoSSRViewer
           content={content}
@@ -144,48 +102,4 @@ const Container = styled.div`
   padding: 32px 0px 72px;
 
   position: relative;
-`;
-
-const HeadWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-`;
-
-const TocAbsoluteWrapper = styled.div`
-  position: absolute;
-  height: 100%;
-  left: 100%;
-  margin-left: 36px;
-  font-size: ${(props) => props.theme.fonts.label.large.size};
-  line-height: ${(props) => props.theme.fonts.label.large.lineHeight};
-  color: ${(props) => props.theme.colors.neutralVariant.outline};
-  display: flex;
-  width: max-content;
-`;
-
-const TocStickyWrapper = styled.div`
-  border-left: 2px solid;
-  border-left-color: ${(props) =>
-    props.theme.colors.neutralVariant.outlineVariant};
-  padding-left: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  position: sticky;
-  top: 300px;
-  left: 0;
-  align-self: flex-start;
-`;
-
-const TocLineDiv = styled.div`
-  display: flex;
-  transition: all 0.125s ease-in 0s;
-`;
-
-const TocAnchor = styled.a`
-  max-width: 240px;
-  :hover {
-    color: ${(props) => props.theme.colors.primary.primary};
-  }
 `;

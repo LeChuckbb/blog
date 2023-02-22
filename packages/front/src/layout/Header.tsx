@@ -6,6 +6,7 @@ import IconDark from "../../public/icons/dark_mode.svg";
 import IconLight from "../../public/icons/light_mode.svg";
 import IconCreateNewPost from "../../public/icons/create.svg";
 import IconLogout from "../../public/icons/logout.svg";
+import IconInfo from "../../public/icons/info.svg";
 import useDarkMode from "../hooks/useDarkMode";
 import IconButton from "design/src/stories/IconButton";
 
@@ -42,6 +43,13 @@ const Header = ({ scrollDirection }: any) => {
               </IconButton>
             </>
           )}
+          <Link href="http://localhost:3000/about">
+            <a>
+              <IconButton tooltip="About">
+                <IconInfo />
+              </IconButton>
+            </a>
+          </Link>
           <IconButton onClick={toggleDarkMode} tooltip="테마 전환">
             {isDarkMode ? <IconDark /> : <IconLight />}
           </IconButton>

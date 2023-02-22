@@ -43,7 +43,6 @@ const useTextField = (id: any, getValues: any) => {
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("on CHANGE!!");
     event.target.value !== ""
       ? setIsInputPopulated(true)
       : setIsInputPopulated(false);

@@ -27,9 +27,7 @@ const onClickSubPageCancelHandler = (
   }
 };
 
-const defaultDateHandler = () => {
-  const date = new Date();
-
+const dateFormatter = (date: Date) => {
   return new Intl.DateTimeFormat("kr", {
     year: "numeric",
     month: "2-digit",
@@ -40,7 +38,7 @@ const defaultDateHandler = () => {
     .slice(0, -1);
 };
 
-const useWriteSubPage = (prevData: any) => {
+const useWriteSubPage = (prevData: any, postFetchBody: any) => {
   const router = useRouter();
   const isUpdatePost = router.query.slug === undefined ? false : true;
   const {
@@ -49,6 +47,7 @@ const useWriteSubPage = (prevData: any) => {
     formState: { errors },
     getValues,
     watch,
+    setValue,
     control,
   } = useForm<FormInterface>({
     mode: "onChange",
@@ -59,14 +58,14 @@ const useWriteSubPage = (prevData: any) => {
     },
   });
 
-  console.log(defaultDateHandler());
-
   return {
     onClickSubPageCancelHandler,
     register,
     handleSubmit,
     getValues,
     watch,
+    dateFormatter,
+    setValue,
     control,
     errors,
     router,

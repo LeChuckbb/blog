@@ -10,7 +10,7 @@ const dateFormatter = (date: string): string => {
   if (date == undefined) return "";
 
   const arr = date?.split("-");
-  return `${arr[0]}년 ${arr[1]}월 ${arr[2]}일`;
+  return `${arr[0]}.${arr[1]}.${arr[2]}`;
 };
 
 const PostList = ({ selectedTag }: Props) => {

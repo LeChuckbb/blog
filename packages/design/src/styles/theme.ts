@@ -59,19 +59,19 @@ export const lightTheme = {
     display: {
       large: {
         size: "61px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "64px",
         letterSpacing: "-0.25px",
       },
       medium: {
         size: "57px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "52px",
         letterSpacing: "0px",
       },
       small: {
         size: "45px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "44px",
         letterSpacing: "0px",
       },
@@ -79,19 +79,19 @@ export const lightTheme = {
     headline: {
       large: {
         size: "38px",
-        weight: "400px",
+        weight: "500",
         lineHeight: "40px",
         letterSpacing: "0px",
       },
       medium: {
         size: "32px",
-        weight: "400px",
+        weight: "500",
         lineHeight: "36px",
         letterSpacing: "0px",
       },
       small: {
         size: "28px",
-        weight: "400px",
+        weight: "500",
         lineHeight: "32px",
         letterSpacing: "0px",
       },
@@ -99,19 +99,19 @@ export const lightTheme = {
     title: {
       large: {
         size: "28px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "28px",
         letterSpacing: "0px",
       },
       medium: {
         size: "24px",
-        weight: "500px",
+        weight: "500",
         lineHeight: "24px",
         letterSpacing: "0.15px",
       },
       small: {
         size: "18px",
-        weight: "500px",
+        weight: "500",
         lineHeight: "20px",
         letterSpacing: "0.10px",
       },
@@ -119,19 +119,19 @@ export const lightTheme = {
     body: {
       large: {
         size: "20px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "24px",
         letterSpacing: "0.50px",
       },
       medium: {
         size: "18px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "20px",
         letterSpacing: "0.25px",
       },
       small: {
         size: "16px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "16px",
         letterSpacing: "0.40px",
       },
@@ -139,19 +139,19 @@ export const lightTheme = {
     label: {
       large: {
         size: "14px",
-        weight: "500px",
+        weight: "500",
         lineHeight: "20px",
         letterSpacing: "0.10px",
       },
       medium: {
         size: "12px",
-        weight: "500px",
+        weight: "500",
         lineHeight: "16px",
         letterSpacing: "0.50px",
       },
       small: {
         size: "11px",
-        weight: "500px",
+        weight: "500",
         lineHeight: "16px",
         letterSpacing: "0.50px",
       },
@@ -226,7 +226,7 @@ export const darkTheme = {
     display: {
       large: {
         size: "61px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "64px",
         letterSpacing: "-0.25px",
       },
@@ -238,7 +238,7 @@ export const darkTheme = {
       },
       small: {
         size: "45px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "44px",
         letterSpacing: "0px",
       },
@@ -246,19 +246,19 @@ export const darkTheme = {
     headline: {
       large: {
         size: "38px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "40px",
         letterSpacing: "0px",
       },
       medium: {
         size: "32px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "36px",
         letterSpacing: "0px",
       },
       small: {
         size: "28px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "32px",
         letterSpacing: "0px",
       },
@@ -266,19 +266,19 @@ export const darkTheme = {
     title: {
       large: {
         size: "28px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "28px",
         letterSpacing: "0px",
       },
       medium: {
         size: "24px",
-        weight: "500px",
+        weight: "500",
         lineHeight: "24px",
         letterSpacing: "0.15px",
       },
       small: {
         size: "18px",
-        weight: "500px",
+        weight: "500",
         lineHeight: "20px",
         letterSpacing: "0.10px",
       },
@@ -286,19 +286,19 @@ export const darkTheme = {
     body: {
       large: {
         size: "20px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "24px",
         letterSpacing: "0.50px",
       },
       medium: {
         size: "18px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "20px",
         letterSpacing: "0.25px",
       },
       small: {
         size: "16px",
-        weight: "400px",
+        weight: "400",
         lineHeight: "16px",
         letterSpacing: "0.40px",
       },
@@ -306,19 +306,19 @@ export const darkTheme = {
     label: {
       large: {
         size: "14px",
-        weight: "500px",
+        weight: "500",
         lineHeight: "20px",
         letterSpacing: "0.10px",
       },
       medium: {
         size: "12px",
-        weight: "500px",
+        weight: "500",
         lineHeight: "16px",
         letterSpacing: "0.50px",
       },
       small: {
         size: "11px",
-        weight: "500px",
+        weight: "500",
         lineHeight: "16px",
         letterSpacing: "0.50px",
       },

@@ -12,6 +12,7 @@ import useMyToast from "../../hooks/useMyToast";
 import { Button, ButtonLikeLabel } from "design/src/stories/Button";
 import TextField from "design/src/stories/TextField";
 import MyDatePicker from "design/src/stories/DatePicker";
+import { useEffect } from "react";
 
 const WriteSubPage: React.FC<WriteSubPageProps> = ({
   prevData,
@@ -24,33 +25,34 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
     handleSubmit,
     getValues,
     watch,
+    setValue,
     errors,
     router,
     control,
     isUpdatePost,
-  } = useWriteSubPage(prevData);
+    dateFormatter,
+  } = useWriteSubPage(prevData, postFetchBody);
   const { mutate: createPost } = useCreatePostMutation();
   const { mutate: updatePost } = useUpdatePostMutation();
   const { callToast } = useMyToast();
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (formInputData) => {
     toast.dismiss(); // toast 종료하기
+    const { date } = formInputData;
+    const body = {
+      ...formInputData,
+      tags: postFetchBody.tags,
+      title: postFetchBody.title,
+      content: postFetchBody.content,
+      date: dateFormatter(date),
+    };
+
     isUpdatePost
       ? await updatePost({
           slug: router.query.slug as string,
-          body: {
-            ...formInputData,
-            tags: postFetchBody.tags,
-            title: postFetchBody.title,
-            content: postFetchBody.content,
-          },
+          body,
         })
-      : await createPost({
-          ...formInputData,
-          tags: postFetchBody.tags,
-          title: postFetchBody.title,
-          content: postFetchBody.content,
-        });
+      : await createPost(body);
   };
 
   const onInvalidSubmit = (errors: any) => {
@@ -61,6 +63,10 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
     errors?.subTitle?.type === "maxLength" &&
       callToast(errors.subTitle.message, "subTitle");
   };
+
+  useEffect(() => {
+    setValue("urlSlug", postFetchBody?.title?.replaceAll(" ", "-"));
+  }, [postFetchBody]);
 
   return (
     <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
@@ -77,7 +83,6 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
                 </ButtonLikeLabel>
               </Thumbnail>
             </Box>
-
             <TextField id="thumbnail" getValues={getValues} variant="outlined">
               <TextField.InputBox>
                 <TextField.Input register={register} />
@@ -106,7 +111,6 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
               </TextField.InputBox>
               <TextField.SupportBox watch={watch} />
             </TextField>
-
             <TextField id="urlSlug" getValues={getValues} variant="outlined">
               <TextField.InputBox>
                 <TextField.Input
@@ -117,9 +121,7 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
                 <TextField.Label label="URL Slug" />
               </TextField.InputBox>
             </TextField>
-
             <MyDatePicker id="date" getValues={getValues} control={control} />
-
             <ButtonWrapper>
               <Button
                 variant="outlined"

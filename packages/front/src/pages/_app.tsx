@@ -2,7 +2,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../styles/reset.css";
 import type { AppProps } from "next/app";
 import { ThemeProvider, Global } from "@emotion/react";
-import { lightTheme, darkTheme } from "../styles/theme";
+import { lightTheme, darkTheme } from "design/src/styles/theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { NextPage } from "next";

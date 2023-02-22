@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { lightTheme, darkTheme } from "../styles/theme";
+import { lightTheme, darkTheme } from "design/src/styles/theme";
 import { useRecoilState } from "recoil";
 import { themeState } from "../recoil/atom";
 

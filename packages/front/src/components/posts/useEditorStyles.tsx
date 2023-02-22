@@ -23,16 +23,19 @@ const useEditorStyles = () => {
 
     .toastui-editor-contents h1 {
       font-size: ${theme.fonts.headline.large.size};
+      font-weight: ${theme.fonts.headline.large.weight};
       line-height: ${theme.fonts.headline.large.lineHeight};
     }
 
     .toastui-editor-contents h2 {
       font-size: ${theme.fonts.headline.medium.size};
+      font-weight: ${theme.fonts.headline.medium.weight};
       line-height: ${theme.fonts.headline.medium.lineHeight};
     }
 
     .toastui-editor-contents h3 {
       font-size: ${theme.fonts.headline.small.size};
+      font-weight: ${theme.fonts.headline.small.weight};
       line-height: ${theme.fonts.headline.small.lineHeight};
     }
 
