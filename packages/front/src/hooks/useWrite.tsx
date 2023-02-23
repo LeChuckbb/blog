@@ -15,6 +15,7 @@ interface Body {
 
 const useWrite = (data: any) => {
   const [tag, setTag] = useState("");
+  const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
   const [tagsArray, setTagsArray] = useState(Array<string>);
   const [postFetchBody, setPostFetchBody] = useState<Body>({
     title: "",
@@ -95,17 +96,29 @@ const useWrite = (data: any) => {
     setTagsArray(result);
   };
 
+  const getTagInputProps =({...otherProps} ={}) => ({
+    value: tag,
+    onKeyDown: onKeyDownHandler,
+    onFocus: () => setIsTagInputFocusIn(true),
+    onBlur: () => setIsTagInputFocusIn(false),
+    onChange: (event:any) => setTag(event?.target.value),
+    ...otherProps
+  })
+
+  const getWriteSubPageProps = () => ({
+    postFetchBody,
+    subPageRef,
+  })
+
   return {
     editorRef,
-    subPageRef,
     tagsArray,
-    tag,
-    postFetchBody,
-    setTag,
-    onKeyDownHandler,
+    isTagInputFocusIn,
     onValidSubmit,
     onInvalidSubmit,
     onClickRemoveTagHandler,
+    getTagInputProps,
+    getWriteSubPageProps,
   };
 };
 

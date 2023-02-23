@@ -108,6 +108,7 @@ export const updatePost = (model: Model<Post>) =>
     const slug = req.params.slug;
     const body = {
       ...req.body,
+      thumbnail: req.file,
       html: encode(req.body.html),
       markup: req.body.markup,
     };

@@ -33,23 +33,18 @@ interface Props {
 const write = ({ data }: Props) => {
   const {
     editorRef,
-    subPageRef,
     tagsArray,
-    tag,
-    postFetchBody,
-    setTag,
-    onKeyDownHandler,
     onValidSubmit,
     onInvalidSubmit,
     onClickRemoveTagHandler,
+    isTagInputFocusIn,
+    getWriteSubPageProps,
+    getTagInputProps,
   } = useWrite(data);
   const { register, handleSubmit } = useForm<FormInterface>();
   const router = useRouter();
   const content = data?.markup;
-  const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
 
-  const onTagFocusHandler = () => setIsTagInputFocusIn(true);
-  const onTagFocusOutHandler = () => setIsTagInputFocusIn(false);
   return (
     <Container>
       <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
@@ -73,15 +68,11 @@ const write = ({ data }: Props) => {
               ))}
             </TagList>
             <TagInput
-              {...register("tag")}
               type="text"
-              value={tag}
               placeholder="태그를 입력하세요"
-              onChange={(event) => setTag(event.target.value)}
-              onKeyDown={onKeyDownHandler}
               autoComplete="off"
-              onFocus={onTagFocusHandler}
-              onBlur={onTagFocusOutHandler}
+              {...register("tag")}
+              {...getTagInputProps()}
             />
             {isTagInputFocusIn && (
               <Tooltip
@@ -104,11 +95,7 @@ const write = ({ data }: Props) => {
         </BottomButtonWrapper>
         <ToastContainer />
       </form>
-      <WriteSubPage
-        prevData={data}
-        postFetchBody={postFetchBody}
-        subPageRef={subPageRef}
-      />
+      <WriteSubPage prevData={data} {...getWriteSubPageProps()} />
     </Container>
   );
 };
