@@ -23,7 +23,6 @@ const PostTags: React.FC<Props> = (props) => {
       <Badge badgeContent={tagsData?.count}>
         <Tag color="secondary" onClick={() => onClickTagList("all")}>
           all
-          {/* <Count>{tagsData?.count}</Count> */}
         </Tag>
       </Badge>
       {tagsData?.tags.map((tag: any) => {
@@ -31,7 +30,6 @@ const PostTags: React.FC<Props> = (props) => {
           <Badge badgeContent={tag.count} key={tag._id}>
             <Tag color="secondary" onClick={() => onClickTagList(tag.name)}>
               {tag.name}
-              {/* <Count>{tag.count}</Count> */}
             </Tag>
           </Badge>
         );
@@ -50,10 +48,6 @@ const TagList = styled.ul`
   ::-webkit-scrollbar {
     display: none;
   }
-`;
-
-const Count = styled.span`
-  color: ${(props) => props.theme.colors.primary.primary};
 `;
 
 export default PostTags;

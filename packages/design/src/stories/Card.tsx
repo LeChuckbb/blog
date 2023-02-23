@@ -83,7 +83,7 @@ Card.SecondSection = ({ children }: Props) => {
 };
 
 Card.TitleWrapper = ({ children }: Props) => {
-  return <div>{children}</div>;
+  return <StyledTitleWrapper>{children}</StyledTitleWrapper>;
 };
 
 Card.Title = ({ children }: Props) => {
@@ -91,7 +91,7 @@ Card.Title = ({ children }: Props) => {
 };
 
 Card.SubTitle = ({ children }: Props) => {
-  return <span>{children}</span>;
+  return <StyledSubTitle>{children}</StyledSubTitle>;
 };
 
 Card.Date = ({ children }: Props) => {
@@ -176,12 +176,26 @@ const StyledTextSection = styled.div`
   justify-content: space-between;
 `;
 
+const StyledTitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
 const StyledTitle = styled.h2`
   font-size: 24px;
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`;
+
+const StyledSubTitle = styled.p`
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* The number of lines to show before truncating */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StyledDate = styled.span`

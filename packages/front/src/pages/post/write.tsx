@@ -45,7 +45,7 @@ const write = ({ data }: Props) => {
   } = useWrite(data);
   const { register, handleSubmit } = useForm<FormInterface>();
   const router = useRouter();
-  const content = data?.content?.markup;
+  const content = data?.markup;
   const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
 
   const onTagFocusHandler = () => setIsTagInputFocusIn(true);

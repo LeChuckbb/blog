@@ -55,6 +55,11 @@ const useTextField = (id: any, getValues: any) => {
     else setIsInputPopulated(true);
   };
 
+  if (id === "subTitle") {
+    console.log(id);
+    console.log(isInputPopulated);
+  }
+
   return {
     onChangeHandler,
     onFocusHandler,

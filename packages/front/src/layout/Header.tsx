@@ -45,7 +45,7 @@ const Header = ({ scrollDirection }: any) => {
           )}
           <Link href="http://localhost:3000/about">
             <a>
-              <IconButton tooltip="About">
+              <IconButton tooltip="소개">
                 <IconInfo />
               </IconButton>
             </a>

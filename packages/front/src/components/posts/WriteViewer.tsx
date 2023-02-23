@@ -11,7 +11,7 @@ import { useEffect, useRef } from "react";
 import useTOCIntersectionObservation from "design/src/hooks/useTOCIntersectionObservation";
 
 const WriteViewer = ({
-  html,
+  content,
   setObserverEntries,
   setAnchorClickHandler,
 }: any) => {
@@ -28,7 +28,6 @@ const WriteViewer = ({
     );
   };
 
-  // 25분
   useEffect(() => {
     setObserverEntries(entry);
     setAnchorClickHandler(() => anchorOnClickHandler);
@@ -37,7 +36,7 @@ const WriteViewer = ({
   return (
     <div css={editorStyles} ref={ref}>
       <Viewer
-        initialValue={html || ""}
+        initialValue={content || ""}
         plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
         customHTMLRenderer={{
           iframe(node: any) {

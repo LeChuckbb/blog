@@ -54,6 +54,9 @@ export const getPostBySlug = (model: Model<Post>) =>
       markup: results?.markup,
     };
 
+    console.log(results);
+    console.log(resultObj);
+    console.log(resultBody);
     return res.status(200).json(resultBody);
   });
 
@@ -76,17 +79,6 @@ export const createPost = (model: Model<Post>) =>
   tryCatch(async (req: Request, res: Response) => {
     // req.body에서 content 항목이 있으면 encode하여 DB에 저장
     // XSS 방지를 위해 HTML markup -> entity로 변경
-    // const body = req?.body?.content
-    //   ? {
-    //       ...req.body,
-    //       content: {
-    //         html: encode(req.body.content.html),
-    //         markup: req.body.content.markup,
-    //       },
-    //     }
-    //   : req.body;
-    console.log(req.body);
-    console.log(req.file);
     const body = {
       ...req.body,
       thumbnail: req.file,
@@ -96,8 +88,6 @@ export const createPost = (model: Model<Post>) =>
     const result = await model.create(body);
     await createTags(body.tags);
 
-    console.log(body);
-
     return res.status(201).json({ result });
   });
 
@@ -105,7 +95,6 @@ const updateTags = async (
   currentTags: Array<String>,
   inputTags: Array<String>
 ) => {
-  console.log(inputTags);
   // [] or ['val1', 'val2'...]
   const removeList = currentTags?.filter((x) => !inputTags?.includes(x));
   const addList = inputTags?.filter((x) => !currentTags?.includes(x));
@@ -117,22 +106,11 @@ const updateTags = async (
 export const updatePost = (model: Model<Post>) =>
   tryCatch(async (req: Request, res: Response) => {
     const slug = req.params.slug;
-    // const body = req?.body?.content
-    //   ? {
-    //       ...req.body,
-    //       content: {
-    //         html: encode(req.body.content.html),
-    //         markup: req.body.content.markup,
-    //       },
-    //     }
-    //   : req.body;
     const body = {
       ...req.body,
       html: encode(req.body.html),
       markup: req.body.markup,
     };
-
-    console.log(body);
 
     const result = await model.findOneAndUpdate(
       { urlSlug: slug },

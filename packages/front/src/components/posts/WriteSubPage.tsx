@@ -55,8 +55,14 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
     };
 
     const formData = new FormData();
-    for (const key in body) {
-      formData.append(key, body[key]);
+    for (const [key, value] of Object.entries(body)) {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          formData.append(key, item);
+        }
+      } else {
+        formData.append(key, value as string);
+      }
     }
 
     isUpdatePost

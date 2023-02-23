@@ -85,7 +85,6 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
 // 빌드 시 데이터를 fetch하여 static 페이지를 생성
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const res = await getPostBySlug(params?.pid as string);
-
   return {
     props: { ...res.data, slug: params?.pid },
   };
