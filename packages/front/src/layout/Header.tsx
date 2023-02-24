@@ -9,11 +9,14 @@ import IconLogout from "../../public/icons/logout.svg";
 import IconInfo from "../../public/icons/info.svg";
 import useDarkMode from "../hooks/useDarkMode";
 import IconButton from "design/src/stories/IconButton";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const Header = ({ scrollDirection }: any) => {
-  const { data } = useIsAuthQuery();
+  const { data, status } = useIsAuthQuery();
   const { refetch } = useLogoutQuery();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const router = useRouter();
 
   const onClickLogoutHandler = async () => {
     const response = await refetch();
@@ -21,6 +24,13 @@ const Header = ({ scrollDirection }: any) => {
       window.location.href = "/";
     }
   };
+
+  useEffect(() => {
+    if (router.pathname === "/liu") {
+      // isAuth가 200을 반환 -> 로그인 완료된 것 (토큰이 모두 유효한 것) -> /로 리디렉트
+      data?.status === 200 && router.push("/");
+    }
+  }, [data]);
 
   return (
     <Container scrollDirection={scrollDirection}>

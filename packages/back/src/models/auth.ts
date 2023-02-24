@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 export interface Auth {
   id: string;
   salt: string;
-  hashedPwd: string;
+  digest: string;
   refreshToken: string;
 }
 
@@ -16,7 +16,7 @@ const AuthSchema: Schema = new Schema<Auth>({
     type: String,
     required: true,
   },
-  hashedPwd: {
+  digest: {
     type: String,
     required: true,
   },

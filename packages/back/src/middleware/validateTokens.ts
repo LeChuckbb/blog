@@ -9,7 +9,6 @@ const ValidateTokens = tryCatch(
     console.log("validateTokens");
 
     const accessToken = Token.verify(req.headers.authorization);
-    console.log(accessToken);
     const refreshToken = await Token.refreshVerify(
       req.cookies.refreshToken,
       "KenLiu"
@@ -18,7 +17,7 @@ const ValidateTokens = tryCatch(
     /*
     case1. Access O Refresh O
     case2. Access O Refresh X
-    case3. Access X Refresh  O
+    case3. Access X Refresh O
     case4. Access X Refresh X
   */
     if (!accessToken) {

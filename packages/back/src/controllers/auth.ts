@@ -8,18 +8,18 @@ const Token = require("../util/token");
 
 import { tryCatch } from "../util/tryCatch";
 
-export const verifyPassword = async (
-  password: string,
-  salt: string,
-  userPassword: string
-) => {
-  const pbkdf2Promise = util.promisify(crypto.pbkdf2);
-  const key = await pbkdf2Promise(password, salt, 9999, 64, "sha512");
-  const hashedPassword = key.toString("base64");
+export const register = () =>
+  tryCatch(async (req: Request, res: Response) => {
+    const { id, password } = req.body;
+    const { digest, salt } = await createDigest(password);
+    await AuthModel.create({
+      id,
+      digest,
+      salt,
+    });
 
-  if (hashedPassword === userPassword) return true;
-  return false;
-};
+    return res.status(200).json({ message: "ok" });
+  });
 
 /*
   사용자가 입력한 ID/PW를 검증하여 성공시 refreshToken, accessToken을 발급.
@@ -31,7 +31,7 @@ export const login = () =>
     const user = await AuthModel.findOne({ id: id });
     if (!user) throw new AppError("AUE001", "존재하지 않는 아이디입니다.", 400);
 
-    const verifed = await verifyPassword(password, user.salt, user.hashedPwd);
+    const verifed = await verifyPassword(password, user.salt, user.digest);
     if (!verifed)
       throw new AppError("AUE002", "비밀번호가 일치하지 않습니다.", 400);
 
@@ -43,8 +43,8 @@ export const login = () =>
     await AuthModel.updateOne({ id }, { $set: { refreshToken } });
 
     res.cookie("refreshToken", refreshToken, {
-      secure: false,
-      httpOnly: true,
+      secure: false, // true -> HTTPS only
+      httpOnly: true, // true -> web server only
       expires: dayjs().add(7, "days").toDate(),
     });
     res.setHeader("Authorization", `Bearer ${accessToken}`);
@@ -75,19 +75,32 @@ export const isAuth = () =>
   });
 
 /* hashed pwd 생성에 사용된 코드 */
-// const createSalt = () =>
-//   new Promise((resolve, reject) => {
-//     crypto.randomBytes(64, (err, buf) => {
-//       if (err) reject(err);
-//       resolve(buf.toString("base64"));
-//     });
-//   });
+const createSalt = () =>
+  new Promise((resolve, reject) => {
+    crypto.randomBytes(64, (err, buf) => {
+      if (err) reject(err);
+      resolve(buf.toString("base64"));
+    });
+  });
 
-// const createHashedPassword: any = (plainPassword: string) =>
-//   new Promise(async (resolve, reject) => {
-//     const salt: any = await createSalt();
-//     crypto.pbkdf2(plainPassword, salt, 9999, 64, "sha512", (err, key) => {
-//       if (err) reject(err);
-//       resolve({ hashedPassword: key.toString("base64"), salt });
-//     });
-//   });
+const createDigest: any = (plainPassword: string) =>
+  new Promise(async (resolve, reject) => {
+    const salt: any = await createSalt();
+    crypto.pbkdf2(plainPassword, salt, 9999, 64, "sha512", (err, key) => {
+      if (err) reject(err);
+      resolve({ digest: key.toString("base64"), salt });
+    });
+  });
+
+const verifyPassword = async (
+  password: string,
+  salt: string,
+  userPassword: string
+) => {
+  const pbkdf2Promise = util.promisify(crypto.pbkdf2);
+  const key = await pbkdf2Promise(password, salt, 9999, 64, "sha512");
+  const hashedPassword = key.toString("base64");
+
+  if (hashedPassword === userPassword) return true;
+  return false;
+};

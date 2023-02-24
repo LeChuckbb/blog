@@ -54,15 +54,15 @@ export const getPostBySlug = (model: Model<Post>) =>
       markup: results?.markup,
     };
 
-    console.log(results);
-    console.log(resultObj);
-    console.log(resultBody);
     return res.status(200).json(resultBody);
   });
 
 // 에러 처리 요망 (catch에서 잡아주는지?)
 const createTags = (tags: any) => {
-  if (tags === "") return;
+  if (tags === "" || undefined) return;
+  console.log(tags);
+  console.log(tags?.length);
+  console.log(typeof tags);
 
   tags?.forEach(async (tag: string) => {
     // 1. tags collection에 동명의 tag document가 이미 존재하는 경우 -> count 증가
@@ -143,7 +143,7 @@ export const updatePost = (model: Model<Post>) =>
   });
 
 const deleteTags = (tags: Array<String>) => {
-  tags.forEach(async (tag) => {
+  tags?.forEach(async (tag) => {
     const result: Tags | null = await modelTags.findOne({ name: tag });
     if (result) {
       if (result.count > 1) {

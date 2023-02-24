@@ -8,7 +8,6 @@ import { GetServerSideProps } from "next";
 import { getPostBySlug } from "../../apis/postApi";
 import { useRouter } from "next/router";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
-import { useState } from "react";
 import { Button } from "design/src/stories/Button";
 import { Chip as TagChip } from "design/src/stories/Chip";
 import Tooltip from "design/src/stories/Tooltip";
