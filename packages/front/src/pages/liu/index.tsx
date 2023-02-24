@@ -49,7 +49,7 @@ const Login = () => {
           autoComplete="new-password"
           onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
         >
-          <TextField id="id" getValues={getValues}>
+          <TextField id="id" getValues={getValues} variant="filled">
             <TextField.InputBox>
               <TextField.Input
                 register={register}
@@ -58,7 +58,7 @@ const Login = () => {
               <TextField.Label label="ID" />
             </TextField.InputBox>
           </TextField>
-          <TextField id="password" getValues={getValues} variant="outlined">
+          <TextField id="password" getValues={getValues} variant="filled">
             <TextField.InputBox>
               <TextField.Input
                 type="password"

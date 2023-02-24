@@ -47,8 +47,9 @@ export const login = () =>
       httpOnly: true,
       expires: dayjs().add(7, "days").toDate(),
     });
+    res.setHeader("Authorization", `Bearer ${accessToken}`);
 
-    return res.status(200).json({ message: "ok", accessToken });
+    return res.status(200).json({ message: "ok" });
   });
 
 export const logout = () =>

@@ -1,5 +1,4 @@
-import axios, { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
-import { toast } from "react-toastify";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
 interface MyError extends Error {
   config: AxiosRequestConfig;
@@ -11,10 +10,6 @@ interface MyError extends Error {
 const axiosInstance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_HOST}`,
   withCredentials: true,
-  // params: {
-  //   api_key: process.env.REACT_APP_API_KEY,
-  //   languages: "ko-KR",
-  // },
 });
 
 axiosInstance.interceptors.response.use(
@@ -23,11 +18,11 @@ axiosInstance.interceptors.response.use(
       if (response.data.code === "AUE003") {
         // AUE003 -> refreshToken은 유효한데 accessToken이 만료된 경우
         console.log("AUE003 인터셉터");
+        console.log(response);
         // 재발급받은 access Token을 세팅하고,
         axiosInstance.defaults.headers.common["Authorization"] =
-          response.data.accessToken;
+          response.headers["authorization"];
 
-        response.headers["Authorization"] = response.data.accessToken;
         // API 재요청하기
         const config = response.config;
         return axiosInstance.request(config);

@@ -9,13 +9,12 @@ const ValidateTokens = tryCatch(
     console.log("validateTokens");
 
     const accessToken = Token.verify(req.headers.authorization);
+    console.log(accessToken);
     const refreshToken = await Token.refreshVerify(
       req.cookies.refreshToken,
       "KenLiu"
     );
 
-    // console.log(accessToken);
-    // console.log(refreshToken);
     /*
     case1. Access O Refresh O
     case2. Access O Refresh X
@@ -31,11 +30,13 @@ const ValidateTokens = tryCatch(
         // case 3 -> Refresh Token을 이용해서 Access Token 재발급
         console.log("CASE 3");
         const newAccessToken = Token.accessToken("KenLiu");
+        res
+          .set("Authorization", `Bearer ${newAccessToken}`)
+          .set("Access-Control-Expose-Headers", "Authorization");
         throw new AppError(
           "AUE003",
           "accessToken 만료. RefreshToken을 이용한 재발급",
-          202,
-          newAccessToken
+          202
         );
         // 1. accessToken을 response 로 전달.
         // 2. 이후 클라이언트에서 자동으로 accessToken을 갈아끼워 재요청을 보낼수 있게끔 해야함. 어떻게?
@@ -62,7 +63,5 @@ const ValidateTokens = tryCatch(
     }
   }
 );
-
-// module.exports = authJWT;
 
 export default ValidateTokens;

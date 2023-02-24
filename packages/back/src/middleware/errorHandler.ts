@@ -9,7 +9,6 @@ const errorHandler = (error: Error, req: Request, res: Response, next: any) => {
     return res.status(error.statusCode).json({
       code: error.errorCode,
       message: error.message,
-      accessToken: error.accessToken,
     });
   } else if (error.name === "MongoServerError") {
     const mongoError = error as MongoServerError;

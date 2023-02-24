@@ -11,7 +11,7 @@ export const useLoginMutation = () => {
     onSuccess: (result) => {
       axiosInstance.defaults.headers.common[
         "Authorization"
-      ] = `Bearer ${result.data.accessToken}`;
+      ] = `Bearer ${result.headers["Authorization"]}`;
       window.location.href = "/";
     },
     onError: (error) => {
