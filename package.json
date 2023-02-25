@@ -5,10 +5,16 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "front": "yarn workspace front build && yarn worspace front start",
-    "back": "yarn workspace back pm2"
+    "frontProd": "yarn workspace front build && yarn workspace front start",
+    "backProd": "yarn workspace back pm2",
+    "front": "yarn workspace front dev",
+    "back": "yarn workspace back start",
+    "start": "npm-run-all --parallel front back"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }
