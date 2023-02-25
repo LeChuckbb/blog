@@ -1,4 +1,9 @@
-import axiosInstance from ".";
+import axiosInstance, { atlasInstance } from ".";
+
+export const getPostAtlas = () => atlasInstance.get(`/posts`);
+
+export const getPostBySlugAtlas = (slug: string) =>
+  atlasInstance.get(`/posts?slug=${slug}`);
 
 export const getPost = () => axiosInstance.get(`/posts`);
 

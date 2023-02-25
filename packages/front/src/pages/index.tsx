@@ -1,12 +1,12 @@
 import React, { Suspense, useState } from "react";
 import dynamic from "next/dynamic";
 import styled from "@emotion/styled";
-import SpinnerPacman from "../common/SpinnerPacman";
 import WithHeader from "../layout/WithHeader";
-import { NextPageWithLayout } from "./_app";
+import axios from "axios";
 import PostList from "../components/main/PostList";
 import LocalErrorBoundary from "../hooks/\berror/LocalErrorBoundary";
 import PostTags from "../components/main/PostTags";
+import { getPostAtlas } from "../apis/postApi";
 
 // const DynamicPosts = dynamic(() => import("../components/main/Posts"), {
 //   ssr: false,
@@ -46,18 +46,11 @@ Home.getLayout = function getLayout(page: React.ReactElement) {
 export default Home;
 
 export async function getStaticProps() {
-  let res = await fetch("http://localhost:3000/api/posts", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  let posts = await res.json();
-
-  if (posts.status !== 200) throw new Error("SSG 포스트 불러오기 실패");
+  let res = await getPostAtlas();
+  if (res.data.status !== 200) throw new Error("SSG 포스트 불러오기 실패");
 
   return {
-    props: { posts: posts.data },
+    props: { posts: res.data.results },
   };
 }
 

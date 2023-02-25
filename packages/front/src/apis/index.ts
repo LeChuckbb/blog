@@ -42,4 +42,9 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+export const atlasInstance = axios.create({
+  baseURL: `http://localhost:3000/api/`,
+  withCredentials: true,
+});
+
 export default axiosInstance;
