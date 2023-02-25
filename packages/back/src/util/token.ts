@@ -3,16 +3,25 @@ import AuthModel from "../models/auth";
 
 module.exports = {
   // access token 발급
-  accessToken: (id: string) => {
-    return jwt.sign({ id }, process.env.ACESS_TOKEN_SECRET as string, {
-      expiresIn: "5m",
-    });
+  accessToken: async (id: string) => {
+    return await jwt.sign(
+      { id },
+      process.env.ACESS_TOKEN_SECRET as string,
+      {
+        expiresIn: "5m",
+      },
+      (err, token) => {
+        console.log(err);
+      }
+    );
   },
-  verify: (token: string) => {
+  verify: async (token: string) => {
     // access token 검증
+    console.log("access token 검증...");
+    console.log(token);
     try {
       const secret = process.env.ACESS_TOKEN_SECRET;
-      jwt.verify(
+      await jwt.verify(
         token === undefined ? "token" : token.split(" ")[1],
         secret === undefined ? "secret" : secret
       );

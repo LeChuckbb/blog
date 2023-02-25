@@ -8,7 +8,6 @@ import Layer from "design/src/stories/Layer";
 
 type Props = {
   children?: React.ReactNode;
-  img?: string;
 };
 
 type CardProps = {
@@ -56,7 +55,8 @@ const myLoader = ({ src }: any) => {
   return src;
 };
 
-Card.Thumbnail = ({ img, children }: Props) => {
+Card.Thumbnail = ({ img }: any) => {
+  const defaultImg = "hi";
   return (
     <div
       className="imgDiv"
@@ -64,7 +64,7 @@ Card.Thumbnail = ({ img, children }: Props) => {
     >
       <Image
         loader={myLoader}
-        src={`/thumbnail/${img}`}
+        src={`/thumbnail/${img ? img : defaultImg}`}
         alt="thumbnail"
         style={{ borderRadius: "12px 12px 0px 0px" }}
         width={320}

@@ -60,9 +60,7 @@ export const getPostBySlug = (model: Model<Post>) =>
 // 에러 처리 요망 (catch에서 잡아주는지?)
 const createTags = (tags: any) => {
   if (tags === "" || undefined) return;
-  console.log(tags);
-  console.log(tags?.length);
-  console.log(typeof tags);
+  if (typeof tags === "string") tags = [tags]; // []타입이 아니면 forEach에서 에러가 발생
 
   tags?.forEach(async (tag: string) => {
     // 1. tags collection에 동명의 tag document가 이미 존재하는 경우 -> count 증가

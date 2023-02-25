@@ -37,8 +37,6 @@ const ValidateTokens = tryCatch(
           "accessToken 만료. RefreshToken을 이용한 재발급",
           202
         );
-        // 1. accessToken을 response 로 전달.
-        // 2. 이후 클라이언트에서 자동으로 accessToken을 갈아끼워 재요청을 보낼수 있게끔 해야함. 어떻게?
       }
     } else {
       if (!refreshToken) {
