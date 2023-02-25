@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 import { useGetPostByPageQuery } from "../../hooks/query/useGetPostByPageQuery";
 import Card from "design/src/stories/Card";
+import { PostDatas } from "../../pages";
 
 interface Props {
   selectedTag: string;
+  posts: PostDatas;
 }
 
 const dateFormatter = (date: string): string => {
@@ -13,7 +15,7 @@ const dateFormatter = (date: string): string => {
   return `${arr[0]}.${arr[1]}.${arr[2]}`;
 };
 
-const PostList = ({ selectedTag }: Props) => {
+const PostList = ({ selectedTag, posts }: Props) => {
   const {
     data: postsData,
     fetchNextPage,
@@ -21,33 +23,59 @@ const PostList = ({ selectedTag }: Props) => {
   } = useGetPostByPageQuery(selectedTag);
 
   return (
+    // <CardContainer className="CardContainer">
+    //   {postsData?.pages
+    //     .map((page: any) => page.data.results)
+    //     .flat()
+    //     .map((post: any, idx: number, arr: any) => {
+    //       return (
+    //         <Card
+    //           key={post._id}
+    //           id={post._id}
+    //           urlSlug={post.urlSlug}
+    //           fetchNext={() => hasNextPage && fetchNextPage()}
+    //           isLastItem={arr.length - 1 === idx}
+    //         >
+    //           <Card.Thumbnail img={post.thumbnail} />
+    //           <Card.SecondSection>
+    //             <Card.TitleWrapper>
+    //               <Card.Title>{post.title}</Card.Title>
+    //               <Card.SubTitle>{post.subTitle}</Card.SubTitle>
+    //             </Card.TitleWrapper>
+    //             <Card.Date>{dateFormatter(post?.date)}</Card.Date>
+    //           </Card.SecondSection>
+    //           <Card.ThirdSection>
+    //             <Card.Tags>{post.tags}</Card.Tags>
+    //           </Card.ThirdSection>
+    //         </Card>
+    //       );
+    //     })}
+    // </CardContainer>
     <CardContainer className="CardContainer">
-      {postsData?.pages
-        .map((page: any) => page.data.results)
-        .flat()
-        .map((post: any, idx: number, arr: any) => {
-          return (
-            <Card
-              key={post._id}
-              id={post._id}
-              urlSlug={post.urlSlug}
-              fetchNext={() => hasNextPage && fetchNextPage()}
-              isLastItem={arr.length - 1 === idx}
-            >
-              <Card.Thumbnail img={post.thumbnail} />
-              <Card.SecondSection>
-                <Card.TitleWrapper>
-                  <Card.Title>{post.title}</Card.Title>
-                  <Card.SubTitle>{post.subTitle}</Card.SubTitle>
-                </Card.TitleWrapper>
-                <Card.Date>{dateFormatter(post?.date)}</Card.Date>
-              </Card.SecondSection>
-              <Card.ThirdSection>
-                <Card.Tags>{post.tags}</Card.Tags>
-              </Card.ThirdSection>
-            </Card>
-          );
-        })}
+      {posts.map((post: any, idx: number, arr: any) => {
+        return (
+          <Card
+            key={post._id}
+            id={post._id}
+            urlSlug={post.urlSlug}
+            // fetchNext={() => hasNextPage && fetchNextPage()}
+            fetchNext={() => console.log("hi")}
+            isLastItem={arr.length - 1 === idx}
+          >
+            <Card.Thumbnail img={post.thumbnail} />
+            <Card.SecondSection>
+              <Card.TitleWrapper>
+                <Card.Title>{post.title}</Card.Title>
+                <Card.SubTitle>{post.subTitle}</Card.SubTitle>
+              </Card.TitleWrapper>
+              <Card.Date>{dateFormatter(post?.date)}</Card.Date>
+            </Card.SecondSection>
+            <Card.ThirdSection>
+              <Card.Tags>{post.tags}</Card.Tags>
+            </Card.ThirdSection>
+          </Card>
+        );
+      })}
     </CardContainer>
   );
 };

@@ -11,8 +11,20 @@ import PostTags from "../components/main/PostTags";
 // const DynamicPosts = dynamic(() => import("../components/main/Posts"), {
 //   ssr: false,
 // });
+export type PostDatas = Array<{
+  id: string;
+  date: string;
+  title: string;
+  subTitle: string;
+  urlSlug: string;
+  tags: Array<String>;
+}>;
 
-const Home: NextPageWithLayout = () => {
+type Props = {
+  posts: PostDatas;
+};
+
+const Home = ({ posts }: Props) => {
   const [selectedTag, setSelectedTag] = useState("all");
 
   return (
@@ -21,7 +33,7 @@ const Home: NextPageWithLayout = () => {
         <PostTags setTag={setSelectedTag} />
       </LocalErrorBoundary>
       <LocalErrorBoundary>
-        <PostList selectedTag={selectedTag} />
+        <PostList selectedTag={selectedTag} posts={posts} />
       </LocalErrorBoundary>
     </Container>
   );
@@ -32,6 +44,22 @@ Home.getLayout = function getLayout(page: React.ReactElement) {
 };
 
 export default Home;
+
+export async function getStaticProps() {
+  let res = await fetch("http://localhost:3000/api/posts", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  let posts = await res.json();
+
+  if (posts.status !== 200) throw new Error("SSG 포스트 불러오기 실패");
+
+  return {
+    props: { posts: posts.data },
+  };
+}
 
 const Container = styled.div`
   width: 100%;
