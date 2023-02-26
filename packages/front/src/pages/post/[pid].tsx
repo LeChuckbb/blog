@@ -2,7 +2,7 @@ import WithHeader from "../../layout/WithHeader";
 import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { getPostAtlas, getPostBySlugAtlas } from "../../apis/postApi";
+import { getPost, getPostBySlug } from "../../apis/postApi";
 import PostHead from "../../components/posts/PostHead";
 import { ToastContainer } from "react-toastify";
 import { useState } from "react";
@@ -38,7 +38,6 @@ const getHTMLTags = (htmlString: string) => {
 };
 
 const PostDetail = ({ title, date, html, slug }: any) => {
-  console.log(html);
   const tocArray = getHTMLTags(html);
   const [observerEntry, setObserverEntry] =
     useState<IntersectionObserverEntry>();
@@ -72,7 +71,7 @@ export default PostDetail;
 
 // 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
 export const getStaticPaths: GetStaticPaths = async ({}) => {
-  const res = await getPostAtlas();
+  const res = await getPost();
   const paths = res.data.results.map((el: any) => ({
     params: { pid: el.urlSlug },
   }));
@@ -85,7 +84,7 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
 
 // 빌드 시 데이터를 fetch하여 static 페이지를 생성
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const res = await getPostBySlugAtlas(params?.pid as string);
+  const res = await getPostBySlug(params?.pid as string);
 
   return {
     props: { ...res.data.results, slug: params?.pid },

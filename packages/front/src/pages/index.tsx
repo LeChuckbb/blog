@@ -1,12 +1,13 @@
 import React, { Suspense, useState } from "react";
-import dynamic from "next/dynamic";
 import styled from "@emotion/styled";
 import WithHeader from "../layout/WithHeader";
-import axios from "axios";
 import PostList from "../components/main/PostList";
 import LocalErrorBoundary from "../hooks/\berror/LocalErrorBoundary";
 import PostTags from "../components/main/PostTags";
-import { getPostAtlas } from "../apis/postApi";
+import { getPostByPage } from "../apis/postApi";
+import { dehydrate, QueryClient } from "react-query";
+import { PostByPageType } from "../hooks/query/useGetPostByPageQuery";
+import { AxiosResponse } from "axios";
 
 // const DynamicPosts = dynamic(() => import("../components/main/Posts"), {
 //   ssr: false,
@@ -20,11 +21,7 @@ export type PostDatas = Array<{
   tags: Array<String>;
 }>;
 
-type Props = {
-  posts: PostDatas;
-};
-
-const Home = ({ posts }: Props) => {
+const Home = () => {
   const [selectedTag, setSelectedTag] = useState("all");
 
   return (
@@ -33,7 +30,7 @@ const Home = ({ posts }: Props) => {
         <PostTags setTag={setSelectedTag} />
       </LocalErrorBoundary>
       <LocalErrorBoundary>
-        <PostList selectedTag={selectedTag} posts={posts} />
+        <PostList selectedTag={selectedTag} />
       </LocalErrorBoundary>
     </Container>
   );
@@ -45,12 +42,28 @@ Home.getLayout = function getLayout(page: React.ReactElement) {
 
 export default Home;
 
-export async function getStaticProps() {
-  let res = await getPostAtlas();
-  if (res.data.status !== 200) throw new Error("SSG 포스트 불러오기 실패");
-
+const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
+  await queryClient.prefetchInfiniteQuery<AxiosResponse<PostByPageType, Error>>(
+    ["getPostByPage", selectedTag],
+    async ({ pageParam = 1 }) => getPostByPage(pageParam, selectedTag),
+    {
+      getNextPageParam: (lastPage: any) => {
+        return lastPage.next ?? null;
+      },
+    }
+  );
   return {
-    props: { posts: res.data.results },
+    dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+  };
+};
+
+export async function getStaticProps() {
+  const queryClient = new QueryClient();
+  const dehydratedState = await prefetchData(queryClient);
+  return {
+    props: {
+      dehydratedState,
+    },
   };
 }
 

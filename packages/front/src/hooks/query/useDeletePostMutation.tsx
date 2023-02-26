@@ -1,8 +1,7 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { deletePost } from "../../apis/postApi";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/router";
-import { toast } from "react-toastify";
 import useMyToast from "../useMyToast";
 
 export const useDeletePostMutation = (content: any, setModal: any) => {

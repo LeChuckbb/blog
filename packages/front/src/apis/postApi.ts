@@ -1,35 +1,28 @@
 import axiosInstance, { atlasInstance } from ".";
 
-export const getPostAtlas = () => atlasInstance.get(`/posts`);
-
-export const getPostBySlugAtlas = (slug: string) =>
-  atlasInstance.get(`/posts?slug=${slug}`);
-
-export const getPost = () => axiosInstance.get(`/posts`);
-
-export const createPost = (body: any) => {
-  return axiosInstance.post("/posts", body, {
+export const uploadThumbnail = (formData: any) =>
+  atlasInstance.post("/upload", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
-};
 
-export const updatePost = (slug: string, body: any) => {
-  return axiosInstance.patch(`/posts/${slug}`, body, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-};
-
-export const deletePost = (slug: string) =>
-  axiosInstance.delete(`/posts/${slug}`);
+export const getPost = () => atlasInstance.get(`/posts`);
 
 export const getPostBySlug = (slug: string) =>
-  axiosInstance.get(`/posts/findBySlug?slug=${slug}`);
+  atlasInstance.get(`/posts?slug=${slug}`);
 
-export const getPostByPage = (page: number, tag: string) =>
-  axiosInstance.get(`/posts/findByPage?page=${page}&tag=${tag}`);
+export const createPost = (body: any) => atlasInstance.post("/posts", body);
 
-export const getPostTags = () => axiosInstance.get(`/posts/tags`);
+export const updatePost = (slug: string, body: any) =>
+  atlasInstance.patch(`/posts?slug=${slug}`, body);
+
+export const deletePost = (slug: string) =>
+  atlasInstance.delete(`/posts?slug=${slug}`);
+
+export const getPostByPage = async (page: number, tag: string) => {
+  const res = await atlasInstance.get(`/posts?page=${page}&tag=${tag}`);
+  return res.data;
+};
+
+export const getPostTags = () => atlasInstance.get(`/tags`);

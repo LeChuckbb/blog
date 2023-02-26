@@ -107,7 +107,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const res = await getPostBySlug(query.slug as string);
 
   return {
-    props: { data: res.data },
+    props: { data: res.data.results },
   };
 };
 

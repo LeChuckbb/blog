@@ -25,7 +25,7 @@ const PostTags: React.FC<Props> = (props) => {
           all
         </Tag>
       </Badge>
-      {tagsData?.tags.map((tag: any) => {
+      {tagsData?.tags?.map((tag: any) => {
         return (
           <Badge badgeContent={tag.count} key={tag._id}>
             <Tag color="secondary" onClick={() => onClickTagList(tag.name)}>

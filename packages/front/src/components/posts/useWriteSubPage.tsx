@@ -8,6 +8,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { ChangeEvent } from "react";
 import { useEffect } from "react";
+import { uploadThumbnail } from "../../apis/postApi";
 
 export type WriteSubPageProps = {
   subPageRef: RefObject<HTMLDivElement>;
@@ -80,26 +81,19 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
       html: postFetchBody.content.html,
       markup: postFetchBody.content.markup,
       date: dateFormatter(date),
-      thumbnail: file,
+      thumbnail: "thumbnail",
     };
 
     const formData = new FormData();
-    for (const [key, value] of Object.entries(body)) {
-      if (Array.isArray(value)) {
-        for (const item of value) {
-          formData.append(key, item);
-        }
-      } else {
-        formData.append(key, value as string);
-      }
-    }
+    formData.append("file", file);
 
+    const uploadResult = await uploadThumbnail(formData);
     isUpdatePost
       ? await updatePost({
           slug: router.query.slug as string,
           body,
         })
-      : await createPost(formData);
+      : await createPost(body);
   };
 
   const onInvalidSubmit = (errors: any) => {

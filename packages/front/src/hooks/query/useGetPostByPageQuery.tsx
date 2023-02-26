@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "react-query";
 import { getPostByPage } from "../../apis/postApi";
 import { AxiosResponse } from "axios";
 
-type PostByPageType = {
+export type PostByPageType = {
   count: number;
   next: number;
   prev: number;
@@ -11,16 +11,14 @@ type PostByPageType = {
 
 export const useGetPostByPageQuery = (selectedTag: string) => {
   return useInfiniteQuery<AxiosResponse<PostByPageType, Error>>(
-    ["getPosts", selectedTag],
+    ["getPostByPage", selectedTag],
     ({ pageParam = 1 }) => getPostByPage(pageParam, selectedTag),
     {
       staleTime: 300000,
       suspense: false,
       useErrorBoundary: true,
       retry: false,
-      getNextPageParam: (lastPage) => {
-        return lastPage.data.next === null ? null : lastPage.data.next;
-      },
+      getNextPageParam: (lastPage: any) => lastPage?.next ?? null,
     }
   );
 };
