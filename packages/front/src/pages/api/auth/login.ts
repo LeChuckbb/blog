@@ -3,7 +3,7 @@ import useMongo from "../../../lib/useMongo";
 import util from "util";
 import useToken from "../../../lib/useToken";
 import crypto from "crypto";
-import { AppError } from "../../../lib/errorType";
+import { AppError } from "../../../types/api";
 import { apiHandler } from "../../../lib/api";
 import { setCookie } from "cookies-next";
 

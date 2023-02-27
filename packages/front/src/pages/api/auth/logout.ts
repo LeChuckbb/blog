@@ -1,7 +1,7 @@
 import type { NextApiHandler } from "next";
 import useMongo from "../../../lib/useMongo";
-import { AppError } from "../../../lib/errorType";
 import { apiHandler } from "../../../lib/api";
+import { AppError } from "../../../types/api";
 
 const logout: NextApiHandler = async (req, res) => {
   const { authCollection } = await useMongo();

@@ -1,9 +1,7 @@
 // const Token = require("../util/token");
 import useToken from "./useToken";
-import dayjs from "dayjs";
-import { AppError } from "./errorType";
 import type { NextApiRequest, NextApiResponse } from "next";
-import axiosInstance from "../apis";
+import { AppError } from "../types/api";
 import { errorHandler } from "./api";
 import { setCookie } from "cookies-next";
 

@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { getCookie, setCookie } from "cookies-next";
 
 const axiosInstance = axios.create({
-  baseURL: `http://localhost:3000/api/`,
+  baseURL: `/api/`,
   withCredentials: true,
 });
 

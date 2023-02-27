@@ -3,7 +3,7 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { ErrorResponse } from "../types/api";
 import { ValidationError } from "yup";
 import { Method } from "axios";
-import { AppError } from "./errorType";
+import { AppError } from "../types/api";
 
 type ApiMethodHandlers = {
   [key in Uppercase<Method>]?: NextApiHandler;
