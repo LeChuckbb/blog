@@ -2,7 +2,7 @@ import axiosInstance from ".";
 import { LoginForm } from "../pages/liu";
 
 export const loginAPI = (body: LoginForm) =>
-  axiosInstance.post(`/auth/liu`, body);
+  axiosInstance.post(`/auth/login`, body);
 
 export const logoutAPI = () => axiosInstance.get(`/auth/logout`);
 

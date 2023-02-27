@@ -7,6 +7,9 @@ import PostHead from "../../components/posts/PostHead";
 import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 import PostTableOfContents from "../../components/posts/PostTableOfContents";
+import useMongo from "../../lib/useMongo";
+import { decode } from "html-entities";
+import { stringify } from "querystring";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -71,8 +74,12 @@ export default PostDetail;
 
 // 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
 export const getStaticPaths: GetStaticPaths = async ({}) => {
-  const res = await getPost();
-  const paths = res.data.results.map((el: any) => ({
+  // get all posts. getPosts()
+  const { postsCollection } = await useMongo();
+  const results = await postsCollection
+    .find({}, { projection: { html: 0, markup: 0 } })
+    .toArray();
+  const paths = results.map((el: any) => ({
     params: { pid: el.urlSlug },
   }));
 
@@ -84,10 +91,20 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
 
 // 빌드 시 데이터를 fetch하여 static 페이지를 생성
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const res = await getPostBySlug(params?.pid as string);
+  // get each post. getPostBySluig
+  const { postsCollection } = await useMongo();
+  const res = await postsCollection.findOne({
+    urlSlug: params?.pid as string,
+  });
+  const results = {
+    ...res,
+    _id: JSON.stringify(res?._id),
+    html: decode(res?.html),
+    markup: res?.markup,
+  };
 
   return {
-    props: { ...res.data.results, slug: params?.pid },
+    props: { ...results, slug: params?.pid },
   };
 };
 

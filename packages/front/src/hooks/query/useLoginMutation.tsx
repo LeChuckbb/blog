@@ -9,17 +9,15 @@ export const useLoginMutation = () => {
 
   return useMutation((body: any) => loginAPI(body), {
     onSuccess: (result) => {
-      axiosInstance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${result.headers["Authorization"]}`;
       window.location.href = "/";
+      console.log("로그인 API 완료");
     },
     onError: (error) => {
       console.log("onError in useLoginMutation");
       if (isAxiosError(error)) {
-        if (error.response?.data?.code === "AUE001")
+        if (error.response?.data?.error?.code === "AUE001")
           callToast("잘못된 ID입니다.", "id");
-        else if (error.response?.data?.code === "AUE002")
+        else if (error.response?.data?.error?.code === "AUE002")
           callToast("잘못된 패스워드입니다.", "password");
       }
     },

@@ -13,7 +13,10 @@ export const useUpdatePostMutation = () => {
       router.push("/");
     },
     onError: (error) => {
-      if (isAxiosError(error) && error.response?.data?.code === "POE002") {
+      if (
+        isAxiosError(error) &&
+        error.response?.data?.error?.code === "POE002"
+      ) {
         callToast("업데이트 실패. 존재하지 않는 slug 입니다.", "update");
       }
     },

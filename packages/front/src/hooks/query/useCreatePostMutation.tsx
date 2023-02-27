@@ -13,7 +13,10 @@ export const useCreatePostMutation = () => {
       router.push("/");
     },
     onError: (error) => {
-      if (isAxiosError(error) && error.response?.data?.code === "POE001") {
+      if (
+        isAxiosError(error) &&
+        error.response?.data?.error?.code === "POE001"
+      ) {
         callToast("중복된 URL 입니다.", "create");
       }
     },

@@ -1,22 +1,16 @@
-import clientPromise from "../../../lib/mongodb";
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { decode, encode } from "html-entities";
-import { MongoClient, Db, Collection } from "mongodb";
+import useMongo from "../../lib/useMongo";
+import { apiHandler } from "../../lib/api";
+import nextConnect from "next-connect";
+import ValidateTokens from "../../lib/validateTokenMiddleware";
 
-let postsCollection: Collection;
-let tagsCollection: Collection;
 const PAGE_SIZE = 8;
 
-async function connectToDatabase() {
-  const client = await clientPromise;
-  const db = client.db("blog");
-  postsCollection = db.collection("posts");
-  tagsCollection = db.collection("tags");
-}
-// 에러 처리 요망 (catch에서 잡아주는지?)
-const createTags = (tags: any) => {
+const createTags = async (tags: any) => {
   if (tags === "" || undefined) return;
   if (typeof tags === "string") tags = [tags]; // []타입이 아니면 forEach에서 에러가 발생
+  const { tagsCollection } = await useMongo();
 
   tags?.forEach(async (tag: string) => {
     // 1. tags collection에 동명의 tag document가 이미 존재하는 경우 -> count 증가
@@ -31,6 +25,7 @@ const createTags = (tags: any) => {
 };
 
 const deleteTags = async (tags: Array<String>) => {
+  const { tagsCollection } = await useMongo();
   tags?.forEach(async (tag) => {
     const result = await tagsCollection.findOne({ name: tag });
     if (result) {
@@ -60,44 +55,74 @@ const updateTags = async (
   addList?.length !== 0 && (await createTags(addList));
 };
 
-const createPost = async (payload: any) => {
+const getPost: NextApiHandler = async (req, res) => {
+  const { postsCollection } = await useMongo();
+  if (req.query?.slug) {
+    // getPostBySlug
+    const results = await postsCollection.findOne({
+      urlSlug: req.query.slug,
+    });
+    const resultBody = {
+      ...results,
+      html: decode(results?.html),
+      markup: results?.markup,
+    };
+    res.status(200).json(resultBody);
+  } else if (req.query?.page) {
+    // getPostByPage
+    const tagQuery = req.query.tag;
+    const pageQuery = req.query.page;
+
+    const count =
+      tagQuery === "all"
+        ? await postsCollection.count({})
+        : await postsCollection.count({ tags: tagQuery });
+    const page = Number(pageQuery);
+    const IS_NEXT_PAGE_EXIST = count - page * PAGE_SIZE <= 0 ? null : true;
+    const next = !IS_NEXT_PAGE_EXIST ? IS_NEXT_PAGE_EXIST : page + 1;
+    const prev = page === 1 ? null : page - 1;
+
+    const results =
+      tagQuery === "all"
+        ? await postsCollection
+            .find({}, { projection: { html: 0, markup: 0 } })
+            .sort({ date: -1 })
+            .skip(PAGE_SIZE * (page - 1))
+            .limit(PAGE_SIZE)
+            .toArray()
+        : await postsCollection
+            .find({ tags: tagQuery }, { projection: { html: 0, markup: 0 } })
+            .sort({ date: -1 })
+            .skip(PAGE_SIZE * (page - 1))
+            .limit(PAGE_SIZE)
+            .toArray();
+
+    res.status(200).json({ count, next, prev, results });
+  }
+};
+
+const createPost: NextApiHandler = async (req, res) => {
   // req.body에서 content 항목이 있으면 encode하여 DB에 저장
   // XSS 방지를 위해 HTML markup -> entity로 변경
+  const { postsCollection } = await useMongo();
   const body = {
-    ...payload,
-    tags: payload?.tags,
-    thumbnail: payload?.file,
-    html: encode(payload.html),
+    ...req.body,
+    tags: req.body?.tags,
+    thumbnail: req.body?.file,
+    html: encode(req.body.html),
   };
   const result = await postsCollection.insertOne(body);
   await createTags(body?.tags);
 
-  return result;
+  res.status(200).json(result);
 };
 
-const getPostBySlug = async (slug: string) => {
-  const results = await postsCollection.findOne({
-    urlSlug: slug,
-  });
-  const resultBody = {
-    ...results,
-    html: decode(results?.html),
-    markup: results?.markup,
-  };
-  return resultBody;
-};
-
-const deletePost = async (slug: string) => {
-  const result = await postsCollection.findOneAndDelete({ urlSlug: slug });
-
-  await deleteTags(result?.value?.tags);
-  return result;
-};
-
-export const updatePost = async (prevSlug: string, payload: any) => {
+const updatePost: NextApiHandler = async (req, res) => {
+  const { postsCollection } = await useMongo();
+  const prevSlug = req.query.slug;
   const body = {
-    ...payload,
-    html: encode(payload.html),
+    ...req.body,
+    html: encode(req.body.html),
   };
 
   const result = await postsCollection.findOneAndUpdate(
@@ -117,77 +142,22 @@ export const updatePost = async (prevSlug: string, payload: any) => {
   );
 
   await updateTags(result?.value?.tags, body.tags);
-  return result;
+  res.status(200).json(result);
 };
 
-const getPostByPage = async (tagQuery: string, pageQuery: string) => {
-  const count =
-    tagQuery === "all"
-      ? await postsCollection.count({})
-      : await postsCollection.count({ tags: tagQuery });
-  const page = Number(pageQuery);
-  const IS_NEXT_PAGE_EXIST = count - page * PAGE_SIZE <= 0 ? null : true;
-  const next = !IS_NEXT_PAGE_EXIST ? IS_NEXT_PAGE_EXIST : page + 1;
-  const prev = page === 1 ? null : page - 1;
+const deletePost: NextApiHandler = async (req, res) => {
+  const { postsCollection } = await useMongo();
+  const result = await postsCollection.findOneAndDelete({
+    urlSlug: req.query.slug,
+  });
 
-  const results =
-    tagQuery === "all"
-      ? await postsCollection
-          .find({}, { projection: { html: 0, markup: 0 } })
-          .sort({ date: -1 })
-          .skip(PAGE_SIZE * (page - 1))
-          .limit(PAGE_SIZE)
-          .toArray()
-      : await postsCollection
-          .find({ tags: tagQuery }, { projection: { html: 0, markup: 0 } })
-          .sort({ date: -1 })
-          .skip(PAGE_SIZE * (page - 1))
-          .limit(PAGE_SIZE)
-          .toArray();
-
-  return { count, next, prev, results };
+  await deleteTags(result?.value?.tags);
+  res.status(200);
 };
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  await connectToDatabase();
-  switch (req.method) {
-    case "POST":
-      const results = await createPost(req.body);
-      res.json({ status: 200, results });
-      break;
-    case "GET":
-      if (req.query?.slug) {
-        // getPostBySlug
-        const results = await getPostBySlug(req.query.slug as string);
-        res.json({ status: 200, results });
-        break;
-      } else if (req.query?.page) {
-        const results = await getPostByPage(
-          req.query.tag as string,
-          req.query.page as string
-        );
-        // console.log("getPostByPage!");
-        // console.log(results);
-        res.json({ ...results });
-        // res.send(results);
-        break;
-      } else {
-        console.log("GET else");
-        const results = await postsCollection
-          .find({}, { projection: { html: 0, markup: 0 } })
-          .toArray();
-        res.json({ status: 200, results });
-        break;
-      }
-    case "PATCH":
-      const updateResult = await updatePost(req.query.slug as string, req.body);
-      res.json(updateResult);
-      break;
-    case "DELETE":
-      const result = await deletePost(req.query.slug as string);
-      res.json(result);
-      break;
-    default:
-      break;
-  }
-};
+export default apiHandler({
+  GET: getPost,
+  POST: createPost,
+  PATCH: updatePost,
+  DELETE: deletePost,
+});

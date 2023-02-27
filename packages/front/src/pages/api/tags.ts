@@ -1,24 +1,14 @@
-import clientPromise from "../../../lib/mongodb";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { Collection } from "mongodb";
+import type { NextApiHandler } from "next";
+import { apiHandler } from "../../lib/api";
+import useMongo from "../../lib/useMongo";
 
-let tagsCollection: Collection;
-
-async function connectToDatabase() {
-  const client = await clientPromise;
-  const db = client.db("blog");
-  tagsCollection = db.collection("tags");
-}
-
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  await connectToDatabase();
-  switch (req.method) {
-    case "GET":
-      const tags = await tagsCollection.find({}).toArray();
-      const count = await tagsCollection.countDocuments();
-      res.json({ count, tags });
-      break;
-    default:
-      break;
-  }
+const tags: NextApiHandler = async (req, res) => {
+  const { tagsCollection } = await useMongo();
+  const tags = await tagsCollection.find({}).toArray();
+  const count = await tagsCollection.countDocuments();
+  res.status(200).json({ count, tags });
 };
+
+export default apiHandler({
+  GET: tags,
+});

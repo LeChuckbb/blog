@@ -4,7 +4,7 @@ import useWrite from "../../hooks/useWrite";
 import { useForm } from "react-hook-form";
 import WriteSubPage from "../../components/posts/WriteSubPage";
 import { ToastContainer } from "react-toastify";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import { getPostBySlug } from "../../apis/postApi";
 import { useRouter } from "next/router";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
@@ -100,14 +100,15 @@ const write = ({ data }: Props) => {
 };
 
 // post/write?slug=xxx (UPDATE)
-// query slug?=가 있으면 data fetch
+// query slug?=가 있으면 data fetch (query가 있어야 하기 때문에 SSG로 전환이 불가.)
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (Object.values(query).length === 0) return { props: { data: null } };
   // 실패시 에러 처리 요망
   const res = await getPostBySlug(query.slug as string);
+  console.log(res.data);
 
   return {
-    props: { data: res.data.results },
+    props: { data: res.data },
   };
 };
 

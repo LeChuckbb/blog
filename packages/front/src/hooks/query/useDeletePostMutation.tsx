@@ -15,7 +15,10 @@ export const useDeletePostMutation = (content: any, setModal: any) => {
     },
     onError: (error) => {
       setModal({ isOpen: false, content });
-      if (isAxiosError(error) && error.response?.data?.code === "POE002") {
+      if (
+        isAxiosError(error) &&
+        error.response?.data?.error?.code === "POE002"
+      ) {
         callToast("삭제에 실패했습니다.", "delete");
       }
     },

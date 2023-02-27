@@ -1,19 +1,6 @@
-import clientPromise from "../../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Collection } from "mongodb";
 import multer from "multer";
 import nextConnect from "next-connect";
-
-// let postsCollection: Collection;
-
-// async function connectToDatabase() {
-//   console.log("connectToDatabase IN");
-//   const client = await clientPromise;
-//   const db = client.db("blog");
-//   postsCollection = db.collection("posts");
-// }
-
-// connectToDatabase();
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -26,20 +13,16 @@ const upload = multer({
 // const uploadMiddleware = upload.array("theFiles");
 const uploadMiddleware = upload.single("file");
 
-const apiRoute = nextConnect({
-  onNoMatch(req: NextApiRequest, res: NextApiResponse) {
-    res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
-  },
-});
+const handler = nextConnect();
 
-apiRoute.use(uploadMiddleware);
+handler.use(uploadMiddleware);
 
-apiRoute.post((req: NextApiRequest, res: NextApiResponse) => {
+handler.post((req: NextApiRequest, res: NextApiResponse) => {
   console.log("UPLOAD POST");
   res.status(200).json({ message: "ok" });
 });
 
-export default apiRoute;
+export default handler;
 
 export const config = {
   api: {
