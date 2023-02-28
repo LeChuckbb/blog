@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, ReactComponentElement } from "react";
 import useMainPageIntersectionObserver from "../hooks/useMainPageIntersectionObserver";
 import { useRouter } from "next/router";
 import { Chip as TagChip } from "design/src/stories/Chip";
@@ -55,25 +55,33 @@ const myLoader = ({ src }: any) => {
   return src;
 };
 
-Card.Thumbnail = ({ img }: any) => {
-  const defaultImg = "hi";
+type ThumbnailProps = {
+  img: string;
+  ImageDefault: any;
+};
+
+Card.Thumbnail = ({ img, ImageDefault }: ThumbnailProps) => {
   return (
     <div
       className="imgDiv"
       onClick={() => console.log("img div clicked!!!!@@@")}
     >
-      <Image
-        loader={myLoader}
-        src={`/thumbnail/${img ? img : defaultImg}`}
-        alt="thumbnail"
-        style={{ borderRadius: "12px 12px 0px 0px" }}
-        width={320}
-        height={176}
-        sizes="(max-width: 768px) 100vw,
+      {img ? (
+        <Image
+          loader={myLoader}
+          src={`/static/uploads/thumbnail/${img}`}
+          alt="thumbnail"
+          style={{ borderRadius: "12px 12px 0px 0px", fill: "red" }}
+          width={320}
+          height={176}
+          sizes="(max-width: 768px) 100vw,
           (max-width: 1200px) 50vw,
           33vw"
-        unoptimized
-      />
+          objectFit="cover"
+        />
+      ) : (
+        <ImageDefault />
+      )}
     </div>
   );
 };
@@ -129,8 +137,19 @@ const CardBox = styled.div`
   box-shadow: ${(props) => props.theme.shadow.elevation.level1};
   position: relative;
   border-radius: 12px;
+  height: 100%;
   transition: all 0.3s;
   top: 0px;
+
+  .imgDiv {
+    fill: ${(props) => props.theme.colors.neutral.surface};
+    svg {
+      border-radius: 12px 12px 0px 0px;
+    }
+    & path:last-child {
+      fill: ${(props) => props.theme.colors.primary.onContainer};
+    }
+  }
 
   /* 
     768px 이상일 때, (두 개 카드 표시)

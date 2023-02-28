@@ -11,6 +11,8 @@ import Prism from "prismjs";
 import { useRecoilState } from "recoil";
 import { themeState } from "../../recoil/atom";
 import useEditorStyles from "./useEditorStyles";
+import { useEffect } from "react";
+import { uploadImage } from "../../apis/postApi";
 interface Props {
   content: string;
   editorRef: React.MutableRefObject<any>;
@@ -28,6 +30,25 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
   ];
   const [isDarkMode, _] = useRecoilState(themeState);
   const { editorStyles } = useEditorStyles();
+
+  useEffect(() => {
+    if (editorRef.current) {
+      const editor = editorRef.current.getInstance();
+      editor.removeHook("addImageBlobHook");
+      editor.addHook("addImageBlobHook", (blob: any, callback: any) => {
+        (async () => {
+          let formData = new FormData();
+          formData.append("file", blob);
+
+          await uploadImage(formData);
+          const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}${blob.name}`;
+          callback(url, "alt text");
+        })();
+
+        return false;
+      });
+    }
+  }, [editorRef]);
 
   return (
     <>

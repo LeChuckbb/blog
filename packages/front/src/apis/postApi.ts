@@ -4,7 +4,14 @@ import { PostByPageType } from "../hooks/query/useGetPostByPageQuery";
 // import useMongo from "../lib/useMongo";
 
 export const uploadThumbnail = (formData: any) =>
-  axiosInstance.post("/upload", formData, {
+  axiosInstance.post("/upload?type=thumbnail", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+export const uploadImage = (formData: any) =>
+  axiosInstance.post("/upload?type=image", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

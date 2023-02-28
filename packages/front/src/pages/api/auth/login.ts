@@ -5,7 +5,7 @@ import useToken from "../../../lib/useToken";
 import crypto from "crypto";
 import { AppError } from "../../../types/api";
 import { apiHandler } from "../../../lib/api";
-import { setCookie } from "cookies-next";
+import { deleteCookie, setCookie } from "cookies-next";
 
 const verifyPassword = async (
   password: string,

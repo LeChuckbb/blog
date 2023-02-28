@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { useGetPostByPageQuery } from "../../hooks/query/useGetPostByPageQuery";
 import Card from "design/src/stories/Card";
+import ImageDefault from "../../../public/static/uploads/thumbnail/default.svg";
+import { ReactComponentElement } from "react";
 
 interface Props {
   selectedTag: string;
@@ -34,7 +36,10 @@ const PostList = ({ selectedTag }: Props) => {
               fetchNext={() => hasNextPage && fetchNextPage()}
               isLastItem={arr.length - 1 === idx}
             >
-              <Card.Thumbnail img={post.thumbnail} />
+              <Card.Thumbnail
+                ImageDefault={ImageDefault}
+                img={post.thumbnail}
+              />
               <Card.SecondSection>
                 <Card.TitleWrapper>
                   <Card.Title>{post.title}</Card.Title>

@@ -72,8 +72,10 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (formInputData) => {
     toast.dismiss(); // toast 종료하기
-    const { date, thumbnail } = formInputData;
-    const file = thumbnail[0];
+    const { date } = formInputData;
+
+    const thumbnail: any = formInputData.thumbnail[0];
+    console.log("onValidSubmit");
     const body: any = {
       ...formInputData,
       tags: postFetchBody.tags,
@@ -81,11 +83,11 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
       html: postFetchBody.content.html,
       markup: postFetchBody.content.markup,
       date: dateFormatter(date),
-      thumbnail: "thumbnail",
+      thumbnail: thumbnail?.name,
     };
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", thumbnail);
 
     const uploadResult = await uploadThumbnail(formData);
     isUpdatePost

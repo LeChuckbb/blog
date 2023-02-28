@@ -5,7 +5,8 @@ import { useRecoilState } from "recoil";
 import { useQuery } from "react-query";
 import { isAuthorized } from "../../apis/authApi";
 import { useRouter } from "next/router";
-import { modalState } from "../../common/Modal/ModalSetter";
+// import { modalState } from "../../common/Modal/ModalSetter";
+import { modalState } from "../../recoil/atom";
 import { useDeletePostMutation } from "../../hooks/query/useDeletePostMutation";
 import { Button } from "design/src/stories/Button";
 

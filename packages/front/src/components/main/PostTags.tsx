@@ -43,6 +43,7 @@ const TagList = styled.ul`
   gap: 8px;
   padding: 16px;
   width: 100%;
+  max-width: 100vw;
   overflow-x: scroll;
   ::-webkit-scrollbar {
     display: none;

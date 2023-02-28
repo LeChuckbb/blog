@@ -11,15 +11,11 @@ axiosInstance.interceptors.response.use(
     console.log("인터셉터!@!!#!$!@ㅃ!@#!");
     if (response.data.message === "Login Success") {
       // 로그인 성공시 accessToken, refreshToken 설정
-      console.log(response.headers);
-      console.log(response.headers["authorization"]);
-      // axiosInstance.defaults.headers.common["Authorization"] = "";
       axiosInstance.defaults.headers.common["Authorization"] =
         response.headers["authorization"];
     }
 
     if (response.status === 202) {
-      console.log(response.data);
       if (response.data.error.code === "AUE003") {
         // AUE003 -> refreshToken은 유효한데 accessToken이 만료된 경우
         console.log("AUE003 인터셉터");

@@ -2,8 +2,6 @@ import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { decode, encode } from "html-entities";
 import useMongo from "../../lib/useMongo";
 import { apiHandler } from "../../lib/api";
-import nextConnect from "next-connect";
-import ValidateTokens from "../../lib/validateTokenMiddleware";
 
 const PAGE_SIZE = 8;
 
@@ -108,7 +106,7 @@ const createPost: NextApiHandler = async (req, res) => {
   const body = {
     ...req.body,
     tags: req.body?.tags,
-    thumbnail: req.body?.file,
+    thumbnail: req.body?.thumbnail,
     html: encode(req.body.html),
   };
   const result = await postsCollection.insertOne(body);
@@ -152,7 +150,7 @@ const deletePost: NextApiHandler = async (req, res) => {
   });
 
   await deleteTags(result?.value?.tags);
-  res.status(200);
+  res.status(200).end();
 };
 
 export default apiHandler({

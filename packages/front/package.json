@@ -44,6 +44,7 @@
     "@types/http-errors": "^2.0.1",
     "@types/prismjs": "^1.26.0",
     "@types/react-transition-group": "^4.4.5",
+    "@types/uuid": "^9.0.1",
     "babel-loader": "^8.3.0",
     "cookies-next": "^2.1.1",
     "next-transpile-modules": "9",

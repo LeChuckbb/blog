@@ -26,7 +26,6 @@ export type PostDatas = Array<{
 
 const Home = ({ dehydratedState }: any) => {
   const [selectedTag, setSelectedTag] = useState("all");
-  console.log(dehydratedState);
 
   return (
     <Container>
