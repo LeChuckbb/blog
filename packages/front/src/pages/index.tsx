@@ -4,10 +4,13 @@ import WithHeader from "../layout/WithHeader";
 import PostList from "../components/main/PostList";
 import LocalErrorBoundary from "../hooks/\berror/LocalErrorBoundary";
 import PostTags from "../components/main/PostTags";
-import { getPostByPage } from "../apis/postApi";
 import { dehydrate, QueryClient } from "react-query";
-import { PostByPageType } from "../hooks/query/useGetPostByPageQuery";
-import { AxiosResponse } from "axios";
+import {
+  PostByPageType,
+  POST_BY_PAGE_KEY,
+} from "../hooks/query/useGetPostByPageQuery";
+import { PostTagsType, POST_TAG_KEY } from "../hooks/query/useGetPostTagsQuery";
+import useMongo from "../lib/useMongo";
 
 // const DynamicPosts = dynamic(() => import("../components/main/Posts"), {
 //   ssr: false,
@@ -21,8 +24,9 @@ export type PostDatas = Array<{
   tags: Array<String>;
 }>;
 
-const Home = () => {
+const Home = ({ dehydratedState }: any) => {
   const [selectedTag, setSelectedTag] = useState("all");
+  console.log(dehydratedState);
 
   return (
     <Container>
@@ -43,15 +47,60 @@ Home.getLayout = function getLayout(page: React.ReactElement) {
 export default Home;
 
 const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
-  await queryClient.prefetchInfiniteQuery<AxiosResponse<PostByPageType, Error>>(
-    ["getPostByPage", selectedTag],
-    async ({ pageParam = 1 }) => getPostByPage(pageParam, selectedTag),
+  await queryClient.prefetchInfiniteQuery<PostByPageType, Error>(
+    [POST_BY_PAGE_KEY, selectedTag],
+    async ({ pageParam = 1 }) => {
+      // getPostByPage
+      const PAGE_SIZE = 8;
+      const { postsCollection } = await useMongo();
+
+      const count =
+        selectedTag === "all"
+          ? await postsCollection.count({})
+          : await postsCollection.count({ tags: selectedTag });
+      const page = Number(pageParam);
+      const IS_NEXT_PAGE_EXIST = count - page * PAGE_SIZE <= 0 ? null : true;
+      const next = !IS_NEXT_PAGE_EXIST ? IS_NEXT_PAGE_EXIST : page + 1;
+      const prev = page === 1 ? null : page - 1;
+
+      const results =
+        selectedTag === "all"
+          ? await postsCollection
+              .find({}, { projection: { html: 0, markup: 0 } })
+              .sort({ date: -1 })
+              .skip(PAGE_SIZE * (page - 1))
+              .limit(PAGE_SIZE)
+              .toArray()
+          : await postsCollection
+              .find(
+                { tags: selectedTag },
+                { projection: { html: 0, markup: 0 } }
+              )
+              .sort({ date: -1 })
+              .skip(PAGE_SIZE * (page - 1))
+              .limit(PAGE_SIZE)
+              .toArray();
+
+      return { count, next, prev, results };
+    },
     {
       getNextPageParam: (lastPage: any) => {
         return lastPage.next ?? null;
       },
     }
   );
+
+  await queryClient.prefetchQuery<PostTagsType, Error>(
+    [POST_TAG_KEY],
+    async () => {
+      // getPostTags
+      const { tagsCollection } = await useMongo();
+      const tags = await tagsCollection.find({}).toArray();
+      const count = await tagsCollection.countDocuments();
+      return { count, tags };
+    }
+  );
+
   return {
     dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
   };

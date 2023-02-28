@@ -12,7 +12,6 @@ interface Props {
 const PostTags: React.FC<Props> = (props) => {
   const { setTag } = props;
   const { data } = useGetPostTagsQuery();
-  const tagsData = data?.data as PostTagsType;
 
   const onClickTagList = (tag: string) => {
     setTag(tag);
@@ -20,12 +19,12 @@ const PostTags: React.FC<Props> = (props) => {
 
   return (
     <TagList>
-      <Badge badgeContent={tagsData?.count}>
+      <Badge badgeContent={data?.count}>
         <Tag color="secondary" onClick={() => onClickTagList("all")}>
           all
         </Tag>
       </Badge>
-      {tagsData?.tags?.map((tag: any) => {
+      {data?.tags?.map((tag: any) => {
         return (
           <Badge badgeContent={tag.count} key={tag._id}>
             <Tag color="secondary" onClick={() => onClickTagList(tag.name)}>

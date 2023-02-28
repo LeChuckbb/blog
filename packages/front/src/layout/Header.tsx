@@ -36,12 +36,12 @@ const Header = ({ scrollDirection }: any) => {
     <Container scrollDirection={scrollDirection}>
       <InnerContainer className="HeaderContainer">
         <LogoWrapper>
-          <Link href="http://localhost:3000/">LeChuck</Link>
+          <Link href="/">LeChuck</Link>
         </LogoWrapper>
         <RightWrapper>
           {data?.status === 200 && (
             <>
-              <Link href="http://localhost:3000/post/write">
+              <Link href="/post/write">
                 <a>
                   <IconButton tooltip="새 글 작성">
                     <IconCreateNewPost />
@@ -53,7 +53,7 @@ const Header = ({ scrollDirection }: any) => {
               </IconButton>
             </>
           )}
-          <Link href="http://localhost:3000/about">
+          <Link href="/about">
             <a>
               <IconButton tooltip="소개">
                 <IconInfo />

@@ -3,7 +3,7 @@ import "../styles/reset.css";
 import type { AppProps } from "next/app";
 import { ThemeProvider, Global } from "@emotion/react";
 import { lightTheme, darkTheme } from "design/src/styles/theme";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider, Hydrate } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { NextPage } from "next";
 import { RecoilRoot, useRecoilState } from "recoil";
@@ -18,6 +18,7 @@ export type NextPageWithLayout = NextPage & {
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
+  pageProps: any;
 }; // 기존 AppProps타입에 Layout을 추가한 것.
 
 const Wrapper = ({ Component, pageProps }: any) => {
@@ -50,10 +51,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen position="bottom-left" />
-      <RecoilRoot>
-        <Wrapper Component={Component} pageProps={pageProps} />
-      </RecoilRoot>
+      <Hydrate state={pageProps.dehydratedState}>
+        <ReactQueryDevtools initialIsOpen position="bottom-left" />
+        <RecoilRoot>
+          <Wrapper Component={Component} pageProps={pageProps} />
+        </RecoilRoot>
+      </Hydrate>
     </QueryClientProvider>
   );
 }

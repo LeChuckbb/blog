@@ -4,7 +4,7 @@ import useWrite from "../../hooks/useWrite";
 import { useForm } from "react-hook-form";
 import WriteSubPage from "../../components/posts/WriteSubPage";
 import { ToastContainer } from "react-toastify";
-import { GetServerSideProps, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { getPostBySlug } from "../../apis/postApi";
 import { useRouter } from "next/router";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";

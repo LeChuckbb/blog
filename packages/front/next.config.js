@@ -2,10 +2,10 @@
 
 const withTM = require("next-transpile-modules")(["design"]);
 const nextConfig = {
-  reactStrictMode: false,
   images: {
-    domains: ["localhost:3000"],
+    domains: ["localhost", "*"],
   },
+  reactStrictMode: false,
   compiler: {
     emotion: true,
   },

@@ -2,14 +2,12 @@ import WithHeader from "../../layout/WithHeader";
 import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { getPost, getPostBySlug } from "../../apis/postApi";
 import PostHead from "../../components/posts/PostHead";
 import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 import PostTableOfContents from "../../components/posts/PostTableOfContents";
 import useMongo from "../../lib/useMongo";
 import { decode } from "html-entities";
-import { stringify } from "querystring";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -74,7 +72,7 @@ export default PostDetail;
 
 // 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
 export const getStaticPaths: GetStaticPaths = async ({}) => {
-  // get all posts. getPosts()
+  // get all posts. getPost()
   const { postsCollection } = await useMongo();
   const results = await postsCollection
     .find({}, { projection: { html: 0, markup: 0 } })

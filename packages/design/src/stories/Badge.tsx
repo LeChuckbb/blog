@@ -5,7 +5,7 @@ type Variant = "small" | "large";
 type Color = "tertiary" | "error" | "errorContainer";
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  badgeContent: number;
+  badgeContent?: number;
   variant?: Variant;
   color?: Color;
 }

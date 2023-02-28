@@ -1,4 +1,7 @@
 import axiosInstance from ".";
+import { PostByPageType } from "../hooks/query/useGetPostByPageQuery";
+// import useMongo from "../lib/useMongo";
+// import useMongo from "../lib/useMongo";
 
 export const uploadThumbnail = (formData: any) =>
   axiosInstance.post("/upload", formData, {
@@ -25,4 +28,7 @@ export const getPostByPage = async (page: number, tag: string) => {
   return res.data;
 };
 
-export const getPostTags = () => axiosInstance.get(`/tags`);
+export const getPostTags = async () => {
+  const res = await axiosInstance.get(`/tags`);
+  return res.data;
+};
