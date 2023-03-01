@@ -8,7 +8,9 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { ChangeEvent } from "react";
 import { useEffect } from "react";
-import { uploadThumbnail } from "../../apis/postApi";
+import { getUploadImageURL } from "../../apis/fileApi";
+import axios from "axios";
+import { getFileFromCF } from "../../apis/fileApi";
 
 export type WriteSubPageProps = {
   subPageRef: RefObject<HTMLDivElement>;
@@ -64,11 +66,34 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
   } = useForm<FormInterface>({
     mode: "onChange",
     defaultValues: {
-      thumbnail: prevData?.thumbnail ? prevData?.thumbnail : "",
+      thumbnail: prevData?.thumbnail?.name ? prevData.thumbnail.name : "",
       subTitle: prevData?.subTitle ? prevData?.subTitle : "",
       date: prevData?.date ? new Date(prevData?.date) : new Date(),
     },
   });
+
+  const uploadThumbnailAndGetThumbnailName = async (
+    thumbInput: string | FileList
+  ): Promise<{ fileName: string; fileId?: string }> => {
+    if (typeof thumbInput === "string") {
+      // DB에 저장된 image file.
+      return { fileName: thumbInput };
+    } else {
+      const formData = new FormData();
+      formData.append("file", thumbInput[0]);
+
+      // 이미지 기존의 파일명이 cloudFlare에 그대로 수록되는데, 변경할 순 없나?
+      const uploadURL = await getUploadImageURL();
+      const uploadResult = await axios.post(uploadURL.data, formData);
+      const {
+        data: {
+          result: { id, filename },
+        },
+      } = uploadResult;
+
+      return { fileName: filename, fileId: id };
+    }
+  };
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (formInputData) => {
     console.log("onValidSubmit");
@@ -77,19 +102,21 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
     // thumbInput 1) string(이미 업로드한 썸네일이 있을 떄) 2)FileList (새로운 파일 업로드시) 3)string '' (아무것도 없을 떄)
     // thumbnail = string | file
     const { date, thumbnail: thumbInput } = formInputData;
-    const thumbnail: any =
-      typeof thumbInput === "string" ? thumbInput : thumbInput[0];
+    const { fileName, fileId } = await uploadThumbnailAndGetThumbnailName(
+      thumbInput
+    );
+
     const body: any = {
       ...formInputData,
       ...postFetchBody,
       date: dateFormatter(date),
-      thumbnail: typeof thumbnail === "string" ? thumbnail : thumbnail?.name,
+      // * DB에는 썸네일 파일명만 저장
+      thumbnail: {
+        name: fileName,
+        id: fileId,
+      },
     };
 
-    const formData = new FormData();
-    formData.append("file", thumbnail);
-
-    const uploadResult = await uploadThumbnail(formData);
     isUpdatePost
       ? updatePost({
           slug: router.query.slug as string,
@@ -110,9 +137,10 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append("image", file);
+    // const formData = new FormData();
+    // formData.append("image", file);
 
+    // 썸네일 Preview
     const reader = new FileReader();
     reader.addEventListener("load", () => {
       setThumbnailImage(reader.result as string); // blob
@@ -127,28 +155,24 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
   };
 
   useEffect(() => {
-    setValue("urlSlug", postFetchBody?.title?.replaceAll(" ", "-"));
-  }, [postFetchBody]);
-
-  useEffect(() => {
-    // db의 thumbnail 파일명을 기반으로 서버 내 파일시스템에서 썸네일 불러오기
-    const getFileAsBase64 = async (url: string) => {
-      const response = await fetch(`/static/uploads/thumbnail/${url}`);
-      const blob = await response.blob();
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = function () {
-        const base64data = reader.result
-          ?.toString()
-          .replace("data:", "")
-          ?.replace(/^.+,/, "");
-        setThumbnailImage(`data:image/png;base64,${base64data}`);
-      };
+    // 썸네일 Preview
+    // db에 저장된 thumbnail ID를 기반으로 CF에서 이미지 가져오기
+    const getFileAndSet = async () => {
+      const { result, base64Image } = await getFileFromCF(
+        prevData.thumbnail.id
+      );
+      setThumbnailImage(
+        `data:${result?.headers["content-type"]};base64,${base64Image}`
+      );
     };
-    if (prevData?.thumbnail) {
-      getFileAsBase64(prevData?.thumbnail);
+    if (prevData?.thumbnail?.name) {
+      getFileAndSet();
     }
   }, []);
+
+  useEffect(() => {
+    setValue("urlSlug", postFetchBody?.title?.replaceAll(" ", "-"));
+  }, [postFetchBody]);
 
   const getUseFormProps = ({ ...otherprops } = {}) => ({
     register,

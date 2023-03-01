@@ -12,7 +12,8 @@ import { useRecoilState } from "recoil";
 import { themeState } from "../../recoil/atom";
 import useEditorStyles from "./useEditorStyles";
 import { useEffect } from "react";
-import { uploadImage } from "../../apis/postApi";
+import { getUploadImageURL } from "../../apis/fileApi";
+import axios from "axios";
 interface Props {
   content: string;
   editorRef: React.MutableRefObject<any>;
@@ -40,9 +41,10 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
           let formData = new FormData();
           formData.append("file", blob);
 
-          const result = await uploadImage(formData);
-          const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}${result?.data?.file?.filename}`;
-          callback(url, "alt text");
+          const uploadURL = await getUploadImageURL();
+          const uploadResult = await axios.post(uploadURL.data, formData);
+          const url = `${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${uploadResult.data.results.id}/post`;
+          callback(url, "image");
         })();
 
         return false;

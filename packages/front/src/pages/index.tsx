@@ -46,10 +46,10 @@ Home.getLayout = function getLayout(page: React.ReactElement) {
 export default Home;
 
 const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
+  // getPostByPage
   await queryClient.prefetchInfiniteQuery<PostByPageType, Error>(
     [POST_BY_PAGE_KEY, selectedTag],
     async ({ pageParam = 1 }) => {
-      // getPostByPage
       const PAGE_SIZE = 8;
       const { postsCollection } = await useMongo();
 
@@ -80,6 +80,11 @@ const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
               .limit(PAGE_SIZE)
               .toArray();
 
+      // results.forEach((post) => {
+      //   // 1. post.thumbnail.id에 접근
+      //   // 2. id를 바탕으로 아마지 요청 URL 생성
+      // });
+
       return { count, next, prev, results };
     },
     {
@@ -89,10 +94,10 @@ const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
     }
   );
 
+  // getPostTags
   await queryClient.prefetchQuery<PostTagsType, Error>(
     [POST_TAG_KEY],
     async () => {
-      // getPostTags
       const { tagsCollection } = await useMongo();
       const tags = await tagsCollection.find({}).toArray();
       const count = await tagsCollection.countDocuments();

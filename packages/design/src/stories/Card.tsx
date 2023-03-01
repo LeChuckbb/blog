@@ -56,20 +56,20 @@ const myLoader = ({ src }: any) => {
 };
 
 type ThumbnailProps = {
-  img: string;
+  imageId: string;
   ImageDefault: any;
 };
 
-Card.Thumbnail = ({ img, ImageDefault }: ThumbnailProps) => {
+Card.Thumbnail = ({ imageId, ImageDefault }: ThumbnailProps) => {
   return (
     <div
       className="imgDiv"
       onClick={() => console.log("img div clicked!!!!@@@")}
     >
-      {img ? (
+      {imageId ? (
         <Image
           loader={myLoader}
-          src={`/static/uploads/thumbnail/${img}`}
+          src={`${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${imageId}/thumbnail`}
           alt="thumbnail"
           style={{ borderRadius: "12px 12px 0px 0px", fill: "red" }}
           width={320}
