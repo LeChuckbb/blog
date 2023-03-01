@@ -1,4 +1,6 @@
 import axiosInstance from ".";
+import { AxiosResponse } from "axios";
+import { CustomNextApiRequest } from "../pages/api/upload";
 
 export const uploadThumbnail = (formData: any) =>
   axiosInstance.post("/upload?type=thumbnail", formData, {
@@ -7,7 +9,9 @@ export const uploadThumbnail = (formData: any) =>
     },
   });
 
-export const uploadImage = (formData: any) =>
+export const uploadImage = (
+  formData: any
+): Promise<AxiosResponse<CustomNextApiRequest, Error>> =>
   axiosInstance.post("/upload?type=image", formData, {
     headers: {
       "Content-Type": "multipart/form-data",

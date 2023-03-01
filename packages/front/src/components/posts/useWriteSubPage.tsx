@@ -71,19 +71,19 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
   });
 
   const onValidSubmit: SubmitHandler<FormInterface> = async (formInputData) => {
-    toast.dismiss(); // toast 종료하기
-    const { date } = formInputData;
-
-    const thumbnail: any = formInputData.thumbnail[0];
     console.log("onValidSubmit");
+    toast.dismiss(); // toast 종료하기
+
+    // thumbInput 1) string(이미 업로드한 썸네일이 있을 떄) 2)FileList (새로운 파일 업로드시) 3)string '' (아무것도 없을 떄)
+    // thumbnail = string | file
+    const { date, thumbnail: thumbInput } = formInputData;
+    const thumbnail: any =
+      typeof thumbInput === "string" ? thumbInput : thumbInput[0];
     const body: any = {
       ...formInputData,
-      tags: postFetchBody.tags,
-      title: postFetchBody.title,
-      html: postFetchBody.content.html,
-      markup: postFetchBody.content.markup,
+      ...postFetchBody,
       date: dateFormatter(date),
-      thumbnail: thumbnail?.name,
+      thumbnail: typeof thumbnail === "string" ? thumbnail : thumbnail?.name,
     };
 
     const formData = new FormData();
@@ -91,15 +91,14 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
 
     const uploadResult = await uploadThumbnail(formData);
     isUpdatePost
-      ? await updatePost({
+      ? updatePost({
           slug: router.query.slug as string,
           body,
         })
-      : await createPost(body);
+      : createPost(body);
   };
 
   const onInvalidSubmit = (errors: any) => {
-    console.log("onInvalid");
     console.log(errors);
     errors?.urlSlug?.message && callToast(errors.urlSlug.message, "urlSlug");
     errors?.date?.message && callToast(errors.date.message, "date");
@@ -116,7 +115,7 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
 
     const reader = new FileReader();
     reader.addEventListener("load", () => {
-      setThumbnailImage(reader.result as string);
+      setThumbnailImage(reader.result as string); // blob
     });
 
     reader.readAsDataURL(file);
@@ -130,6 +129,26 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
   useEffect(() => {
     setValue("urlSlug", postFetchBody?.title?.replaceAll(" ", "-"));
   }, [postFetchBody]);
+
+  useEffect(() => {
+    // db의 thumbnail 파일명을 기반으로 서버 내 파일시스템에서 썸네일 불러오기
+    const getFileAsBase64 = async (url: string) => {
+      const response = await fetch(`/static/uploads/thumbnail/${url}`);
+      const blob = await response.blob();
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function () {
+        const base64data = reader.result
+          ?.toString()
+          .replace("data:", "")
+          ?.replace(/^.+,/, "");
+        setThumbnailImage(`data:image/png;base64,${base64data}`);
+      };
+    };
+    if (prevData?.thumbnail) {
+      getFileAsBase64(prevData?.thumbnail);
+    }
+  }, []);
 
   const getUseFormProps = ({ ...otherprops } = {}) => ({
     register,

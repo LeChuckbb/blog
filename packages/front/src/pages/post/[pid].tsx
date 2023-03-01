@@ -98,7 +98,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     ...res,
     _id: JSON.stringify(res?._id),
     html: decode(res?.html),
-    markup: res?.markup,
   };
 
   return {

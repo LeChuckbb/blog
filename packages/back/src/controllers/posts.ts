@@ -77,8 +77,6 @@ export const createPost = (model: Model<Post>) =>
   tryCatch(async (req: Request, res: Response) => {
     // req.body에서 content 항목이 있으면 encode하여 DB에 저장
     // XSS 방지를 위해 HTML markup -> entity로 변경
-    console.log("safnkjnasfdijkbasfdiasfbdiafsdasfdhiasfdhisfaduhi");
-    console.log(req.body);
     const body = {
       ...req.body,
       thumbnail: req.file,

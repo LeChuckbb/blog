@@ -7,10 +7,8 @@ import useMyToast from "./useMyToast";
 interface Body {
   title: string;
   tags: string[];
-  content: {
-    html: any;
-    markup: any;
-  };
+  html: any;
+  markup: any;
 }
 
 const useWrite = (data: any) => {
@@ -20,10 +18,8 @@ const useWrite = (data: any) => {
   const [postFetchBody, setPostFetchBody] = useState<Body>({
     title: "",
     tags: [],
-    content: {
-      html: "",
-      markup: "",
-    },
+    html: "",
+    markup: "",
   });
   const editorRef = useRef<any>(null);
   const subPageRef = useRef<HTMLDivElement>(null);
@@ -74,10 +70,8 @@ const useWrite = (data: any) => {
       setPostFetchBody({
         title: data.title,
         tags: tagsArray,
-        content: {
-          html: contentHTML,
-          markup: contentMark,
-        },
+        html: contentHTML,
+        markup: contentMark,
       });
     } catch (error) {
       console.log(error);

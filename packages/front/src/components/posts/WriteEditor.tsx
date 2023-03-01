@@ -40,8 +40,8 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
           let formData = new FormData();
           formData.append("file", blob);
 
-          await uploadImage(formData);
-          const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}${blob.name}`;
+          const result = await uploadImage(formData);
+          const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}${result?.data?.file?.filename}`;
           callback(url, "alt text");
         })();
 

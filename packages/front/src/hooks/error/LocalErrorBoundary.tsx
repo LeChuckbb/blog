@@ -19,7 +19,6 @@ const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
 
 const onErrorHandler = (error: Error, info: any) => {
   console.log(error);
-  console.log(isAxiosError(error) && error?.response?.status);
   // if (isAxiosError(error) && error.response?.status !== 500) {
   if (isAxiosError(error)) {
     console.log("axios Error.");

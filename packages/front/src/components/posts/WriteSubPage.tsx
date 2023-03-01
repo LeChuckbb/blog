@@ -52,7 +52,7 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
                       <input
                         id="thumbnail"
                         type="file"
-                        accept="image/jpg, image/png, image/jpeg"
+                        accept="image/*"
                         style={{ display: "none" }}
                         {...register("thumbnail")}
                         onChange={handleThumbnailFileChange}
