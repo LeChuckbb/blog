@@ -42,13 +42,10 @@ const ValidateTokens = async (
         // case 3 -> Refresh Token을 이용해서 Access Token 재발급
         console.log("CASE 3");
         const newAccessToken = getAccessToken("KenLiu");
-        // axiosInstance.defaults.headers.common["authorization"] = "";
-        // axiosInstance.defaults.headers.common[
-        //   "authorization"
-        // ] = `Bearer ${newAccessToken}`;
-        res.removeHeader("authorization");
-        res.setHeader("authorization", `Bearer ${newAccessToken}`);
-        // .setHeader("Access-Control-Expose-Headers", "authorization");
+
+        res
+          .setHeader("authorization", `Bearer ${newAccessToken}`)
+          .setHeader("Access-Control-Expose-Headers", "authorization");
         throw new AppError(
           "AUE003",
           "accessToken 만료. RefreshToken을 이용한 재발급",
@@ -60,7 +57,6 @@ const ValidateTokens = async (
         // case 2 -> refresh Token 재발급
         console.log("CASE 2");
         const newRefreshToken = await getRefreshToken();
-        console.log(newRefreshToken);
 
         setCookie("refreshToken", newRefreshToken, {
           req,

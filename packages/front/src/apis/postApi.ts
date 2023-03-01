@@ -1,7 +1,4 @@
 import axiosInstance from ".";
-import { PostByPageType } from "../hooks/query/useGetPostByPageQuery";
-// import useMongo from "../lib/useMongo";
-// import useMongo from "../lib/useMongo";
 
 export const uploadThumbnail = (formData: any) =>
   axiosInstance.post("/upload?type=thumbnail", formData, {

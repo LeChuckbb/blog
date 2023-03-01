@@ -39,12 +39,14 @@ const login: NextApiHandler = async (req, res) => {
   // refreshToken을 DB에 저장
   await authCollection.updateOne({ id }, { $set: { refreshToken } });
 
-  res.setHeader("authorization", `Bearer ${accessToken}`);
+  res
+    .setHeader("authorization", `Bearer ${accessToken}`)
+    .setHeader("Access-Control-Expose-Headers", "authorization");
   setCookie("refreshToken", refreshToken, {
     req,
     res,
     httpOnly: true,
-    maxAge: 604800,
+    maxAge: 60 * 60 * 24 * 7,
   });
 
   res.json({ message: "Login Success" });

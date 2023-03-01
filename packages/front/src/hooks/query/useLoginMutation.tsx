@@ -2,7 +2,6 @@ import { useMutation } from "react-query";
 import { loginAPI } from "../../apis/authApi";
 import { isAxiosError } from "axios";
 import useMyToast from "../useMyToast";
-import axiosInstance from "../../apis";
 
 export const useLoginMutation = () => {
   const { callToast } = useMyToast();
@@ -10,7 +9,6 @@ export const useLoginMutation = () => {
   return useMutation((body: any) => loginAPI(body), {
     onSuccess: (result) => {
       window.location.href = "/";
-      console.log("로그인 API 완료");
     },
     onError: (error) => {
       console.log("onError in useLoginMutation");

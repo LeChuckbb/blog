@@ -30,8 +30,8 @@ const ValidateTokens = tryCatch(
         console.log("CASE 3");
         const newAccessToken = Token.accessToken("KenLiu");
         res
-          .set("Authorization", `Bearer ${newAccessToken}`)
-          .set("Access-Control-Expose-Headers", "Authorization");
+          .set("authorization", `Bearer ${newAccessToken}`)
+          .set("Access-Control-Expose-Headers", "authorization");
         throw new AppError(
           "AUE003",
           "accessToken 만료. RefreshToken을 이용한 재발급",
