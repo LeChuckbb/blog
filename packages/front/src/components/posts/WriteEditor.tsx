@@ -43,7 +43,9 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
 
           const uploadURL = await getUploadImageURL();
           const uploadResult = await axios.post(uploadURL.data, formData);
-          const url = `${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${uploadResult.data.results.id}/post`;
+          console.log(uploadURL);
+          console.log(uploadResult);
+          const url = `${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${uploadResult.data.result.id}/post`;
           callback(url, "image");
         })();
 

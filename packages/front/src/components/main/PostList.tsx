@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import { useGetPostByPageQuery } from "../../hooks/query/useGetPostByPageQuery";
 import Card from "design/src/stories/Card";
 import ImageDefault from "../../../public/static/thumbnail/default.svg";
-import { ReactComponentElement } from "react";
 
 interface Props {
   selectedTag: string;

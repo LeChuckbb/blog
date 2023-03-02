@@ -77,7 +77,7 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
   ): Promise<{ fileName: string; fileId?: string }> => {
     if (typeof thumbInput === "string") {
       // DB에 저장된 image file.
-      return { fileName: thumbInput };
+      return { fileName: thumbInput, fileId: prevData?.thumbnail?.id };
     } else {
       const formData = new FormData();
       formData.append("file", thumbInput[0]);
@@ -137,9 +137,6 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // const formData = new FormData();
-    // formData.append("image", file);
-
     // 썸네일 Preview
     const reader = new FileReader();
     reader.addEventListener("load", () => {
@@ -159,13 +156,15 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
     // db에 저장된 thumbnail ID를 기반으로 CF에서 이미지 가져오기
     const getFileAndSet = async () => {
       const { result, base64Image } = await getFileFromCF(
-        prevData.thumbnail.id
+        prevData.thumbnail.id,
+        "thumbnail"
       );
       setThumbnailImage(
         `data:${result?.headers["content-type"]};base64,${base64Image}`
       );
     };
-    if (prevData?.thumbnail?.name) {
+    console.log(prevData);
+    if (prevData?.thumbnail?.id) {
       getFileAndSet();
     }
   }, []);
@@ -185,7 +184,6 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
     ...otherprops,
   });
 
-  // <button {...getHandleSubmitProps({ onClick: handleBtn1Clicked })}></button>
   const getHandleSubmitProps = ({ ...otherprops } = {}) => ({
     onValidSubmit,
     onInvalidSubmit,

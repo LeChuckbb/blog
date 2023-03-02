@@ -4,9 +4,10 @@ import axios, { AxiosResponse } from "axios";
 export const getUploadImageURL = () => axiosInstance.get(`/uploadURL`);
 
 export const getFileFromCF = async (
-  imageId: string
+  imageId: string,
+  suffix: string
 ): Promise<{ result: AxiosResponse; base64Image: string }> => {
-  const url = `${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${imageId}/public`;
+  const url = `${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${imageId}/${suffix}`;
   const result = await axios.get(url, {
     responseType: "arraybuffer",
   });
