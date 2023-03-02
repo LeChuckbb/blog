@@ -17,8 +17,10 @@ const WriteViewer = ({
 }: any) => {
   const { editorStyles } = useEditorStyles();
   const ref = useRef<HTMLDivElement | null>(null);
-  const { entry, anchorOnClickHandler, mouseWheelActiveRef, anchorClickedRef } =
-    useTOCIntersectionObservation(ref, {});
+  const { entry, anchorOnClickHandler } = useTOCIntersectionObservation(
+    ref,
+    {}
+  );
 
   const FAB = () => {
     return (
@@ -32,6 +34,8 @@ const WriteViewer = ({
     setObserverEntries(entry);
     setAnchorClickHandler(() => anchorOnClickHandler);
   }, [entry, anchorOnClickHandler]);
+
+  console.log(content);
 
   return (
     <div css={editorStyles} ref={ref}>
@@ -59,7 +63,6 @@ const WriteViewer = ({
                 tagName,
                 classNames: [`tocAnchor`],
                 attributes: {
-                  // id: getChildrenText(node).trim().replace(/\s+/g, "-"),
                   id: getChildrenText(node).trim(),
                 },
               };

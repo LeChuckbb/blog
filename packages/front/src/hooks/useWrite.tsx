@@ -8,7 +8,7 @@ interface Body {
   title: string;
   tags: string[];
   html: any;
-  markup: any;
+  markdown: any;
 }
 
 const useWrite = (data: any) => {
@@ -19,7 +19,7 @@ const useWrite = (data: any) => {
     title: "",
     tags: [],
     html: "",
-    markup: "",
+    markdown: "",
   });
   const editorRef = useRef<any>(null);
   const subPageRef = useRef<HTMLDivElement>(null);
@@ -71,7 +71,7 @@ const useWrite = (data: any) => {
         title: data.title,
         tags: tagsArray,
         html: contentHTML,
-        markup: contentMark,
+        markdown: contentMark,
       });
     } catch (error) {
       console.log(error);

@@ -42,7 +42,7 @@ const write = ({ data }: Props) => {
   } = useWrite(data);
   const { register, handleSubmit } = useForm<FormInterface>();
   const router = useRouter();
-  const content = data?.markup;
+  const content = data?.markdown;
 
   return (
     <Container>

@@ -62,8 +62,9 @@ const getPost: NextApiHandler = async (req, res) => {
     });
     const resultBody = {
       ...results,
-      html: decode(results?.html),
-      markup: results?.markup,
+      // html: decode(results?.html),
+      html: results?.html,
+      markdown: results?.markdown,
     };
     res.status(200).json(resultBody);
   } else if (req.query?.page) {
@@ -83,13 +84,13 @@ const getPost: NextApiHandler = async (req, res) => {
     const results =
       tagQuery === "all"
         ? await postsCollection
-            .find({}, { projection: { html: 0, markup: 0 } })
+            .find({}, { projection: { html: 0, markdown: 0 } })
             .sort({ date: -1 })
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE)
             .toArray()
         : await postsCollection
-            .find({ tags: tagQuery }, { projection: { html: 0, markup: 0 } })
+            .find({ tags: tagQuery }, { projection: { html: 0, markdown: 0 } })
             .sort({ date: -1 })
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE)
@@ -101,13 +102,14 @@ const getPost: NextApiHandler = async (req, res) => {
 
 const createPost: NextApiHandler = async (req, res) => {
   // req.body에서 content 항목이 있으면 encode하여 DB에 저장
-  // XSS 방지를 위해 HTML markup -> entity로 변경
+  // XSS 방지를 위해 HTML markdown -> entity로 변경
   const { postsCollection } = await useMongo();
   const body = {
     ...req.body,
     tags: req.body?.tags,
     thumbnail: req.body?.thumbnail,
-    html: encode(req.body.html),
+    // html: encode(req.body.html),
+    html: req.body.html,
   };
   const result = await postsCollection.insertOne(body);
   await createTags(body?.tags);
@@ -120,7 +122,8 @@ const updatePost: NextApiHandler = async (req, res) => {
   const prevSlug = req.query.slug;
   const body = {
     ...req.body,
-    html: encode(req.body.html),
+    // html: encode(req.body.html),
+    html: req.body.html,
   };
 
   const result = await postsCollection.findOneAndUpdate(
@@ -133,7 +136,7 @@ const updatePost: NextApiHandler = async (req, res) => {
         subTitle: body.subTitle,
         date: body.date,
         html: body.html,
-        markup: body.markup,
+        markdown: body.markdown,
         tags: body.tags,
       },
     }

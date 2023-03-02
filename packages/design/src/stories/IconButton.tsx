@@ -3,12 +3,16 @@ import { css, useTheme } from "@emotion/react";
 import { useState } from "react";
 import Layer from "./Layer";
 import Tooltip from "./Tooltip";
+import { Direction } from "./Tooltip";
 
 type Variant = "standard" | "contained";
+export type Size = "small" | "medium";
 
 interface IconButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   tooltip?: string;
+  direction?: Direction;
+  size?: Size;
 }
 
 // children : Icon svg component
@@ -16,16 +20,18 @@ const IconButton = ({
   children,
   variant = "standard",
   tooltip = undefined,
+  size = "medium",
+  direction = "bottom",
   onClick,
 }: IconButtonProps) => {
   const [mouseHover, setMouseHover] = useState(false);
   const mouseEnterHandler = () => setMouseHover(true);
   const mouseLeaveHandler = () => setMouseHover(false);
-  const { styles, themeVariant } = IconButtonStyle(mouseHover);
+  const { styles, themeVariant, themeSize } = IconButtonStyle(mouseHover, size);
 
   return (
     <button
-      css={[styles, themeVariant[variant]]}
+      css={[styles, themeVariant[variant], themeSize[size]]}
       onClick={onClick}
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseLeaveHandler}
@@ -33,17 +39,15 @@ const IconButton = ({
     >
       <Layer>{children}</Layer>
       {/* {tooltip && <Tooltip>{tooltip}</Tooltip>} */}
-      {tooltip && <Tooltip>{tooltip}</Tooltip>}
+      {tooltip && <Tooltip direction={direction}>{tooltip}</Tooltip>}
     </button>
   );
 };
 
-const IconButtonStyle = (mouseHover: boolean) => {
+const IconButtonStyle = (mouseHover: boolean, size: Size) => {
   const theme = useTheme();
 
   const styles = css`
-    width: 48px;
-    height: 48px;
     position: relative;
     display: flex;
     justify-content: center;
@@ -53,8 +57,8 @@ const IconButtonStyle = (mouseHover: boolean) => {
     background-color: unset;
 
     #stateLayer {
-      width: 40px;
-      height: 40px;
+      width: ${size === "medium" ? "40px" : "28px"};
+      height: ${size === "medium" ? "40px" : "28px"};
       left: unset;
       opacity: 0.8;
     }
@@ -91,7 +95,18 @@ const IconButtonStyle = (mouseHover: boolean) => {
     `,
   };
 
-  return { styles, themeVariant };
+  const themeSize = {
+    small: css`
+      width: 28px;
+      height: 28px;
+    `,
+    medium: css`
+      width: 48px;
+      height: 48px;
+    `,
+  };
+
+  return { styles, themeVariant, themeSize };
 };
 
 export default IconButton;

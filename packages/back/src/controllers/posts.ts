@@ -26,12 +26,12 @@ export const getPostByPage = (model: Model<Post>) =>
     const results =
       tagQuery === "all"
         ? await model
-            .find({}, { html: 0, markup: 0 })
+            .find({}, { html: 0, markdown: 0 })
             .sort({ date: -1 })
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE)
         : await model
-            .find({ tags: tagQuery }, { html: 0, markup: 0 })
+            .find({ tags: tagQuery }, { html: 0, markdown: 0 })
             .sort({ date: -1 })
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE);
@@ -51,7 +51,7 @@ export const getPostBySlug = (model: Model<Post>) =>
     const resultBody = {
       ...resultObj,
       html: decode(results?.html),
-      markup: results?.markup,
+      markdown: results?.markdown,
     };
 
     return res.status(200).json(resultBody);
@@ -76,12 +76,12 @@ const createTags = (tags: any) => {
 export const createPost = (model: Model<Post>) =>
   tryCatch(async (req: Request, res: Response) => {
     // req.body에서 content 항목이 있으면 encode하여 DB에 저장
-    // XSS 방지를 위해 HTML markup -> entity로 변경
+    // XSS 방지를 위해 HTML markdown -> entity로 변경
     const body = {
       ...req.body,
       thumbnail: req.file,
       html: encode(req.body.html),
-      markup: req.body.markup,
+      markdown: req.body.markdown,
     };
     const result = await model.create(body);
     await createTags(body.tags);
@@ -108,7 +108,7 @@ export const updatePost = (model: Model<Post>) =>
       ...req.body,
       thumbnail: req.file,
       html: encode(req.body.html),
-      markup: req.body.markup,
+      markdown: req.body.markdown,
     };
 
     const result = await model.findOneAndUpdate(
@@ -121,7 +121,7 @@ export const updatePost = (model: Model<Post>) =>
           subTitle: body.subTitle,
           date: body.date,
           html: body.html,
-          markup: body.markup,
+          markdown: body.markdown,
           tags: body.tags,
         },
       }

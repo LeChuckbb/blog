@@ -38,7 +38,7 @@ const getHTMLTags = (htmlString: string) => {
     : null;
 };
 
-const PostDetail = ({ title, date, html, slug }: any) => {
+const PostDetail = ({ title, date, html, slug, markdown }: any) => {
   const tocArray = getHTMLTags(html);
   const [observerEntry, setObserverEntry] =
     useState<IntersectionObserverEntry>();
@@ -52,9 +52,9 @@ const PostDetail = ({ title, date, html, slug }: any) => {
         observerEntry={observerEntry}
       />
       <PostHead slug={slug} date={date} title={title} />
-      {html && (
+      {markdown && (
         <NoSSRViewer
-          content={html}
+          content={markdown}
           setObserverEntries={setObserverEntry}
           setAnchorClickHandler={setAnchorClickHandler}
         />
@@ -75,7 +75,7 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
   // get all posts. getPost()
   const { postsCollection } = await useMongo();
   const results = await postsCollection
-    .find({}, { projection: { html: 0, markup: 0 } })
+    .find({}, { projection: { html: 0, markdown: 0 } })
     .toArray();
   const paths = results.map((el: any) => ({
     params: { pid: el.urlSlug },
@@ -97,7 +97,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const results = {
     ...res,
     _id: JSON.stringify(res?._id),
-    html: decode(res?.html),
+    // html: decode(res?.html),
+    html: res?.html,
   };
 
   return {
@@ -112,8 +113,22 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.neutral.background};
   color: ${(props) => props.theme.colors.neutral.onBackground};
   min-height: 100vh;
-  width: 768px;
   padding: 32px 0px 72px;
-
   position: relative;
+  width: 90%;
+  margin: 0 auto 16px;
+
+  & .ToC {
+    display: none;
+  }
+
+  ${(props) => props.theme.mq[0]} {
+    width: 768px;
+  }
+  // 1240px 이상일 때
+  ${(props) => props.theme.mq[2]} {
+    & .ToC {
+      display: block;
+    }
+  }
 `;

@@ -65,7 +65,7 @@ const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
       const results =
         selectedTag === "all"
           ? await postsCollection
-              .find({}, { projection: { html: 0, markup: 0 } })
+              .find({}, { projection: { html: 0, markdown: 0 } })
               .sort({ date: -1 })
               .skip(PAGE_SIZE * (page - 1))
               .limit(PAGE_SIZE)
@@ -73,7 +73,7 @@ const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
           : await postsCollection
               .find(
                 { tags: selectedTag },
-                { projection: { html: 0, markup: 0 } }
+                { projection: { html: 0, markdown: 0 } }
               )
               .sort({ date: -1 })
               .skip(PAGE_SIZE * (page - 1))
@@ -127,10 +127,10 @@ const Container = styled.div`
   ${(props) => props.theme.mq[1]} {
     width: 1024px;
   }
-  ${(props) => props.theme.mq[2]} {
+  ${(props) => props.theme.mq[3]} {
     width: 1376px;
   }
-  ${(props) => props.theme.mq[3]} {
+  ${(props) => props.theme.mq[4]} {
     width: 1728px;
   }
 `;

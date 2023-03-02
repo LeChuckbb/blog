@@ -22,12 +22,14 @@ const useEditorStyles = () => {
     }
 
     .toastui-editor-contents h1 {
+      margin-top: 40px;
       font-size: ${theme.fonts.headline.large.size};
       font-weight: ${theme.fonts.headline.large.weight};
       line-height: ${theme.fonts.headline.large.lineHeight};
     }
 
     .toastui-editor-contents h2 {
+      margin-top: 24px;
       font-size: ${theme.fonts.headline.medium.size};
       font-weight: ${theme.fonts.headline.medium.weight};
       line-height: ${theme.fonts.headline.medium.lineHeight};
@@ -47,8 +49,13 @@ const useEditorStyles = () => {
     div,
     span {
       font-family: ${theme.fonts.family.plain};
-      font-size: ${theme.fonts.body.medium.size};
+      font-size: ${theme.fonts.body.small.size};
+      /* letter-spacing: ${theme.fonts.body.small.letterSpacing}; */
       color: inherit;
+    }
+
+    .toastui-editor-contents p {
+      margin: 18px 0;
     }
 
     .toastui-editor-contents img {
@@ -85,6 +92,47 @@ const useEditorStyles = () => {
       padding: 16px 16px 16px 32px;
       background-color: ${theme.colors.neutralVariant.surfaceVariant};
       color: ${theme.colors.neutralVariant.onSurfaceVariant};
+      font-style: italic;
+    }
+
+    .toastui-editor-contents pre {
+      background-color: ${theme.colors.neutral.onBackground};
+      color: ${theme.colors.neutral.background};
+      border-radius: 12px;
+      position: relative;
+      & * {
+        text-shadow: none !important;
+        font-size: 16px;
+      }
+    }
+
+    .toastui-editor-contents code[data-backticks] {
+      border-radius: 4px;
+    }
+
+    .toastui-editor-contents code[data-language="javascript"]::before {
+      content: attr(data-language);
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      font-size: 13px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background-color: ${theme.colors.primary.primary};
+      color: ${theme.colors.primary.onPrimary};
+      padding: 4px 8px;
+      border-radius: 4px;
+      line-height: 18px;
+      font-weight: bold;
+      font-family: ${theme.fonts.family.plain};
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string {
+      background-color: unset;
     }
   `;
   return { editorStyles };

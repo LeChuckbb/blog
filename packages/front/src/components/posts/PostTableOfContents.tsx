@@ -19,7 +19,7 @@ const PostTableOfContents = ({
   return (
     <>
       {tocArray && (
-        <TocAbsoluteWrapper>
+        <TocAbsoluteWrapper className="ToC">
           <TocStickyWrapper>
             {tocArray.map((str: any, idx: any) => {
               return (

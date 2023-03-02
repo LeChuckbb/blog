@@ -5,7 +5,7 @@ export interface Post extends mongoose.Document {
   title: string;
   subTitle: string;
   date: string;
-  markup: string;
+  markdown: string;
   html: string;
   tags: Array<String>;
   thumbnail: {
@@ -39,7 +39,7 @@ const PostSchema: Schema = new Schema<Post>({
     type: String,
     required: true,
   },
-  markup: {
+  markdown: {
     type: String,
     required: true,
   },

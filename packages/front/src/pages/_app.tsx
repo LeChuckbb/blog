@@ -29,10 +29,10 @@ const Wrapper = ({ Component, pageProps }: any) => {
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <Global styles={GlobalStyles(isDarkMode ? darkTheme : lightTheme)} />
       <GlobalErrorBoundary>
-        {getLayout(<Component {...pageProps} />)}
         <div className="modal-root">
           <ModalSetter selector=".modal-root" />
         </div>
+        {getLayout(<Component {...pageProps} />)}
       </GlobalErrorBoundary>
     </ThemeProvider>
   );

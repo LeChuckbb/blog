@@ -2,15 +2,26 @@
 import { css, useTheme } from "@emotion/react";
 
 type Variant = "short" | "long";
+export type Direction = "bottom" | "top";
 
 interface TooltipProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: Variant;
+  direction?: Direction;
 }
 
-const Tooltip = ({ children, variant = "short", ...props }: TooltipProps) => {
-  const { styles, themeVariant } = TooltipStyle();
+const Tooltip = ({
+  children,
+  variant = "short",
+  direction = "bottom",
+  ...props
+}: TooltipProps) => {
+  const { styles, themeVariant, themeDirection } = TooltipStyle();
   return (
-    <span id="tooltip" css={[styles, themeVariant[variant]]} {...props}>
+    <span
+      id="tooltip"
+      css={[styles, themeVariant[variant], themeDirection[direction]]}
+      {...props}
+    >
       {children}
     </span>
   );
@@ -25,7 +36,6 @@ const TooltipStyle = () => {
     padding: 5px 12px;
     border-radius: 6px;
     position: relative;
-    top: 80%;
     z-index: 9999;
     transition: opacity 0.5s;
     opacity: 0;
@@ -44,7 +54,16 @@ const TooltipStyle = () => {
     `,
   };
 
-  return { styles, themeVariant };
+  const themeDirection = {
+    bottom: css`
+      top: 80%;
+    `,
+    top: css`
+      top: -100%;
+    `,
+  };
+
+  return { styles, themeVariant, themeDirection };
 };
 
 export default Tooltip;

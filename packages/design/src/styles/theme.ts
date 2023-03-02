@@ -5,7 +5,7 @@
   1464 ~ 1920 -> Card 4개
   1920 ~ -> Card 5개
 */
-const BREAK_POINTS = [768, 1058, 1464, 1920];
+const BREAK_POINTS = [768, 1058, 1240, 1464, 1920];
 
 export const lightTheme = {
   colors: {
@@ -78,21 +78,21 @@ export const lightTheme = {
     },
     headline: {
       large: {
-        size: "38px",
+        size: "36px",
         weight: "500",
         lineHeight: "40px",
         letterSpacing: "0px",
       },
       medium: {
-        size: "32px",
-        weight: "500",
-        lineHeight: "36px",
-        letterSpacing: "0px",
-      },
-      small: {
         size: "28px",
         weight: "500",
         lineHeight: "32px",
+        letterSpacing: "0px",
+      },
+      small: {
+        size: "24px",
+        weight: "500",
+        lineHeight: "28px",
         letterSpacing: "0px",
       },
     },
@@ -132,7 +132,7 @@ export const lightTheme = {
       small: {
         size: "16px",
         weight: "400",
-        lineHeight: "16px",
+        lineHeight: "20px",
         letterSpacing: "0.40px",
       },
     },

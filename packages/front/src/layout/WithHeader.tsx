@@ -13,14 +13,14 @@ const WithHeader = ({ children }: Props) => {
   const { scrollDirection } = useScrollDirection();
 
   return (
-    <Container>
+    <Container className="Conteinasd">
       <LocalErrorBoundary>
         {/* <Suspense fallback={<p>loading...</p>}> */}
         <Header scrollDirection={scrollDirection} />
         {/* </Suspense> */}
       </LocalErrorBoundary>
-      <div style={{ marginTop: "64px" }}>{children}</div>
-      {/* <Footer /> */}
+      <ContentContainer>{children}</ContentContainer>
+      <Footer />
     </Container>
   );
 };
@@ -29,6 +29,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const ContentContainer = styled.div`
+  margin-top: 64px;
+  min-height: 100vh;
+  width: 100%;
+  ${(props) => props.theme.mq[1]} {
+    width: unset;
+  }
 `;
 
 export default WithHeader;

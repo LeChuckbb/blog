@@ -168,13 +168,13 @@ const CardBox = styled.div`
     max-height: 365px;
   }
   // 1464px 이상일 때
-  ${(props) => props.theme.mq[2]} {
+  ${(props) => props.theme.mq[3]} {
     width: 21%;
     max-width: calc(25% - 8px);
     max-height: 365px;
   }
   // 1920px 이상일 때
-  ${(props) => props.theme.mq[3]} {
+  ${(props) => props.theme.mq[4]} {
     width: 16%;
     max-width: calc(20% - 8px);
     max-height: 365px;

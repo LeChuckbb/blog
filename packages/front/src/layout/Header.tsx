@@ -96,10 +96,10 @@ const InnerContainer = styled.div`
   ${(props) => props.theme.mq[1]} {
     width: 1024px;
   }
-  ${(props) => props.theme.mq[2]} {
+  ${(props) => props.theme.mq[3]} {
     width: 1376px;
   }
-  ${(props) => props.theme.mq[3]} {
+  ${(props) => props.theme.mq[4]} {
     width: 1728px;
   }
 `;
