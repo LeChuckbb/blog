@@ -28,13 +28,11 @@ const PostTableOfContents = ({
                   css={(theme) => ({
                     marginLeft: getLeftMarginByTagName(str?.tag),
                     color:
-                      observerEntry?.target.textContent === str?.content
+                      observerEntry === str?.content
                         ? theme.colors.primary.primary
                         : "",
                     transform:
-                      observerEntry?.target.textContent === str?.content
-                        ? "scale(1.05)"
-                        : "",
+                      observerEntry === str?.content ? "scale(1.05)" : "",
                   })}
                 >
                   <TocAnchor

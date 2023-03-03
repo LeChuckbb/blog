@@ -24,6 +24,7 @@ const Badge = ({
 
   return (
     <span
+      className="badge"
       css={{
         display: "flex",
         position: "relative",

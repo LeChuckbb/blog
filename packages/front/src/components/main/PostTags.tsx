@@ -3,6 +3,8 @@ import { PostTagsType } from "../../hooks/query/useGetPostTagsQuery";
 import { useGetPostTagsQuery } from "../../hooks/query/useGetPostTagsQuery";
 import { Chip as Tag } from "design/src/stories/Chip";
 import Badge from "design/src/stories/Badge";
+import { useRef } from "react";
+import { useEffect } from "react";
 
 interface Props {
   tagsData?: PostTagsType;
@@ -12,13 +14,51 @@ interface Props {
 const PostTags: React.FC<Props> = (props) => {
   const { setTag } = props;
   const { data } = useGetPostTagsQuery();
+  const touchContainerRef = useRef<HTMLUListElement | null>(null);
 
   const onClickTagList = (tag: string) => {
     setTag(tag);
   };
 
+  useEffect(() => {
+    if (touchContainerRef.current) {
+      let startX = 0;
+      let pressed = false;
+
+      touchContainerRef.current.addEventListener(
+        "mousedown",
+        (e: MouseEvent) => {
+          pressed = true;
+          startX = e.clientX;
+          if (touchContainerRef.current !== null)
+            touchContainerRef.current.style.cursor = "grabbing";
+        }
+      );
+
+      touchContainerRef.current.addEventListener("mouseleave", (e) => {
+        pressed = false;
+      });
+
+      touchContainerRef.current.addEventListener("mouseup", (e: MouseEvent) => {
+        pressed = false;
+        if (touchContainerRef.current !== null)
+          touchContainerRef.current.style.cursor = "grab";
+      });
+
+      touchContainerRef.current.addEventListener(
+        "mousemove",
+        (e: MouseEvent) => {
+          if (!pressed) return;
+
+          if (touchContainerRef.current !== null)
+            touchContainerRef.current.scrollLeft += startX - e.clientX;
+        }
+      );
+    }
+  }, []);
+
   return (
-    <TagList>
+    <TagList ref={touchContainerRef}>
       <Badge badgeContent={data?.count}>
         <Tag color="secondary" onClick={() => onClickTagList("all")}>
           all
@@ -42,11 +82,14 @@ const TagList = styled.ul`
   display: flex;
   gap: 8px;
   padding: 16px;
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: scroll;
+  overflow-x: auto;
+  scroll-snap-type: x;
+  scroll-behavior: auto;
   ::-webkit-scrollbar {
-    display: none;
+    width: 0;
+  }
+  & .badge {
+    scroll-snap-align: start;
   }
 `;
 

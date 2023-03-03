@@ -6,7 +6,6 @@ const useScrollDirection = () => {
   const timeoutRef = useRef<any>(null);
 
   const handleScroll = () => {
-    console.log("handle Scroll");
     const currentScrollY = window.scrollY;
     if (prevY.current > currentScrollY) {
       setScrollDirection("up");
@@ -16,16 +15,15 @@ const useScrollDirection = () => {
     prevY.current = currentScrollY;
   };
 
-  const throttleScroll = () => {
-    if (!timeoutRef.current) {
-      timeoutRef.current = setTimeout(() => {
-        handleScroll();
-        timeoutRef.current = null;
-      }, 300);
-    }
-  };
-
   useEffect(() => {
+    const throttleScroll = () => {
+      if (!timeoutRef.current) {
+        timeoutRef.current = setTimeout(() => {
+          handleScroll();
+          timeoutRef.current = null;
+        }, 300);
+      }
+    };
     window.addEventListener("scroll", throttleScroll);
   }, []);
 

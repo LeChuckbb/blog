@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 const Header = ({ scrollDirection }: any) => {
-  const { data, status } = useIsAuthQuery();
+  const { data } = useIsAuthQuery();
   const { refetch } = useLogoutQuery();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const router = useRouter();
@@ -77,7 +77,8 @@ const Container = styled.div<ContainerProps>`
   width: 100%;
   position: fixed;
   z-index: 100;
-  transition: all 0.3s;
+  transition: all 0.1s;
+  transition-timing-function: cubic-bezier(0, 0, 0.22, 0.99);
   background: ${(props) => props.theme.colors.primary.primary};
   transform: ${(props) =>
     props.scrollDirection === "down" && "translateY(-64px)"};

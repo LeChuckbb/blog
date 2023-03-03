@@ -108,6 +108,8 @@ const useEditorStyles = () => {
 
     .toastui-editor-contents code[data-backticks] {
       border-radius: 4px;
+      background-color: ${theme.colors.primary.container};
+      color: ${theme.colors.primary.onContainer};
     }
 
     .toastui-editor-contents code[data-language="javascript"]::before {

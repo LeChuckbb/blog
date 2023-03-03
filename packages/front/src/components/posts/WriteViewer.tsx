@@ -5,37 +5,55 @@ import { Viewer } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import useEditorStyles from "./useEditorStyles";
-import styled from "@emotion/styled";
-import IconArrowUp from "../../../public/icons/arrow_upward.svg";
 import { useEffect, useRef } from "react";
-import useTOCIntersectionObservation from "design/src/hooks/useTOCIntersectionObservation";
 
-const WriteViewer = ({
-  content,
-  setObserverEntries,
-  setAnchorClickHandler,
-}: any) => {
+const WriteViewer = ({ content, setObserverEntry }: any) => {
   const { editorStyles } = useEditorStyles();
   const ref = useRef<HTMLDivElement | null>(null);
-  const { entry, anchorOnClickHandler } = useTOCIntersectionObservation(
-    ref,
-    {}
-  );
-
-  const FAB = () => {
-    return (
-      <FABContainer>
-        <IconArrowUp />
-      </FABContainer>
-    );
-  };
+  const HEADER_OFFSET_Y = 64;
+  const timeoutRef = useRef<any>(null);
 
   useEffect(() => {
-    setObserverEntries(entry);
-    setAnchorClickHandler(() => anchorOnClickHandler);
-  }, [entry, anchorOnClickHandler]);
+    const ToCHandleScroll = () => {
+      if (ref.current !== null) {
+        let aboveHeaderUrl: string | null;
+        const currentOffsetY = window.pageYOffset;
+        const headerElements = ref.current.querySelectorAll(
+          "h1,h2,h3"
+        ) as NodeListOf<HTMLHeadingElement>;
+        headerElements.forEach((elem) => {
+          const { top } = elem.getBoundingClientRect();
+          const elemTop = top + currentOffsetY;
+          const isLast = elem === headerElements[headerElements.length - 1];
+          if (currentOffsetY < elemTop - HEADER_OFFSET_Y) {
+            // 아직 지나치지 않은 헤더들.
+            aboveHeaderUrl
+              ? setObserverEntry(aboveHeaderUrl)
+              : setObserverEntry("");
+          } else {
+            // 헤더가 최상단에 도착하면 여기서 Set
+            // top이 -가 되면 여기 출력됨. -가 된다는 건 이미 지나친 스크롤을 의미
+            isLast
+              ? setObserverEntry(elem.innerText)
+              : (aboveHeaderUrl = elem.innerText);
+          }
+        });
+      }
+    };
 
-  console.log(content);
+    const throttleScroll = () => {
+      if (!timeoutRef.current) {
+        timeoutRef.current = setTimeout(() => {
+          ToCHandleScroll();
+          timeoutRef.current = null;
+        }, 300);
+      }
+    };
+    window.addEventListener("scroll", throttleScroll);
+    return () => {
+      window.removeEventListener("scroll", throttleScroll);
+    };
+  }, []);
 
   return (
     <div css={editorStyles} ref={ref}>
@@ -71,23 +89,8 @@ const WriteViewer = ({
           },
         }}
       />
-      {/* <FAB /> */}
     </div>
   );
 };
 
 export default WriteViewer;
-
-const FABContainer = styled.div`
-  width: 56px;
-  height: 56px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 16px;
-  box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15),
-    0px 1px 3px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  background: ${(props) => props.theme.colors.primary.primary};
-  fill: ${(props) => props.theme.colors.primary.onPrimary};
-`;

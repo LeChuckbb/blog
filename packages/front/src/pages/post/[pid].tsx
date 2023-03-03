@@ -40,8 +40,7 @@ const getHTMLTags = (htmlString: string) => {
 
 const PostDetail = ({ title, date, html, slug, markdown }: any) => {
   const tocArray = getHTMLTags(html);
-  const [observerEntry, setObserverEntry] =
-    useState<IntersectionObserverEntry>();
+  const [observerEntry, setObserverEntry] = useState<string>();
   const [anchorClickHandler, setAnchorClickHandler] = useState();
 
   return (
@@ -55,7 +54,7 @@ const PostDetail = ({ title, date, html, slug, markdown }: any) => {
       {markdown && (
         <NoSSRViewer
           content={markdown}
-          setObserverEntries={setObserverEntry}
+          setObserverEntry={setObserverEntry}
           setAnchorClickHandler={setAnchorClickHandler}
         />
       )}

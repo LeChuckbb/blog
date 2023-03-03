@@ -140,6 +140,7 @@ const CardBox = styled.div`
   height: 100%;
   transition: all 0.3s;
   top: 0px;
+  height: 100%;
 
   .imgDiv {
     fill: ${(props) => props.theme.colors.neutral.surface};
@@ -189,7 +190,7 @@ const CardBox = styled.div`
 const StyledTextSection = styled.div`
   padding: 8px 16px;
   flex: 2 1 auto;
-  height: 162px;
+  height: 140px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

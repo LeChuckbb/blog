@@ -25,6 +25,9 @@
   --toastify-color-progress-light: #5252b6;
   --toastify-color-progress-dark: #c1c1ff;
 }
+html {
+  scroll-behavior: smooth;
+}
 html,
 body {
   height: 100%;
