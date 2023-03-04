@@ -5,7 +5,7 @@ import ImageDefault from "../../../public/static/thumbnail/default.svg";
 
 interface Props {
   selectedTag: string;
-  images: [string];
+  images: [{ image: string; id: string }];
 }
 
 const dateFormatter = (date: string): string => {
@@ -25,9 +25,10 @@ const PostList = ({ selectedTag, images }: Props) => {
   return (
     <CardContainer className="CardContainer">
       {postsData?.pages
-        .map((page: any, idx) => page.results)
+        .map((page: any) => page.results)
         .flat()
         .map((post: any, idx: number, arr: any) => {
+          const image = images.filter((item) => item.id === post.thumbnail.id);
           return (
             <Card
               key={post._id}
@@ -38,7 +39,7 @@ const PostList = ({ selectedTag, images }: Props) => {
             >
               <Card.Thumbnail
                 ImageDefault={ImageDefault}
-                images={images[idx]}
+                images={image[0]?.image}
               />
               <Card.SecondSection>
                 <Card.TitleWrapper>

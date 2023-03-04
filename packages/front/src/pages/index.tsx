@@ -26,7 +26,7 @@ export type PostDatas = Array<{
 
 const Home = ({ dehydratedState, tags, images }: any) => {
   const [selectedTag, setSelectedTag] = useState("all");
-  console.log(dehydratedState);
+  // console.log(dehydratedState);
 
   return (
     <Container>
@@ -108,7 +108,7 @@ const getImages = async () => {
 
       const { result, base64Image } = await getFileFromCF(id, "thumbnail");
       const image = `data:${result?.headers["content-type"]};base64,${base64Image}`;
-      return image;
+      return { image, id };
     })
   );
 
@@ -135,6 +135,7 @@ export async function getStaticProps() {
       tags: JSON.stringify(tags),
       images: JSON.stringify(images),
     },
+    // revalidate: 60, 이 설정이 있으면 빌드 없이도 새로 생성한 글을 볼 수 있나?
   };
 }
 

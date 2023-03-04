@@ -173,7 +173,10 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
   }, []);
 
   useEffect(() => {
-    setValue("urlSlug", postFetchBody?.title?.replaceAll(" ", "-"));
+    setValue(
+      "urlSlug",
+      postFetchBody?.title?.replaceAll(" ", "-").replaceAll("/", "")
+    );
   }, [postFetchBody]);
 
   const getUseFormProps = ({ ...otherprops } = {}) => ({

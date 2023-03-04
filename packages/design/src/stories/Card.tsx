@@ -212,6 +212,8 @@ const StyledTitle = styled.h2`
 
 const StyledSubTitle = styled.p`
   display: -webkit-box;
+  font-size: 15px;
+  color: ${(props) => props.theme.colors.neutralVariant.surfaceVariant};
   -webkit-line-clamp: 2; /* The number of lines to show before truncating */
   -webkit-box-orient: vertical;
   overflow: hidden;
