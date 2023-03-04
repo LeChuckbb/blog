@@ -22,6 +22,10 @@ const PostList = ({ selectedTag, images }: Props) => {
     hasNextPage,
   } = useGetPostByPageQuery(selectedTag);
 
+  const fetchNextHandler = () => {
+    hasNextPage && fetchNextPage();
+  };
+
   return (
     <CardContainer className="CardContainer">
       {postsData?.pages
@@ -34,7 +38,7 @@ const PostList = ({ selectedTag, images }: Props) => {
               key={post._id}
               id={post._id}
               urlSlug={post.urlSlug}
-              fetchNext={() => hasNextPage && fetchNextPage()}
+              fetchNext={fetchNextHandler}
               isLastItem={arr.length - 1 === idx}
             >
               <Card.Thumbnail

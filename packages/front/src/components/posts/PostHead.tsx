@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { modalState } from "../../recoil/atom";
 import { useDeletePostMutation } from "../../hooks/query/useDeletePostMutation";
 import { Button } from "design/src/stories/Button";
+import { useIsAuthQuery } from "../../hooks/query/useIsAuthQuery";
 
 type Props = {
   date: any;
@@ -42,9 +43,10 @@ const dateFormatter = (date: string) => {
 const PostHead = ({ date, title, slug }: Props) => {
   const router = useRouter();
   const [_, setModal] = useRecoilState(modalState);
-  const { data } = useQuery(["isAuthNoSuspense"], () => isAuthorized(), {
-    suspense: false,
-  });
+  // const { data } = useQuery(["isAuthNoSuspense"], () => isAuthorized(), {
+  //   suspense: false,
+  // });
+  const { data } = useIsAuthQuery();
   const { mutate: deletePost } = useDeletePostMutation(<></>, setModal);
   const confirmHanlder = async () =>
     await deletePost(router.query.pid as string);

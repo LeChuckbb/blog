@@ -16,7 +16,7 @@ export const useLogoutQuery = () => {
       suspense: false,
       useErrorBoundary: true,
       onSuccess: () => {
-        window.sessionStorage.setItem("isLogin", "false");
+        window.sessionStorage.removeItem("isLogin");
       },
     }
   );

@@ -14,12 +14,13 @@ export type PostByPageType = {
 export const useGetPostByPageQuery = (selectedTag: string) => {
   return useInfiniteQuery<AxiosResponse<PostByPageType, Error>>(
     [POST_BY_PAGE_KEY, selectedTag],
-    ({ pageParam = 1 }) => getPostByPage(pageParam, selectedTag),
+    ({ pageParam = 1 }) => {
+      console.log(pageParam);
+      return getPostByPage(pageParam, selectedTag);
+    },
     {
-      staleTime: 300000,
       suspense: false,
       useErrorBoundary: true,
-      retry: false,
       getNextPageParam: (lastPage: any) => lastPage?.next ?? null,
     }
   );
