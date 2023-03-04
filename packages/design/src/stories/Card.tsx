@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import React, { useRef, useEffect, ReactComponentElement } from "react";
+import React, { useRef, useEffect } from "react";
 import useMainPageIntersectionObserver from "../hooks/useMainPageIntersectionObserver";
 import { useRouter } from "next/router";
 import { Chip as TagChip } from "design/src/stories/Chip";
@@ -56,20 +56,20 @@ const myLoader = ({ src }: any) => {
 };
 
 type ThumbnailProps = {
-  imageId: string;
   ImageDefault: any;
+  images: string;
 };
 
-Card.Thumbnail = ({ imageId, ImageDefault }: ThumbnailProps) => {
+Card.Thumbnail = ({ ImageDefault, images }: ThumbnailProps) => {
   return (
     <div
       className="imgDiv"
       onClick={() => console.log("img div clicked!!!!@@@")}
     >
-      {imageId ? (
+      {images ? (
         <Image
           loader={myLoader}
-          src={`${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${imageId}/thumbnail`}
+          src={images}
           alt="thumbnail"
           style={{ borderRadius: "12px 12px 0px 0px", fill: "red" }}
           width={320}

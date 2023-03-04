@@ -6,7 +6,6 @@ import { Button } from "design/src/stories/Button";
 import useMyToast from "../../hooks/useMyToast";
 import { ToastContainer } from "react-toastify";
 import { useLoginMutation } from "../../hooks/query/useLoginMutation";
-import { getCookie } from "cookies-next";
 
 export type LoginForm = {
   id: string;
@@ -42,8 +41,6 @@ const Login = () => {
     error?.id?.message && callToast(error.id.message, "Id");
     error?.password?.message && callToast(error.password.message, "password");
   };
-
-  console.log(getCookie("refreshToken"));
 
   return (
     <>

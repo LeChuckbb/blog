@@ -6,8 +6,6 @@ import { IS_AUTH_QUERYKEY } from "./useIsAuthQuery";
 export const LOGOUT_QUERYKEY = "logout";
 
 export const useLogoutQuery = () => {
-  const queryClient = useQueryClient();
-
   return useQuery<AxiosResponse<any, Error>>(
     [LOGOUT_QUERYKEY],
     () => logoutAPI(),
@@ -17,7 +15,9 @@ export const useLogoutQuery = () => {
       enabled: false,
       suspense: false,
       useErrorBoundary: true,
-      onSuccess: () => queryClient.invalidateQueries(IS_AUTH_QUERYKEY),
+      onSuccess: () => {
+        window.sessionStorage.setItem("isLogin", "false");
+      },
     }
   );
 };

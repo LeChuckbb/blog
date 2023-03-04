@@ -9,8 +9,8 @@ import {
   PostByPageType,
   POST_BY_PAGE_KEY,
 } from "../hooks/query/useGetPostByPageQuery";
-import { PostTagsType, POST_TAG_KEY } from "../hooks/query/useGetPostTagsQuery";
 import useMongo from "../lib/useMongo";
+import { getFileFromCF } from "../apis/fileApi";
 
 // const DynamicPosts = dynamic(() => import("../components/main/Posts"), {
 //   ssr: false,
@@ -24,16 +24,17 @@ export type PostDatas = Array<{
   tags: Array<String>;
 }>;
 
-const Home = ({ dehydratedState }: any) => {
+const Home = ({ dehydratedState, tags, images }: any) => {
   const [selectedTag, setSelectedTag] = useState("all");
+  console.log(dehydratedState);
 
   return (
     <Container>
       <LocalErrorBoundary>
-        <PostTags setTag={setSelectedTag} />
+        <PostTags setTag={setSelectedTag} tagsData={JSON.parse(tags)} />
       </LocalErrorBoundary>
       <LocalErrorBoundary>
-        <PostList selectedTag={selectedTag} />
+        <PostList selectedTag={selectedTag} images={JSON.parse(images)} />
       </LocalErrorBoundary>
     </Container>
   );
@@ -79,12 +80,6 @@ const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
               .skip(PAGE_SIZE * (page - 1))
               .limit(PAGE_SIZE)
               .toArray();
-
-      // results.forEach((post) => {
-      //   // 1. post.thumbnail.id에 접근
-      //   // 2. id를 바탕으로 아마지 요청 URL 생성
-      // });
-
       return { count, next, prev, results };
     },
     {
@@ -94,28 +89,51 @@ const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
     }
   );
 
-  // getPostTags
-  await queryClient.prefetchQuery<PostTagsType, Error>(
-    [POST_TAG_KEY],
-    async () => {
-      const { tagsCollection } = await useMongo();
-      const tags = await tagsCollection.find({}).toArray();
-      const count = await tagsCollection.countDocuments();
-      return { count, tags };
-    }
-  );
-
   return {
     dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
   };
 };
 
+const getImages = async () => {
+  const { postsCollection } = await useMongo();
+  const posts = await postsCollection
+    .find({}, { projection: { thumbnail: 1 } })
+    .sort({ date: -1 })
+    .toArray();
+
+  const images = await Promise.all(
+    posts.map(async (post) => {
+      const id = post?.thumbnail?.id;
+      if (id === undefined || id === "") return null;
+
+      const { result, base64Image } = await getFileFromCF(id, "thumbnail");
+      const image = `data:${result?.headers["content-type"]};base64,${base64Image}`;
+      return image;
+    })
+  );
+
+  return images;
+};
+
+const getTags = async () => {
+  // getPostTags
+  const { tagsCollection } = await useMongo();
+  const tags = await tagsCollection.find({}).toArray();
+  const count = await tagsCollection.countDocuments();
+  return { count, tags };
+};
+
 export async function getStaticProps() {
+  const images = await getImages();
+  const tags = await getTags();
   const queryClient = new QueryClient();
   const dehydratedState = await prefetchData(queryClient);
+
   return {
     props: {
       dehydratedState,
+      tags: JSON.stringify(tags),
+      images: JSON.stringify(images),
     },
   };
 }

@@ -8,6 +8,7 @@ export const useLoginMutation = () => {
 
   return useMutation((body: any) => loginAPI(body), {
     onSuccess: (result) => {
+      window.sessionStorage.setItem("isLogin", "true");
       window.location.href = "/";
     },
     onError: (error) => {

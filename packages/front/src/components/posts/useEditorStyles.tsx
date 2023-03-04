@@ -5,9 +5,9 @@ const useEditorStyles = () => {
   const theme = useTheme();
 
   const editorStyles = css`
-    .toastui-editor-contents {
+    /* .toastui-editor-contents {
       color: ${theme.colors.neutral.onBackground};
-    }
+    } */
 
     .toastui-editor-contents h1,
     h2,
@@ -85,6 +85,16 @@ const useEditorStyles = () => {
       border-color: ${theme.colors.neutralVariant.outline};
     }
 
+    .toastui-editor-contents ul > li::before {
+      background-color: ${theme.colors.neutral.onBackground};
+      margin-top: 10px;
+      width: 6px;
+      height: 6px;
+    }
+    .toastui-editor-contents ol > li::before {
+      color: ${theme.colors.primary.primary};
+    }
+
     .toastui-editor-contents blockquote {
       margin: 32px 0;
       border-left: 4px solid;
@@ -107,12 +117,16 @@ const useEditorStyles = () => {
     }
 
     .toastui-editor-contents code[data-backticks] {
+      border: 1.5px solid;
+      border-color: ${theme.colors.primary.container};
       border-radius: 4px;
-      background-color: ${theme.colors.primary.container};
-      color: ${theme.colors.primary.onContainer};
+      background-color: ${theme.colors.neutral.background};
+      color: ${theme.colors.primary.primary};
+      font-weight: 500;
+      font-size: 15px;
     }
 
-    .toastui-editor-contents code[data-language="javascript"]::before {
+    .toastui-editor-contents code[data-language]::before {
       content: attr(data-language);
       position: absolute;
       right: 10px;

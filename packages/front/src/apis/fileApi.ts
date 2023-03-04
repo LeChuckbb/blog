@@ -1,7 +1,7 @@
 import axiosInstance from ".";
 import axios, { AxiosResponse } from "axios";
 
-export const getUploadImageURL = () => axiosInstance.get(`/uploadURL`);
+export const getUploadImageURL = () => axiosInstance.get(`/file/upload`);
 
 export const getFileFromCF = async (
   imageId: string,
@@ -20,3 +20,6 @@ export const getFileFromCF = async (
 
   return { result, base64Image };
 };
+
+export const deleteThumbnail = (documentId: string) =>
+  axiosInstance.delete(`/file/thumbnail?id=${documentId}`);

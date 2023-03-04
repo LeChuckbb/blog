@@ -1,13 +1,18 @@
+import Prism from "prismjs";
+import "prismjs/themes/prism.css";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-tsx";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
+import { Editor } from "@toast-ui/react-editor";
+import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
+import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import "tui-color-picker/dist/tui-color-picker.css";
 import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
-import { Editor } from "@toast-ui/react-editor";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
-import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
-import "prismjs/themes/prism.css";
-import Prism from "prismjs";
+
 import { useRecoilState } from "recoil";
 import { themeState } from "../../recoil/atom";
 import useEditorStyles from "./useEditorStyles";
@@ -33,6 +38,7 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
   const { editorStyles } = useEditorStyles();
 
   useEffect(() => {
+    // 게시글에 이미지 붙여넣기 시 CF 서버에 업로드하는 addImageBlobHook
     if (editorRef.current) {
       const editor = editorRef.current.getInstance();
       editor.removeHook("addImageBlobHook");
@@ -43,8 +49,6 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
 
           const uploadURL = await getUploadImageURL();
           const uploadResult = await axios.post(uploadURL.data, formData);
-          console.log(uploadURL);
-          console.log(uploadResult);
           const url = `${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${uploadResult.data.result.id}/post`;
           callback(url, "image");
         })();
@@ -100,7 +104,6 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
                     tagName,
                     classNames: [`tocAnchor`],
                     attributes: {
-                      // id: getChildrenText(node).trim().replace(/\s+/g, "-"),
                       id: getChildrenText(node).trim(),
                     },
                   };

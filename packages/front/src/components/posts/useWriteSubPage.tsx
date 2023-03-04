@@ -8,7 +8,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { ChangeEvent } from "react";
 import { useEffect } from "react";
-import { getUploadImageURL } from "../../apis/fileApi";
+import { deleteThumbnail, getUploadImageURL } from "../../apis/fileApi";
 import axios from "axios";
 import { getFileFromCF } from "../../apis/fileApi";
 
@@ -76,8 +76,9 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
     thumbInput: string | FileList
   ): Promise<{ fileName: string; fileId?: string }> => {
     if (typeof thumbInput === "string") {
+      const id = thumbInput !== "" ? prevData?.thumbnail?.id : "";
       // DB에 저장된 image file.
-      return { fileName: thumbInput, fileId: prevData?.thumbnail?.id };
+      return { fileName: thumbInput, fileId: id };
     } else {
       const formData = new FormData();
       formData.append("file", thumbInput[0]);
@@ -147,8 +148,11 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
     register("thumbnail").onChange(event);
   };
 
-  const handleDeleteButtonClick = () => {
+  const handleDeleteButtonClick = async () => {
     setThumbnailImage(null);
+    // DB에서 삭제하기
+    await deleteThumbnail(prevData._id);
+    setValue("thumbnail", "");
   };
 
   useEffect(() => {
@@ -163,7 +167,6 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
         `data:${result?.headers["content-type"]};base64,${base64Image}`
       );
     };
-    console.log(prevData);
     if (prevData?.thumbnail?.id) {
       getFileAndSet();
     }

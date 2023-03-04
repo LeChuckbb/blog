@@ -46,6 +46,7 @@
     "@types/react-transition-group": "^4.4.5",
     "@types/uuid": "^9.0.1",
     "babel-loader": "^8.3.0",
+    "bson-objectid": "^2.0.4",
     "cookies-next": "^2.1.1",
     "next-transpile-modules": "9",
     "prismjs": "^1.29.0",

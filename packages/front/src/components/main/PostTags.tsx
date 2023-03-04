@@ -1,19 +1,19 @@
 import styled from "@emotion/styled";
-import { PostTagsType } from "../../hooks/query/useGetPostTagsQuery";
-import { useGetPostTagsQuery } from "../../hooks/query/useGetPostTagsQuery";
 import { Chip as Tag } from "design/src/stories/Chip";
 import Badge from "design/src/stories/Badge";
 import { useRef } from "react";
 import { useEffect } from "react";
 
+type PostTagsType = {
+  count: number;
+  tags: Array<object>;
+};
 interface Props {
   tagsData?: PostTagsType;
   setTag: (tag: string | any) => unknown;
 }
 
-const PostTags: React.FC<Props> = (props) => {
-  const { setTag } = props;
-  const { data } = useGetPostTagsQuery();
+const PostTags: React.FC<Props> = ({ tagsData, setTag }) => {
   const touchContainerRef = useRef<HTMLUListElement | null>(null);
 
   const onClickTagList = (tag: string) => {
@@ -59,12 +59,12 @@ const PostTags: React.FC<Props> = (props) => {
 
   return (
     <TagList ref={touchContainerRef}>
-      <Badge badgeContent={data?.count}>
+      <Badge badgeContent={tagsData?.count}>
         <Tag color="secondary" onClick={() => onClickTagList("all")}>
           all
         </Tag>
       </Badge>
-      {data?.tags?.map((tag: any) => {
+      {tagsData?.tags.map((tag: any) => {
         return (
           <Badge badgeContent={tag.count} key={tag._id}>
             <Tag color="secondary" onClick={() => onClickTagList(tag.name)}>
@@ -83,8 +83,6 @@ const TagList = styled.ul`
   gap: 8px;
   padding: 16px;
   overflow-x: auto;
-  scroll-snap-type: x;
-  scroll-behavior: auto;
   ::-webkit-scrollbar {
     width: 0;
   }

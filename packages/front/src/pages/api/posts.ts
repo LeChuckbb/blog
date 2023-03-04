@@ -1,4 +1,4 @@
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import type { NextApiHandler } from "next";
 import { decode, encode } from "html-entities";
 import useMongo from "../../lib/useMongo";
 import { apiHandler } from "../../lib/api";
