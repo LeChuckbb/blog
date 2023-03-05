@@ -7,11 +7,11 @@ export const getPostBySlug = (slug: string) =>
 
 export const createPost = (body: any) => axiosInstance.post("/posts", body);
 
-export const updatePost = (slug: string, body: any) =>
-  axiosInstance.patch(`/posts?slug=${slug}`, body);
+export const updatePost = (id: string, body: any) =>
+  axiosInstance.patch(`/posts?id=${id}`, body);
 
-export const deletePost = (slug: string) =>
-  axiosInstance.delete(`/posts?slug=${slug}`);
+export const deletePost = (id: string) =>
+  axiosInstance.delete(`/posts?id=${id}`);
 
 export const getPostByPage = async (page: number, tag: string) => {
   const res = await axiosInstance.get(`/posts?page=${page}&tag=${tag}`);

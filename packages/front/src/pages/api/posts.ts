@@ -1,7 +1,7 @@
 import type { NextApiHandler } from "next";
-import { decode, encode } from "html-entities";
 import useMongo from "../../lib/useMongo";
 import { apiHandler } from "../../lib/api";
+import ObjectID from "bson-objectid";
 
 const PAGE_SIZE = 8;
 
@@ -106,28 +106,21 @@ const createPost: NextApiHandler = async (req, res) => {
   const { postsCollection } = await useMongo();
   const body = {
     ...req.body,
-    tags: req.body?.tags,
-    thumbnail: req.body?.thumbnail,
-    // html: encode(req.body.html),
-    html: req.body.html,
   };
   const result = await postsCollection.insertOne(body);
   await createTags(body?.tags);
 
-  res.status(200).json(result);
+  res.status(200).json({ insertResult: result, urlSlug: req.body.urlSlug });
 };
 
 const updatePost: NextApiHandler = async (req, res) => {
   const { postsCollection } = await useMongo();
-  const prevSlug = req.query.slug;
   const body = {
     ...req.body,
-    // html: encode(req.body.html),
-    html: req.body.html,
   };
 
   const result = await postsCollection.findOneAndUpdate(
-    { urlSlug: prevSlug },
+    { _id: ObjectID.createFromHexString(req.query.id as string) },
     {
       $set: {
         thumbnail: body.thumbnail,
@@ -142,14 +135,16 @@ const updatePost: NextApiHandler = async (req, res) => {
     }
   );
 
+  if (result.value === null) throw new Error("게시글 업데이트 실패");
+
   await updateTags(result?.value?.tags, body.tags);
-  res.status(200).json(result);
+  res.status(200).json({ updateResult: result, urlSlug: req.body.urlSlug });
 };
 
 const deletePost: NextApiHandler = async (req, res) => {
   const { postsCollection } = await useMongo();
   const result = await postsCollection.findOneAndDelete({
-    urlSlug: req.query.slug,
+    _id: ObjectID.createFromHexString(req.query.id as string),
   });
 
   await deleteTags(result?.value?.tags);

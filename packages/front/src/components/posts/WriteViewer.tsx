@@ -56,7 +56,7 @@ const WriteViewer = ({ content, setObserverEntry }: any) => {
   }, []);
 
   return (
-    <div css={editorStyles} ref={ref}>
+    <div css={editorStyles} ref={ref} className="WriterViewer">
       <Viewer
         initialValue={content || ""}
         plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}

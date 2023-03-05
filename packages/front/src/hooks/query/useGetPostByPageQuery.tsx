@@ -15,7 +15,6 @@ export const useGetPostByPageQuery = (selectedTag: string) => {
   return useInfiniteQuery<AxiosResponse<PostByPageType, Error>>(
     [POST_BY_PAGE_KEY, selectedTag],
     ({ pageParam = 1 }) => {
-      console.log(pageParam);
       return getPostByPage(pageParam, selectedTag);
     },
     {

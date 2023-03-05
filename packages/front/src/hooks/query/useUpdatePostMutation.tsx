@@ -8,9 +8,11 @@ export const useUpdatePostMutation = () => {
   const router = useRouter();
   const { callToast } = useMyToast();
 
-  return useMutation((param: any) => updatePost(param?.slug, param?.body), {
-    onSuccess: () => {
-      router.push("/");
+  return useMutation((param: any) => updatePost(param?.id, param?.body), {
+    onSuccess: (result) => {
+      result.data.urlSlug
+        ? router.push(`/post/${result.data.urlSlug}`)
+        : router.push("/");
     },
     onError: (error) => {
       if (

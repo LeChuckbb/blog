@@ -7,7 +7,6 @@ import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 import PostTableOfContents from "../../components/posts/PostTableOfContents";
 import useMongo from "../../lib/useMongo";
-import { decode } from "html-entities";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -38,7 +37,7 @@ const getHTMLTags = (htmlString: string) => {
     : null;
 };
 
-const PostDetail = ({ title, date, html, slug, markdown }: any) => {
+const PostDetail = ({ title, date, html, slug, markdown, _id }: any) => {
   const tocArray = getHTMLTags(html);
   const [observerEntry, setObserverEntry] = useState<string>();
   const [anchorClickHandler, setAnchorClickHandler] = useState();
@@ -50,7 +49,12 @@ const PostDetail = ({ title, date, html, slug, markdown }: any) => {
         anchorClickHandler={anchorClickHandler}
         observerEntry={observerEntry}
       />
-      <PostHead slug={slug} date={date} title={title} />
+      <PostHead
+        slug={slug}
+        date={date}
+        title={title}
+        id={_id?.replaceAll('"', "")}
+      />
       {markdown && (
         <NoSSRViewer
           content={markdown}
@@ -96,7 +100,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const results = {
     ...res,
     _id: JSON.stringify(res?._id),
-    // html: decode(res?.html),
     html: res?.html,
   };
 

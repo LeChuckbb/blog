@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { deleteThumbnail, getUploadImageURL } from "../../apis/fileApi";
 import axios from "axios";
 import { getFileFromCF } from "../../apis/fileApi";
+import ObjectID from "bson-objectid";
 
 export type WriteSubPageProps = {
   subPageRef: RefObject<HTMLDivElement>;
@@ -107,6 +108,10 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
       thumbInput
     );
 
+    console.log(prevData);
+    console.log(prevData._id);
+    console.log(prevData._id?.replaceAll('"', ""));
+
     const body: any = {
       ...formInputData,
       ...postFetchBody,
@@ -120,7 +125,7 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
 
     isUpdatePost
       ? updatePost({
-          slug: router.query.slug as string,
+          id: prevData._id,
           body,
         })
       : createPost(body);

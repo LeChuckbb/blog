@@ -9,8 +9,10 @@ export const useCreatePostMutation = () => {
   const { callToast } = useMyToast();
 
   return useMutation((body: any) => createPost(body), {
-    onSuccess: () => {
-      router.push("/");
+    onSuccess: (result) => {
+      result.data.urlSlug
+        ? router.push(`/post/${result.data.urlSlug}`)
+        : router.push("/");
     },
     onError: (error) => {
       if (

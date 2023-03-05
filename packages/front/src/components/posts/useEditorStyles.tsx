@@ -8,17 +8,18 @@ const useEditorStyles = () => {
     /* .toastui-editor-contents {
       color: ${theme.colors.neutral.onBackground};
     } */
-
-    .toastui-editor-contents h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      color: inherit;
-      font-family: ${theme.fonts.family.plain};
-      margin: 32px 0px 16px 0px;
-      border-bottom: none;
+    .toastui-editor-contents {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: ${theme.colors.neutral.onBackground};
+        font-family: ${theme.fonts.family.plain};
+        margin: 32px 0px 16px 0px;
+        border-bottom: none;
+      }
     }
 
     .toastui-editor-contents h1 {
@@ -95,14 +96,21 @@ const useEditorStyles = () => {
       color: ${theme.colors.primary.primary};
     }
 
+    .toastui-editor-contents li {
+      color: ${theme.colors.neutral.onBackground};
+    }
+
     .toastui-editor-contents blockquote {
-      margin: 32px 0;
+      margin: 16px 0;
       border-left: 4px solid;
       border-left-color: ${theme.colors.primary.primary};
       padding: 16px 16px 16px 32px;
       background-color: ${theme.colors.neutralVariant.surfaceVariant};
       color: ${theme.colors.neutralVariant.onSurfaceVariant};
-      font-style: italic;
+      & * {
+        /* font-style: italic; */
+        /* font-family: ${theme.fonts.family.brand}; */
+      }
     }
 
     .toastui-editor-contents pre {

@@ -8,7 +8,7 @@ export const useDeletePostMutation = (content: any, setModal: any) => {
   const router = useRouter();
   const { callToast } = useMyToast();
 
-  return useMutation((slug: string) => deletePost(slug), {
+  return useMutation((id: string) => deletePost(id), {
     onSuccess: () => {
       router.push("/");
       setModal({ isOpen: false, content });

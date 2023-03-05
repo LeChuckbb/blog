@@ -1,8 +1,6 @@
 import Modal from "design/src/stories/Modal";
 import styled from "@emotion/styled";
 import { useRecoilState } from "recoil";
-import { useQuery } from "react-query";
-import { isAuthorized } from "../../apis/authApi";
 import { useRouter } from "next/router";
 import { modalState } from "../../recoil/atom";
 import { useDeletePostMutation } from "../../hooks/query/useDeletePostMutation";
@@ -13,6 +11,7 @@ type Props = {
   date: any;
   title: any;
   slug: any;
+  id: string;
 };
 
 const DeleteModal = ({ confirmHandler }: any) => {
@@ -40,7 +39,7 @@ const dateFormatter = (date: string) => {
   return formatter.format(dateObj);
 };
 
-const PostHead = ({ date, title, slug }: Props) => {
+const PostHead = ({ date, title, slug, id }: Props) => {
   const router = useRouter();
   const [_, setModal] = useRecoilState(modalState);
   // const { data } = useQuery(["isAuthNoSuspense"], () => isAuthorized(), {
@@ -48,8 +47,7 @@ const PostHead = ({ date, title, slug }: Props) => {
   // });
   const { data } = useIsAuthQuery();
   const { mutate: deletePost } = useDeletePostMutation(<></>, setModal);
-  const confirmHanlder = async () =>
-    await deletePost(router.query.pid as string);
+  const confirmHanlder = async () => await deletePost(id);
 
   const onClickDeleteHandler = async () => {
     setModal({

@@ -32,7 +32,7 @@ const PostList = ({ selectedTag, images }: Props) => {
         .map((page: any) => page.results)
         .flat()
         .map((post: any, idx: number, arr: any) => {
-          const image = images.filter((item) => item.id === post.thumbnail.id);
+          const image = images.filter((item) => item?.id === post.thumbnail.id);
           return (
             <Card
               key={post._id}
