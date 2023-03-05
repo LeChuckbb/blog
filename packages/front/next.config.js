@@ -3,7 +3,7 @@
 const withTM = require("next-transpile-modules")(["design"]);
 const nextConfig = {
   images: {
-    domains: ["localhost", "*"],
+    domains: ["localhost", "imagedelivery.net", "*"],
   },
   reactStrictMode: false,
   compiler: {

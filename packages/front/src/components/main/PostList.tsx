@@ -5,7 +5,6 @@ import ImageDefault from "../../../public/static/thumbnail/default.svg";
 
 interface Props {
   selectedTag: string;
-  images: [{ image: string; id: string }];
 }
 
 const dateFormatter = (date: string): string => {
@@ -15,35 +14,34 @@ const dateFormatter = (date: string): string => {
   return `${arr[0]}.${arr[1]}.${arr[2]}`;
 };
 
-const PostList = ({ selectedTag, images }: Props) => {
+const PostList = ({ selectedTag }: Props) => {
   const {
     data: postsData,
     fetchNextPage,
     hasNextPage,
   } = useGetPostByPageQuery(selectedTag);
 
-  const fetchNextHandler = () => {
-    hasNextPage && fetchNextPage();
-  };
-
   return (
     <CardContainer className="CardContainer">
       {postsData?.pages
-        .map((page: any) => page.results)
+        .map((page: any) => {
+          // console.log(page.results);
+          return page.results;
+        })
         .flat()
         .map((post: any, idx: number, arr: any) => {
-          const image = images.filter((item) => item?.id === post.thumbnail.id);
+          // console.log(post);
           return (
             <Card
               key={post._id}
               id={post._id}
               urlSlug={post.urlSlug}
-              fetchNext={fetchNextHandler}
+              fetchNext={() => hasNextPage && fetchNextPage()}
               isLastItem={arr.length - 1 === idx}
             >
               <Card.Thumbnail
                 ImageDefault={ImageDefault}
-                images={image[0]?.image}
+                imageId={post.thumbnail.id}
               />
               <Card.SecondSection>
                 <Card.TitleWrapper>

@@ -18,6 +18,7 @@ export const useGetPostByPageQuery = (selectedTag: string) => {
       return getPostByPage(pageParam, selectedTag);
     },
     {
+      staleTime: 60000,
       suspense: false,
       useErrorBoundary: true,
       getNextPageParam: (lastPage: any) => lastPage?.next ?? null,

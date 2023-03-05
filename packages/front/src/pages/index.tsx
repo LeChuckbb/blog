@@ -10,7 +10,6 @@ import {
   POST_BY_PAGE_KEY,
 } from "../hooks/query/useGetPostByPageQuery";
 import useMongo from "../lib/useMongo";
-import { getFileFromCF } from "../apis/fileApi";
 
 // const DynamicPosts = dynamic(() => import("../components/main/Posts"), {
 //   ssr: false,
@@ -24,9 +23,9 @@ export type PostDatas = Array<{
   tags: Array<String>;
 }>;
 
-const Home = ({ dehydratedState, tags, images }: any) => {
+const Home = ({ dehydratedState, tags }: any) => {
   const [selectedTag, setSelectedTag] = useState("all");
-  console.log(dehydratedState);
+  // console.log(dehydratedState);
 
   return (
     <Container>
@@ -34,7 +33,7 @@ const Home = ({ dehydratedState, tags, images }: any) => {
         <PostTags setTag={setSelectedTag} tagsData={JSON.parse(tags)} />
       </LocalErrorBoundary>
       <LocalErrorBoundary>
-        <PostList selectedTag={selectedTag} images={JSON.parse(images)} />
+        <PostList selectedTag={selectedTag} />
       </LocalErrorBoundary>
     </Container>
   );
@@ -93,28 +92,6 @@ const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
     dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
   };
 };
-
-const getImages = async () => {
-  const { postsCollection } = await useMongo();
-  const posts = await postsCollection
-    .find({}, { projection: { thumbnail: 1 } })
-    .sort({ date: -1 })
-    .toArray();
-
-  const images = await Promise.all(
-    posts.map(async (post) => {
-      const id = post?.thumbnail?.id;
-      if (id === undefined || id === "") return null;
-
-      const { result, base64Image } = await getFileFromCF(id, "thumbnail");
-      const image = `data:${result?.headers["content-type"]};base64,${base64Image}`;
-      return { image, id };
-    })
-  );
-
-  return images;
-};
-
 const getTags = async () => {
   // getPostTags
   const { tagsCollection } = await useMongo();
@@ -124,7 +101,6 @@ const getTags = async () => {
 };
 
 export async function getStaticProps() {
-  const images = await getImages();
   const tags = await getTags();
   const queryClient = new QueryClient();
   const dehydratedState = await prefetchData(queryClient);
@@ -133,7 +109,6 @@ export async function getStaticProps() {
     props: {
       dehydratedState,
       tags: JSON.stringify(tags),
-      images: JSON.stringify(images),
     },
     revalidate: 60,
   };

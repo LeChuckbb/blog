@@ -108,10 +108,6 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
       thumbInput
     );
 
-    console.log(prevData);
-    console.log(prevData._id);
-    console.log(prevData._id?.replaceAll('"', ""));
-
     const body: any = {
       ...formInputData,
       ...postFetchBody,

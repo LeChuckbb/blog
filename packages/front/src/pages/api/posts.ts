@@ -71,12 +71,12 @@ const getPost: NextApiHandler = async (req, res) => {
     // getPostByPage
     const tagQuery = req.query.tag;
     const pageQuery = req.query.page;
+    const page = Number(pageQuery);
 
     const count =
       tagQuery === "all"
         ? await postsCollection.count({})
         : await postsCollection.count({ tags: tagQuery });
-    const page = Number(pageQuery);
     const IS_NEXT_PAGE_EXIST = count - page * PAGE_SIZE <= 0 ? null : true;
     const next = !IS_NEXT_PAGE_EXIST ? IS_NEXT_PAGE_EXIST : page + 1;
     const prev = page === 1 ? null : page - 1;
@@ -85,13 +85,14 @@ const getPost: NextApiHandler = async (req, res) => {
       tagQuery === "all"
         ? await postsCollection
             .find({}, { projection: { html: 0, markdown: 0 } })
-            .sort({ date: -1 })
+            .sort({ date: -1, _id: 1 })
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE)
             .toArray()
-        : await postsCollection
+        : // 8 *
+          await postsCollection
             .find({ tags: tagQuery }, { projection: { html: 0, markdown: 0 } })
-            .sort({ date: -1 })
+            .sort({ date: -1, _id: 1 })
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE)
             .toArray();

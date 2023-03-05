@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import useMainPageIntersectionObserver from "../hooks/useMainPageIntersectionObserver";
 import { useRouter } from "next/router";
 import { Chip as TagChip } from "design/src/stories/Chip";
@@ -23,10 +23,14 @@ const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
   const entry = useMainPageIntersectionObserver(ref, {});
   const isIntersecting = !!entry?.isIntersecting;
   const router = useRouter();
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    isLastItem && isIntersecting && fetchNext();
-  }, [isLastItem, isIntersecting, fetchNext]);
+    if (isLastItem && isIntersecting && !isLoaded) {
+      fetchNext();
+      setIsLoaded(true);
+    }
+  }, [isLoaded, isLastItem, isIntersecting, fetchNext]);
 
   const onClickHandler = (event: React.MouseEvent, id: string) => {
     router.push(
@@ -57,19 +61,19 @@ const myLoader = ({ src }: any) => {
 
 type ThumbnailProps = {
   ImageDefault: any;
-  images: string;
+  imageId: string;
 };
 
-Card.Thumbnail = ({ ImageDefault, images }: ThumbnailProps) => {
+Card.Thumbnail = ({ ImageDefault, imageId }: ThumbnailProps) => {
   return (
     <div
       className="imgDiv"
       onClick={() => console.log("img div clicked!!!!@@@")}
     >
-      {images ? (
+      {imageId ? (
         <Image
-          loader={myLoader}
-          src={images}
+          // loader={myLoader}
+          src={`${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${imageId}/thumbnail`}
           alt="thumbnail"
           style={{ borderRadius: "12px 12px 0px 0px", fill: "red" }}
           width={320}
@@ -78,6 +82,7 @@ Card.Thumbnail = ({ ImageDefault, images }: ThumbnailProps) => {
           (max-width: 1200px) 50vw,
           33vw"
           objectFit="cover"
+          priority
         />
       ) : (
         <ImageDefault />
