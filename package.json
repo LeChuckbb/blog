@@ -6,9 +6,7 @@
   "private": true,
   "scripts": {
     "frontProd": "yarn workspace front build && yarn workspace front start",
-    "backProd": "yarn workspace back pm2",
     "front": "yarn workspace front dev",
-    "back": "yarn workspace back start",
     "start": "npm-run-all --parallel front back"
   },
   "workspaces": [
