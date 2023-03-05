@@ -3,7 +3,7 @@ import useMongo from "../../../lib/useMongo";
 import { apiHandler } from "../../../lib/api";
 import { AppError } from "../../../types/api";
 
-const logout: NextApiHandler = async (req, res) => {
+const Logout: NextApiHandler = async (req, res) => {
   const { authCollection } = await useMongo();
   const logoutResult = await authCollection.findOneAndUpdate(
     {
@@ -19,5 +19,5 @@ const logout: NextApiHandler = async (req, res) => {
 };
 
 export default apiHandler({
-  GET: logout,
+  GET: Logout,
 });

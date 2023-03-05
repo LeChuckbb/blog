@@ -5,10 +5,10 @@ import ObjectID from "bson-objectid";
 
 const PAGE_SIZE = 8;
 
-const createTags = async (tags: any) => {
+const CreateTags = async (tags: any) => {
+  const { tagsCollection } = await useMongo();
   if (tags === "" || undefined) return;
   if (typeof tags === "string") tags = [tags]; // []타입이 아니면 forEach에서 에러가 발생
-  const { tagsCollection } = await useMongo();
 
   tags?.forEach(async (tag: string) => {
     // 1. tags collection에 동명의 tag document가 이미 존재하는 경우 -> count 증가
@@ -22,7 +22,7 @@ const createTags = async (tags: any) => {
   });
 };
 
-const deleteTags = async (tags: Array<String>) => {
+const DeleteTags = async (tags: Array<String>) => {
   const { tagsCollection } = await useMongo();
   tags?.forEach(async (tag) => {
     const result = await tagsCollection.findOne({ name: tag });
@@ -49,11 +49,11 @@ const updateTags = async (
   const removeList = currentTags?.filter((x) => !inputTags?.includes(x));
   const addList = inputTags?.filter((x) => !currentTags?.includes(x));
 
-  removeList?.length !== 0 && (await deleteTags(removeList));
-  addList?.length !== 0 && (await createTags(addList));
+  removeList?.length !== 0 && (await DeleteTags(removeList));
+  addList?.length !== 0 && (await CreateTags(addList));
 };
 
-const getPost: NextApiHandler = async (req, res) => {
+const GetPost: NextApiHandler = async (req, res) => {
   const { postsCollection } = await useMongo();
   if (req.query?.slug) {
     // getPostBySlug
@@ -101,7 +101,7 @@ const getPost: NextApiHandler = async (req, res) => {
   }
 };
 
-const createPost: NextApiHandler = async (req, res) => {
+const CreatePost: NextApiHandler = async (req, res) => {
   // req.body에서 content 항목이 있으면 encode하여 DB에 저장
   // XSS 방지를 위해 HTML markdown -> entity로 변경
   const { postsCollection } = await useMongo();
@@ -109,12 +109,12 @@ const createPost: NextApiHandler = async (req, res) => {
     ...req.body,
   };
   const result = await postsCollection.insertOne(body);
-  await createTags(body?.tags);
+  await CreateTags(body?.tags);
 
   res.status(200).json({ insertResult: result, urlSlug: req.body.urlSlug });
 };
 
-const updatePost: NextApiHandler = async (req, res) => {
+const UpdatePost: NextApiHandler = async (req, res) => {
   const { postsCollection } = await useMongo();
   const body = {
     ...req.body,
@@ -142,19 +142,19 @@ const updatePost: NextApiHandler = async (req, res) => {
   res.status(200).json({ updateResult: result, urlSlug: req.body.urlSlug });
 };
 
-const deletePost: NextApiHandler = async (req, res) => {
+const DeletePost: NextApiHandler = async (req, res) => {
   const { postsCollection } = await useMongo();
   const result = await postsCollection.findOneAndDelete({
     _id: ObjectID.createFromHexString(req.query.id as string),
   });
 
-  await deleteTags(result?.value?.tags);
+  await DeleteTags(result?.value?.tags);
   res.status(200).end();
 };
 
 export default apiHandler({
-  GET: getPost,
-  POST: createPost,
-  PATCH: updatePost,
-  DELETE: deletePost,
+  GET: GetPost,
+  POST: CreatePost,
+  PATCH: UpdatePost,
+  DELETE: DeletePost,
 });

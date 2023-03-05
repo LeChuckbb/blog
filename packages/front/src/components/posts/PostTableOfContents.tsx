@@ -6,7 +6,6 @@ const getLeftMarginByTagName = (tagName: string | undefined) => {
   } else if (tagName === "h3") {
     return "24px";
   } else {
-    // h1
     return "0px";
   }
 };

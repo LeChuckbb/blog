@@ -42,9 +42,6 @@ const dateFormatter = (date: string) => {
 const PostHead = ({ date, title, slug, id }: Props) => {
   const router = useRouter();
   const [_, setModal] = useRecoilState(modalState);
-  // const { data } = useQuery(["isAuthNoSuspense"], () => isAuthorized(), {
-  //   suspense: false,
-  // });
   const { data } = useIsAuthQuery();
   const { mutate: deletePost } = useDeletePostMutation(<></>, setModal);
   const confirmHanlder = async () => await deletePost(id);

@@ -20,7 +20,7 @@ const verifyPassword = async (
   return false;
 };
 
-const login: NextApiHandler = async (req, res) => {
+const Login: NextApiHandler = async (req, res) => {
   const { authCollection } = await useMongo();
   const { getAccessToken, getRefreshToken } = await useToken();
 
@@ -53,5 +53,5 @@ const login: NextApiHandler = async (req, res) => {
 };
 
 export default apiHandler({
-  POST: login,
+  POST: Login,
 });

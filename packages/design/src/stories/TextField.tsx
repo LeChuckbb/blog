@@ -79,7 +79,6 @@ TextField.Input = ({
 
   // datePicker용 onChange + common onChagneHanlder
   const ChangeHanlder = (event: any) => {
-    console.log("onCHANGE");
     onChangeHandler(event);
     onChange && onChange(event);
   };

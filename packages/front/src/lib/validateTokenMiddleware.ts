@@ -10,15 +10,13 @@ const ValidateTokens = async (
   res: NextApiResponse,
   next: () => void
 ) => {
+  const {
+    getAccessToken,
+    getRefreshToken,
+    verifyAccessToken,
+    verifyRefreshToken,
+  } = await useToken();
   try {
-    console.log("validateTokens");
-    const {
-      getAccessToken,
-      getRefreshToken,
-      verifyAccessToken,
-      verifyRefreshToken,
-    } = await useToken();
-
     const accessToken = await verifyAccessToken(
       req.headers.authorization as string
     );

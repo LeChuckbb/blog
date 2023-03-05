@@ -30,7 +30,7 @@ const Header = ({ scrollDirection }: any) => {
       // isAuth가 200을 반환 -> 로그인 완료된 것 (토큰이 모두 유효한 것) -> /로 리디렉트
       data?.status === 200 && router.push("/");
     }
-  }, [data]);
+  }, [data, router]);
 
   return (
     <Container scrollDirection={scrollDirection}>

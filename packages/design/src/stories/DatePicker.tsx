@@ -32,16 +32,18 @@ const MyDatePicker = ({ id, getValues, control }: any) => {
   );
 };
 
-const ExampleCustomInput = forwardRef(({ value, onClick, onChange }: any) => {
-  return (
-    <TextField.InputBox style={{ padding: "4px 16px" }}>
-      <TextField.Input value={value} onChange={onChange} />
-      <TextField.Label label="date" />
-      <IconButton variant="contained" onClick={onClick}>
-        <IconCalendar />
-      </IconButton>
-    </TextField.InputBox>
-  );
-});
+const ExampleCustomInput = forwardRef(
+  ({ value, onClick, onChange }: any, ref) => {
+    return (
+      <TextField.InputBox style={{ padding: "4px 16px" }}>
+        <TextField.Input value={value} onChange={onChange} />
+        <TextField.Label label="date" />
+        <IconButton variant="contained" onClick={onClick}>
+          <IconCalendar />
+        </IconButton>
+      </TextField.InputBox>
+    );
+  }
+);
 
 export default MyDatePicker;

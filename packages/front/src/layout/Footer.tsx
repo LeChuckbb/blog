@@ -6,7 +6,11 @@ const Footer: React.FC = () => {
   return (
     <Container>
       <div>
-        <a href="https://github.com/LeChuckbb" target={"_blank"}>
+        <a
+          href="https://github.com/LeChuckbb"
+          target={"_blank"}
+          rel="noreferrer"
+        >
           <IconButton tooltip="github" direction="top" size="small">
             <IconGithub />
           </IconButton>

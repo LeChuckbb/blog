@@ -29,7 +29,7 @@ interface Props {
   data?: any;
 }
 
-const write = ({ data }: Props) => {
+const Write = ({ data }: Props) => {
   const {
     editorRef,
     tagsArray,
@@ -177,4 +177,4 @@ const BottomButtonWrapper = styled.div`
   box-shadow: rgb(0 0 0 / 10%) 0px 0px 8px;
 `;
 
-export default write;
+export default Write;

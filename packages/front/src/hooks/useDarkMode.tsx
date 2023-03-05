@@ -35,7 +35,7 @@ const useDarkMode = () => {
         setIsDarkMode(false);
       }
     }
-  }, []);
+  }, [setIsDarkMode]);
 
   return { isDarkMode, toggleDarkMode };
 };

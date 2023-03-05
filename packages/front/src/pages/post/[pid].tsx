@@ -73,16 +73,19 @@ PostDetail.getLayout = function getLayout(page: React.ReactElement) {
 
 export default PostDetail;
 
-// 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
-export const getStaticPaths: GetStaticPaths = async ({}) => {
-  // get all posts. getPost()
+const GetAllPosts = async () => {
   const { postsCollection } = await useMongo();
   const results = await postsCollection
     .find({}, { projection: { html: 0, markdown: 0 } })
     .toArray();
-  const paths = results.map((el: any) => ({
+  return results.map((el: any) => ({
     params: { pid: el.urlSlug },
   }));
+};
+
+// 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = await GetAllPosts();
 
   return {
     paths,
@@ -90,17 +93,21 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
   };
 };
 
+const GetPostBySlug = async (urlSlug: string) => {
+  const { postsCollection } = await useMongo();
+  return await postsCollection.findOne({
+    urlSlug,
+  });
+};
+
 // 빌드 시 데이터를 fetch하여 static 페이지를 생성
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  // get each post. getPostBySlug
-  const { postsCollection } = await useMongo();
-  const res = await postsCollection.findOne({
-    urlSlug: params?.pid as string,
-  });
+  const res = await GetPostBySlug(params?.pid as string);
+
   const results = {
     ...res,
     _id: JSON.stringify(res?._id),
-    html: res?.html,
+    // html: res?.html,
   };
 
   return {

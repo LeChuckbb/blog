@@ -2,7 +2,7 @@ import type { NextApiHandler } from "next";
 import { apiHandler } from "../../lib/api";
 import useMongo from "../../lib/useMongo";
 
-const tags: NextApiHandler = async (req, res) => {
+const Tags: NextApiHandler = async (req, res) => {
   const { tagsCollection } = await useMongo();
   const tags = await tagsCollection.find({}).toArray();
   const count = await tagsCollection.countDocuments();
@@ -10,5 +10,5 @@ const tags: NextApiHandler = async (req, res) => {
 };
 
 export default apiHandler({
-  GET: tags,
+  GET: Tags,
 });

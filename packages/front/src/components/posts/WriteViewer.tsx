@@ -53,7 +53,7 @@ const WriteViewer = ({ content, setObserverEntry }: any) => {
     return () => {
       window.removeEventListener("scroll", throttleScroll);
     };
-  }, []);
+  }, [setObserverEntry]);
 
   return (
     <div css={editorStyles} ref={ref} className="WriterViewer">

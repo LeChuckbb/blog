@@ -33,7 +33,7 @@ const registerSchema = Yup.object().shape({
   password: Yup.string().required("password is required!"),
 });
 
-const register: NextApiHandler = async (req, res) => {
+const Register: NextApiHandler = async (req, res) => {
   const data = validateRequest(req.body, registerSchema);
   const { id, password } = data;
   const { authCollection } = await useMongo();
@@ -47,4 +47,4 @@ const register: NextApiHandler = async (req, res) => {
   res.status(200).json(result);
 };
 
-export default apiHandler({ POST: register });
+export default apiHandler({ POST: Register });

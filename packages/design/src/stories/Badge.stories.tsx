@@ -2,7 +2,6 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { ThemeProvider } from "@emotion/react";
 import Badge from "./Badge";
 import { lightTheme } from "../styles/theme";
-import styled from "@emotion/styled";
 import { FlexContainer, FlexWrapper } from "./Common";
 import { Chip } from "./Chip";
 import { ReactComponent as IconClear } from "../../public/clear.svg";

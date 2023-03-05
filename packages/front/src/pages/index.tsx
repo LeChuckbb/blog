@@ -92,7 +92,7 @@ const prefetchData = async (queryClient: QueryClient, selectedTag = "all") => {
     dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
   };
 };
-const getTags = async () => {
+const GetTags = async () => {
   // getPostTags
   const { tagsCollection } = await useMongo();
   const tags = await tagsCollection.find({}).toArray();
@@ -101,7 +101,7 @@ const getTags = async () => {
 };
 
 export async function getStaticProps() {
-  const tags = await getTags();
+  const tags = await GetTags();
   const queryClient = new QueryClient();
   const dehydratedState = await prefetchData(queryClient);
 

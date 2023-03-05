@@ -3,7 +3,7 @@ import { apiHandler } from "../../../lib/api";
 import useMongo from "../../../lib/useMongo";
 import ObjectID from "bson-objectid";
 
-const deleteThumbnail: NextApiHandler = async (req, res) => {
+const DeleteThumbnail: NextApiHandler = async (req, res) => {
   const { id } = req.query;
   const { postsCollection } = await useMongo();
   const result = await postsCollection.findOneAndUpdate(
@@ -19,5 +19,5 @@ const deleteThumbnail: NextApiHandler = async (req, res) => {
 };
 
 export default apiHandler({
-  DELETE: deleteThumbnail,
+  DELETE: DeleteThumbnail,
 });
