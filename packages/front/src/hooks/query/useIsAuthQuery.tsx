@@ -19,7 +19,6 @@ export const useIsAuthQuery = () => {
       retry: false,
       cacheTime: 0,
       suspense: false,
-      useErrorBoundary: true,
       refetchOnMount: false,
       enabled: isLogin === "true",
     }

@@ -65,7 +65,7 @@ const GetPost: NextApiHandler = async (req, res) => {
 
     if (!result)
       throw new AppError(
-        "POE007",
+        "POE005",
         "게시글을 찾을 수 없습니다. 입력한 id가 올바른지 확인하세요.",
         404
       );
@@ -127,7 +127,7 @@ const UpdatePost: NextApiHandler = async (req, res) => {
 
   if (result.value === null)
     throw new AppError(
-      "POE005",
+      "POE003",
       "게시글 업데이트 실패. 요청한 게시글을 찾을 수 없음",
       404
     );
@@ -144,7 +144,7 @@ const DeletePost: NextApiHandler = async (req, res) => {
 
   if (result.value === null)
     throw new AppError(
-      "POE006",
+      "POE004",
       "게시글 삭제 실패. 요청한 게시글을 찾을 수 없음",
       404
     );

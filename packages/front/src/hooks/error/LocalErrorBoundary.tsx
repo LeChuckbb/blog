@@ -1,33 +1,36 @@
 import { useQueryErrorResetBoundary } from "react-query";
-import { isAxiosError } from "axios";
+import { AxiosError, isAxiosError } from "axios";
 import { ErrorBoundary } from "react-error-boundary";
-import React from "react";
+import { AppError } from "../../lib/api";
+import styled from "@emotion/styled";
+import { Button } from "design/src/stories/Button";
 
 const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
   console.log(error);
   // resetErrorBoundary -> onReset으로 전달한 것 = useQueryErrorResetBoundary
 
-  const customErrorMessage = error?.response?.data?.message;
+  const customErrorMessage = error?.response?.data?.error?.message;
 
   return (
-    <div role="alert">
+    <Container role="alert">
       <pre>{customErrorMessage ? customErrorMessage : error?.message}</pre>
-      <button onClick={resetErrorBoundary}>재시도</button>
-    </div>
+      <Button variant="elevated" onClick={resetErrorBoundary}>재시도</Button>
+    </Container>
   );
 };
 
-const onErrorHandler = (error: Error, info: any) => {
+const onErrorHandler = (error: Error) => {
   console.log(error);
-  // if (isAxiosError(error) && error.response?.status !== 500) {
-  if (isAxiosError(error)) {
-    console.log("axios Error.");
-    if (error.code === "ERR_NETWORK") {
-      window.location.href = "/error/network";
-    }
-  } else {
-    // axios Error가 아닌 경우.. global로 위임
-    throw error;
+
+  if (error instanceof AxiosError<AppError>) {
+      console.log("App Error!");
+      if (error.response?.data.error.code === "AUE005") {
+        console.log("AUE005");
+      } else if (error.response?.data.error.code === 'POE002'){
+        console.log('POE002')
+      }
+  }else {
+    throw Error(error.message);
   }
 };
 
@@ -46,3 +49,11 @@ const LocalErrorBoundary = ({ children }: any) => {
 };
 
 export default LocalErrorBoundary;
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+`

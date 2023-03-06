@@ -8,6 +8,7 @@ import { useState } from "react";
 import PostTableOfContents from "../../components/posts/PostTableOfContents";
 import useMongo from "../../lib/useMongo";
 import ObjectID from "bson-objectid";
+import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -59,12 +60,14 @@ const PostDetail = ({ title, date, html, slug, markdown, _id }: Props) => {
         anchorClickHandler={anchorClickHandler}
         observerEntry={observerEntry}
       />
-      <PostHead
-        slug={slug}
-        date={date}
-        title={title}
-        id={_id?.replaceAll('"', "")}
-      />
+      <LocalErrorBoundary>
+        <PostHead
+          slug={slug}
+          date={date}
+          title={title}
+          id={_id?.replaceAll('"', "")}
+        />
+      </LocalErrorBoundary>
       {markdown && (
         <NoSSRViewer content={markdown} setObserverEntry={setObserverEntry} />
       )}

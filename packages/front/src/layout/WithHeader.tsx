@@ -15,9 +15,7 @@ const WithHeader = ({ children }: Props) => {
   return (
     <Container className="Conteinasd">
       <LocalErrorBoundary>
-        {/* <Suspense fallback={<p>loading...</p>}> */}
         <Header scrollDirection={scrollDirection} />
-        {/* </Suspense> */}
       </LocalErrorBoundary>
       <ContentContainer>{children}</ContentContainer>
       <Footer />

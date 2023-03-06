@@ -6,7 +6,7 @@ import { lightTheme, darkTheme } from "design/src/styles/theme";
 import { QueryClient, QueryClientProvider, Hydrate } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { NextPage } from "next";
-import { RecoilRoot, useRecoilState } from "recoil";
+import { RecoilRoot } from "recoil";
 import ModalSetter from "../common/Modal/ModalSetter";
 import GlobalErrorBoundary from "../hooks/\berror/GlobalErrorBoundary";
 import GlobalStyles from "../styles/glabals";
@@ -47,8 +47,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       defaultOptions: {
         queries: {
           suspense: true,
+          useErrorBoundary: true,
           refetchOnMount: false,
           refetchOnWindowFocus: false,
+        },
+        mutations: {
+          useErrorBoundary: true,
         },
       },
     });

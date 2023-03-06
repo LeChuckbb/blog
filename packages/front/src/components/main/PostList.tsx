@@ -3,6 +3,7 @@ import { useGetPostByPageQuery } from "../../hooks/query/useGetPostByPageQuery";
 import Card from "design/src/stories/Card";
 import ImageDefault from "../../../public/static/thumbnail/default.svg";
 import { PostSchema } from "../../types/post";
+import { AppError } from "../../lib/api";
 
 interface Props {
   selectedTag: string;

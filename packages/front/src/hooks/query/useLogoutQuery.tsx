@@ -13,7 +13,6 @@ export const useLogoutQuery = () => {
       cacheTime: 0,
       enabled: false,
       suspense: false,
-      useErrorBoundary: true,
       onSuccess: () => {
         window.sessionStorage.removeItem("isLogin");
       },

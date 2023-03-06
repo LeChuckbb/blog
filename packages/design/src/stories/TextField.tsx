@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import styled from "@emotion/styled";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import useTextField, {
   InputProps,
   ContextProps,
@@ -83,7 +83,9 @@ TextField.Input = ({
     onChange && onChange(event);
   };
 
-  setPopulatedIfDateNull();
+  useEffect(() => {
+    setPopulatedIfDateNull();
+  }, [setPopulatedIfDateNull]);
 
   return (
     <Input

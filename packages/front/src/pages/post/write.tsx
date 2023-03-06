@@ -14,6 +14,7 @@ import useWrite, { FormInterface, WriteProps } from "../../hooks/useWrite";
 import WriteSubPage from "../../components/posts/WriteSubPage";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { AppError } from "../../lib/api";
+import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -39,55 +40,57 @@ const Write = ({ data }: WriteProps) => {
 
   return (
     <Container>
-      <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
-        <TitleWrapper>
-          <TitleInput
-            {...register("title", { required: "제목을 입력해주세요" })}
-            type="text"
-            placeholder="제목을 입력하세요"
-            defaultValue={data?.title}
-          />
-          <TagsWrapper>
-            <TagList>
-              {tagsArray?.map((el, idx) => (
-                <TagChip
-                  variant="input"
-                  onClick={() => onClickRemoveTagHandler(idx)}
-                  key={idx}
-                >
-                  {el}
-                </TagChip>
-              ))}
-            </TagList>
-            <TagInput
+      <LocalErrorBoundary>
+        <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
+          <TitleWrapper>
+            <TitleInput
+              {...register("title", { required: "제목을 입력해주세요" })}
               type="text"
-              placeholder="태그를 입력하세요"
-              autoComplete="off"
-              {...register("tag")}
-              {...getTagInputProps()}
+              placeholder="제목을 입력하세요"
+              defaultValue={data?.title}
             />
-            {isTagInputFocusIn && (
-              <Tooltip
-                variant="long"
-                css={{ position: "absolute", opacity: 1, bottom: "-16px" }}
-              >
-                엔터를 입력하여 태그를 등록해주세요. <br />
-                등록된 태그를 클릭하면 삭제됩니다.
-              </Tooltip>
-            )}
-          </TagsWrapper>
-        </TitleWrapper>
-        <NoSsrEditor content={content} editorRef={editorRef} />
-        <BottomButtonWrapper>
-          <Button icon variant="outlined" onClick={() => router.back()}>
-            <IconArrowPrev width={18} height={18} />
-            나가기
-          </Button>
-          <Button type="submit">출간하기</Button>
-        </BottomButtonWrapper>
-        <ToastContainer />
-      </form>
-      <WriteSubPage prevData={data} {...getWriteSubPageProps()} />
+            <TagsWrapper>
+              <TagList>
+                {tagsArray?.map((el, idx) => (
+                  <TagChip
+                    variant="input"
+                    onClick={() => onClickRemoveTagHandler(idx)}
+                    key={idx}
+                  >
+                    {el}
+                  </TagChip>
+                ))}
+              </TagList>
+              <TagInput
+                type="text"
+                placeholder="태그를 입력하세요"
+                autoComplete="off"
+                {...register("tag")}
+                {...getTagInputProps()}
+              />
+              {isTagInputFocusIn && (
+                <Tooltip
+                  variant="long"
+                  css={{ position: "absolute", opacity: 1, bottom: "-16px" }}
+                >
+                  엔터를 입력하여 태그를 등록해주세요. <br />
+                  등록된 태그를 클릭하면 삭제됩니다.
+                </Tooltip>
+              )}
+            </TagsWrapper>
+          </TitleWrapper>
+          <NoSsrEditor content={content} editorRef={editorRef} />
+          <BottomButtonWrapper>
+            <Button icon variant="outlined" onClick={() => router.back()}>
+              <IconArrowPrev width={18} height={18} />
+              나가기
+            </Button>
+            <Button type="submit">출간하기</Button>
+          </BottomButtonWrapper>
+          <ToastContainer />
+        </form>
+        <WriteSubPage prevData={data} {...getWriteSubPageProps()} />
+      </LocalErrorBoundary>
     </Container>
   );
 };
@@ -101,7 +104,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await getPostById(id as string);
   const data = res.data;
 
-  if (!data) throw new AppError("POE007", "게시글 조회 실패", 404);
+  if (!data) throw new AppError("POE005", "게시글 조회 실패", 404);
 
   return {
     props: { data },

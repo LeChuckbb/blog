@@ -15,9 +15,7 @@ const Home = ({ tags }: TagsType) => {
 
   return (
     <Container>
-      <LocalErrorBoundary>
-        <PostTags setTag={setSelectedTag} tagsData={JSON.parse(String(tags))} />
-      </LocalErrorBoundary>
+      <PostTags setTag={setSelectedTag} tagsData={JSON.parse(String(tags))} />
       <LocalErrorBoundary>
         <PostList selectedTag={selectedTag} />
       </LocalErrorBoundary>

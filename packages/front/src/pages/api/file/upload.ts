@@ -16,7 +16,7 @@ const getCloudFlareUpload: NextApiHandler = async (req, res) => {
   );
   const uploadURL = response?.data?.result?.uploadURL;
   if (!uploadURL)
-    throw new AppError("POE004", "Cloud Flare 업로드 URL 불러오기 실패", 500);
+    throw new AppError("POE002", "Cloud Flare 업로드 URL 불러오기 실패", 500);
 
   res.status(200).json(uploadURL);
 };

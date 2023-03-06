@@ -14,7 +14,7 @@ const DeleteThumbnail: NextApiHandler = async (req, res) => {
     }
   );
   if (result.ok !== 1 || result.value === null)
-    throw new AppError("POE003", "썸네일 삭제 실패", 404);
+    throw new AppError("POE001", "썸네일 삭제 실패", 404);
 
   res.status(200).end();
 };
