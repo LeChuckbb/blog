@@ -12,7 +12,11 @@ import IconButton from "design/src/stories/IconButton";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-const Header = ({ scrollDirection }: any) => {
+interface HeaderProps {
+  scrollDirection: string;
+}
+
+const Header = ({ scrollDirection }: HeaderProps) => {
   const { data } = useIsAuthQuery();
   const { refetch } = useLogoutQuery();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -27,14 +31,15 @@ const Header = ({ scrollDirection }: any) => {
 
   useEffect(() => {
     if (router.pathname === "/liu") {
-      // isAuth가 200을 반환 -> 로그인 완료된 것 (토큰이 모두 유효한 것) -> /로 리디렉트
-      data?.status === 200 && router.push("/");
+      if (data?.status === 200)
+        // isAuth가 200을 반환 -> 로그인 완료된 것 (토큰이 모두 유효한 것) -> /로 리디렉트
+        router.push("/");
     }
   }, [data, router]);
 
   return (
     <Container scrollDirection={scrollDirection}>
-      <InnerContainer className="HeaderContainer">
+      <InnerContainer>
         <LogoWrapper>
           <Link href="/">LeChuck</Link>
         </LogoWrapper>
@@ -69,11 +74,7 @@ const Header = ({ scrollDirection }: any) => {
   );
 };
 
-interface ContainerProps {
-  scrollDirection: string;
-}
-
-const Container = styled.div<ContainerProps>`
+const Container = styled.div<HeaderProps>`
   width: 100%;
   position: fixed;
   z-index: 100;

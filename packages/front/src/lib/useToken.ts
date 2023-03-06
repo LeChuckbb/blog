@@ -3,34 +3,33 @@ import useMongo from "./useMongo";
 
 const useToken = async () => {
   const { authCollection } = await useMongo();
+  const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET as string;
+  const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET as string;
+
   // access token 발급
   const getAccessToken = (id: string) => {
-    const secret = process.env.ACCESS_TOKEN_SECRET as string;
-    const res = jwt.sign({ id }, secret, {
+    const res = jwt.sign({ id }, accessTokenSecret, {
       expiresIn: "5m",
     });
-
     return res;
   };
 
   const verifyAccessToken = (token: string) => {
     try {
-      const secret = process.env.ACCESS_TOKEN_SECRET;
       jwt.verify(
         token === undefined ? "token" : token.split(" ")[1],
-        secret === undefined ? "secret" : secret
+        accessTokenSecret
       );
-      console.log("access token 검증 성공");
       return true;
-    } catch (err: any) {
-      console.log("access token 검증 실패");
+    } catch (err) {
+      console.error(err);
       return false;
     }
   };
 
   // refresh token 발급
   const getRefreshToken = () => {
-    return jwt.sign({}, process.env.REFRESH_TOKEN_SECRET as string, {
+    return jwt.sign({}, refreshTokenSecret, {
       expiresIn: "7d",
     });
   };
@@ -42,10 +41,10 @@ const useToken = async () => {
         { projection: { _id: 0, refreshToken: 1 } }
       ); // refresh token 가져오기
       return token === data?.refreshToken
-        ? jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string)
+        ? jwt.verify(token, refreshTokenSecret)
         : false;
     } catch (err) {
-      console.log("refresh toekn 검증 실패");
+      console.error(err);
       return false;
     }
   };

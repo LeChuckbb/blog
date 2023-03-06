@@ -1,13 +1,31 @@
 import createHttpError from "http-errors";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { ErrorResponse } from "../types/api";
 import { ValidationError } from "yup";
 import { Method } from "axios";
-import { AppError } from "../types/api";
 
 type ApiMethodHandlers = {
   [key in Uppercase<Method>]?: NextApiHandler;
 };
+
+// Shape of the response when an error is thrown
+export interface ErrorResponse {
+  error: {
+    message: string;
+    code?: string;
+    err?: any; // Sent for unhandled errors reulting in 500
+  };
+  status?: number; // Sent for unhandled errors reulting in 500
+}
+
+export class AppError extends Error {
+  errorCode: string; // POE002
+  statusCode: number; // 404
+  constructor(errorCode: string, message: any, statusCode: number) {
+    super(message);
+    this.errorCode = errorCode;
+    this.statusCode = statusCode;
+  }
+}
 
 // Global Error Handler
 export function errorHandler(
@@ -24,7 +42,7 @@ export function errorHandler(
       },
     });
   } else if (createHttpError.isHttpError(err) && err.expose) {
-    // 400번대 에러인 경우
+    // expose -> 400번대 에러인 경우
     // Handle all errors thrown by http-errors module
     return res.status(err.statusCode).json({ error: { message: err.message } });
   } else if (err instanceof ValidationError) {
@@ -34,14 +52,13 @@ export function errorHandler(
     // default to 500 server error
     console.error(err);
     return res.status(500).json({
-      error: { message: "Internal Server Error", err: err },
+      error: { message: "Internal Server Error", err },
       status: createHttpError.isHttpError(err) ? err.statusCode : 500,
     });
   }
 }
 
 // acts as the entry point for any API route (HOF)
-// usage: apiHAnlder({method : mhethodHandler,...})
 export const apiHandler = (handler: ApiMethodHandlers) => {
   return async (req: NextApiRequest, res: NextApiResponse<ErrorResponse>) => {
     try {
@@ -49,7 +66,6 @@ export const apiHandler = (handler: ApiMethodHandlers) => {
         ? (req.method.toUpperCase() as keyof ApiMethodHandlers)
         : undefined;
 
-      // check if handler supports current HTTP method
       if (!method)
         throw new createHttpError.MethodNotAllowed(
           `No method specified on path ${req.url}!`
@@ -61,10 +77,8 @@ export const apiHandler = (handler: ApiMethodHandlers) => {
           `Method ${req.method} Not Allowed on path ${req.url}!`
         );
 
-      // call method handler
       await methodHandler(req, res);
     } catch (err) {
-      // global error handler
       errorHandler(err, res);
     }
   };

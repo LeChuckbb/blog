@@ -2,12 +2,13 @@ import { useMutation } from "react-query";
 import { loginAPI } from "../../apis/authApi";
 import { isAxiosError } from "axios";
 import useMyToast from "../useMyToast";
+import { LoginForm } from "../../pages/liu";
 
 export const useLoginMutation = () => {
   const { callToast } = useMyToast();
 
-  return useMutation((body: any) => loginAPI(body), {
-    onSuccess: (result) => {
+  return useMutation((body: LoginForm) => loginAPI(body), {
+    onSuccess: () => {
       window.sessionStorage.setItem("isLogin", "true");
       window.location.href = "/";
     },

@@ -4,58 +4,65 @@ import Badge from "design/src/stories/Badge";
 import { useRef } from "react";
 import { useEffect } from "react";
 
-type PostTagsType = {
+interface TagType {
+  _id: string;
+  name: string;
   count: number;
-  tags: Array<object>;
-};
-interface Props {
-  tagsData?: PostTagsType;
-  setTag: (tag: string | any) => unknown;
 }
 
-const PostTags: React.FC<Props> = ({ tagsData, setTag }) => {
-  const touchContainerRef = useRef<HTMLUListElement | null>(null);
+export interface TagsType {
+  count: number;
+  tags: TagType[];
+}
+
+interface Props {
+  tagsData?: TagsType;
+  setTag: (tag: string) => void;
+}
+
+const PostTags = ({ tagsData, setTag }: Props) => {
+  const touchContainerRef = useRef<HTMLUListElement>(null);
 
   const onClickTagList = (tag: string) => {
     setTag(tag);
   };
 
   useEffect(() => {
-    if (touchContainerRef.current) {
-      let startX = 0;
-      let pressed = false;
+    if (!touchContainerRef.current) return;
 
-      touchContainerRef.current.addEventListener(
-        "mousedown",
-        (e: MouseEvent) => {
-          pressed = true;
-          startX = e.clientX;
-          if (touchContainerRef.current !== null)
-            touchContainerRef.current.style.cursor = "grabbing";
-        }
-      );
+    let startX = 0;
+    let pressed = false;
+    const touchContainer = touchContainerRef.current;
 
-      touchContainerRef.current.addEventListener("mouseleave", (e) => {
-        pressed = false;
-      });
+    const handleMouseDown = (e: MouseEvent) => {
+      pressed = true;
+      startX = e.clientX;
+      touchContainer.style.cursor = "grabbing";
+    };
+    const handleMouseLeave = () => {
+      pressed = false;
+    };
+    const handleMouseUp = () => {
+      pressed = false;
+      touchContainer.style.cursor = "grab";
+    };
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!pressed) return;
+      touchContainer.scrollLeft += startX - e.clientX;
+    };
 
-      touchContainerRef.current.addEventListener("mouseup", (e: MouseEvent) => {
-        pressed = false;
-        if (touchContainerRef.current !== null)
-          touchContainerRef.current.style.cursor = "grab";
-      });
+    touchContainer.addEventListener("mousedown", handleMouseDown);
+    touchContainer.addEventListener("mouseleave", handleMouseLeave);
+    touchContainer.addEventListener("mouseup", handleMouseUp);
+    touchContainer.addEventListener("mousemove", handleMouseMove);
 
-      touchContainerRef.current.addEventListener(
-        "mousemove",
-        (e: MouseEvent) => {
-          if (!pressed) return;
-
-          if (touchContainerRef.current !== null)
-            touchContainerRef.current.scrollLeft += startX - e.clientX;
-        }
-      );
-    }
-  }, []);
+    return () => {
+      touchContainer.removeEventListener("mousedown", handleMouseDown);
+      touchContainer.removeEventListener("mouseleave", handleMouseLeave);
+      touchContainer.removeEventListener("mouseup", handleMouseUp);
+      touchContainer.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [touchContainerRef]);
 
   return (
     <TagList ref={touchContainerRef}>
@@ -64,7 +71,7 @@ const PostTags: React.FC<Props> = ({ tagsData, setTag }) => {
           all
         </Tag>
       </Badge>
-      {tagsData?.tags.map((tag: any) => {
+      {tagsData?.tags.map((tag: TagType) => {
         return (
           <Badge badgeContent={tag.count} key={tag._id}>
             <Tag color="secondary" onClick={() => onClickTagList(tag.name)}>

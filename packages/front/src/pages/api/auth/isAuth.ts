@@ -8,7 +8,6 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>();
 handler.use((req, res, next) => ValidateTokens(req, res, next));
 
 const isAuth: NextApiHandler = async (req, res) => {
-  console.log("isAuth 200 OK");
   return res.status(200).end();
 };
 

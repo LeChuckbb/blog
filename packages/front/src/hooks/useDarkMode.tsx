@@ -3,23 +3,21 @@ import { lightTheme, darkTheme } from "design/src/styles/theme";
 import { useRecoilState } from "recoil";
 import { themeState } from "../recoil/atom";
 
-type themeType = typeof lightTheme | typeof darkTheme;
+type ThemeType = typeof lightTheme | typeof darkTheme;
 
-const useDarkMode = () => {
+const useDarkMode = (): { isDarkMode: boolean; toggleDarkMode: () => void } => {
   const [isDarkMode, setIsDarkMode] = useRecoilState(themeState);
 
-  const setMode = (mode: themeType) => {
-    if (mode === lightTheme) {
-      window.localStorage.setItem("isDarkMode", "false");
-      setIsDarkMode(false);
-    } else {
-      window.localStorage.setItem("isDarkMode", "true");
-      setIsDarkMode(true);
-    }
+  const setMode = (mode: ThemeType) => {
+    window.localStorage.setItem(
+      "isDarkMode",
+      mode === darkTheme ? "true" : "false"
+    );
+    setIsDarkMode(mode === darkTheme);
   };
 
   const toggleDarkMode = () => {
-    isDarkMode ? setMode(lightTheme) : setMode(darkTheme);
+    setMode(isDarkMode ? lightTheme : darkTheme);
   };
 
   /*
@@ -28,12 +26,10 @@ const useDarkMode = () => {
   */
   useEffect(() => {
     const localTheme = window.localStorage.getItem("isDarkMode");
-    if (localTheme != null) {
-      if (localTheme === "true") {
-        setIsDarkMode(true);
-      } else {
-        setIsDarkMode(false);
-      }
+    if (localTheme === "true") {
+      setIsDarkMode(true);
+    } else if (localTheme === "false") {
+      setIsDarkMode(false);
     }
   }, [setIsDarkMode]);
 

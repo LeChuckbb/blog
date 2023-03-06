@@ -2,27 +2,27 @@ import type { NextApiHandler } from "next";
 import useMongo from "../../lib/useMongo";
 import { apiHandler } from "../../lib/api";
 import ObjectID from "bson-objectid";
+import { AppError } from "../../lib/api";
 
 const PAGE_SIZE = 8;
 
-const CreateTags = async (tags: any) => {
+const CreateTags = async (tags: string[]) => {
   const { tagsCollection } = await useMongo();
-  if (tags === "" || undefined) return;
+  if (!tags || tags.length === 0) return;
   if (typeof tags === "string") tags = [tags]; // []타입이 아니면 forEach에서 에러가 발생
 
-  tags?.forEach(async (tag: string) => {
-    // 1. tags collection에 동명의 tag document가 이미 존재하는 경우 -> count 증가
-    const result = await tagsCollection.findOneAndUpdate(
+  // 1. tags collection에 동명의 tag document가 이미 존재하는 경우 -> count 증가
+  // 2. 동명의 tag documnet가 비존재 -> 새 document추가
+  for (const tag of tags) {
+    await tagsCollection.findOneAndUpdate(
       { name: tag },
-      { $inc: { count: 1 } }
+      { $inc: { count: 1 } },
+      { upsert: true }
     );
-    // 2. 동명의 tag documnet가 비존재 -> 새 document추가
-    if (result.value === null)
-      await tagsCollection.insertOne({ name: tag, count: 1 });
-  });
+  }
 };
 
-const DeleteTags = async (tags: Array<String>) => {
+const DeleteTags = async (tags: string[]) => {
   const { tagsCollection } = await useMongo();
   tags?.forEach(async (tag) => {
     const result = await tagsCollection.findOne({ name: tag });
@@ -41,16 +41,12 @@ const DeleteTags = async (tags: Array<String>) => {
   });
 };
 
-const updateTags = async (
-  currentTags: Array<String>,
-  inputTags: Array<String>
-) => {
-  // [] or ['val1', 'val2'...]
+const updateTags = async (currentTags: string[], inputTags: string[]) => {
   const removeList = currentTags?.filter((x) => !inputTags?.includes(x));
   const addList = inputTags?.filter((x) => !currentTags?.includes(x));
 
-  removeList?.length !== 0 && (await DeleteTags(removeList));
-  addList?.length !== 0 && (await CreateTags(addList));
+  if (removeList?.length !== 0) await DeleteTags(removeList);
+  if (addList?.length !== 0) await CreateTags(addList);
 };
 
 const GetPost: NextApiHandler = async (req, res) => {
@@ -60,13 +56,21 @@ const GetPost: NextApiHandler = async (req, res) => {
     const results = await postsCollection.findOne({
       urlSlug: req.query.slug,
     });
-    const resultBody = {
-      ...results,
-      // html: decode(results?.html),
-      html: results?.html,
-      markdown: results?.markdown,
-    };
-    res.status(200).json(resultBody);
+    res.status(200).json({ ...results });
+  } else if (req.query?.id) {
+    // getPostById
+    const result = await postsCollection.findOne({
+      _id: ObjectID.createFromHexString(req.query.id as string),
+    });
+
+    if (!result)
+      throw new AppError(
+        "POE007",
+        "게시글을 찾을 수 없습니다. 입력한 id가 올바른지 확인하세요.",
+        404
+      );
+
+    res.status(200).json({ ...result });
   } else if (req.query?.page) {
     // getPostByPage
     const tagQuery = req.query.tag;
@@ -89,8 +93,7 @@ const GetPost: NextApiHandler = async (req, res) => {
             .skip(PAGE_SIZE * (page - 1))
             .limit(PAGE_SIZE)
             .toArray()
-        : // 8 *
-          await postsCollection
+        : await postsCollection
             .find({ tags: tagQuery }, { projection: { html: 0, markdown: 0 } })
             .sort({ date: -1, _id: 1 })
             .skip(PAGE_SIZE * (page - 1))
@@ -102,41 +105,32 @@ const GetPost: NextApiHandler = async (req, res) => {
 };
 
 const CreatePost: NextApiHandler = async (req, res) => {
-  // req.body에서 content 항목이 있으면 encode하여 DB에 저장
-  // XSS 방지를 위해 HTML markdown -> entity로 변경
   const { postsCollection } = await useMongo();
-  const body = {
-    ...req.body,
-  };
+  const body = { ...req.body };
+
   const result = await postsCollection.insertOne(body);
   await CreateTags(body?.tags);
 
-  res.status(200).json({ insertResult: result, urlSlug: req.body.urlSlug });
+  res.status(200).json({ insertResult: result, urlSlug: body.urlSlug });
 };
 
 const UpdatePost: NextApiHandler = async (req, res) => {
   const { postsCollection } = await useMongo();
-  const body = {
-    ...req.body,
-  };
+  const body = { ...req.body };
 
   const result = await postsCollection.findOneAndUpdate(
     { _id: ObjectID.createFromHexString(req.query.id as string) },
     {
-      $set: {
-        thumbnail: body.thumbnail,
-        urlSlug: body.urlSlug,
-        title: body.title,
-        subTitle: body.subTitle,
-        date: body.date,
-        html: body.html,
-        markdown: body.markdown,
-        tags: body.tags,
-      },
+      $set: { ...body },
     }
   );
 
-  if (result.value === null) throw new Error("게시글 업데이트 실패");
+  if (result.value === null)
+    throw new AppError(
+      "POE005",
+      "게시글 업데이트 실패. 요청한 게시글을 찾을 수 없음",
+      404
+    );
 
   await updateTags(result?.value?.tags, body.tags);
   res.status(200).json({ updateResult: result, urlSlug: req.body.urlSlug });
@@ -147,6 +141,13 @@ const DeletePost: NextApiHandler = async (req, res) => {
   const result = await postsCollection.findOneAndDelete({
     _id: ObjectID.createFromHexString(req.query.id as string),
   });
+
+  if (result.value === null)
+    throw new AppError(
+      "POE006",
+      "게시글 삭제 실패. 요청한 게시글을 찾을 수 없음",
+      404
+    );
 
   await DeleteTags(result?.value?.tags);
   res.status(200).end();

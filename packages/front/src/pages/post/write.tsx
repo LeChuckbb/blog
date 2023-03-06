@@ -1,16 +1,19 @@
 import styled from "@emotion/styled";
 import dynamic from "next/dynamic";
-import useWrite from "../../hooks/useWrite";
-import { useForm } from "react-hook-form";
-import WriteSubPage from "../../components/posts/WriteSubPage";
-import { ToastContainer } from "react-toastify";
 import { GetServerSideProps } from "next";
-import { getPostBySlug } from "../../apis/postApi";
 import { useRouter } from "next/router";
-import IconArrowPrev from "../../../public/icons/arrow_back.svg";
-import { Button } from "design/src/stories/Button";
+import { ToastContainer } from "react-toastify";
+import { useForm } from "react-hook-form";
+
+import { getPostById } from "../../apis/postApi";
 import { Chip as TagChip } from "design/src/stories/Chip";
 import Tooltip from "design/src/stories/Tooltip";
+import { Button } from "design/src/stories/Button";
+
+import useWrite, { FormInterface, WriteProps } from "../../hooks/useWrite";
+import WriteSubPage from "../../components/posts/WriteSubPage";
+import IconArrowPrev from "../../../public/icons/arrow_back.svg";
+import { AppError } from "../../lib/api";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -19,17 +22,7 @@ const NoSsrEditor = dynamic(
   }
 );
 
-export interface FormInterface {
-  title: string;
-  tag: Array<string>;
-  content: string;
-}
-
-interface Props {
-  data?: any;
-}
-
-const Write = ({ data }: Props) => {
+const Write = ({ data }: WriteProps) => {
   const {
     editorRef,
     tagsArray,
@@ -101,13 +94,17 @@ const Write = ({ data }: Props) => {
 
 // post/write?slug=xxx (UPDATE)
 // query slug?=가 있으면 data fetch (query가 있어야 하기 때문에 SSG로 전환이 불가.)
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  if (Object.values(query).length === 0) return { props: { data: null } };
-  // 실패시 에러 처리 요망
-  const res = await getPostBySlug(query.slug as string);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.query;
+  if (!id) return { props: { data: null } };
+
+  const res = await getPostById(id as string);
+  const data = res.data;
+
+  if (!data) throw new AppError("POE007", "게시글 조회 실패", 404);
 
   return {
-    props: { data: res.data },
+    props: { data },
   };
 };
 

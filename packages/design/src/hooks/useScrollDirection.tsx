@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const useScrollDirection = () => {
-  const [scrollDirection, setScrollDirection] = useState<string>();
+  const [scrollDirection, setScrollDirection] = useState<string>("");
   const prevY = useRef(0);
   const timeoutRef = useRef<any>(null);
 

@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
 
+interface Heading {
+  tag?: string;
+  content?: string;
+}
+
 const getLeftMarginByTagName = (tagName: string | undefined) => {
   if (tagName === "h2") {
     return "12px";
@@ -20,25 +25,25 @@ const PostTableOfContents = ({
       {tocArray && (
         <TocAbsoluteWrapper className="ToC">
           <TocStickyWrapper>
-            {tocArray.map((str: any, idx: any) => {
+            {tocArray.map((head: Heading, idx: number) => {
               return (
                 <TocLineDiv
                   key={idx}
                   css={(theme) => ({
-                    marginLeft: getLeftMarginByTagName(str?.tag),
+                    marginLeft: getLeftMarginByTagName(head?.tag),
                     color:
-                      observerEntry === str?.content
+                      observerEntry === head?.content
                         ? theme.colors.primary.primary
                         : "",
                     transform:
-                      observerEntry === str?.content ? "scale(1.05)" : "",
+                      observerEntry === head?.content ? "scale(1.05)" : "",
                   })}
                 >
                   <TocAnchor
-                    href={`#${str?.content}`}
+                    href={`#${head?.content}`}
                     onClick={anchorClickHandler}
                   >
-                    {str?.content}
+                    {head?.content}
                   </TocAnchor>
                 </TocLineDiv>
               );

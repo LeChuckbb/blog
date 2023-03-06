@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { deleteThumbnail, getUploadImageURL } from "../../apis/fileApi";
 import axios from "axios";
 import { getFileFromCF } from "../../apis/fileApi";
-import ObjectID from "bson-objectid";
+import { PostSchema } from "../../types/post";
 
 export type WriteSubPageProps = {
   subPageRef: RefObject<HTMLDivElement>;
@@ -108,11 +108,10 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
       thumbInput
     );
 
-    const body: any = {
+    const body: PostSchema = {
       ...formInputData,
       ...postFetchBody,
       date: dateFormatter(date),
-      // * DB에는 썸네일 파일명만 저장
       thumbnail: {
         name: fileName,
         id: fileId,
@@ -178,7 +177,7 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
       "urlSlug",
       postFetchBody?.title?.replaceAll(" ", "-").replaceAll("/", "")
     );
-  }, [postFetchBody]);
+  }, [postFetchBody, setValue]);
 
   const getUseFormProps = ({ ...otherprops } = {}) => ({
     register,

@@ -1,14 +1,13 @@
 import type { NextApiHandler } from "next";
 import useMongo from "../../../lib/useMongo";
 import { apiHandler } from "../../../lib/api";
-import { AppError } from "../../../types/api";
+import { AppError } from "../../../lib/api";
 
 const Logout: NextApiHandler = async (req, res) => {
   const { authCollection } = await useMongo();
+  const adminId = process.env.NEXT_PUBLIC_ADMIN_ID;
   const logoutResult = await authCollection.findOneAndUpdate(
-    {
-      id: process.env.ADMIN_ID,
-    },
+    { id: adminId },
     { $set: { refreshToken: "" } }
   );
 

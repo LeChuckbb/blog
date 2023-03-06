@@ -21,10 +21,10 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
     getHandleSubmitProps,
     getUseFormProps,
   } = useWriteSubPage(prevData, postFetchBody);
-  const { register, handleSubmit, getValues, watch, errors, control } = {
-    ...getUseFormProps(),
-  };
-  const { onValidSubmit, onInvalidSubmit } = { ...getHandleSubmitProps() };
+
+  const { register, handleSubmit, getValues, watch, errors, control } =
+    getUseFormProps();
+  const { onValidSubmit, onInvalidSubmit } = getHandleSubmitProps();
 
   return (
     <form

@@ -5,6 +5,16 @@ import { apiHandler } from "../../../lib/api";
 import * as Yup from "yup";
 import { validateRequest } from "../../../lib/yup";
 
+interface RegistrationData {
+  id: string;
+  password: string;
+}
+interface User {
+  id: string;
+  digest: string;
+  salt: string;
+}
+
 /* hashed pwd 생성에 사용된 코드 */
 const createSalt = (): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -14,17 +24,11 @@ const createSalt = (): Promise<string> =>
     });
   });
 
-const createDigest = (
-  plainPassword: string
-): Promise<{
-  digest: string;
-  salt: string;
-}> =>
-  new Promise(async (resolve, reject) => {
-    const salt = await createSalt();
+const createDigest = (plainPassword: string, salt: string): Promise<string> =>
+  new Promise((resolve, reject) => {
     crypto.pbkdf2(plainPassword, salt, 9999, 64, "sha512", (err, key) => {
       if (err) reject(err);
-      resolve({ digest: key.toString("base64"), salt });
+      resolve(key.toString("base64"));
     });
   });
 
@@ -34,15 +38,17 @@ const registerSchema = Yup.object().shape({
 });
 
 const Register: NextApiHandler = async (req, res) => {
-  const data = validateRequest(req.body, registerSchema);
+  const data: RegistrationData = validateRequest(req.body, registerSchema);
   const { id, password } = data;
   const { authCollection } = await useMongo();
-  const { digest, salt } = await createDigest(password);
-  const result = await authCollection.insertOne({
+  const salt = await createSalt();
+  const digest = await createDigest(password, salt);
+  const user: User = {
     id,
     digest,
     salt,
-  });
+  };
+  const result = await authCollection.insertOne(user);
 
   res.status(200).json(result);
 };

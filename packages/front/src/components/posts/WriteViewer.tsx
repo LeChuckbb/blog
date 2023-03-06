@@ -7,20 +7,26 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import useEditorStyles from "./useEditorStyles";
 import { useEffect, useRef } from "react";
 
-const WriteViewer = ({ content, setObserverEntry }: any) => {
+type WriteViewerProps = {
+  content: string;
+  setObserverEntry: any;
+};
+
+const WriteViewer = ({ content, setObserverEntry }: WriteViewerProps) => {
   const { editorStyles } = useEditorStyles();
-  const ref = useRef<HTMLDivElement | null>(null);
-  const HEADER_OFFSET_Y = 64;
+  const ref = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<any>(null);
+  const HEADER_OFFSET_Y = 64;
 
   useEffect(() => {
     const ToCHandleScroll = () => {
       if (ref.current !== null) {
-        let aboveHeaderUrl: string | null;
+        let aboveHeaderUrl: string | null = null;
         const currentOffsetY = window.pageYOffset;
         const headerElements = ref.current.querySelectorAll(
           "h1,h2,h3"
         ) as NodeListOf<HTMLHeadingElement>;
+
         headerElements.forEach((elem) => {
           const { top } = elem.getBoundingClientRect();
           const elemTop = top + currentOffsetY;

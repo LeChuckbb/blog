@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useGetPostByPageQuery } from "../../hooks/query/useGetPostByPageQuery";
 import Card from "design/src/stories/Card";
 import ImageDefault from "../../../public/static/thumbnail/default.svg";
+import { PostSchema } from "../../types/post";
 
 interface Props {
   selectedTag: string;
@@ -9,7 +10,6 @@ interface Props {
 
 const dateFormatter = (date: string): string => {
   if (date == undefined) return "";
-
   const arr = date?.split("-");
   return `${arr[0]}.${arr[1]}.${arr[2]}`;
 };
@@ -24,17 +24,13 @@ const PostList = ({ selectedTag }: Props) => {
   return (
     <CardContainer className="CardContainer">
       {postsData?.pages
-        .map((page: any) => {
-          // console.log(page.results);
-          return page.results;
-        })
+        .map((page: any) => page.results)
         .flat()
-        .map((post: any, idx: number, arr: any) => {
-          // console.log(post);
+        .map((post: PostSchema, idx: number, arr) => {
           return (
             <Card
               key={post._id}
-              id={post._id}
+              id={post._id as string}
               urlSlug={post.urlSlug}
               fetchNext={() => hasNextPage && fetchNextPage()}
               isLastItem={arr.length - 1 === idx}

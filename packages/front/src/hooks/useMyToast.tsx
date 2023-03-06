@@ -1,15 +1,16 @@
-import { toast } from "react-toastify";
+import { toast, ToastOptions } from "react-toastify";
 import useDarkMode from "./useDarkMode";
 
 const useMyToast = () => {
   const { isDarkMode } = useDarkMode();
 
   const callToast = (content: string, id: string, option?: {}) => {
-    toast(content, {
+    const toastOptions: ToastOptions = {
       toastId: id,
       theme: isDarkMode ? "dark" : "light",
       ...option,
-    });
+    };
+    toast(content, toastOptions);
   };
 
   return { callToast };

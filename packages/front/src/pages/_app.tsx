@@ -11,6 +11,7 @@ import ModalSetter from "../common/Modal/ModalSetter";
 import GlobalErrorBoundary from "../hooks/\berror/GlobalErrorBoundary";
 import GlobalStyles from "../styles/glabals";
 import useDarkMode from "../hooks/useDarkMode";
+import { useRef } from "react";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -39,18 +40,22 @@ const Wrapper = ({ Component, pageProps }: any) => {
 };
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        suspense: true,
-        refetchOnMount: false,
-        refetchOnWindowFocus: false,
+  const queryClientRef = useRef<QueryClient>();
+
+  if (!queryClientRef.current) {
+    queryClientRef.current = new QueryClient({
+      defaultOptions: {
+        queries: {
+          suspense: true,
+          refetchOnMount: false,
+          refetchOnWindowFocus: false,
+        },
       },
-    },
-  });
+    });
+  }
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClientRef.current}>
       <Hydrate state={pageProps.dehydratedState}>
         <ReactQueryDevtools initialIsOpen position="bottom-left" />
         <RecoilRoot>

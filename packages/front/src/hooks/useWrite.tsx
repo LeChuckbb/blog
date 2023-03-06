@@ -1,20 +1,41 @@
 import React, { useState, useRef, useEffect } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
-import { FormInterface } from "../pages/post/write";
 import useMyToast from "./useMyToast";
+import { PostSchema } from "../types/post";
 
 interface Body {
   title: string;
   tags: string[];
-  html: any;
-  markdown: any;
+  html: string;
+  markdown: string;
 }
 
-const useWrite = (data: any) => {
+export interface FormInterface {
+  title: string;
+  tag: string[];
+  content: string;
+}
+
+export interface WriteProps {
+  data: PostSchema;
+}
+
+interface WriteHook {
+  editorRef: React.RefObject<any>;
+  tagsArray: string[];
+  isTagInputFocusIn: boolean;
+  onValidSubmit: SubmitHandler<FormInterface>;
+  onInvalidSubmit: (errors: any) => void;
+  onClickRemoveTagHandler: (clickedIdx: number) => void;
+  getTagInputProps: (props?: any) => any;
+  getWriteSubPageProps: () => any;
+}
+
+const useWrite = (data: PostSchema): WriteHook => {
   const [tag, setTag] = useState("");
   const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
-  const [tagsArray, setTagsArray] = useState(Array<string>);
+  const [tagsArray, setTagsArray] = useState<string[]>([]);
   const [postFetchBody, setPostFetchBody] = useState<Body>({
     title: "",
     tags: [],
@@ -27,24 +48,22 @@ const useWrite = (data: any) => {
 
   useEffect(() => {
     if (data?.tags != undefined) setTagsArray(data?.tags);
-  }, []);
+  }, [data?.tags]);
 
   const onKeyDownHandler = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && event.nativeEvent.isComposing === false) {
       // 한글(복합문자) 입력시 끝 문자 이벤트가 한 번 더 발생하는 문제 방지
-      if (event.nativeEvent.isComposing === false) {
-        event.preventDefault(); // submit 방지
-        setTagsArray((prev: any) => {
-          // Set로 만들어서 배열 내 중복을 제거한 뒤 다시 배열로 반환
-          const set = new Set([...prev, tag]);
-          return Array.from(set);
-        });
-        setTag("");
-      }
+      event.preventDefault(); // submit 방지
+      setTagsArray((prev: any) => {
+        // Set로 만들어서 배열 내 중복을 제거한 뒤 다시 배열로 반환
+        const set = new Set([...prev, tag]);
+        return Array.from(set);
+      });
+      setTag("");
     }
   };
 
-  const onValidSubmit: SubmitHandler<FormInterface> = (data: any) => {
+  const onValidSubmit: SubmitHandler<FormInterface> = (data) => {
     try {
       // toast 종료하기
       toast.dismiss();
@@ -56,7 +75,7 @@ const useWrite = (data: any) => {
 
       if (contentMark?.length === 0) {
         // subpage로 이동하지 말아야 함.
-        callToast('본문 내용을 입력해주세요.', 'content')
+        callToast("본문 내용을 입력해주세요.", "content");
         throw new Error("본문 내용을 입력해주세요.");
       }
 
@@ -80,29 +99,31 @@ const useWrite = (data: any) => {
   };
 
   const onInvalidSubmit = (errors: any) => {
-    errors.title.message && callToast(errors.title.message, 'title');
+    console.log(errors);
+    errors.title.message && callToast(errors.title.message, "title");
   };
 
   const onClickRemoveTagHandler = (clickedIdx: number) => {
     const result = tagsArray.filter(
-      (_: any, index: any) => index !== clickedIdx
+      (_: string, index: number) => index !== clickedIdx
     );
     setTagsArray(result);
   };
 
-  const getTagInputProps =({...otherProps} ={}) => ({
+  const getTagInputProps = ({ ...otherProps } = {}) => ({
     value: tag,
     onKeyDown: onKeyDownHandler,
     onFocus: () => setIsTagInputFocusIn(true),
     onBlur: () => setIsTagInputFocusIn(false),
-    onChange: (event:any) => setTag(event?.target.value),
-    ...otherProps
-  })
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
+      setTag(event?.target.value),
+    ...otherProps,
+  });
 
   const getWriteSubPageProps = () => ({
     postFetchBody,
     subPageRef,
-  })
+  });
 
   return {
     editorRef,

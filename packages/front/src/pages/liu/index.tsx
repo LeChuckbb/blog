@@ -13,12 +13,7 @@ export type LoginForm = {
 };
 
 const Login = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    getValues,
-  } = useForm<LoginForm>({
+  const { register, handleSubmit, getValues } = useForm<LoginForm>({
     defaultValues: {
       id: "",
       password: "",
@@ -28,16 +23,10 @@ const Login = () => {
   const { mutate: loginAPI } = useLoginMutation();
 
   const onValidSubmit: SubmitHandler<LoginForm> = async (data: LoginForm) => {
-    try {
-      await loginAPI(data);
-    } catch (err) {
-      console.log("catch Error!");
-      console.log(err);
-    }
+    loginAPI(data);
   };
 
   const onInvalidSubmit: SubmitErrorHandler<LoginForm> = async (error) => {
-    console.log("onInvalid");
     error?.id?.message && callToast(error.id.message, "Id");
     error?.password?.message && callToast(error.password.message, "password");
   };
@@ -93,11 +82,6 @@ const Form = styled.form`
   flex-direction: column;
   gap: 24px;
   width: 400px;
-`;
-
-const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 export default Login;

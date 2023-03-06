@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import IconButton from "design/src/stories/IconButton";
 import IconGithub from "../../public/icons/github_mark.svg";
 
-const Footer: React.FC = () => {
+const Footer = () => {
   return (
     <Container>
       <div>

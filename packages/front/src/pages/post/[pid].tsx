@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 import PostTableOfContents from "../../components/posts/PostTableOfContents";
 import useMongo from "../../lib/useMongo";
+import ObjectID from "bson-objectid";
 
 const NoSSRViewer = dynamic(
   () => import("../../components/posts/WriteViewer"),
@@ -14,6 +15,15 @@ const NoSSRViewer = dynamic(
     ssr: false,
   }
 );
+
+interface Props {
+  title: string;
+  date: string;
+  html: string;
+  slug: string;
+  markdown?: string;
+  _id: string;
+}
 
 const getHTMLTags = (htmlString: string) => {
   // 긴 HTML 문자열에서 h1,h2,h3 태그만 추출하기
@@ -37,7 +47,7 @@ const getHTMLTags = (htmlString: string) => {
     : null;
 };
 
-const PostDetail = ({ title, date, html, slug, markdown, _id }: any) => {
+const PostDetail = ({ title, date, html, slug, markdown, _id }: Props) => {
   const tocArray = getHTMLTags(html);
   const [observerEntry, setObserverEntry] = useState<string>();
   const [anchorClickHandler, setAnchorClickHandler] = useState();
@@ -56,11 +66,7 @@ const PostDetail = ({ title, date, html, slug, markdown, _id }: any) => {
         id={_id?.replaceAll('"', "")}
       />
       {markdown && (
-        <NoSSRViewer
-          content={markdown}
-          setObserverEntry={setObserverEntry}
-          setAnchorClickHandler={setAnchorClickHandler}
-        />
+        <NoSSRViewer content={markdown} setObserverEntry={setObserverEntry} />
       )}
       <ToastContainer />
     </Container>
@@ -73,19 +79,19 @@ PostDetail.getLayout = function getLayout(page: React.ReactElement) {
 
 export default PostDetail;
 
-const GetAllPosts = async () => {
-  const { postsCollection } = await useMongo();
-  const results = await postsCollection
-    .find({}, { projection: { html: 0, markdown: 0 } })
-    .toArray();
-  return results.map((el: any) => ({
-    params: { pid: el.urlSlug },
-  }));
-};
-
 // 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = await GetAllPosts();
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { postsCollection } = await useMongo();
+  const posts = await postsCollection
+    .find({}, { projection: { html: 0, markdown: 0 } })
+    .toArray();
+
+  const paths = posts.map((post) => ({
+    params: {
+      pid: post.urlSlug,
+    },
+  }));
 
   return {
     paths,
@@ -93,25 +99,25 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-const GetPostBySlug = async (urlSlug: string) => {
-  const { postsCollection } = await useMongo();
-  return await postsCollection.findOne({
-    urlSlug,
-  });
-};
-
 // 빌드 시 데이터를 fetch하여 static 페이지를 생성
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const res = await GetPostBySlug(params?.pid as string);
+export const getStaticProps: GetStaticProps = async (context) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { postsCollection } = await useMongo();
+  const res = await postsCollection.findOne({
+    urlSlug: context.params?.pid as string,
+  });
 
-  const results = {
-    ...res,
+  const results: Props = {
+    title: res?.title ?? "",
+    date: res?.date ?? "",
+    html: res?.html ?? "",
+    slug: context.params?.pid as string,
+    markdown: res?.markdown,
     _id: JSON.stringify(res?._id),
-    // html: res?.html,
   };
 
   return {
-    props: { ...results, slug: params?.pid },
+    props: results,
   };
 };
 

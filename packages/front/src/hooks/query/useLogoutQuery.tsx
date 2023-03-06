@@ -1,7 +1,6 @@
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { logoutAPI } from "../../apis/authApi";
 import { AxiosResponse } from "axios";
-import { IS_AUTH_QUERYKEY } from "./useIsAuthQuery";
 
 export const LOGOUT_QUERYKEY = "logout";
 

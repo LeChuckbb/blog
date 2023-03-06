@@ -21,7 +21,7 @@ import { useEffect } from "react";
 import { getUploadImageURL } from "../../apis/fileApi";
 import axios from "axios";
 interface Props {
-  content: string;
+  content?: string;
   editorRef: React.MutableRefObject<any>;
 }
 
@@ -40,22 +40,20 @@ const WrtieEditor = ({ content = "", editorRef }: Props) => {
 
   useEffect(() => {
     // 게시글에 이미지 붙여넣기 시 CF 서버에 업로드하는 addImageBlobHook
+    const uploadImage = async (blob: string, callback: any) => {
+      let formData = new FormData();
+      formData.append("file", blob);
+
+      const uploadURL = await getUploadImageURL();
+      const uploadResult = await axios.post(uploadURL.data, formData);
+      const url = `${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${uploadResult.data.result.id}/post`;
+      callback(url, "image");
+    };
+
     if (editorRef.current) {
       const editor = editorRef.current.getInstance();
       editor.removeHook("addImageBlobHook");
-      editor.addHook("addImageBlobHook", (blob: any, callback: any) => {
-        (async () => {
-          let formData = new FormData();
-          formData.append("file", blob);
-
-          const uploadURL = await getUploadImageURL();
-          const uploadResult = await axios.post(uploadURL.data, formData);
-          const url = `${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${uploadResult.data.result.id}/post`;
-          callback(url, "image");
-        })();
-
-        return false;
-      });
+      editor.addHook("addImageBlobHook", uploadImage);
     }
   }, [editorRef]);
 

@@ -4,19 +4,17 @@ import { AxiosResponse } from "axios";
 
 export const POST_BY_PAGE_KEY = "getPostByPage";
 
-export type PostByPageType = {
+export interface PostByPageType {
   count: number;
   next: number | null;
   prev: number | null;
-  results: Array<object>;
-};
+  results: [{}];
+}
 
 export const useGetPostByPageQuery = (selectedTag: string) => {
   return useInfiniteQuery<AxiosResponse<PostByPageType, Error>>(
     [POST_BY_PAGE_KEY, selectedTag],
-    ({ pageParam = 1 }) => {
-      return getPostByPage(pageParam, selectedTag);
-    },
+    ({ pageParam = 1 }) => getPostByPage(pageParam, selectedTag),
     {
       staleTime: 60000,
       suspense: false,

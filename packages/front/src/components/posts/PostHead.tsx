@@ -8,9 +8,9 @@ import { Button } from "design/src/stories/Button";
 import { useIsAuthQuery } from "../../hooks/query/useIsAuthQuery";
 
 type Props = {
-  date: any;
-  title: any;
-  slug: any;
+  date: string;
+  title: string;
+  slug: string;
   id: string;
 };
 
@@ -44,7 +44,7 @@ const PostHead = ({ date, title, slug, id }: Props) => {
   const [_, setModal] = useRecoilState(modalState);
   const { data } = useIsAuthQuery();
   const { mutate: deletePost } = useDeletePostMutation(<></>, setModal);
-  const confirmHanlder = async () => await deletePost(id);
+  const confirmHanlder = async () => deletePost(id);
 
   const onClickDeleteHandler = async () => {
     setModal({
@@ -56,10 +56,13 @@ const PostHead = ({ date, title, slug, id }: Props) => {
   const onClickUpdateHandler = () => {
     // Editor 열기
     // post/write?slug=xxx
-    router.push({
-      pathname: "/post/write",
-      query: { slug },
-    });
+    router.push(
+      {
+        pathname: "/post/write",
+        query: { slug, id },
+      },
+      `/post/write/${slug}`
+    );
   };
 
   const formattedDate = dateFormatter(date);

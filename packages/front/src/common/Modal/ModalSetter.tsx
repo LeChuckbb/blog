@@ -2,9 +2,6 @@ import styled from "@emotion/styled";
 import Portal from "./Portal";
 import { CSSTransition } from "react-transition-group";
 import { useRecoilState } from "recoil";
-// import { modalState } from "../../recoil/atom";
-import { atom } from "recoil";
-import { v1 } from "uuid";
 import { modalState } from "../../recoil/atom";
 interface Props {
   selector?: string;
