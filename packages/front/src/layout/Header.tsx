@@ -58,13 +58,13 @@ const Header = ({ scrollDirection }: HeaderProps) => {
               </IconButton>
             </>
           )}
-          <Link href="/about">
+          {/* <Link href="/about">
             <a>
               <IconButton tooltip="소개">
                 <IconInfo />
               </IconButton>
             </a>
-          </Link>
+          </Link> */}
           <IconButton onClick={toggleDarkMode} tooltip="테마 전환">
             {isDarkMode ? <IconDark /> : <IconLight />}
           </IconButton>

@@ -160,7 +160,7 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
     // db에 저장된 thumbnail ID를 기반으로 CF에서 이미지 가져오기
     const getFileAndSet = async () => {
       const { result, base64Image } = await getFileFromCF(
-        prevData.thumbnail.id,
+        prevData?.thumbnail?.id,
         "thumbnail"
       );
       setThumbnailImage(

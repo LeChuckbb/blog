@@ -16,10 +16,9 @@ const useToken = async () => {
 
   const verifyAccessToken = (token: string) => {
     try {
-      jwt.verify(
-        token === undefined ? "token" : token.split(" ")[1],
-        accessTokenSecret
-      );
+      if (token === undefined) return false;
+
+      jwt.verify(token.split(" ")[1], accessTokenSecret);
       return true;
     } catch (err) {
       console.error(err);

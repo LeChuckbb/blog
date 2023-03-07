@@ -38,7 +38,7 @@ const PostList = ({ selectedTag }: Props) => {
             >
               <Card.Thumbnail
                 ImageDefault={ImageDefault}
-                imageId={post.thumbnail.id}
+                imageId={post?.thumbnail?.id}
               />
               <Card.SecondSection>
                 <Card.TitleWrapper>
