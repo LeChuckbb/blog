@@ -2,13 +2,15 @@
 
 여러 가지 기술 스택을 실험하고 오랫동안 유지보수 해 볼 요량으로 만든 개인 블로그입니다.
 
+[블로그 링크](https://lechuck.blog)
+
 <table>
   <tr>
     <td width="350px">
-        <img src=".packages/front/public/static/readme/responsive.gif" style="width: 100%; height: auto;" alt="반응형"/>
+        <img src="./packages/front/public/static/readme/responsive.gif" style="width: 100%; height: auto;" alt="반응형"/>
     </td>
     <td width="350px">
-        <img src=".packages/front/public/static/readme/read.gif" style="width: 100%; height: auto;" alt="게시글 조회"/>
+        <img src="./packages/front/public/static/readme/read.gif" style="width: 100%; height: auto;" alt="게시글 조회"/>
     </td>
   </tr>
   <tr>
@@ -21,10 +23,10 @@
   </tr>
   <tr>
     <td width="350px">
-        <img src=".packages/front/public/static/readme/create.gif" style="width: 100%; height: auto;" alt="게시글 작성"/>
+        <img src="./packages/front/public/static/readme/create.gif" style="width: 100%; height: auto;" alt="게시글 작성"/>
     </td>
     <td width="350px">
-        <img src=".packages/front/public/static/readme/tag.gif" style="width: 100%; height: auto;" alt="태그별 조회"/>
+        <img src="./packages/front/public/static/readme/tag.gif" style="width: 100%; height: auto;" alt="태그별 조회"/>
     </td>
   </tr>
   <tr>
