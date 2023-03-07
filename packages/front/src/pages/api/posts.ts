@@ -1,8 +1,8 @@
 import type { NextApiHandler } from "next";
 import useMongo from "../../lib/useMongo";
 import { apiHandler } from "../../lib/api";
-import ObjectID from "bson-objectid";
 import { AppError } from "../../lib/api";
+import { ObjectId } from "../../lib/mongodb";
 
 const PAGE_SIZE = 8;
 
@@ -60,7 +60,7 @@ const GetPost: NextApiHandler = async (req, res) => {
   } else if (req.query?.id) {
     // getPostById
     const result = await postsCollection.findOne({
-      _id: ObjectID.createFromHexString(req.query.id as string),
+      _id: new ObjectId(req.query.id as string),
     });
 
     if (!result)
@@ -119,7 +119,7 @@ const UpdatePost: NextApiHandler = async (req, res) => {
   const body = { ...req.body };
 
   const result = await postsCollection.findOneAndUpdate(
-    { _id: ObjectID.createFromHexString(req.query.id as string) },
+    { _id: new ObjectId(req.query.id as string) },
     {
       $set: { ...body },
     }
@@ -139,7 +139,7 @@ const UpdatePost: NextApiHandler = async (req, res) => {
 const DeletePost: NextApiHandler = async (req, res) => {
   const { postsCollection } = await useMongo();
   const result = await postsCollection.findOneAndDelete({
-    _id: ObjectID.createFromHexString(req.query.id as string),
+    _id: new ObjectId(req.query.id as string),
   });
 
   if (result.value === null)
