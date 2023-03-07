@@ -5,10 +5,10 @@
 <table>
   <tr>
     <td width="350px">
-        <img src="./public/static/readme/responsive.gif" style="width: 100%; height: auto;" alt="반응형"/>
+        <img src=".packages/front/public/static/readme/responsive.gif" style="width: 100%; height: auto;" alt="반응형"/>
     </td>
     <td width="350px">
-        <img src="./public/static/readme/read.gif" style="width: 100%; height: auto;" alt="게시글 조회"/>
+        <img src=".packages/front/public/static/readme/read.gif" style="width: 100%; height: auto;" alt="게시글 조회"/>
     </td>
   </tr>
   <tr>
@@ -21,10 +21,10 @@
   </tr>
   <tr>
     <td width="350px">
-        <img src="./public/static/readme/create.gif" style="width: 100%; height: auto;" alt="게시글 작성"/>
+        <img src=".packages/front/public/static/readme/create.gif" style="width: 100%; height: auto;" alt="게시글 작성"/>
     </td>
     <td width="350px">
-        <img src="./public/static/readme/tag.gif" style="width: 100%; height: auto;" alt="태그별 조회"/>
+        <img src=".packages/front/public/static/readme/tag.gif" style="width: 100%; height: auto;" alt="태그별 조회"/>
     </td>
   </tr>
   <tr>
