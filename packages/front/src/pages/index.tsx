@@ -5,36 +5,24 @@ import PostList from "../components/main/PostList";
 import LocalErrorBoundary from "../hooks/\berror/LocalErrorBoundary";
 import PostTags, { TagsType } from "../components/main/PostTags";
 import useMongo from "../lib/useMongo";
-import { Suspense } from "react";
-import dynamic from "next/dynamic";
 
-const SuspensePostList = dynamic(() => import("../components/main/PostList"), {
-  ssr: false,
-});
-
-// const DynamicPosts = dynamic(() => import("../components/main/Posts"), {
+// const SuspensePostList = dynamic(() => import("../components/main/PostList"), {
 //   ssr: false,
 // });
 
-const CardSkeleton = () => {
-  return (
-    <div>
-      <p>yap</p>
-    </div>
-  );
-};
+interface Props {
+  tags: TagsType;
+  posts: string;
+}
 
-const Home = ({ tags }: TagsType) => {
+const Home = ({ tags, posts }: Props) => {
   const [selectedTag, setSelectedTag] = useState("all");
 
   return (
     <Container>
       <PostTags setTag={setSelectedTag} tagsData={JSON.parse(String(tags))} />
       <LocalErrorBoundary>
-        <Suspense fallback={<CardSkeleton />}>
-          <SuspensePostList selectedTag={selectedTag} />
-          {/* <PostList selectedTag={selectedTag} /> */}
-        </Suspense>
+        <PostList selectedTag={selectedTag} posts={JSON.parse(String(posts))} />
       </LocalErrorBoundary>
     </Container>
   );
@@ -54,13 +42,26 @@ const GetTags = async () => {
   return { count, tags };
 };
 
+const GetPosts = async () => {
+  const { postsCollection } = await useMongo();
+  const posts = await postsCollection
+    .find({}, { projection: { html: 0, markdown: 0 } })
+    .sort({ date: -1, _id: 1 })
+    .toArray();
+
+  return posts;
+};
+
 export async function getStaticProps() {
   const tags = await GetTags();
+  const posts = await GetPosts();
 
   return {
     props: {
       tags: JSON.stringify(tags),
+      posts: JSON.stringify(posts),
     },
+    revalidate: 10,
   };
 }
 

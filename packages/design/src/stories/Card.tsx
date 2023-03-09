@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import Image, { ImageLoader } from "next/image";
-import React, { useRef, useEffect, useState } from "react";
+import Image from "next/image";
+import React, { useRef, useEffect } from "react";
 import useMainPageIntersectionObserver from "../hooks/useMainPageIntersectionObserver";
 import { useRouter } from "next/router";
 import { Chip as TagChip } from "design/src/stories/Chip";
@@ -23,14 +23,10 @@ const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
   const entry = useMainPageIntersectionObserver(ref, {});
   const isIntersecting = !!entry?.isIntersecting;
   const router = useRouter();
-  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (isLastItem && isIntersecting && !isLoaded) {
-      fetchNext();
-      setIsLoaded(true);
-    }
-  }, [isLoaded, isLastItem, isIntersecting, fetchNext]);
+    if (isLastItem && isIntersecting) fetchNext();
+  }, [isLastItem, isIntersecting, fetchNext]);
 
   const onClickHandler = (event: React.MouseEvent, id: string) => {
     router.push(
@@ -52,33 +48,6 @@ const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
       {children}
     </CardBox>
   );
-};
-
-// loader를 사용해야만 console에 img 관련 warning이 출력되지 않음
-// const myLoader = ({ src }: any) => {
-//   return src;
-// };
-
-// const normalizeSrc = (src: string) => {
-//   return src.startsWith("/") ? src.slice(1) : src;
-// };
-
-// const cloudflareLoader = ({ src, width, quality }: any) => {
-//   const params = [`width=${width}`];
-//   if (quality) {
-//     params.push(`quality=${quality}`);
-//   }
-//   const paramsString = params.join(",");
-//   return `/cdn-cgi/image/${paramsString}/${normalizeSrc(src)}`;
-// };
-
-const cloudflareImagesLoader: ImageLoader = ({ src, width }) => {
-  // Note that `width` might be larger than you're expecting because of a device pixel ratio (DPR)
-
-  // Next.js expects to see the width somewhere in the URL,
-  // so we add the no-op `width` query parameter to suppress the warning
-  // https://nextjs.org/docs/messages/next-image-missing-loader-width
-  return `${src}?width=${width}`;
 };
 
 type ThumbnailProps = {
