@@ -102,7 +102,7 @@ Card.Thumbnail = ({ ImageDefault, imageId }: ThumbnailProps) => {
           alt="thumbnail"
           style={{ borderRadius: "12px 12px 0px 0px", fill: "red" }}
           width={340}
-          height={176}
+          height={185}
           sizes="100vw"
           objectFit="cover"
           priority
@@ -172,6 +172,8 @@ const CardBox = styled.div`
 
   .imgDiv {
     fill: ${(props) => props.theme.colors.neutral.surface};
+    min-height: 190px;
+    height: 100%;
     svg {
       border-radius: 12px 12px 0px 0px;
     }

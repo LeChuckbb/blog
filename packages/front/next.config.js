@@ -24,10 +24,11 @@ const nextConfig = {
     ];
   },
   images: {
-    domains: ["localhost", "imagedelivery.net", "*"],
+    domains: ["imagedelivery.net"],
     formats: ["image/avif", "image/webp"],
     imageSizes: [768, 350],
     deviceSizes: [768, 1058],
+    minimumCacheTTL: 192800,
   },
   reactStrictMode: false,
   compiler: {

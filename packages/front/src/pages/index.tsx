@@ -9,7 +9,7 @@ import { Suspense } from "react";
 import dynamic from "next/dynamic";
 
 const SuspensePostList = dynamic(() => import("../components/main/PostList"), {
-  suspense: true,
+  ssr: false,
 });
 
 // const DynamicPosts = dynamic(() => import("../components/main/Posts"), {
@@ -32,8 +32,8 @@ const Home = ({ tags }: TagsType) => {
       <PostTags setTag={setSelectedTag} tagsData={JSON.parse(String(tags))} />
       <LocalErrorBoundary>
         <Suspense fallback={<CardSkeleton />}>
-          {/* <SuspensePostList selectedTag={selectedTag} /> */}
-          <PostList selectedTag={selectedTag} />
+          <SuspensePostList selectedTag={selectedTag} />
+          {/* <PostList selectedTag={selectedTag} /> */}
         </Suspense>
       </LocalErrorBoundary>
     </Container>
