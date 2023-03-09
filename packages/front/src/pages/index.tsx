@@ -5,10 +5,24 @@ import PostList from "../components/main/PostList";
 import LocalErrorBoundary from "../hooks/\berror/LocalErrorBoundary";
 import PostTags, { TagsType } from "../components/main/PostTags";
 import useMongo from "../lib/useMongo";
+import { Suspense } from "react";
+import dynamic from "next/dynamic";
+
+const SuspensePostList = dynamic(() => import("../components/main/PostList"), {
+  suspense: true,
+});
 
 // const DynamicPosts = dynamic(() => import("../components/main/Posts"), {
 //   ssr: false,
 // });
+
+const CardSkeleton = () => {
+  return (
+    <div>
+      <p>yap</p>
+    </div>
+  );
+};
 
 const Home = ({ tags }: TagsType) => {
   const [selectedTag, setSelectedTag] = useState("all");
@@ -17,7 +31,10 @@ const Home = ({ tags }: TagsType) => {
     <Container>
       <PostTags setTag={setSelectedTag} tagsData={JSON.parse(String(tags))} />
       <LocalErrorBoundary>
-        <PostList selectedTag={selectedTag} />
+        <Suspense fallback={<CardSkeleton />}>
+          {/* <SuspensePostList selectedTag={selectedTag} /> */}
+          <PostList selectedTag={selectedTag} />
+        </Suspense>
       </LocalErrorBoundary>
     </Container>
   );

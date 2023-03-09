@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Image from "next/image";
+import Image, { ImageLoader } from "next/image";
 import React, { useRef, useEffect, useState } from "react";
 import useMainPageIntersectionObserver from "../hooks/useMainPageIntersectionObserver";
 import { useRouter } from "next/router";
@@ -55,8 +55,30 @@ const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
 };
 
 // loader를 사용해야만 console에 img 관련 warning이 출력되지 않음
-const myLoader = ({ src }: any) => {
-  return src;
+// const myLoader = ({ src }: any) => {
+//   return src;
+// };
+
+// const normalizeSrc = (src: string) => {
+//   return src.startsWith("/") ? src.slice(1) : src;
+// };
+
+// const cloudflareLoader = ({ src, width, quality }: any) => {
+//   const params = [`width=${width}`];
+//   if (quality) {
+//     params.push(`quality=${quality}`);
+//   }
+//   const paramsString = params.join(",");
+//   return `/cdn-cgi/image/${paramsString}/${normalizeSrc(src)}`;
+// };
+
+const cloudflareImagesLoader: ImageLoader = ({ src, width }) => {
+  // Note that `width` might be larger than you're expecting because of a device pixel ratio (DPR)
+
+  // Next.js expects to see the width somewhere in the URL,
+  // so we add the no-op `width` query parameter to suppress the warning
+  // https://nextjs.org/docs/messages/next-image-missing-loader-width
+  return `${src}?width=${width}`;
 };
 
 type ThumbnailProps = {
@@ -72,15 +94,16 @@ Card.Thumbnail = ({ ImageDefault, imageId }: ThumbnailProps) => {
     >
       {imageId ? (
         <Image
-          // loader={myLoader}
+          // loader={cloudflareImagesLoader}
           src={`${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${imageId}/thumbnail`}
+          blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+          // blurDataURL={`${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${imageId}/thumbnail`}
+          placeholder="blur"
           alt="thumbnail"
           style={{ borderRadius: "12px 12px 0px 0px", fill: "red" }}
-          width={320}
+          width={340}
           height={176}
-          sizes="(max-width: 768px) 100vw,
-          (max-width: 1200px) 50vw,
-          33vw"
+          sizes="100vw"
           objectFit="cover"
           priority
         />

@@ -4,6 +4,7 @@ import Card from "design/src/stories/Card";
 import ImageDefault from "../../../public/static/thumbnail/default.svg";
 import { PostSchema } from "../../types/post";
 import { AppError } from "../../lib/api";
+import dynamic from "next/dynamic";
 
 interface Props {
   selectedTag: string;
