@@ -67,11 +67,7 @@ const PostDetail = ({ title, date, html, slug, markdown, _id }: Props) => {
           id={_id?.replaceAll('"', "")}
         />
       </LocalErrorBoundary>
-      <DynamicPostViewer
-        html={html}
-        markdown={markdown}
-        setObserverEntry={setObserverEntry}
-      />
+      <DynamicPostViewer html={html} setObserverEntry={setObserverEntry} />
       <ToastContainer />
     </Container>
   );

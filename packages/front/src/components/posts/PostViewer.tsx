@@ -1,4 +1,3 @@
-import { Parser, createRenderHTML } from "@toast-ui/toastmark";
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-jsx";
@@ -9,29 +8,21 @@ import "prismjs/components/prism-sql";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import useEditorStyles from "./useEditorStyles";
 import { useEffect, useRef } from "react";
-import { useState } from "react";
 
 interface Props {
   html: string;
-  markdown: string | undefined;
   setObserverEntry: any;
 }
 
-const PostViewer = ({ html, markdown, setObserverEntry }: Props) => {
+const PostViewer = ({ html, setObserverEntry }: Props) => {
   const { editorStyles } = useEditorStyles();
   const ref = useRef<HTMLDivElement>(null);
-  const [parsedHtml, setParsedHtml] = useState("");
   const timeoutRef = useRef<any>(null);
   const HEADER_OFFSET_Y = 64;
 
   useEffect(() => {
     Prism.highlightAll();
-
-    const parser = new Parser();
-    const renderHTML = createRenderHTML({ gfm: true });
-    const root = parser.parse(markdown);
-    setParsedHtml(renderHTML(root));
-  }, [html]);
+  }, []);
 
   useEffect(() => {
     const ToCHandleScroll = () => {
