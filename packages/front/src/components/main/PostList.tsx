@@ -4,6 +4,7 @@ import ImageDefault from "../../../public/static/thumbnail/default.svg";
 import { PostSchema } from "../../types/post";
 import { useState } from "react";
 import { useEffect } from "react";
+import Link from "next/link";
 
 interface Props {
   selectedTag: string;
@@ -70,30 +71,33 @@ const PostList = ({ selectedTag, posts }: Props) => {
     <CardContainer className="CardContainer">
       {currentPosts?.map((post: PostSchema, idx: number, arr) => {
         return (
-          <Card
-            key={post._id}
-            id={post._id as string}
-            urlSlug={post.urlSlug}
-            fetchNext={() =>
-              currentPosts.length !== selectedPost.length && fetchNextPage()
-            }
-            isLastItem={arr.length - 1 === idx}
-          >
-            <Card.Thumbnail
-              ImageDefault={ImageDefault}
-              imageId={post?.thumbnail?.id}
-            />
-            <Card.SecondSection>
-              <Card.TitleWrapper>
-                <Card.Title>{post.title}</Card.Title>
-                <Card.SubTitle>{post.subTitle}</Card.SubTitle>
-              </Card.TitleWrapper>
-              <Card.Date>{dateFormatter(post?.date)}</Card.Date>
-            </Card.SecondSection>
-            <Card.ThirdSection>
-              <Card.Tags>{post.tags}</Card.Tags>
-            </Card.ThirdSection>
-          </Card>
+          <Link key={post._id} href={`/post/${post.urlSlug}`}>
+            <a>
+              <Card
+                id={post._id as string}
+                urlSlug={post.urlSlug}
+                fetchNext={() =>
+                  currentPosts.length !== selectedPost.length && fetchNextPage()
+                }
+                isLastItem={arr.length - 1 === idx}
+              >
+                <Card.Thumbnail
+                  ImageDefault={ImageDefault}
+                  imageId={post?.thumbnail?.id}
+                />
+                <Card.SecondSection>
+                  <Card.TitleWrapper>
+                    <Card.Title>{post.title}</Card.Title>
+                    <Card.SubTitle>{post.subTitle}</Card.SubTitle>
+                  </Card.TitleWrapper>
+                  <Card.Date>{dateFormatter(post?.date)}</Card.Date>
+                </Card.SecondSection>
+                <Card.ThirdSection>
+                  <Card.Tags>{post.tags}</Card.Tags>
+                </Card.ThirdSection>
+              </Card>
+            </a>
+          </Link>
         );
       })}
     </CardContainer>
