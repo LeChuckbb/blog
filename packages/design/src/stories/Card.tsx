@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import React, { useRef, useEffect } from "react";
 import useMainPageIntersectionObserver from "../hooks/useMainPageIntersectionObserver";
-import { useRouter } from "next/router";
 import { Chip as TagChip } from "design/src/stories/Chip";
 import Layer from "design/src/stories/Layer";
 

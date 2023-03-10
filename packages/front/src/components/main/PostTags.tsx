@@ -66,18 +66,19 @@ const PostTags = ({ tagsData, setTag }: Props) => {
 
   return (
     <TagList ref={touchContainerRef}>
-      <Badge badgeContent={tagsData?.count}>
-        <Tag color="secondary" onClick={() => onClickTagList("all")}>
-          all
-        </Tag>
-      </Badge>
+      <Tag color="secondary" value="all" onClick={() => onClickTagList("all")}>
+        <Badge badgeContent={tagsData?.count} />
+      </Tag>
       {tagsData?.tags.map((tag: TagType) => {
         return (
-          <Badge badgeContent={tag.count} key={tag._id}>
-            <Tag color="secondary" onClick={() => onClickTagList(tag.name)}>
-              {tag.name}
-            </Tag>
-          </Badge>
+          <Tag
+            key={tag._id}
+            color="secondary"
+            value={tag.name}
+            onClick={() => onClickTagList(tag.name)}
+          >
+            <Badge badgeContent={tag.count} />
+          </Tag>
         );
       })}
     </TagList>

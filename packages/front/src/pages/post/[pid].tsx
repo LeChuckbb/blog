@@ -1,6 +1,5 @@
 import WithHeader from "../../layout/WithHeader";
 import styled from "@emotion/styled";
-import dynamic from "next/dynamic";
 import { GetStaticProps, GetStaticPaths } from "next";
 import PostHead from "../../components/posts/PostHead";
 import { ToastContainer } from "react-toastify";
@@ -9,16 +8,11 @@ import PostTableOfContents from "../../components/posts/PostTableOfContents";
 import useMongo from "../../lib/useMongo";
 import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
 import PostViewer from "../../components/posts/PostViewer";
-
-const DynamicPostViewer = dynamic(
-  () => import("../../components/posts/PostViewer"),
-  {
-    ssr: false,
-  }
-);
+import { NextSeo } from "next-seo";
 
 interface Props {
   title: string;
+  subTitle: string;
   date: string;
   html: string;
   slug: string;
@@ -48,12 +42,13 @@ const getHTMLTags = (htmlString: string) => {
     : null;
 };
 
-const PostDetail = ({ title, date, html, slug, _id }: Props) => {
+const PostDetail = ({ title, subTitle, date, html, slug, _id }: Props) => {
   const tocArray = getHTMLTags(html);
   const [observerEntry, setObserverEntry] = useState<string>();
 
   return (
     <Container className="pidContainer">
+      <NextSeo title={title} description={subTitle} />
       <PostTableOfContents tocArray={tocArray} observerEntry={observerEntry} />
       <LocalErrorBoundary>
         <PostHead
@@ -63,7 +58,6 @@ const PostDetail = ({ title, date, html, slug, _id }: Props) => {
           id={_id?.replaceAll('"', "")}
         />
       </LocalErrorBoundary>
-      {/* <DynamicPostViewer html={html} setObserverEntry={setObserverEntry} /> */}
       <PostViewer html={html} setObserverEntry={setObserverEntry} />
       <ToastContainer />
     </Container>
@@ -106,6 +100,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const results: Props = {
     title: res?.title ?? "",
+    subTitle: res?.subTitle,
     date: res?.date ?? "",
     html: res?.html,
     slug: context.params?.pid as string,

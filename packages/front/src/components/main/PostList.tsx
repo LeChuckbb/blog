@@ -71,7 +71,7 @@ const PostList = ({ selectedTag, posts }: Props) => {
     <CardContainer className="CardContainer">
       {currentPosts?.map((post: PostSchema, idx: number, arr) => {
         return (
-          <Link key={post._id} href={`/post/${post.urlSlug}`}>
+          <Link key={post._id} href={`/post/${post.urlSlug}`} passHref>
             <Anchor>
               <Card
                 id={post._id as string}

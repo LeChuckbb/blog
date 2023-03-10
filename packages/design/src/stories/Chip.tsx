@@ -8,18 +8,21 @@ type Color = "primary" | "secondary" | "background";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLLIElement> {
   variant?: Variant;
   color?: Color;
+  value?: string;
 }
 
 export const Chip = ({
   children,
   variant = "filter",
   color = "primary",
+  value,
   ...props
 }: ButtonProps) => {
   const { style, themeColor } = ChipStyle(variant);
 
   return (
     <li css={[style, themeColor[color]]} {...props}>
+      {value}
       <Layer variant="chip" />
       {children}
     </li>

@@ -22,20 +22,7 @@ const Badge = ({
 }: BadgeProps) => {
   const { style, themeColor } = BadgeStyle();
 
-  return (
-    <span
-      className="badge"
-      css={{
-        display: "flex",
-        position: "relative",
-        minWidth: "16px",
-        minHeight: "16px",
-      }}
-    >
-      {children}
-      <span css={[style, themeColor[color]]}>{badgeContent}</span>
-    </span>
-  );
+  return <span css={[style, themeColor[color]]}>{badgeContent}</span>;
 };
 
 const BadgeStyle = () => {
@@ -53,8 +40,8 @@ const BadgeStyle = () => {
     line-height: 16px;
     box-sizing: border-box;
     position: absolute;
-    right: 0px;
-    top: -4px;
+    right: -1px;
+    top: -5px;
   `;
 
   const themeColor = {
