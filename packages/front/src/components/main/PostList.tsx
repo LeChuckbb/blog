@@ -72,31 +72,31 @@ const PostList = ({ selectedTag, posts }: Props) => {
       {currentPosts?.map((post: PostSchema, idx: number, arr) => {
         return (
           <Link key={post._id} href={`/post/${post.urlSlug}`}>
-            <a>
-              <Card
-                id={post._id as string}
-                urlSlug={post.urlSlug}
-                fetchNext={() =>
-                  currentPosts.length !== selectedPost.length && fetchNextPage()
-                }
-                isLastItem={arr.length - 1 === idx}
-              >
-                <Card.Thumbnail
-                  ImageDefault={ImageDefault}
-                  imageId={post?.thumbnail?.id}
-                />
-                <Card.SecondSection>
-                  <Card.TitleWrapper>
-                    <Card.Title>{post.title}</Card.Title>
-                    <Card.SubTitle>{post.subTitle}</Card.SubTitle>
-                  </Card.TitleWrapper>
-                  <Card.Date>{dateFormatter(post?.date)}</Card.Date>
-                </Card.SecondSection>
-                <Card.ThirdSection>
-                  <Card.Tags>{post.tags}</Card.Tags>
-                </Card.ThirdSection>
-              </Card>
-            </a>
+            {/* <a style={{ width: "100%", height: "100%" }}> */}
+            <Card
+              id={post._id as string}
+              urlSlug={post.urlSlug}
+              fetchNext={() =>
+                currentPosts.length !== selectedPost.length && fetchNextPage()
+              }
+              isLastItem={arr.length - 1 === idx}
+            >
+              <Card.Thumbnail
+                ImageDefault={ImageDefault}
+                imageId={post?.thumbnail?.id}
+              />
+              <Card.SecondSection>
+                <Card.TitleWrapper>
+                  <Card.Title>{post.title}</Card.Title>
+                  <Card.SubTitle>{post.subTitle}</Card.SubTitle>
+                </Card.TitleWrapper>
+                <Card.Date>{dateFormatter(post?.date)}</Card.Date>
+              </Card.SecondSection>
+              <Card.ThirdSection>
+                <Card.Tags>{post.tags}</Card.Tags>
+              </Card.ThirdSection>
+            </Card>
+            {/* </a> */}
           </Link>
         );
       })}
