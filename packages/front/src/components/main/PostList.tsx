@@ -72,31 +72,31 @@ const PostList = ({ selectedTag, posts }: Props) => {
       {currentPosts?.map((post: PostSchema, idx: number, arr) => {
         return (
           <Link key={post._id} href={`/post/${post.urlSlug}`}>
-            {/* <a style={{ width: "100%", height: "100%" }}> */}
-            <Card
-              id={post._id as string}
-              urlSlug={post.urlSlug}
-              fetchNext={() =>
-                currentPosts.length !== selectedPost.length && fetchNextPage()
-              }
-              isLastItem={arr.length - 1 === idx}
-            >
-              <Card.Thumbnail
-                ImageDefault={ImageDefault}
-                imageId={post?.thumbnail?.id}
-              />
-              <Card.SecondSection>
-                <Card.TitleWrapper>
-                  <Card.Title>{post.title}</Card.Title>
-                  <Card.SubTitle>{post.subTitle}</Card.SubTitle>
-                </Card.TitleWrapper>
-                <Card.Date>{dateFormatter(post?.date)}</Card.Date>
-              </Card.SecondSection>
-              <Card.ThirdSection>
-                <Card.Tags>{post.tags}</Card.Tags>
-              </Card.ThirdSection>
-            </Card>
-            {/* </a> */}
+            <Anchor>
+              <Card
+                id={post._id as string}
+                urlSlug={post.urlSlug}
+                fetchNext={() =>
+                  currentPosts.length !== selectedPost.length && fetchNextPage()
+                }
+                isLastItem={arr.length - 1 === idx}
+              >
+                <Card.Thumbnail
+                  ImageDefault={ImageDefault}
+                  imageId={post?.thumbnail?.id}
+                />
+                <Card.SecondSection>
+                  <Card.TitleWrapper>
+                    <Card.Title>{post.title}</Card.Title>
+                    <Card.SubTitle>{post.subTitle}</Card.SubTitle>
+                  </Card.TitleWrapper>
+                  <Card.Date>{dateFormatter(post?.date)}</Card.Date>
+                </Card.SecondSection>
+                <Card.ThirdSection>
+                  <Card.Tags>{post.tags}</Card.Tags>
+                </Card.ThirdSection>
+              </Card>
+            </Anchor>
           </Link>
         );
       })}
@@ -113,4 +113,39 @@ export const CardContainer = styled.div`
   width: 100%;
   column-gap: 16px;
   margin-bottom: 60px;
+`;
+
+const Anchor = styled.a`
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+
+  /* 
+    768px 이상일 때, (두 개 카드 표시)
+    1) 50% 미만 33% 이상의 백분율을 카드의 width로 부여.
+      즉, 카드 두 개는 초과하지만 3개에는 도달하지 않는 백분율을 부여하고 나머지 여백은 flex-grow로 채운다.
+    2) max-width를 지정해서 마지막 줄의 한 개가 flex-grow:1 에 의하여 모든 칸을 차지하지 않도록
+  */
+  ${(props) => props.theme.mq[0]} {
+    width: 47%;
+    max-width: calc(50% - 8px);
+  }
+  // 1058px 이상일 때
+  ${(props) => props.theme.mq[1]} {
+    width: 30%;
+    max-width: calc(33.3% - 8px);
+    max-height: 365px;
+  }
+  // 1464px 이상일 때
+  ${(props) => props.theme.mq[3]} {
+    width: 21%;
+    max-width: calc(25% - 8px);
+    max-height: 365px;
+  }
+  // 1920px 이상일 때
+  ${(props) => props.theme.mq[4]} {
+    width: 16%;
+    max-width: calc(20% - 8px);
+    max-height: 365px;
+  }
 `;

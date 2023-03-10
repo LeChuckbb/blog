@@ -22,27 +22,27 @@ const Card = ({ children, id, urlSlug, isLastItem, fetchNext }: CardProps) => {
   const ref = useRef<HTMLDivElement | null>(null); // 감시할 엘리먼트
   const entry = useMainPageIntersectionObserver(ref, {});
   const isIntersecting = !!entry?.isIntersecting;
-  const router = useRouter();
+  // const router = useRouter();
 
   useEffect(() => {
     if (isLastItem && isIntersecting) fetchNext();
   }, [isLastItem, isIntersecting, fetchNext]);
 
-  const onClickHandler = (event: React.MouseEvent, id: string) => {
-    router.push(
-      {
-        pathname: `/post/${urlSlug}`,
-        query: { id },
-      },
-      `/post/${urlSlug}`
-    );
-  };
+  // const onClickHandler = (event: React.MouseEvent, id: string) => {
+  //   router.push(
+  //     {
+  //       pathname: `/post/${urlSlug}`,
+  //       query: { id },
+  //     },
+  //     `/post/${urlSlug}`
+  //   );
+  // };
 
   return (
     <CardBox
       className="CardHere"
       ref={ref}
-      onClick={(event) => onClickHandler(event, id)}
+      // onClick={(event) => onClickHandler(event, id)}
     >
       <Layer variant="card" />
       {children}
@@ -63,10 +63,8 @@ Card.Thumbnail = ({ ImageDefault, imageId }: ThumbnailProps) => {
     >
       {imageId ? (
         <Image
-          // loader={cloudflareImagesLoader}
           src={`${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${imageId}/thumbnail`}
           blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-          // blurDataURL={`${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${imageId}/thumbnail`}
           placeholder="blur"
           alt="thumbnail"
           style={{ borderRadius: "12px 12px 0px 0px", fill: "red" }}
@@ -149,35 +147,6 @@ const CardBox = styled.div`
     & path:last-child {
       fill: ${(props) => props.theme.colors.primary.onContainer};
     }
-  }
-
-  /* 
-    768px 이상일 때, (두 개 카드 표시)
-    1) 50% 미만 33% 이상의 백분율을 카드의 width로 부여.
-      즉, 카드 두 개는 초과하지만 3개에는 도달하지 않는 백분율을 부여하고 나머지 여백은 flex-grow로 채운다.
-    2) max-width를 지정해서 마지막 줄의 한 개가 flex-grow:1 에 의하여 모든 칸을 차지하지 않도록
-  */
-  ${(props) => props.theme.mq[0]} {
-    width: 47%;
-    max-width: calc(50% - 8px);
-  }
-  // 1058px 이상일 때
-  ${(props) => props.theme.mq[1]} {
-    width: 30%;
-    max-width: calc(33.3% - 8px);
-    max-height: 365px;
-  }
-  // 1464px 이상일 때
-  ${(props) => props.theme.mq[3]} {
-    width: 21%;
-    max-width: calc(25% - 8px);
-    max-height: 365px;
-  }
-  // 1920px 이상일 때
-  ${(props) => props.theme.mq[4]} {
-    width: 16%;
-    max-width: calc(20% - 8px);
-    max-height: 365px;
   }
 
   &:hover {
