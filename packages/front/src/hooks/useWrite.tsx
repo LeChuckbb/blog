@@ -73,6 +73,8 @@ const useWrite = (data: PostSchema): WriteHook => {
       const contentMark = editorIns.getMarkdown();
       const contentHTML = editorIns.getHTML();
 
+      // console.log(contentHTML);
+
       if (contentMark?.length === 0) {
         // subpage로 이동하지 말아야 함.
         callToast("본문 내용을 입력해주세요.", "content");

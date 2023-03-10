@@ -6,10 +6,6 @@ import LocalErrorBoundary from "../hooks/\berror/LocalErrorBoundary";
 import PostTags, { TagsType } from "../components/main/PostTags";
 import useMongo from "../lib/useMongo";
 
-// const SuspensePostList = dynamic(() => import("../components/main/PostList"), {
-//   ssr: false,
-// });
-
 interface Props {
   tags: TagsType;
   posts: string;

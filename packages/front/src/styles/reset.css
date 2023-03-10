@@ -1,4 +1,21 @@
 /* https://velog.io/@teo/2022-CSS-Reset-%EB%8B%A4%EC%8B%9C-%EC%8D%A8%EB%B3%B4%EA%B8%B0 */
+
+@font-face {
+  font-family: "D2Coding";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../../public//static//font/subset-D2Coding.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "menlo";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../../public//static//font/menlo.woff") format("woff");
+  font-display: swap;
+}
+
 * {
   margin: 0;
   padding: 0;

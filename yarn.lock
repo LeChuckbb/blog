@@ -3423,6 +3423,11 @@
   dependencies:
     "@toast-ui/editor" "^3.2.2"
 
+"@toast-ui/toastmark@^0.0.1-alpha.1":
+  version "0.0.1-alpha.1"
+  resolved "https://registry.yarnpkg.com/@toast-ui/toastmark/-/toastmark-0.0.1-alpha.1.tgz#906ea55a8a3f38271e4458d870a86a905f475585"
+  integrity sha512-DhjWKwZybsYC8YtHWR2252hbr6qB26wgH6PCLX7GhH1DVnbNAVvpDyCscC+8XwKvzocHenBMgc7oeIjZIqe3Qw==
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"

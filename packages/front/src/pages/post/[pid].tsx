@@ -9,8 +9,8 @@ import PostTableOfContents from "../../components/posts/PostTableOfContents";
 import useMongo from "../../lib/useMongo";
 import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
 
-const NoSSRViewer = dynamic(
-  () => import("../../components/posts/WriteViewer"),
+const DynamicPostViewer = dynamic(
+  () => import("../../components/posts/PostViewer"),
   {
     ssr: false,
   }
@@ -67,9 +67,11 @@ const PostDetail = ({ title, date, html, slug, markdown, _id }: Props) => {
           id={_id?.replaceAll('"', "")}
         />
       </LocalErrorBoundary>
-      {markdown && (
-        <NoSSRViewer content={markdown} setObserverEntry={setObserverEntry} />
-      )}
+      <DynamicPostViewer
+        html={html}
+        markdown={markdown}
+        setObserverEntry={setObserverEntry}
+      />
       <ToastContainer />
     </Container>
   );
@@ -112,7 +114,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const results: Props = {
     title: res?.title ?? "",
     date: res?.date ?? "",
-    html: res?.html ?? "",
+    html: res?.html,
     slug: context.params?.pid as string,
     markdown: res?.markdown,
     _id: JSON.stringify(res?._id),

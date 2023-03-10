@@ -1,24 +1,37 @@
-import "prismjs/themes/prism.css";
-import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
+import { Parser, createRenderHTML } from "@toast-ui/toastmark";
 import Prism from "prismjs";
-import { Viewer } from "@toast-ui/react-editor";
-// import { Parser } from "@toast-ui/editor/types/toastmark";
+import "prismjs/themes/prism.css";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-tsx";
+import "prismjs/components/prism-sql";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import useEditorStyles from "./useEditorStyles";
 import { useEffect, useRef } from "react";
+import { useState } from "react";
 
-type WriteViewerProps = {
-  content: string;
+interface Props {
   html: string;
+  markdown: string | undefined;
   setObserverEntry: any;
-};
+}
 
-const WriteViewer = ({ content, html, setObserverEntry }: WriteViewerProps) => {
+const PostViewer = ({ html, markdown, setObserverEntry }: Props) => {
   const { editorStyles } = useEditorStyles();
   const ref = useRef<HTMLDivElement>(null);
+  const [parsedHtml, setParsedHtml] = useState("");
   const timeoutRef = useRef<any>(null);
   const HEADER_OFFSET_Y = 64;
+
+  useEffect(() => {
+    Prism.highlightAll();
+
+    const parser = new Parser();
+    const renderHTML = createRenderHTML({ gfm: true });
+    const root = parser.parse(markdown);
+    setParsedHtml(renderHTML(root));
+  }, [html]);
 
   useEffect(() => {
     const ToCHandleScroll = () => {
@@ -57,6 +70,7 @@ const WriteViewer = ({ content, html, setObserverEntry }: WriteViewerProps) => {
         }, 300);
       }
     };
+
     window.addEventListener("scroll", throttleScroll);
     return () => {
       window.removeEventListener("scroll", throttleScroll);
@@ -64,41 +78,14 @@ const WriteViewer = ({ content, html, setObserverEntry }: WriteViewerProps) => {
   }, [setObserverEntry]);
 
   return (
-    <div css={editorStyles} ref={ref} className="WriterViewer">
-      <Viewer
-        initialValue={content || ""}
-        plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
-        customHTMLRenderer={{
-          iframe(node: any) {
-            return [
-              {
-                type: "openTag",
-                tagName: "iframe",
-                outerNewLine: true,
-                attributes: node.attrs,
-              },
-              { type: "html", content: node.childrenHTML },
-              { type: "closeTag", tagName: "iframe", outerNewLine: false },
-            ];
-          },
-          heading(node: any, { entering, getChildrenText }) {
-            const tagName = `h${node.level}`;
-            if (entering) {
-              return {
-                type: "openTag",
-                tagName,
-                classNames: [`tocAnchor`],
-                attributes: {
-                  id: getChildrenText(node).trim(),
-                },
-              };
-            }
-            return { type: "closeTag", tagName };
-          },
-        }}
-      />
+    <div css={editorStyles}>
+      <div
+        ref={ref}
+        className="toastui-editor-contents"
+        dangerouslySetInnerHTML={{ __html: html }}
+      ></div>
     </div>
   );
 };
 
-export default WriteViewer;
+export default PostViewer;

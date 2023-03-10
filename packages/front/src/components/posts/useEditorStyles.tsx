@@ -57,6 +57,9 @@ const useEditorStyles = () => {
 
     .toastui-editor-contents p {
       margin: 18px 0;
+      & br {
+        display: none;
+      }
     }
 
     .toastui-editor-contents img {
@@ -120,7 +123,8 @@ const useEditorStyles = () => {
       position: relative;
       & * {
         text-shadow: none !important;
-        font-size: 16px;
+        font-size: 13px;
+        font-family: "menlo", "D2Coding", Courier, monospace;
       }
     }
 
