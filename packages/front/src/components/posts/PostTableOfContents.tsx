@@ -15,11 +15,7 @@ const getLeftMarginByTagName = (tagName: string | undefined) => {
   }
 };
 
-const PostTableOfContents = ({
-  tocArray,
-  anchorClickHandler,
-  observerEntry,
-}: any) => {
+const PostTableOfContents = ({ tocArray, observerEntry }: any) => {
   return (
     <>
       {tocArray && (
@@ -39,10 +35,7 @@ const PostTableOfContents = ({
                       observerEntry === head?.content ? "scale(1.05)" : "",
                   })}
                 >
-                  <TocAnchor
-                    href={`#${head?.content}`}
-                    onClick={anchorClickHandler}
-                  >
+                  <TocAnchor href={`#${head?.content}`}>
                     {head?.content}
                   </TocAnchor>
                 </TocLineDiv>

@@ -8,6 +8,7 @@ import "prismjs/components/prism-sql";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import useEditorStyles from "./useEditorStyles";
 import { useEffect, useRef } from "react";
+import { useState } from "react";
 
 interface Props {
   html: string;
@@ -16,12 +17,14 @@ interface Props {
 
 const PostViewer = ({ html, setObserverEntry }: Props) => {
   const { editorStyles } = useEditorStyles();
+  const [parseHtml, setParseHtml] = useState("");
   const ref = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<any>(null);
   const HEADER_OFFSET_Y = 64;
 
   useEffect(() => {
     Prism.highlightAll();
+    setParseHtml(html);
   }, []);
 
   useEffect(() => {
@@ -73,7 +76,7 @@ const PostViewer = ({ html, setObserverEntry }: Props) => {
       <div
         ref={ref}
         className="toastui-editor-contents"
-        dangerouslySetInnerHTML={{ __html: html }}
+        dangerouslySetInnerHTML={{ __html: parseHtml }}
       ></div>
     </div>
   );

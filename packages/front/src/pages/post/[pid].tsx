@@ -8,6 +8,7 @@ import { useState } from "react";
 import PostTableOfContents from "../../components/posts/PostTableOfContents";
 import useMongo from "../../lib/useMongo";
 import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
+import PostViewer from "../../components/posts/PostViewer";
 
 const DynamicPostViewer = dynamic(
   () => import("../../components/posts/PostViewer"),
@@ -47,18 +48,13 @@ const getHTMLTags = (htmlString: string) => {
     : null;
 };
 
-const PostDetail = ({ title, date, html, slug, markdown, _id }: Props) => {
+const PostDetail = ({ title, date, html, slug, _id }: Props) => {
   const tocArray = getHTMLTags(html);
   const [observerEntry, setObserverEntry] = useState<string>();
-  const [anchorClickHandler, setAnchorClickHandler] = useState();
 
   return (
     <Container className="pidContainer">
-      <PostTableOfContents
-        tocArray={tocArray}
-        anchorClickHandler={anchorClickHandler}
-        observerEntry={observerEntry}
-      />
+      <PostTableOfContents tocArray={tocArray} observerEntry={observerEntry} />
       <LocalErrorBoundary>
         <PostHead
           slug={slug}
@@ -67,7 +63,8 @@ const PostDetail = ({ title, date, html, slug, markdown, _id }: Props) => {
           id={_id?.replaceAll('"', "")}
         />
       </LocalErrorBoundary>
-      <DynamicPostViewer html={html} setObserverEntry={setObserverEntry} />
+      {/* <DynamicPostViewer html={html} setObserverEntry={setObserverEntry} /> */}
+      <PostViewer html={html} setObserverEntry={setObserverEntry} />
       <ToastContainer />
     </Container>
   );
@@ -112,7 +109,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     date: res?.date ?? "",
     html: res?.html,
     slug: context.params?.pid as string,
-    markdown: res?.markdown,
     _id: JSON.stringify(res?._id),
   };
 
