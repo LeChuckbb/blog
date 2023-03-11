@@ -15,6 +15,7 @@ import WriteSubPage from "../../components/posts/WriteSubPage";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { AppError } from "../../lib/api";
 import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
+import { NextSeo } from "next-seo";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -40,6 +41,7 @@ const Write = ({ data }: WriteProps) => {
 
   return (
     <Container>
+      <NextSeo noindex={true} nofollow={true} />
       <LocalErrorBoundary>
         <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
           <TitleWrapper>

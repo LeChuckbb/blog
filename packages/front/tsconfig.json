@@ -23,7 +23,8 @@
     "**/*.tsx",
     "../design/src/hooks/useIntersectionObservation.tsx",
     "../design/src/hooks/useScrollDirection.tsx",
-    "../design/src/hooks/useIntersectionObserver.tsx"
+    "../design/src/hooks/useIntersectionObserver.tsx",
+    "../sitemap.xml.tsx"
   ],
   "exclude": ["node_modules"]
 }

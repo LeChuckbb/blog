@@ -6,6 +6,7 @@ import { Button } from "design/src/stories/Button";
 import useMyToast from "../../hooks/useMyToast";
 import { ToastContainer } from "react-toastify";
 import { useLoginMutation } from "../../hooks/query/useLoginMutation";
+import { NextSeo } from "next-seo";
 
 export type LoginForm = {
   id: string;
@@ -34,6 +35,7 @@ const Login = () => {
   return (
     <>
       <Container>
+        <NextSeo noindex={true} nofollow={true} />
         <Form
           autoComplete="new-password"
           onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}

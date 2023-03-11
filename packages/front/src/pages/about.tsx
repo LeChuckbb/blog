@@ -1,9 +1,11 @@
 import WithHeader from "../layout/WithHeader";
 import styled from "@emotion/styled";
+import { NextSeo } from "next-seo";
 
 const About = () => {
   return (
     <Container className="Container">
+      <NextSeo noindex={true} nofollow={true} />
       <ContentWrapper>
         {/* Junior Frontend Developer
         <p>github: https://github.com/LeChuckbb</p>

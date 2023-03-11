@@ -1,0 +1,14 @@
+# Block all crawlers for /accounts
+User-agent: *
+Disallow: /liu
+
+User-agent: *
+Disallow: /post/write
+
+User-agent: *
+Disallow: /about
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+Sitemap: https://lechuck.blog/sitemap.xml
