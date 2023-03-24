@@ -10,7 +10,6 @@ function generateSiteMap(posts) {
       </url>
       ${posts
         .map((post) => {
-          console.log(post);
           return `
         <url>
             <loc> ${`https://lechuck.blog/post/${post.urlSlug}`} </loc>
