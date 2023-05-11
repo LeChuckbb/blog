@@ -11,7 +11,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
 };
 
 const OnErrorHandler = (error: Error, info: any) => {
-  window.location.href = "/error";
+  // window.location.href = "/error";
 };
 
 const GlobalErrorBoundary = ({ children }: any) => {

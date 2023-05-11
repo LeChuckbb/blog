@@ -15,10 +15,10 @@ import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 
 import { useRecoilState } from "recoil";
-import { themeState } from "../../recoil/atom";
-import useEditorStyles from "./useEditorStyles";
+import { themeState } from "../../../recoil/atom";
+import useEditorStyles from "../useEditorStyles";
 import { useEffect } from "react";
-import { getUploadImageURL } from "../../apis/fileApi";
+import { getUploadImageURL } from "../../../apis/fileApi";
 import axios from "axios";
 interface Props {
   content?: string;

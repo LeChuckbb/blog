@@ -50,8 +50,6 @@ const updateTags = async (currentTags: string[], inputTags: string[]) => {
 };
 
 const GetPost: NextApiHandler = async (req, res) => {
-  console.log("adsjasniunvdinvxcijnvcxijn");
-  console.log(req.query);
   const { postsCollection } = await useMongo();
   if (req.query?.slug) {
     // getPostBySlug

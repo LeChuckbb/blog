@@ -5,7 +5,7 @@ import { Viewer } from "@toast-ui/react-editor";
 // import { Parser } from "@toast-ui/editor/types/toastmark";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
-import useEditorStyles from "./useEditorStyles";
+import useEditorStyles from "../useEditorStyles";
 import { useEffect, useRef } from "react";
 
 type WriteViewerProps = {

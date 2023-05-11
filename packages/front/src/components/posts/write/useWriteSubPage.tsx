@@ -1,17 +1,17 @@
 import { RefObject } from "react";
 import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useCreatePostMutation } from "../../hooks/query/useCreatePostMutation";
-import { useUpdatePostMutation } from "../../hooks/query/useUpdatePostMutation";
-import useMyToast from "../../hooks/useMyToast";
+import { useCreatePostMutation } from "../../../hooks/query/useCreatePostMutation";
+import { useUpdatePostMutation } from "../../../hooks/query/useUpdatePostMutation";
+import useMyToast from "../../../hooks/useMyToast";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { ChangeEvent } from "react";
 import { useEffect } from "react";
-import { deleteThumbnail, getUploadImageURL } from "../../apis/fileApi";
+import { deleteThumbnail, getUploadImageURL } from "../../../apis/fileApi";
 import axios from "axios";
-import { getFileFromCF } from "../../apis/fileApi";
-import { PostSchema } from "../../types/post";
+import { getFileFromCF } from "../../../apis/fileApi";
+import { PostSchema } from "../../../types/post";
 
 export type WriteSubPageProps = {
   subPageRef: RefObject<HTMLDivElement>;

@@ -32,7 +32,7 @@ interface WriteHook {
   getWriteSubPageProps: () => any;
 }
 
-const useWrite = (data: PostSchema): WriteHook => {
+const useWrite = (data: PostSchema | null): WriteHook => {
   const [tag, setTag] = useState("");
   const [isTagInputFocusIn, setIsTagInputFocusIn] = useState(false);
   const [tagsArray, setTagsArray] = useState<string[]>([]);
@@ -45,7 +45,11 @@ const useWrite = (data: PostSchema): WriteHook => {
   const editorRef = useRef<any>(null);
   const subPageRef = useRef<HTMLDivElement>(null);
   const { callToast } = useMyToast();
-  if (data.tags.length !== 0 && tagsArray.length === 0) setTagsArray(data.tags);
+
+  if (data !== null) {
+    if (data?.tags.length !== 0 && tagsArray.length === 0)
+      setTagsArray(data?.tags);
+  }
 
   const onKeyDownHandler = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && event.nativeEvent.isComposing === false) {

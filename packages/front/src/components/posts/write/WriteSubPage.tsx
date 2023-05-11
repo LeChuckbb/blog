@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { ToastContainer } from "react-toastify";
-import IconThumbnail from "../../../public/thumbnail.svg";
+import IconThumbnail from "../../../../public/thumbnail.svg";
 import useWriteSubPage, { WriteSubPageProps } from "./useWriteSubPage";
 import { Button, ButtonLikeLabel } from "design/src/stories/Button";
 import TextField from "design/src/stories/TextField";

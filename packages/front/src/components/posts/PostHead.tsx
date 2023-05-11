@@ -61,7 +61,7 @@ const PostHead = ({ date, title, slug, id }: Props) => {
         pathname: "/post/write",
         query: { slug, id },
       },
-      `/post/write/${slug}`
+      `/post/write?slug=${slug}&id=${id}`
     );
   };
 

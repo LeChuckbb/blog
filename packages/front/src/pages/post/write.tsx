@@ -10,7 +10,8 @@ import Tooltip from "design/src/stories/Tooltip";
 import { Button } from "design/src/stories/Button";
 
 import useWrite, { FormInterface, WriteProps } from "../../hooks/useWrite";
-import WriteSubPage from "../../components/posts/WriteSubPage";
+// import WriteSubPage from "../../components/posts/WriteSubPage";
+import WriteSubPage from "../../components/posts/write/WriteSubPage";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { AppError } from "../../lib/api";
 import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
@@ -19,7 +20,7 @@ import mongo from "../../lib/mongo";
 import { ObjectId } from "mongodb";
 
 const NoSsrEditor = dynamic(
-  () => import("../../components/posts/WriteEditor"),
+  () => import("../../components/posts/write/WriteEditor"),
   {
     ssr: false,
   }
