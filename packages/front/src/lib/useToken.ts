@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import useMongo from "./useMongo";
+import useMongo from "./mongo";
 
 const useToken = async () => {
   const { authCollection } = await useMongo();

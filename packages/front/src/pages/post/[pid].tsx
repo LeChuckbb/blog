@@ -5,7 +5,7 @@ import PostHead from "../../components/posts/PostHead";
 import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 import PostTableOfContents from "../../components/posts/PostTableOfContents";
-import useMongo from "../../lib/useMongo";
+import useMongo from "../../lib/mongo";
 import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
 import PostViewer from "../../components/posts/PostViewer";
 import { NextSeo } from "next-seo";

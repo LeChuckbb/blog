@@ -1,6 +1,6 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { apiHandler } from "../../../lib/api";
-import useMongo from "../../../lib/useMongo";
+import useMongo from "../../../lib/mongo";
 import { AppError } from "../../../lib/api";
 import { ObjectId } from "../../../lib/mongodb";
 

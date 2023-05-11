@@ -1,5 +1,5 @@
 import type { NextApiHandler } from "next";
-import useMongo from "../../lib/useMongo";
+import useMongo from "../../lib/mongo";
 import { apiHandler } from "../../lib/api";
 import { AppError } from "../../lib/api";
 import { ObjectId } from "../../lib/mongodb";
@@ -50,6 +50,8 @@ const updateTags = async (currentTags: string[], inputTags: string[]) => {
 };
 
 const GetPost: NextApiHandler = async (req, res) => {
+  console.log("adsjasniunvdinvxcijnvcxijn");
+  console.log(req.query);
   const { postsCollection } = await useMongo();
   if (req.query?.slug) {
     // getPostBySlug

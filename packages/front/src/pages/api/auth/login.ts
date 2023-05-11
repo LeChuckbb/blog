@@ -1,5 +1,5 @@
 import type { NextApiHandler } from "next";
-import useMongo from "../../../lib/useMongo";
+import useMongo from "../../../lib/mongo";
 import util from "util";
 import useToken from "../../../lib/useToken";
 import crypto from "crypto";

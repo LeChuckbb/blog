@@ -1,6 +1,6 @@
 import type { NextApiHandler } from "next";
 import { apiHandler } from "../../lib/api";
-import useMongo from "../../lib/useMongo";
+import useMongo from "../../lib/mongo";
 
 const Tags: NextApiHandler = async (req, res) => {
   const { tagsCollection } = await useMongo();

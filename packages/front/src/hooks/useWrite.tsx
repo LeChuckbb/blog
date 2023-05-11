@@ -45,10 +45,7 @@ const useWrite = (data: PostSchema): WriteHook => {
   const editorRef = useRef<any>(null);
   const subPageRef = useRef<HTMLDivElement>(null);
   const { callToast } = useMyToast();
-
-  useEffect(() => {
-    if (data?.tags != undefined) setTagsArray(data?.tags);
-  }, [data?.tags]);
+  if (data.tags.length !== 0 && tagsArray.length === 0) setTagsArray(data.tags);
 
   const onKeyDownHandler = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && event.nativeEvent.isComposing === false) {

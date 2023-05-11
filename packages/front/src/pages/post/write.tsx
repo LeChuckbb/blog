@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
 
-import { getPostById } from "../../apis/postApi";
 import { Chip as TagChip } from "design/src/stories/Chip";
 import Tooltip from "design/src/stories/Tooltip";
 import { Button } from "design/src/stories/Button";
@@ -16,6 +15,8 @@ import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { AppError } from "../../lib/api";
 import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
 import { NextSeo } from "next-seo";
+import mongo from "../../lib/mongo";
+import { ObjectId } from "mongodb";
 
 const NoSsrEditor = dynamic(
   () => import("../../components/posts/WriteEditor"),
@@ -24,7 +25,9 @@ const NoSsrEditor = dynamic(
   }
 );
 
-const Write = ({ data }: WriteProps) => {
+// const Write = ({ data }: WriteProps) => {
+const Write = (props) => {
+  const data = JSON.parse(props.data);
   const {
     editorRef,
     tagsArray,
@@ -103,13 +106,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
   if (!id) return { props: { data: null } };
 
-  const res = await getPostById(id as string);
-  const data = res.data;
+  const { postsCollection } = await mongo();
+  const data = await postsCollection.findOne({
+    _id: new ObjectId(id as string),
+  });
 
   if (!data) throw new AppError("POE005", "게시글 조회 실패", 404);
 
   return {
-    props: { data },
+    props: { data: JSON.stringify(data) },
   };
 };
 

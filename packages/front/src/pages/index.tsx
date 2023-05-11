@@ -4,7 +4,7 @@ import WithHeader from "../layout/WithHeader";
 import PostList from "../components/main/PostList";
 import LocalErrorBoundary from "../hooks/\berror/LocalErrorBoundary";
 import PostTags, { TagsType } from "../components/main/PostTags";
-import useMongo from "../lib/useMongo";
+import useMongo from "../lib/mongo";
 
 interface Props {
   tags: TagsType;

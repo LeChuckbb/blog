@@ -1,5 +1,5 @@
 //pages/sitemap.xml.js
-import useMongo from "../lib/useMongo";
+import useMongo from "../lib/mongo";
 
 function generateSiteMap(posts) {
   return `<?xml version="1.0" encoding="UTF-8"?>

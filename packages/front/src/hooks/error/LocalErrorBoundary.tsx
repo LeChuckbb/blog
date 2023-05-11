@@ -6,6 +6,7 @@ import styled from "@emotion/styled";
 import { Button } from "design/src/stories/Button";
 
 const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
+  console.log('local error fallback')
   console.log(error);
   // resetErrorBoundary -> onReset으로 전달한 것 = useQueryErrorResetBoundary
 
@@ -20,6 +21,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
 };
 
 const onErrorHandler = (error: Error) => {
+  console.log('local error handler');
   console.log(error);
 
   if (error instanceof AxiosError<AppError>) {
