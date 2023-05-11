@@ -9,9 +9,11 @@ import { Chip as TagChip } from "design/src/stories/Chip";
 import Tooltip from "design/src/stories/Tooltip";
 import { Button } from "design/src/stories/Button";
 
-import useWrite, { FormInterface, WriteProps } from "../../hooks/useWrite";
-// import WriteSubPage from "../../components/posts/WriteSubPage";
-import WriteSubPage from "../../components/posts/write/WriteSubPage";
+import useWrite, {
+  FormInterface,
+  WriteProps,
+} from "../../components/posts/write/useWrite";
+import WrtieCompletePage from "../../components/posts/write/complete/WriteCompletePage";
 import IconArrowPrev from "../../../public/icons/arrow_back.svg";
 import { AppError } from "../../lib/api";
 import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
@@ -95,7 +97,7 @@ const Write = (props) => {
           </BottomButtonWrapper>
           <ToastContainer />
         </form>
-        <WriteSubPage prevData={data} {...getWriteSubPageProps()} />
+        <WrtieCompletePage prevData={data} {...getWriteSubPageProps()} />
       </LocalErrorBoundary>
     </Container>
   );

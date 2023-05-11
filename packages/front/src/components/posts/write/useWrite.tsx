@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
-import useMyToast from "./useMyToast";
-import { PostSchema } from "../types/post";
+import useMyToast from "../../../hooks/useMyToast";
+import { PostSchema } from "../../../types/post";
 
 interface Body {
   title: string;

@@ -1,13 +1,15 @@
 import styled from "@emotion/styled";
 import { ToastContainer } from "react-toastify";
-import IconThumbnail from "../../../../public/thumbnail.svg";
-import useWriteSubPage, { WriteSubPageProps } from "./useWriteSubPage";
+import IconThumbnail from "../../../../../public/thumbnail.svg";
+import useWriteCompletePage, {
+  WriteSubPageProps,
+} from "./useWriteCompletePage";
 import { Button, ButtonLikeLabel } from "design/src/stories/Button";
 import TextField from "design/src/stories/TextField";
 import MyDatePicker from "design/src/stories/DatePicker";
 import Image from "next/image";
 
-const WriteSubPage: React.FC<WriteSubPageProps> = ({
+const WriteCompletePage: React.FC<WriteSubPageProps> = ({
   prevData,
   postFetchBody,
   subPageRef,
@@ -20,7 +22,7 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
     handleDeleteButtonClick,
     getHandleSubmitProps,
     getUseFormProps,
-  } = useWriteSubPage(prevData, postFetchBody);
+  } = useWriteCompletePage(prevData, postFetchBody);
 
   const { register, handleSubmit, getValues, watch, errors, control } =
     getUseFormProps();
@@ -119,7 +121,7 @@ const WriteSubPage: React.FC<WriteSubPageProps> = ({
   );
 };
 
-export default WriteSubPage;
+export default WriteCompletePage;
 
 const SubPage = styled.div`
   width: 100vw;

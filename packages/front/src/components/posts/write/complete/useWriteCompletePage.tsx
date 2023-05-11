@@ -1,17 +1,17 @@
 import { RefObject } from "react";
 import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useCreatePostMutation } from "../../../hooks/query/useCreatePostMutation";
-import { useUpdatePostMutation } from "../../../hooks/query/useUpdatePostMutation";
-import useMyToast from "../../../hooks/useMyToast";
+import { useCreatePostMutation } from "../../../../hooks/query/useCreatePostMutation";
+import { useUpdatePostMutation } from "../../../../hooks/query/useUpdatePostMutation";
+import useMyToast from "../../../../hooks/useMyToast";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { ChangeEvent } from "react";
 import { useEffect } from "react";
-import { deleteThumbnail, getUploadImageURL } from "../../../apis/fileApi";
+import { deleteThumbnail, getUploadImageURL } from "../../../../apis/fileApi";
 import axios from "axios";
-import { getFileFromCF } from "../../../apis/fileApi";
-import { PostSchema } from "../../../types/post";
+import { getFileFromCF } from "../../../../apis/fileApi";
+import { PostSchema } from "../../../../types/post";
 
 export type WriteSubPageProps = {
   subPageRef: RefObject<HTMLDivElement>;
@@ -49,7 +49,7 @@ const dateFormatter = (date: Date) => {
     .slice(0, -1);
 };
 
-const useWriteSubPage = (prevData: any, postFetchBody: any) => {
+const useWriteCompletePage = (prevData: any, postFetchBody: any) => {
   const router = useRouter();
   const isUpdatePost = router.query.slug === undefined ? false : true;
   const { mutate: createPost } = useCreatePostMutation();
@@ -207,4 +207,4 @@ const useWriteSubPage = (prevData: any, postFetchBody: any) => {
   };
 };
 
-export default useWriteSubPage;
+export default useWriteCompletePage;
