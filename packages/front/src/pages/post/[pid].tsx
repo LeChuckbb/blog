@@ -5,10 +5,11 @@ import PostHead from "../../components/posts/PostHead";
 import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 import PostTableOfContents from "../../components/posts/PostTableOfContents";
-import useMongo from "../../lib/mongo";
+import mongo from "../../lib/mongo";
 import LocalErrorBoundary from "../../hooks/\berror/LocalErrorBoundary";
 import PostViewer from "../../components/posts/PostViewer";
 import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
 
 interface Props {
   title: string;
@@ -23,7 +24,7 @@ interface Props {
 const getHTMLTags = (htmlString: string) => {
   // 긴 HTML 문자열에서 h1,h2,h3 태그만 추출하기
   const regex = /<(h[1-3]).*?>(.*?)<\/\1>/g;
-  const headers = htmlString.match(regex);
+  const headers = htmlString?.match(regex);
 
   return headers != null
     ? headers.map((str) => {
@@ -43,8 +44,13 @@ const getHTMLTags = (htmlString: string) => {
 };
 
 const PostDetail = ({ title, subTitle, date, html, slug, _id }: Props) => {
+  const router = useRouter();
   const tocArray = getHTMLTags(html);
   const [observerEntry, setObserverEntry] = useState<string>();
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container className="pidContainer">
@@ -72,8 +78,7 @@ export default PostDetail;
 
 // 빌드 시 생성할 dynamic routing 페이지의 경로를 지정
 export const getStaticPaths: GetStaticPaths = async () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { postsCollection } = await useMongo();
+  const { postsCollection } = await mongo();
   const posts = await postsCollection
     .find({}, { projection: { html: 0, markdown: 0 } })
     .toArray();
@@ -87,13 +92,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths,
     fallback: true,
+    // fallback: false,
   };
 };
 
 // 빌드 시 데이터를 fetch하여 static 페이지를 생성
 export const getStaticProps: GetStaticProps = async (context) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { postsCollection } = await useMongo();
+  const { postsCollection } = await mongo();
   const res = await postsCollection.findOne({
     urlSlug: context.params?.pid as string,
   });
