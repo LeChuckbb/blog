@@ -25,13 +25,13 @@ type AppPropsWithLayout = AppProps & {
 
 const DEFAULT_SEO = {
   title: "Blog | LeChuck",
-  description: `책과 영화를 좋아하는 프론트엔드 개발자의 개인 블로그입니다.`,
+  description: `Frontend developer`,
   // canonical: "https://lechuck.blog",
   openGraph: {
     type: "website",
     locale: "ko_KR",
     url: "https://lechuck.blog",
-    title: "박재욱 개인 블로그",
+    title: "Lechuck 개인 블로그",
     site_name: "블로그",
     images: [
       {
