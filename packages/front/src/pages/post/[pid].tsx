@@ -140,6 +140,20 @@ const Container = styled.div`
   ${(props) => props.theme.mq[2]} {
     & .ToC {
       display: block;
+      margin-left: 32px;
+    }
+    & .TocAnchor {
+      max-width: 15vw;
+    }
+  }
+  ${(props) => props.theme.mq[3]} {
+    & .ToC {
+      margin-left: 72px;
+    }
+  }
+  ${(props) => props.theme.mq[4]} {
+    & .TocAnchor {
+      max-width: 20vw;
     }
   }
 `;
