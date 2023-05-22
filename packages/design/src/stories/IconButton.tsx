@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css, useTheme } from "@emotion/react";
-import { useState } from "react";
 import Layer from "./Layer";
 import Tooltip from "./Tooltip";
 import { Direction } from "./Tooltip";
@@ -24,27 +23,21 @@ const IconButton = ({
   direction = "bottom",
   onClick,
 }: IconButtonProps) => {
-  const [mouseHover, setMouseHover] = useState(false);
-  const mouseEnterHandler = () => setMouseHover(true);
-  const mouseLeaveHandler = () => setMouseHover(false);
-  const { styles, themeVariant, themeSize } = IconButtonStyle(mouseHover, size);
+  const { styles, themeVariant, themeSize } = IconButtonStyle(size);
 
   return (
     <button
       css={[styles, themeVariant[variant], themeSize[size]]}
       onClick={onClick}
-      onMouseEnter={mouseEnterHandler}
-      onMouseLeave={mouseLeaveHandler}
       type="button"
     >
       <Layer>{children}</Layer>
-      {/* {tooltip && <Tooltip>{tooltip}</Tooltip>} */}
       {tooltip && <Tooltip direction={direction}>{tooltip}</Tooltip>}
     </button>
   );
 };
 
-const IconButtonStyle = (mouseHover: boolean, size: Size) => {
+const IconButtonStyle = (size: Size) => {
   const theme = useTheme();
 
   const styles = css`
@@ -62,8 +55,8 @@ const IconButtonStyle = (mouseHover: boolean, size: Size) => {
       left: unset;
       opacity: 0.8;
     }
-    #tooltip {
-      opacity: ${mouseHover && "1"};
+    & :hover #tooltip {
+      opacity: 1;
     }
     svg {
       width: 24px;
