@@ -92,7 +92,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths,
     fallback: true,
-    // fallback: false,
   };
 };
 
@@ -114,6 +113,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: results,
+    revalidate: 5,
   };
 };
 
@@ -140,6 +140,20 @@ const Container = styled.div`
   ${(props) => props.theme.mq[2]} {
     & .ToC {
       display: block;
+      margin-left: 32px;
+    }
+    & .TocAnchor {
+      max-width: 15vw;
+    }
+  }
+  ${(props) => props.theme.mq[3]} {
+    & .ToC {
+      margin-left: 72px;
+    }
+  }
+  ${(props) => props.theme.mq[4]} {
+    & .TocAnchor {
+      max-width: 20vw;
     }
   }
 `;

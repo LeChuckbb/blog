@@ -35,7 +35,7 @@ const PostTableOfContents = ({ tocArray, observerEntry }: any) => {
                       observerEntry === head?.content ? "scale(1.05)" : "",
                   })}
                 >
-                  <TocAnchor href={`#${head?.content}`}>
+                  <TocAnchor className="TocAnchor" href={`#${head?.content}`}>
                     {head?.content}
                   </TocAnchor>
                 </TocLineDiv>
@@ -52,7 +52,7 @@ const TocAbsoluteWrapper = styled.div`
   position: absolute;
   height: 100%;
   left: 100%;
-  margin-left: 36px;
+  margin-left: 72px;
   font-size: ${(props) => props.theme.fonts.label.large.size};
   line-height: ${(props) => props.theme.fonts.label.large.lineHeight};
   color: ${(props) => props.theme.colors.neutralVariant.outline};
@@ -80,7 +80,6 @@ const TocLineDiv = styled.div`
 `;
 
 const TocAnchor = styled.a`
-  max-width: 240px;
   :hover {
     color: ${(props) => props.theme.colors.primary.primary};
   }
