@@ -56,10 +56,7 @@ type ThumbnailProps = {
 
 Card.Thumbnail = ({ ImageDefault, imageId }: ThumbnailProps) => {
   return (
-    <div
-      className="imgDiv"
-      onClick={() => console.log("img div clicked!!!!@@@")}
-    >
+    <div className="imgDiv">
       {imageId ? (
         <Image
           src={`${process.env.NEXT_PUBLIC_CF_RECEIVE_URL}/${imageId}/thumbnail`}
