@@ -92,7 +92,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths,
     fallback: true,
-    // fallback: false,
   };
 };
 
@@ -114,6 +113,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: results,
+    revalidate: 5,
   };
 };
 
