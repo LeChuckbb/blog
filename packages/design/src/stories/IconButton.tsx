@@ -55,8 +55,10 @@ const IconButtonStyle = (size: Size) => {
       left: unset;
       opacity: 0.8;
     }
-    & :hover #tooltip {
-      opacity: 1;
+    @media (hover: hover) and (pointer: fine) {
+      & :hover #tooltip {
+        opacity: 1;
+      }
     }
     svg {
       width: 24px;
