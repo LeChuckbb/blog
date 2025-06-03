@@ -1,4 +1,14 @@
+import remarkToc from "remark-toc";
 import createMDX from "@next/mdx";
+import rehypeSlug from "rehype-slug";
+import rehypePrettyCode from "rehype-pretty-code";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+
+/** @type {import('rehype-pretty-code').Options} */
+const options = {
+  theme: "catppuccin-frappe",
+  // transformers: [transformerCopyButton({})],
+};
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -13,6 +23,14 @@ const nextConfig = {
 const withMDX = createMDX({
   // Add markdown plugins here, as desired
   extension: /\.(md|mdx)$/,
+  options: {
+    remarkPlugins: [[remarkToc, {}]],
+    rehypePlugins: [
+      [rehypePrettyCode, options],
+      rehypeSlug,
+      rehypeAutolinkHeadings,
+    ],
+  },
 });
 
 // Merge MDX config with Next.js config

@@ -29,7 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col items-center`}
       >
         <div className="flex flex-col max-w-[1200px] w-full">
-          <nav className="flex justify-between p-4 ">
+          <nav className="flex justify-between p-4">
             <div>
               <Link href={"/"}>LeChuck</Link>
             </div>
