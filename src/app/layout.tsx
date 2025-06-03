@@ -34,7 +34,6 @@ export default function RootLayout({
               <Link href={"/"}>LeChuck</Link>
             </div>
             <div className="flex gap-2">
-              <Link href={"/posts/url-search-params"}>example</Link>
               <div>github</div>
               <div>theme</div>
             </div>

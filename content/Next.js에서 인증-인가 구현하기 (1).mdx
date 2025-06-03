@@ -1,0 +1,55 @@
+---
+publish_date: 2024-03-13
+tags:
+  - Nextjs
+  - 인증/인가
+slug: next-auth
+description:
+---
+
+# 달리는 기차의 바퀴를 갈아 끼울 준비
+
+기존 Next.js 프로젝트의 인증/인가 로직에 SSR이 지원되지 않는 큰 맹점이 있었다. 그냥 '아, 지원되지 않는구나.. 나중엔 고쳐야겠다..' 정도로만 생각하고 다른 기능들을 쳐냈다. 인증/인가 로직은 내가 합류하기 전에 이미 구현된 기능이고 지금까지는 별다른 문제 없이 잘 동작해왔기 때문이다. 그러던 와중, 인증/인가 로직으로 인해 모든 페이지가 CSR로만 렌더링 되고 있었다는 사실을 발견한다. 패닉에 빠졌다. 이 글은 달리는 기차의 바퀴를 갈아끼운 경험담이다.
+
+SEO를 목전에 둔 프로젝트 말미에 이르러서야 전말을 알게 되었다. 인증/인가 책임이 몰려있는 `<WithAuth>`라는 HoC가 있다. 이 컴포넌트는 모든 페이지의 상위에 위치해서 인증/인가 로직이 끝난 경우에만 페이지를 렌더링하는 방식이었다. 문제는 'session을 zustand에 할당하는 과정이 끝난 이후에 (!isLaoding) 하위 페이지를 렌더링하라'는 조건부 로직 때문에 CSR처럼 동작했다는 점이다. 이 때문에 Next.js의 Pre-rendering은 기대한대로 동작하지 않았고, 크롤링 봇은 내부가 비어있는 HTML 파일로부터 쓸만한 정보를 수집할 수가 없었다.
+
+인증/인가 로직을 처음부터 재설계해야만 했다. 문제는 이미 많은 수의 페이지가 CSR을 기준으로 작성되었다는 점이다. 웹 스토리지에 의존하는 로직은 Server-side에서 실행되지 않을 것이다. 주렁주렁 달려있던 스켈레톤과 Suspense 로직을 걷어내야 하고 getServerSideProps에서 pre-fetch하는 로직을 추가해야 한다. 물론 각 페이지별 어떤 렌더링 방식이 적합할지 고민해보는 과정이 선행되어야 하며, hydration error를 비롯한 각종 예상치 못한 문제들이 불쑥 튀어나와 지속적으로 괴롭힐 것이다. '바퀴는 출발 전에 갈아 끼웠어야지!' 하며 말이다.
+
+# 기존 서비스의 간략한 구조
+
+- JWT
+	- ID/PW 정보로 백엔드에 로그인을 요청하면 JWT를 반환받는 구조
+	- refresh_token : http-only, sameSite cookie. (8시간)
+	- access_token: HTTP response body (30분)
+- API
+	- /login
+	- /refresh -> 요청에 동봉한 refreshToken이 유효한 경우 JWT 재발급
+- withAuth
+	- protected route 용도의 HoC 컴포넌트
+- authStore
+	- accessToken을 비롯한 유저 정보(session)을 global state(zustand)로 관리
+
+# 삽질기. 여러가지 개선안
+
+기존의 CSR에 특화된 인증/인가 로직을 SSR에도 호환 가능하게끔 개선하는 작업에서 가장 고민했던 부분은 session management였다. 기존에는 백엔드에서 쿠키로 내려주는 refreshToken에 대해서는 특별히 신경쓸 게 없었고, accessToken에 대해서만 memory에 관리했다. API 호출시에 zustand의 세션에서 accessToken을 가져와서 HTTP Authorization 헤더에 넣어주는 방식으로 구현되었다. 하지만 이제는 서버단에서 API를 호출하는 경우도 고려해야 하기 때문에 session을 어디에 저장해서 어떻게 싱크를 맞추고 가져와서 사용할지를 고민했다.
+
+가급적 memory에 세션을 유지하는 방식을 고수하고 싶었다. 보안 측면에서 제일 좋은 선택지 같았다. 그랬을 때, 선택할 수 있는 방법은 두 가지였다. (global) zustand를 SSR에서도 활용 가능하게 확장해보는 것. 또 하나는 zustand를 버리고 (local) 일회성의 API 호출 횟수를 늘리는 방식이다.
+``
+그러나 두 방식 모두 아쉬움이 남았다. zustand-SSR은 docs가 작성되어 있긴 하지만 활용 사례가 너무 적었고 내가 기대한대로 동작할 지 확신이 서질 않았다. 무엇보다 다른 곳에서도 세션 관리를 위해 전역 상태 관리 라이브러리를 활용할지가 의문이었다. 이걸 이런 용도로 활용하는 게 맞을까?
+
+세션이 필요할 때마다 일회성 API를 호출하는 방식은 단순하면서도 파워풀한 방식처럼 느껴졌다. memory를 제한된 범위 내에서 한 번 쓰고 버리는 방식인 까닭에 보안적으로 좋다. 또한 클라이언트와 서버를 가리지 않고 어디서나 같은 방식으로 호출하여 같은 결과를 얻어낼 수 있어서 복잡성이라곤 찾아볼 수가 없다. 무엇보다 zustand에 세션을 별도로 관리하면서 단일 진실 공급원의 측면에서 아쉬움이 컸는데, 이를 해소할 수 있는 방식이었다. 백엔드와 프론트에서 세션을 별도로 관리하다보니 그 싱크를 맞추는데 있어 많은 코드 작성이 필요하고, 그럼에도 언제든지 불일치할 수 있다는 위험이 도사린다고 생각했다. 백엔드에서만 세션을 관리하고, 프론트는 이를 받아서 쓰기만 한다면 이런 문제는 해결된다.
+
+그럼에도 위 방식은 API 호출 횟수가 너무 많았기 때문에 선뜻 도입할수가 없었다. 이제는 라이브러리에 눈길이 갔다. 가장 많은 사용자를 보유한 nextAuth는 혹평보다 악평을 더 쉽게 찾아볼 수 있었다. docs가 불친절함을 넘어선 지경이라 온전한 사용법을 익히기가 무척 어렵다는 소감이 주를 이루었다. 다른 라이브러리도 저마다의 크고 작은 문제점을 가지고 있어서, 한 개발자가 제대로 된 인증/인가 라이브러리를 만들어내겠다는 레딧 글이 많은 성원을 받고 있는 상황이다. 즉, 표준으로 여길만한 라이브러리가 없음을 시사하는 것 같았다. 
+
+# 그래서 결론은? BFF? Proxy?
+
+결론은 next.js의 API Route를 통해 Next.js 서버를 일종의 proxy로 활용하고, 백엔드에서 내려준 JWT를 httpOnly + sameSite 쿠키로만 관리하는 방식을 택했다. 쿠키의 httpOnly 속성은 XSS를 방지하고, sameSite 속성은 CSRF를 방지할 수 있기 때문에 쿠키야말로 memory 못지 않게 안전하면서도 편리한 방식이 아닐까라는 결론을 내렸다. [hasura](https://hasura.io/blog/best-practices-of-using-jwt-with-graphql#how-does-the-ssr-server-know-if-the-user-is-logged-in)를 참고했다.
+
+그리고 BFF 구조는 아래와 같은 자료들을 참고했다. 
+- [# Next.js: Using HTTP-Only Cookies for Secure Authentication (2023)](https://maxschmitt.me/posts/next-js-http-only-cookie-auth-tokens)
+- [# JWT Authentication with NextJS BFF (Backend-For-Frontend)](https://www.devgould.com/jwt-authentication-with-nextjs-bff-backend-for-frontend/)
+- [Best way to store tokens in Next.js for authentication](https://stackoverflow.com/questions/76375969/best-way-to-store-tokens-in-next-js-for-authentication)
+
+처음에는 위 구조가 프론트-백엔드가 서로 다른 도메인에서 운용될 때 쿠키의 sameSite 옵션을 활용하기 위한 용도로 proxy를 두는 것이라고만 생각했다. 하지만 생각해보면 프론트-백엔드의 도메인이 같은 경우더라도 백엔드에서 httpOnly 쿠키로 내려주는 refreshToken을 제어하려면 Next.js 서버를 반드시 거쳐야 한다. 그래서 cookie를 통한 session management가 보안과 편의성 모두를 어느정도 충족시켜주는 best practice라는 결론을 내렸다. 
+
+결론에 대한 검증은 현재진행형이다. 다음에는 좀 더 구체적인 구조와 코드를 가지고 와서 자가검증하는 시간을 가져 보겠다.
