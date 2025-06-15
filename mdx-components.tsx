@@ -1,36 +1,28 @@
 import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
+import { cn } from "@/src/app/util";
+
+const textAnchor =
+  "[&_a]:after:content-['#'] [&_a]:after:text-white [&_a]:after:ml-2 [&_a]:after:invisible hover:[&_a]:after:visible [&_a]:after:text-2xl";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
-    h1: ({ children }) => (
-      <h1 className="mt-8 mb-4 text-4xl font-bold group">
-        <div className="flex items-center">
-          {children}
-          <span className="ml-2 text-2xl text-white opacity-0 group-hover:opacity-100 transition-opacity">
-            #
-          </span>
-        </div>
+    h1: ({ children, ...rest }) => (
+      <h1 className={cn("mt-8 mb-4 text-4xl font-bold", textAnchor)} {...rest}>
+        {children}
       </h1>
     ),
-    h2: ({ children }) => (
-      <h2 className="mt-8 mb-4 text-3xl font-bold group">
-        <div className="flex items-center">
-          {children}
-          <span className="ml-2 text-xl text-white opacity-0 group-hover:opacity-100 transition-opacity">
-            #
-          </span>
-        </div>
+    h2: ({ children, ...rest }) => (
+      <h2 className={cn("mt-8 mb-4 text-3xl font-bold", textAnchor)} {...rest}>
+        {children}
       </h2>
     ),
-    h3: ({ children }) => (
-      <h3 className="mt-8 mb-4 text-2xl font-semibold group">
-        <div className="flex items-center">
-          {children}
-          <span className="ml-2 text-lg text-white opacity-0 group-hover:opacity-100 transition-opacity">
-            #
-          </span>
-        </div>
+    h3: ({ children, ...rest }) => (
+      <h3
+        className={cn("mt-8 mb-4 text-2xl font-semibold", textAnchor)}
+        {...rest}
+      >
+        {children}
       </h3>
     ),
     img: (props) => (
@@ -41,8 +33,10 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {...(props as ImageProps)}
       />
     ),
-    pre: ({ children }) => (
-      <pre className="my-4 rounded-2xl p-4 bg-[#1F2028]">{children}</pre>
+    pre: ({ children, ...rest }) => (
+      <pre className="my-4 rounded-2xl p-4 bg-[#1F2028]" {...rest}>
+        {children}
+      </pre>
     ),
     ...components,
   };

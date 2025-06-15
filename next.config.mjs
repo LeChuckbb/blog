@@ -28,7 +28,15 @@ const withMDX = createMDX({
     rehypePlugins: [
       [rehypePrettyCode, options],
       rehypeSlug,
-      rehypeAutolinkHeadings,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: "wrap",
+          properties: {
+            className: ["anchor-link"],
+          },
+        },
+      ],
     ],
   },
 });
