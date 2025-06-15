@@ -3,6 +3,7 @@ import createMDX from "@next/mdx";
 import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import remarkFrontmatter from "remark-frontmatter";
 
 /** @type {import('rehype-pretty-code').Options} */
 const options = {
@@ -24,7 +25,10 @@ const withMDX = createMDX({
   // Add markdown plugins here, as desired
   extension: /\.(md|mdx)$/,
   options: {
-    remarkPlugins: [[remarkToc, {}]],
+    remarkPlugins: [
+      [remarkFrontmatter, ["yaml", "toml"]], // frontmatter 파싱 후 제거
+      [remarkToc, {}],
+    ],
     rehypePlugins: [
       [rehypePrettyCode, options],
       rehypeSlug,

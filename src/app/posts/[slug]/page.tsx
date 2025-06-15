@@ -1,5 +1,6 @@
-import { convertToAfterContentPath } from "@/src/app/posts/[slug]/util";
 import postsData from "@/src/app/posts.json";
+import { generateTocFromFile } from "@/src/app/tocUtil";
+import TableOfContents from "@/src/app/_components/TableOfContents";
 
 export default async function Page({
   params,
@@ -7,19 +8,33 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  // const filePath = await findFileBySlug(slug);
   const filePath = getFileNameBySlug(slug);
 
   if (!filePath) {
     throw new Error(`Content file not found for slug: ${slug}`);
   }
 
-  const afterContentPath = convertToAfterContentPath(filePath);
-  console.log(filePath, afterContentPath);
-
   try {
+    // ToC 생성
+    const tocItems = await generateTocFromFile(`./content/${filePath}`);
     const { default: Post } = await import(`@/content/${filePath}`);
-    return <Post />;
+
+    console.log(filePath, tocItems);
+    return (
+      <div className="flex gap-4">
+        <div className="flex flex-col gap-2 pb-[120px] pt-6 px-4">
+          <h1 className="mb-8 text-4xl text-[40px] font-bold">
+            {filePath.split(".md")[0]}
+          </h1>
+          <Post />
+        </div>
+        <aside className="w-64 shrink-0">
+          <div className="sticky top-8">
+            <TableOfContents items={tocItems} />
+          </div>
+        </aside>
+      </div>
+    );
   } catch (error) {
     console.log(error);
     throw new Error(`Content file not found for slug: ${slug}`);
