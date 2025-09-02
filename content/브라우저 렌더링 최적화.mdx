@@ -1,0 +1,76 @@
+---
+tags:
+  - browser
+  - rendering
+slug: browser-rendering
+description: null
+date: '2021-10-25'
+title: 브라우저 렌더링 최적화
+---
+# 1. 브라우저 렌더링 복습하기
+
+## layout - paint - composition
+
+layout : 요소들의 기하학적인 구조를 찾는 과정. 위치와 크기를 계산.
+
+paint : stacking order(z-index)에 따라 layout tree를 화면에 그리는 단계. rasterizing(주어진 정보를 스크린에 픽셀로 찍어내는 것)이 paint 단계에 포함된다.
+
+composition(합성) : 각각의 분리 가능한 레이어를 분리해서 처리한 뒤 합성하는 것이다. Main Thread에서 벗어나서 다른 Thread flow를 가지고 화면에 업데이트할 수 있다. 즉, 비동기적으로 실행된 후 기존 레이어에 합성한다.
+
+![](https://images.velog.io/images/lechuck/post/4d66ea9a-0e56-46a3-ba0c-af5560fdffc4/frame-full.jpg)
+
+## layer 이해하기
+레이어란 page를 분해한 일부로써 다른 레이어들과 독립적으로 raster되고 transform될 수 있는 것을 말한다. 여러 개의 레이어를 두어서 변경된 레이어만 관리하는 식으로 성능을 최적화한다.
+
+![](https://images.velog.io/images/lechuck/post/c9081cb5-ab1a-4106-919f-3c836add74bb/layer1.gif)
+
+위 이미지는 과거에 브라우저가 화면을 렌더링했던 방식이다. compositing없이 single layer로 렌더링하는 방식이다. 아래로 스크롤하여 변경된 뷰포트만큼 여백이 생긴다. 이 여백을 다시 rasterizing 하는 식으로 동작했다.
+
+![](https://images.velog.io/images/lechuck/post/77b59dbd-7f38-4d45-a042-478b9444125d/layer2.gif)
+
+모던 브라우저는 compositing을 통해서 한 페이지의 부분들을 여러 레이어로 나누고, 이 레이어들을 각각 ratserizing하여 compositor thread에서 페이지를 합성하는 방식으로 동작한다. 필요에 따라서 조그마한 레이어나 뷰포트만 움직임으로써 연산을 최소화한다.
+
+# 2. 브라우저 렌더링 최적화
+
+## CSS will-change 속성으로 레이어 분리하기
+DOM API로 빈번하게 변경할 요소 노드가 있다면 레이어를 쪼개서 전체가 아닌 부분만 변경되도록 하는게 좋다. CSS의 <span style="color:red;">**will-change**</span> 속성을 이용하면 새 레이어를 생성하여 기존 레이어에서 분리한다.
+
+레이어는 메모리 할당을 비롯한 관리가 필요하므로, will-change 속성을 남용하여 레이어를 늘릴 때 주의해야한다. 적재적소에 활용하지 않으면 오히려 악영향을 끼친다.
+
+## layout을 발생시키지 않는 CSS 속성을 사용하기
+
+[CSS Triggers](https://csstriggers.com "CSS 속성별 리렌더링 여부 확인하기") 웹 사이트는 CSS 속성이 layout, paint, composition중 어떤 단계를 trigger하는지 알려준다.
+
+layout과 paint가 필요 없는 CSS 속성을 변경해서 브라우저가 composite 단계만 수행하도록 하는게 렌더링 최적화에 좋다.
+
+![](https://images.velog.io/images/lechuck/post/4e49c9a5-1bfe-4cd8-9876-666f3fdc79e4/frame-no-layout-paint.jpg)
+
+이를테면, top/right/left/bottom을 이용해서 위치에 변화를 주는것보다 transform을 이용하는 게 좋다. 전자는 layout-paint-composite 세 단계를 모두 거치지만 transform은 composite 단계만 밟기 때문이다.
+
+## image lazy loading
+
+``` jsx
+	<img loading="lazy" src="something" />
+```
+HTML `<img>` 태그의 loading 속성값을 lazy로 지정하면 이미지가 뷰포트의 일정 거리 안으로 들어와야 이미지를 불러온다. 초기 로딩시간을 단축시킨다.
+
+# 3. 개발자 도구 활용하기
+
+## Performance로 성능 확인하기
+<개발자 도구> - <퍼포먼스> 탭에서 record를 통해 브라우저의 성능을 확인할 수 있다. 빨간색으로 표시되어 경고하는 부분들을 유심히 살펴 문제를 해결하는식으로 접근하자. 16.6ms 60fps를 유지하는 성능을 뽑아내어 좋은 사용자 경험을 줄 수 있도록 한다. 
+
+`ctrl + shift + p`로 개발툴 팔레트를 열어서 (Rendering) Show layout shift region을 이용하면 사이트 내 어떠한 동작들이 layout을 유발하는지 가시적으로 확인할 수 있다. layout 단계를 생략할 수 있는 방안을 갈구해서 최적화하도록 하자.
+
+# Reference
+
+[모던 웹 브라우저 들여다보기 파트3](https://developers.google.com/web/updates/2018/09/inside-browser-part3?hl=ko)
+
+[렌더링 성능](https://developers.google.com/web/fundamentals/performance/rendering)
+
+[Reflow, Repaint Chromium 입장에서 살펴보기 (왜 transform은 빠를까?)](https://devsdk.github.io/ko/development/2021/03/08/ReflowRepaint.html)
+
+[Chromium Composition과 Layer](https://devsdk.github.io/ko/development/2021/03/29/blink-render-composition.html)
+
+[Lifa of a pixel](https://docs.google.com/presentation/d/1boPxbgNrTU0ddsc144rcXayGA_WF53k96imRH8Mp34Y/edit#slide=id.ga884fe665f_64_6)
+
+[브라우저 렌더링 과정과 최적화](https://velog.io/@bumsu0211/%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80-%EB%A0%8C%EB%8D%94%EB%A7%81-%EA%B3%BC%EC%A0%95%EA%B3%BC-%EC%B5%9C%EC%A0%81%ED%99%94#2-image-lazy-loading)

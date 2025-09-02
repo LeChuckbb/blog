@@ -1,0 +1,217 @@
+---
+tags:
+  - Nextjs
+  - RSC
+slug: Nextjs-13-app-router
+description: null
+date: '2023-05-31'
+title: Next.js 13 App Router 살펴보기
+---
+# React Essentials
+
+[React Essentials](https://nextjs.org/docs/getting-started/react-essentials)
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/72ec69dd-f14e-43d4-4d72-edc082bea200/post)
+
+하나의 페이지를 구상할 때, non-interactive한 부분은 서버 컴포넌트로 서버에서 렌더링한다. interactive한 부분은 클라이언트 컴포넌트를 이용한다. 이것이 Next.js의 `server-first` approach다.
+
+## Server Components
+
+* 서버 컴포넌트 활용시의 이점
+	
+  1. data fetching 로직을 서버로 이전할 수 있다. 이는 client - server간 네트워크 워터폴을 줄인다.
+
+  2. DB 등의 서버 인프라를 활용할 수 있다.
+
+  3. 서비스에 필요한 패키지를 브라우저까지 가져올 필요가 없게 된다. 일부 패키지는 서버에서만 사용하여 클라이언트에 전송되는 자바스크립트 번들 사이즈를 획기적으로 줄일 수 있다. 이는 브라우저의 초기 로딩 시간 감축에 큰 도움이 된다.
+
+## Client Components
+
+* Next에서 클라이언트 컴포넌트는 서비스에 인터랙션을 추가하는 역할이다. 
+
+* Next에서 클라이언트 컴포넌트는 서버에서 pre-render되고 클라이언트에서 hydration된다.
+
+* 기존 Pages 라우터에서의 컴포넌트 동작 방식이 바로 클라이언트 컴포넌트다.
+
+* `use client` 지시문을 통해 클라이언트 컴포넌트임을 명시할 수 있다. app 라우팅에서 default는 서버 컴포넌트다.
+
+```tsx
+'use client';
+ 
+import { useState } from 'react';
+ 
+export default function Counter() {
+  const [count, setCount] = useState(0);
+ 
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  );
+}
+```
+
+* 서버 컴포넌트가 default이기 때문에, `use client` 지시문이 없는 모든 컴포넌트는 `Server Component module graph`의 일부가 된다.
+
+* `use client` 지시문이 포함된 클라이언트 컴포넌트는, 해당 파일에 포함된 모든 imported 모듈(자식 컴포넌트에 정의된 것들까지)을 `client bundle`의 일부로 여긴다.
+
+## 언제 어떤 컴포넌트를 활용해야 하는가?
+
+* 클라이언트 컴포넌트의 사용이 필요하겠다 싶은 생각이 들기 전에는 서버 컴포넌트를 사용하라.
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/d720632b-0933-4eb0-0027-421437b6e300/post)
+
+# Routing
+
+[(번역) Next.js의 app 디렉터리 아키텍처 이해하기](https://junghan92.medium.com/%EB%B2%88%EC%97%AD-next-js%EC%9D%98-app-%EB%94%94%EB%A0%89%ED%84%B0%EB%A6%AC-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0-28672980d765)
+
+[[번역] 레이아웃 RFC](https://medium.com/@yujso66/%EB%B2%88%EC%97%AD-%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83-rfc-f118cf2552fb)
+
+[Next.js Docs](https://nextjs.org/docs/app/building-your-application/routing)
+
+## Next 12의 pages 라우트
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/c4bb15df-7397-4464-6243-f9b9ce9fde00/post)
+
+## Next 13의 App 라우트
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/46774a7e-a264-4a61-45c2-e0b4f0188000/post)
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/0479c9c9-884f-491e-c06b-0c4816bdb700/post)
+
+* App 디렉터리는 Next.js에서 라우트를 처리하고 뷰를 렌더링하기 위한 새로운 전략이다. 이 전략은 리액트 Concurrent 기능을 최대한 활용할 수 있도록 고안되었다. (Suspense)
+
+* 각 폴더는 `route segement`를 나타낸다. route segement는 URL path의 segement와 매핑된다.
+
+### 컴포넌트 계층
+
+* 특정 route segement에 정의되어 있는 `special files`는 계층적으로 렌더링된다.
+
+- `layout.js`
+- `template.js`
+- `error.js` (React error boundary)
+- `loading.js` (React suspense boundary)
+- `not-found.js` (React error boundary)
+- `page.js` or nested `layout.js`
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/39a3df2d-c43a-40a4-3ec3-ab1e72d5cf00/post)
+
+* /dashboard/settings 구조의 nested route는 아래와 같은 계층이 형성된다
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/f2fb8818-4c89-4c0a-8034-c27b5c1aea00/post)
+
+### co-location
+
+* route segement에는 위에서 언급한 special files 외에 own files(components, styles, test 등)이 위치할 수 있다.
+
+* 당연하게도 이것들은 URL path에 포함되지 않는다
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/e0fcf670-6283-42d2-67d6-ca0fdfecf000/post)
+
+### page
+
+* 페이지는 rotue에 unique한 UI다. route에 page.js파일을 정의함으로써 route를 접근 가능하게 개방한다. 
+
+* page.js는 항상 route subtree의 leaf다.
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/4b25c271-e524-47ef-c377-ecca93a26c00/post)
+
+> Page, layout 컴포넌트는 각각 page, layout 파일로부터 default export되어야 한다.
+
+> layout 컴포넌트는 반드시 children 프로퍼티를 포함해야 한다.
+
+### layout
+
+* 레이아웃은 multiple pages에 공유되는 UI다. 
+
+* Navigation에 있어 레이아웃은 상태를 보존하고 interactive를 유지하며 리렌더링되지 않는다.
+
+* 루트 레이아웃 : app 폴더에 정의된 layout.js. 루트 레이아웃은 반드시 정의되어야 하며 애플리케이션의 모든 라우트 페이지에 적용된다.
+
+* 루트 레이아웃은 pages 라우팅의 _app.js, _document.js를 대체한다
+
+```tsx
+// app/layout.tsx
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/e2d04d35-4557-4f7f-f238-e27290cc8100/post)
+
+* 특정 폴더에 정의된 레이아웃은 해당 route segement에 적용된다. 또한 중첩되어서 Children 프로퍼티를 통해 자식 레이아웃음 감싼다.
+
+```tsx
+// app/dashboard/layout.tsx
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <section>{children}</section>;
+}
+```
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/cc81ea49-edad-4724-8738-85cf28564f00/post)
+
+### template
+
+* 템플릿은 자식 레이아웃, 페이지를 감싼다는 점에서 레이아웃과 유사하지만 레이아웃처럼 navigation간 상태를 유지하지는 못한다. 템플릿은 navigation 시 새 인스턴스를 생성한다.
+
+* 즉, 템플릿 navigation 시 컴포넌트의 새 인스턴스가 마운트되고, DOM 요소가 다시 생성되며, 상태가 보존되지 않고, 효과가 다시 동기화된다.
+
+* 따라서 경우에 따라 layout이 아닌 template을 선택해야 할 때가 있다.
+
+    - useState, useEffect에 의존하는 경우
+    
+    - CSS를 활용한 Enter/Exit 애니메이션 또는 애니메이션 라이브러리를 사용할 경우
+
+### loading
+
+* special file인 `loading.js`는 React Suspense와 활용되어 유의미한 Loading UI를 만들어낸다.
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/371e4750-24bb-41bd-4b21-eed45b53b700/post)
+
+```tsx
+// app/dashboard/page.tsx
+import { Suspense } from 'react';
+import { PostFeed, Weather } from './Components';
+ 
+export default function Posts() {
+  return (
+    <section>
+      <Suspense fallback={<p>Loading feed...</p>}>
+        <PostFeed />
+      </Suspense>
+      <Suspense fallback={<p>Loading weather...</p>}>
+        <Weather />
+      </Suspense>
+    </section>
+  );
+}
+```
+
+### Error Handling
+
+* `error.js` special file은 nested routes에서 런타임 에러를 우아하게 처리하는 방법을 제공한다.
+
+* error.js 파일은 자동으로 route segement(page.js)와 nested children을 React Error Boundary로 감싼다.
+
+* 앱의 나머지 기능은 유지하면서 에러가 발생한 세그먼트만 격리한다.
+
+* 전체 페이지를 새로고침하지 않고 에러 복구를 시도하는 기능을 추가한다.
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/5841b6d4-71d5-4062-2c26-854908623e00/post)
+
+* 에러바운더리가 중첩된 컴포넌트 예시
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/4d471035-63f3-4b4d-ebef-d890d97ae900/post)

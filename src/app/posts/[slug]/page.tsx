@@ -21,7 +21,7 @@ export default async function Page({
 
     console.log(filePath, tocItems);
     return (
-      <div className="flex gap-4">
+      <div className="flex gap-4 relative">
         <div className="flex flex-col gap-2 pb-[120px] pt-6 px-4">
           <h1 className="mb-8 text-4xl text-[40px] font-bold">
             {filePath.split(".md")[0]}
@@ -29,7 +29,9 @@ export default async function Page({
           <Post />
         </div>
         <aside className="w-64 shrink-0">
-          <div className="sticky top-8">
+          <div className="sticky border-l top-[64px] flex flex-col ">
+            <div className="p-4 border-b">published</div>
+            <div className="p-4 border-b">tags..</div>
             <TableOfContents items={tocItems} />
           </div>
         </aside>

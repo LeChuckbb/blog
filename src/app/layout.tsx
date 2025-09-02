@@ -29,7 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col items-center`}
       >
         <div className="flex flex-col max-w-[1200px] w-full">
-          <nav className="flex justify-between p-4">
+          <nav className="flex w-full max-w-[1200px] backdrop-blur-sm justify-between p-4 h-[56px] border-b bg-[hsla(0,0%,9%,.6)] fixed top-0 z-10">
             <div>
               <Link href={"/"}>LeChuck</Link>
             </div>
@@ -38,7 +38,7 @@ export default function RootLayout({
               <div>theme</div>
             </div>
           </nav>
-          {children}
+          <div className="relative top-[56px]">{children}</div>
         </div>
       </body>
     </html>

@@ -1,0 +1,516 @@
+---
+tags:
+  - ErrorHandling
+  - ContextAPI
+  - CompoundComponents
+  - Reducer
+  - Memoization
+  - test
+slug: wanted-fe-preonboard-3
+description: null
+date: '2023-05-22'
+title: 원티드 FE 프리온보딩 회고 (3)
+---
+# 5. ErrorBoundary를 활용한 에러 핸들링
+[토스ㅣSLASH 21 - 프론트엔드 웹 서비스에서 우아하게 비동기 처리하기](https://www.youtube.com/watch?v=FvRtoViujGg)
+
+[Sentry를 이용한 에러 추적기, React의 선언적 에러 처리 / if(kakao)2022](https://www.youtube.com/watch?v=012IPbMX_y4&t=1214s)
+
+[React Query와 함께 Concurrent UI Pattern을 도입하는 방법](https://tech.kakaopay.com/post/react-query-2/)
+
+[How to handle errors in React: full guide](https://www.developerway.com/posts/how-to-handle-errors-in-react)
+
+우아한 에러 처리 방법의 핵심은 `성공한 경우`와 `실패한 경우`를 분리하는 것이라고 생각한다.
+
+```jsx
+  const handleRemoveTodo = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      await deleteTodo(id);
+      setTodos((prev) => prev.filter((item) => item.id !== id));
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong.");
+    } 
+  }, [id, setTodos]);
+```
+
+위는 프리온보딩 과제로 주어졌던 코드다. 제공된 코드를 리팩토링하는 게 과제의 목적이었다. 여기서 나는 `try-catch` 구조가 몹시 거슬렸다. 저런식으로만 에러 처리를 하면 모든 API 호출부에 try-catch 문이 주렁주렁 붙어야 할 것이다. 적어도 성공한 경우(try)와 실패한 경우(catch)가 분리되어 있기는 하다. 하지만 실패한 경우를 `ErrorBoundary`로 외부에 위임하면 훨씬 더 읽기 쉬울것이다.
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/d3f89950-ce53-4822-b044-7888f5228d00/post)
+
+```tsx
+const useTryCatchErrorHandling = <T extends unknown[]>(
+  callback: (...rest: T) => Promise<void>
+) => {
+  return async (...args: T) => {
+    try {
+      await callback(...args)
+    } catch (e: unknown) {
+      (...)
+    }
+  }
+}
+
+```
+
+```tsx
+   const tryCatchHandleRemoveTodo = useTryCatchErrorHandling(async () => {
+    setIsLoading(true)
+    await deleteTodo(id)
+    setTodos(prev => prev.filter(item => item.id !== id))
+    setIsLoading(false)
+  })
+```
+
+먼저 성공한 경우에 대한 처리를 리팩토링해보자. `useTryCatchErrorHanlding`이라는 커스텀 훅을 정의하여 `handleRemoveTodo`와 같은 API 호출 로직이 응집된 함수를 callback으로 전달받는다. 이를통해 반복되는 try-catch문을 추상화할 수 있다. 또한 성공한 경우에 관한 로직만이 응집되어 있어서 읽기 쉽고 함수의 책임이 명확히 드러난다.
+
+실패한 경우에 대한 처리는 `ErrorBoundary`를 이용한다. ErrorBoundary를 활용하면 선언적으로 실패한 경우를 외부에 위임하여 처리할 수 있다.
+
+```tsx
+class ErrorBoundary extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      shouldHandleError: false,
+      shouldRethrowError: false,
+      error: null
+    }
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    // if an error happened, Update state to indicate an error has occurred
+
+    // local에서 처리 불가능한 경우 -> Global로 rethrow
+    if (false) {
+      return { shouldHandleError: false, shouldRethrowError: true, error }
+    }
+
+    return { shouldHandleError: true, shouldRethorwError: false, error }
+  }
+
+  render() {
+    // if error happened, return a fallback component
+    const { shouldHandleError, shouldRethrowError, error } = this.state
+    const { fallback, children } = this.props
+
+    if (shouldRethrowError) {
+      throw error
+    } else if (shouldHandleError) {
+      return fallback ? fallback : <div>Error Boundary</div>
+    }
+
+    // 아무런 에러가 없을 땐 정상적으로 하위 UI 컴포넌트를 렌더링
+    return children
+  }
+}
+```
+
+```tsx
+ 	<ErrorBoundary fallback={<div>Todo Fallback</div>}>
+      <Todo>
+        <Todo.List todos={todoListData}>
+          {todoListData.map(({ id, title }) => (
+            <Todo.Item key={id} title={title}>
+              <Todo.ItemButton id={id} setTodos={setTodoListData} />
+            </Todo.Item>
+          ))}
+        </Todo.List>
+      </Todo>
+    </ErrorBoundary>
+```
+
+그러면 이제 앞서 정의한 `tryCatchHandleRemoveTodo`에서 에러가 발생하면 `ErrorBoundary`로 에러가 잘 전파될까? 그렇지 않다! ErrorBoundary에는 몇 가지 제약이 있는데 위 코드에는 그 제약을 우회하는 로직이 포함되지 않았다.
+
+1. Class형 컴포넌트로 작성해야 한다
+2. Event Hanlder에서 발생한 에러를 catch하지 못한다
+3. 비동기 Promise에서 발생한 에러를 catch하지 못한다
+
+> React only handles errors thrown during render or during component lifecycle methods (e.g. effects and did-mount/did-update). Errors thrown in event handlers, or after async code has run, will not be caught. 
+
+> Error boundary catches only errors that happen during React lifecycle. Things that happen outside of it, like resolved promises, async code with setTimeout, various callbacks and event handlers, will just disappear if not dealt with explicitly.
+
+2,3번의 제약은 대부분의 상황에서 치명적이다. 저 제약을 뚫지 못하면 대부분의 실용적인 사례에서 제대로 된 에러 핸들링이 불가능하다. 이 제약을 우회하는 방법도 여러가진데
+
+1. React-Query 라이브러리를 사용하고 useErrorBoundary: true 옵션 주기
+2. react-error-boundary 라이브러리의 useErrorBoundary 훅 사용하기
+3. 라이브러리 사용 없이, setState hack 이용하기
+
+위 과제에서는 추가적인 라이브러리 사용이 불가능했다. 따라서 setState hack을 이용했다.
+
+`useTryCatchErrorHandling` 훅의 더 중요한 역할은 따로 있었다. 바로 callback에서 발생한 에러를 `ErrorBoundary`로 throw하는 것이다.
+
+```tsx
+const useTryCatchErrorHandling = <T extends unknown[]>(
+  callback: (...rest: T) => Promise<void>
+) => {
+  const [_, setState] = useState()
+
+  return async (...args: T) => {
+    try {
+      await callback(...args)
+    } catch (e: unknown) {
+      setState(() => {
+       throw e
+      })
+    }
+  }
+}
+```
+
+위 방식에 대해 설명하자면, catch에서 에러가 발생했을 때 임의의 setState로 리액트 리렌더링을 유발한다. 이 리렌더링 라이프 사이클 도중에 에러를 throw하면 ErrorBoundary는 해당 에러를 catch할 수 있다. ErrorBoundary는 리액트 라이프 사이클 도중에 발생한 에러만 catch할 수 있기 때문이다. 
+
+위 trick을 알기 전에는 ErrorBoundary를 선뜻 적용하기가 어려운 경우가 있었다. 하지만 앞으로는 웬만한 상황에선 ErrorBoundary를 적용하지 않을까.
+
+# 6. Reducer + Context API + Compound Components
+
+[합성 컴포넌트로 재사용성 극대화하기](https://fe-developers.kakaoent.com/2022/220731-composition-component/)
+
+[React 18 공식문서](https://react-ko.dev/learn/scaling-up-with-reducer-and-context)에 Reducer와 Context API를 함께 다룬 섹션이 있어서 이 구조를 과제에 한 번 적용하고 싶었다. 여기다 Compound Component 패턴으로 작성된 위 구조를 합쳐 보았고, 상당히 만족스러웠다.
+
+처음에는 Reducer 사용 없이 Context + useState로 작성했다. 굉장히 복잡하고 지저분해졌다.
+
+```tsx
+const SearchProvider = ({ children, setTodos }: SearchProps) => {
+  const [searchState, setSearchState] = useState({
+    input: '',
+    result: ['']
+  })
+  const [isSearchLoading, setIsSearchLoading] = useState(false)
+  const { isFocus, formRef, onFocusHandler } = useFocus()
+  const dropdownPage = useRef(1)
+  const [dropdownStatus, setDropdownStatus] = useState<DropdownStatus>('none')
+
+  const isNextExistChecker = (res: AxiosResponse<SearchResult, any>) => {
+    const total = res.data.total
+    const curLen = (res.data.page - 1) * res.data.limit + res.data.qty
+    console.log(`total: ${total}, curLen: ${curLen}`)
+    total - curLen > 0 ? setDropdownStatus('next') : setDropdownStatus('none')
+  }
+
+  const callSearchAPI = async (input: string, page: number) => {
+    const res = await getSearch(`q=${input}&page=${page}`)
+    console.log(`curLength: ${searchState.result.length}`)
+    isNextExistChecker(res)
+    setSearchState({
+      input,
+      result: res.data.result.length
+        ? [...searchState.result.filter(arr => arr !== ''), ...res.data.result]
+        : ['']
+    })
+  }
+
+  const callCreateTodoAPI = async (title: string) => {
+    setIsSearchLoading(true)
+    const { data } = await createTodo({ title })
+    setTodos(prev => [...prev, data])
+    setIsSearchLoading(false)
+  }
+
+  const debounced = useDebouncer(
+    async (curInput: string) => {
+      if (curInput === '') {
+        setIsSearchLoading(false)
+        return
+      }
+      await callSearchAPI(curInput, dropdownPage.current)
+    },
+    setIsSearchLoading,
+    500
+  )
+
+  const onInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchState({
+      input: e.target.value,
+      result: ['']
+    })
+    dropdownPage.current = 1
+    debounced(e.target.value)
+  }
+
+  const contextValue = {
+    searchState,
+    isSearchLoading,
+    isFocus,
+    formRef,
+    dropdownStatus,
+    dropdownPage
+  }
+
+  const contextDispatchValue = {
+    setIsSearchLoading,
+    onFocusHandler,
+    onInputChangeHandler,
+    setSearchState,
+    setDropdownStatus,
+    callSearchAPI,
+    callCreateTodoAPI
+  }
+
+  return (
+    <SearchContext.Provider value={contextValue}>
+      <SearchDispatchContext.Provider value={contextDispatchValue}>
+        {children}
+      </SearchDispatchContext.Provider>
+    </SearchContext.Provider>
+  )
+}
+
+```
+
+Reducer를 적용하니 코드가 깔끔해졌다. 이전에는 setTodos...setIsSearchLoading과 같이 각기 다른 명칭으로 상태 업데이트 함수가 호출되었는데, 이제는 dispatch라는 일관된 명칭으로 함수를 호출하니 가독성이 좋아졌다. 
+
+또한 여러가지 상태와 상태 업데이트 함수가 state, dispatch로 통합되니 Context Provider의 value로 전달하는 인자의 개수가 줄었고, 이로인해 각종 이벤트 핸들러를 UI 컴포넌트 내부에서 무리없이 정의 및 사용할 수 있게 되었다. 그 전에는 UI 컴포넌트에서 이벤트 핸들러 정의를 위해 여러가지 상태, 상태 업데이트 함수를 받아오는 게 부담되어서 `SearchProvider`에서 그냥 이벤트 핸들러를 정의하고 내려주었던 부분이 있었다. 
+
+```tsx
+const SearchProvider = ({ children, setTodos }: SearchProps) => {
+  const [state, dispatch] = useReducer(searchReducer, initialState)
+  const dropdownPage = useRef(1)
+
+  const callSearchAPI = useTryCatchErrorHandling(
+    async (input: string, page: number) => {
+      const { data } = await getSearch(`q=${input}&page=${page}`)
+      dispatch({
+        type: SEARCH_AT.SEARCH_WITH_DROPDOWN,
+        payload: { result: data.result, isNextExist: isNextExistChecker(data) }
+      })
+    }
+  )
+
+  const callCreateTodoAPI = useTryCatchErrorHandling(async (title: string) => {
+    dispatch({ type: SEARCH_AT.SET_SEARCH_LOADING, payload: true })
+    const { data } = await createTodo({ title })
+    setTodos(prev => [...prev, data])
+    dispatch({ type: SEARCH_AT.SET_SEARCH_LOADING, payload: false })
+  })
+
+  return (
+    <SearchContext.Provider value={{ dropdownPage, state }}>
+      <SearchDispatchContext.Provider
+        value={{
+          callSearchAPI,
+          callCreateTodoAPI,
+          dispatch
+        }}
+      >
+        {children}
+      </SearchDispatchContext.Provider>
+    </SearchContext.Provider>
+  )
+}
+```
+```tsx
+const searchReducer = (
+  state: SearchReducerState,
+  action: SearchReducerAction
+) => {
+  switch (action.type) {
+    case SEARCH_AT.SEARCH_WITH_DROPDOWN:
+      return {
+        ...state,
+        input: state.input,
+        dropdownStatus: action.payload.isNextExist
+          ? ('next' as DropdownStatus)
+          : ('none' as DropdownStatus),
+        result: action.payload.result.length
+          ? [
+              ...state.result.filter(arr => arr !== ''),
+              ...action.payload.result
+            ]
+          : ['']
+      }
+    case SEARCH_AT.SET_SEARCH:
+      return {
+        ...state,
+        input: action.payload.input,
+        result: action.payload.result
+      }
+    case SEARCH_AT.SET_SEARCH_LOADING:
+      return { ...state, isSearchLoading: action.payload }
+    case SEARCH_AT.SET_DROPDOWN_STATUS:
+      return { ...state, dropdownStatus: action.payload }
+    case SEARCH_AT.SET_FOCUS:
+      return { ...state, isFocus: action.payload }
+    default:
+      return state
+  }
+}
+```
+
+Search와 관련된 UI 컴포넌트를 Compound Compound 패턴으로 작성했다. Context로 Search를 감싸서 Search에서 사용될 상태와 함수를 Props Drilling없이 공유할 수 있어서 편리하다. 이런 구조를 활용하기 전에는 하나의 컴포넌트에 5~10개의 Props를 전달해주는 경우가 잦았는데, 이는 굉장히 읽기 힘들고 리팩토링하기 어려운 구조라고 생각한다.
+
+Compound Componet 패턴을 활용하면 UI 컴포넌트를 레고 블록처럼 끼워넣고 뺄 수 있어서 확장에 용이한 구조를 가져갈 수 있다. 또한 리액트 선언형 패러다임에 적합한 패턴으로 보여진다.
+
+```tsx
+ <ErrorBoundary fallback={<div>Search Fallback</div>}>
+  <Search setTodos={setTodoListData}>
+    <Search.Form>
+      <Search.SearchBar
+        LeftIcon={<BiSearch />}
+        rightIcon={<FaSpinner className="spinner" />}
+      />
+      <Search.Dropdown />
+    </Search.Form>
+  </Search>
+</ErrorBoundary>
+```
+
+```tsx
+import SearchProvider from './context/context'
+import Dropdown from './dropdown/Dropdown'
+import Form from './form/Form'
+import SearchBar from './form/SearchBar'
+import { SearchProps } from './types'
+
+const Search = ({ children, setTodos }: SearchProps) => {
+  return <SearchProvider setTodos={setTodos}>{children}</SearchProvider>
+}
+
+Search.Form = Form
+Search.SearchBar = SearchBar
+Search.Dropdown = Dropdown
+
+export default Search
+```
+
+# 7. React Memoization
+
+[Should You Really Use useMemo in React? Let’s Find Out.](https://medium.com/swlh/should-you-use-usememo-in-react-a-benchmarked-analysis-159faf6609b7)
+
+[무지성 useMemo, 멈춰!](https://snack.wiki/react-usememo/)
+
+React에서 Memoization은 늘 골칫거리였다. 이걸 써야 해 말아야 해? React.memo, useMemo, useCallback의 개념도 모호했다. 그래서 다시 찾아봤다. 결론은 웬만해선 사용하지 않는다. 
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/3707b59a-8da5-4414-9325-e9708dc0a100/post)
+
+* 불확실한 예외 1: Custom hook에서 반환하는 함수에 useCallback 사용하기?
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/f2946494-5f4a-4f66-0de5-9d26a1b0ba00/post)
+
+* 불확실한 예외 2: Context API에서 객체 및 함수 전달시 메모화?
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/412c5a18-b692-424c-a614-b5a341083c00/post)
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/28272ccf-5b57-4890-1894-7f9ded3c2a00/post)
+
+## 객체 비교
+
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/801ff8b8-8580-477b-e541-ed66ca353800/post)
+![](https://velog.velcdn.com/images/lechuck/post/0522fd41-6f31-4c70-b0f3-d51f0930f0c9/image.png)
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/ef5b89c5-bd93-4aea-a8a5-2241cc7cfd00/post)
+![](https://velog.velcdn.com/images/lechuck/post/ebb28d71-9228-40f2-b566-02d1e23bbfae/image.png)
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/37dbb7a5-a09c-45de-a2e3-134770253400/post)
+## React.memo
+
+[React 18 memo](https://react-ko.dev/reference/react/memo)
+
+* React는 기본적으로 상위 컴포넌트가 리렌더링되면 모든 하위 컴포넌트가 리렌더링된다
+
+* `React.memo`를 이용하여 컴포넌트를 감싸면 이전 Props와 현재 Props를 비교하여 props가 변경되지 않은 경우 리렌더링을 건너뛴다
+
+* `state`가 변경되거나 사용중인 `Context`가 변경되면 여지없이 리렌더링된다. 즉, React.memo는 부모에서 전달되는 Props만 비교하여 수행.
+
+* 또한 React.memo는 컴포넌트에 전달되는 props가 항상 다른 경우 완전히 무용지물이다. 그래서 `useMemo`, `useCallback`을 상위 컴포넌트에 사용해서 고정된 props을 내려주면 React.memo로 감싼 하위 컴포넌트에서 이를 활용하는 식으로 자주 쓴다.
+
+* Props 비교에는 `Object.is()` 연산이 사용된다. Object.is()는 `===` 비교연산자와 동작이 유사하다.
+
+* 자바스크립트는 기본적으로 비교연산자를 수행할 때 해당 데이터의 값이 아닌 메모리 주소를 통해 일치 여부를 판단한다. 그래서 객체는 비교가 까다롭다.
+
+* prop이 객체(혹은 배열)면 객체는 매 렌더링마다 새로 생성되어 React는 이전 Prop에서 변경된 것으로 간주한다. 객체 요소가 전과 동일한 건 아무런 소용이 없다. **따라서 객체를 prop으로 전달할 땐 단순화(원시값으로 변환)하거나 메모화(useMemo, useCallback)해야 한다.**
+
+```jsx
+// Prop이 객체인 경우 useMemo를 이용하여 부모 컴포넌트가 해당 객체를 매번 다시 만드는 것을 방지하는 예시
+function Page() {
+  const [name, setName] = useState('Taylor');
+  const [age, setAge] = useState(42);
+
+  const person = useMemo(
+    () => ({ name, age }),
+    [name, age]
+  );
+
+  return <Profile person={person} />;
+}
+
+const Profile = memo(function Profile({ person }) {
+  // ...
+});
+```
+
+## useMemo, useCallback
+
+* `useMemo`는 리렌더링 사이의 계산 결과를 캐시할 수 있는 훅이다.
+
+```jsx
+function TodoList({ todos, tab }) {
+  const visibleTodos = useMemo(
+    () => filterTodos(todos, tab),
+    [todos, tab]
+  );
+  // ...
+}
+```
+
+* useMemo의 첫 번째 인자로는 값을 반환하는 함수가 전달되어야 한다. 여기서 반한된 값은 캐싱(메모이제이션)된다.
+
+* 이후, 의존성에 변경이 없는 한 계속해서 캐싱된 값을 사용한다. 의존성에 변경이 발생하면 다시 첫 번째 함수를 호출하고 캐싱한다.
+
+* useMemo로 함수를 메모화하려면 함수를 반환하는 함수를 첫 번째 인자로 전달해야 하는데 이는 장황하다.
+
+* 함수를 메모화 할 땐 `useCallabck` 사용하면 간결한 코드를 유지할 수 있다.
+
+* `useCallabck`은 리렌더링 사이에 함수 정의를 캐시할 수 있는 훅이다.
+
+# 8. Husky로 프로젝트 초기 설정하기
+
+프로젝트 설정 초기에 ESLint와 Prettier를 적용하는 건 일반적이다. 보통 그렇게들 한다. 그런데 프로젝트에 ESLint와 Prettier가 적용되어 있어도 팀원A의 환경에서 ESLint, Prettier가 모종의 이유로 비활성화되어 있다면 프로젝트 환경설정이 무색하게 ESLint, Prettier가 적용되지 않은 코드가 원격 저장소를 통해 공유될 수 있다. 이런 상황을 방지하기 위해 특정 시점에 ESLint, Prettier를 강제할 필요가 있다. Husky는 이런 이유로 사용된다.
+
+git에서 특정 이벤트(pre-commit, pre-push) 발생시 각각 prettier와 lint가 반드시 실행되도록 강제하고자 한다. git hook을 사용하면 git pre-commit, pre-push 시점에 위와 같은 동작을 설정할 수 있지만 조금 복잡하다. 그래서 git hook 기반의 라이브러리 husky를 사용하여 위 설정을 적용한다.
+
+1. `npm install husky --save-dev`
+
+2. `npx husky install` 명령어를 통해 스크립트 생성, git hook install. 이 명령은 처음 husky를 프로젝트에 세팅하는 사람만 수행하면 된다.
+
+3. `package.json` 파일에 `postinstall` 스크립트 추가. 모든 깃 레포 사용자는 반드시 npm install 명령을 수행하기 때문에, 이 때 husky 명령을 수행하도록 강제한다.
+
+```JSON
+// package.json
+{
+  "scripts": {
+    "postinstall": "husky install",
+		"format": "prettier --cache --write .",
+		"lint": "eslint --cache .",
+  },
+}
+```
+
+4. husky를 통해 git`pre-commit`, `pre-push` hook 이벤트를 추가한다.
+
+* `npx husky add .husky/pre-commit "npm run format"`
+* `npx husky add .husky/pre-push "npm run lint"`
+
+그러면 프로젝트에 아래와 같은 husky 스크립트 파일이 생성된다. 이 폴더를 원격 repo에 함께 올려서 해당 repo를 이용하는 팀원이 pre-commit, pre-push 훅 이벤트를 등록하는 과정(4번) 없이 이용할 수 있도록 한다. 만약 .gitignore에 .husky파일을 추가하면 의도한대로 동작하지 않는다. 
+
+![](https://velog.velcdn.com/images/lechuck/post/a16bf23c-5646-4f7d-9391-ac26446d199b/image.png)
+![image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/7cbcbb77-1b06-4730-609d-61b4391b5200/post)
+
+# 9. 테스트코드에 대한 단상
+
+과제 요구사항에 테스트코드 작성(선택)이란 항목이 있어서 Jest, React-testing-library를 이용한 간단한 유닛 테스트 정도를 시행해봤다. 그 과정에서 코드 내 어떤 부분을 테스트할 지 고민하며 여러가지 자료를 찾아봤는데, 결론은 FE에는 아직도 또렷한 테스트 개발 방법론 혹은 패턴이 자리매김 하지 않은 것 같았다. 개발자마다 이야기가 달랐고, 거기엔 상충하는 부분이 많았다.
+
+[[Testing] 0. React Testing 시리즈를 들어가며](https://jbee.io/react/testing-0-react-testing-intro/)
+
+Jbee님의 방식이 와닿았다. UI테스트보다는 가급적 비즈니스 로직(리듀서, 미들웨어 등) 테스트 위주로. 왜냐하면 UI 테스트는 작은 디자인 변경 사항에도 맥없이 무너지고, UI 컴포넌트는 부모 컴포넌트의 영향을 많이 받아 변수가 너무 많기 때문이다. UI 테스트에 성공했더라도 실제 화면에서는 부모 컴포넌트에 의해 UI가 깨질 수 있다. 
+
+[스토리북 작성을 통해 얻게 되는 리팩토링 효과](https://fe-developers.kakaoent.com/2022/220609-storybookwise-component-refactoring/)
+
+UI 테스트보다는 Storybook을 이용한 컴포넌트 단위의 재사용성을 늘리는 게 훨씬 더 효율적으로 보였다.
+
+# 그 외
+
+[Refactoring React(리팩토링 리액트) : Folder Structure(폴더 구조)](https://itchallenger.tistory.com/900)
+
+[React Folder Structure in 5 Steps [2022]](https://www.robinwieruch.de/react-folder-structure/)
+
+[Evolution of a React folder structure and why to group by features right away](https://profy.dev/article/react-folder-structure)

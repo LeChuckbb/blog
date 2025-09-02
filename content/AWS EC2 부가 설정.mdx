@@ -1,0 +1,128 @@
+---
+tags:
+  - AWS
+  - HTTPS
+slug: aws-ec2-settings
+description: null
+date: '2022-03-31'
+title: AWS EC2 부가 설정
+---
+1. EC2 인스턴스 생성
+
+2. EC2 인스턴스에 "연결"하여(터미널에 접속) `sudo apt update`
+
+3. `sudo apt install apache2` 명령을 통해 아파치 웹 서버를 실행하고, 사용자들은 EC2 IP 주소를 통해 웹서버에 접속할 수 있게 된다. IP주소란 퍼블릭 IPv4 혹은 퍼블릭 IPv4 DNS다.
+
+# AWS Budgets으로 요금 알람 설정하기
+
+AWS Budgets 예산 유형
+
+* 비용 예산 (금액)
+
+* 사용량 예산
+
+* Savings Plan 예산
+
+* 예약 예산
+
+Budgets - 예산 추가 - 고정, 1달러 - 알림 임계값을 80%로 설정 및 알림받을 이메일 주소 지정. 초간단!!
+
+[AWS 비용 폭탄 나오기 전에 알림 받으세요: AWS Budgets으로 비용 알림 받는 방법](https://www.youtube.com/watch?v=ziYtStkSCwA&ab_channel=AWS%EA%B0%95%EC%9D%98%EC%8B%A4)
+
+# 가비아 - EC2 도메인 연결하기
+
+* Route53에서 '호스팅 영역 생성'하기. 구매한 도메인 주소를 입력하기.
+
+* 호스팅 영역에서 '레코드 생성'하기. '값'에 EC2 퍼블릭 IPv4 주소 입력하기.
+
+* NS 유형의 레코드에 있는 4개의 주소를 가비아 네임서버 목록에 추가하기. (마지막에 . 지워서)
+
+# 인증서 없이 HTTPS로 변경하기
+
+ 방법 1) CloudFront
+ 
+* 1) Route53에서 EC2 퍼블릭 IPv4를 값으로 갖고 이름을 공란으로 둔 레코드를 생성한다. (가비아 - EC2 도메인 연결했다면 pass) -> A 유형 레코드 생성. http 접속 가능
+
+* (인증서는 버지니아 북부에서 만들어야 한다. 버지니아 북부로 변경)	
+
+* 2) certificate manager - 인증서 요청. 인증서에는 도메인명을 적는다. ex)theraphy.shop 인증서 발급 후 인증서 ID 클릭 - 'Route 53 레코드 생성' 버튼 클릭하여 CNAME 형태의 Route 53 레코드를 생성한다.
+
+* 3) cloudFront - 배포 생성 - 원본 도메인, HTTP만 해당, Redirect HTTP to HTTPS, 2)에서 만들어 둔 SSL 인증서 할당. 원본 도메인 이름과 대체 도메인 이름 모두 theraphy.shop으로 지정했다. cloudFront 배포가 활성화되면 부여되는 도메인 이름 xxx.cloudfront.net으로 접속시 https로 접속되는 것을 확인할 수 있다. 
+
+* 4) Route53에서 레코드를 생성한다. 별칭을 활성화하여 CloudFront 배포에 대한 별칭 - 배포 선택에서 xxx.cloudfront.net을 할당한다. 레코드명을 공란(theraphy.shop)으로 두고 레코드를 생성하면 이제 theraphy.shop으로 접속 시 xxx.cloudfront.net으로 redirect되면서 https를 이용할 수 있게 된다.
+
+> 4) 에서 레코드명을 공란으로 두고 생성시 1)에서 생성한 레코드명과 중복되어 생성이 안된다. http를 사용할 필요가 없으니 1)에서 생성한 A 유형의 레코드명을 아무렇게나 변경해주면 해결된다.
+
+> A 레코드는 도메인을 IP에 직접 연결하는 것. theraphy.shop이라는 A 레코드가 있다면 theraphy.shop에 접속 시 xxx.cloudfront.net이라는 IP에 연결된다.
+
+> CNAME은 도메인을 별명과 연결하는 것. IP가 유동적으로 변하는 서버의 경우 그 바뀌는 IP들에 일정하게 연결된 다른 도메인인 CNAME(canonical)을 연결하는 것. 한 군데를 더 거친다는 것이 단점이다.
+
+[DNS가 뭔가요? + 도메인, A Record, CName](https://www.youtube.com/watch?v=6fc9NAQkcv0&ab_channel=%EC%96%84%ED%8C%8D%ED%95%9C%EC%BD%94%EB%94%A9%EC%82%AC%EC%A0%84)
+
+* 방법 2) Application Load Balancer  
+
+[[AWS]인증서 없이 HTTP 웹사이트를 HTTPS로 바꾸는 2가지 방법](https://www.youtube.com/watch?v=WS2n8mkrFaY&ab_channel=AWS%EA%B0%95%EC%9D%98%EC%8B%A4)
+
+# Session Mangaer로 EC2 인스턴스에 연결하기
+
+Systems Manager Session Manager란? EC2를 브라우저 기반의 쉘 혹은 AWS CLI로 관리할 수 있는 완전 관리형 서비스다.
+
+* 장점
+1. 다수의 EC2 관리가 쉬워진다
+2. 연결 시 SSH pem 키 입력이 필요 없음
+3. 다른 AWS 시스템과 연동하여 로깅 등의 기능을 활용할 수 있음
+
+* 방법
+1. EC2 인스턴스에 `AmazonEC2RoleforSSM` 권한을 갖는 IAM 역할을 부여한다.
+2. AWS Systems Manager - 세션 관리자 - 세션 시작
+
+> 22.4 기준 `AmazonEC2RoleforSSM`은 deprecate될 예정이라고 한다. `AmazonSSMManagedInstanceCore` 사용이 권장된다.
+
+> 세션 시작 - 대상 인스턴스에 목록이 제대로 출력되지 않는다면 EC2 인스턴스를 재시작한다.
+
+[[AWS 강좌]EC2에 SSH로 연결하지 마세요 : AWS Session Manager](https://www.youtube.com/watch?v=2Xb2JXV5Llo&ab_channel=AWS%EA%B0%95%EC%9D%98%EC%8B%A4)
+
+# 포트 포워딩하기
+
+리액트 CRA로 만든 앱은 기본 포트가 3000이다. 따라서 도메인:3000 으로 접속해야 한다는 불편함이 있다.
+
+EC2에서 `su` 명령어를 통해 root로 로그인한 뒤, `iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000` 명령어를 통해서 생략 가능한 80포트로 요청이 들어왔을 때 3000번 포트로 redirect 되게 만든다.
+
+![](https://velog.velcdn.com/cloudflare/lechuck/4aea594c-8e41-43e8-8367-35d2662fa6c5/image.png)
+
+[iptables로 80포트 리다이렉트 하기](https://blog.outsider.ne.kr/580)
+
+> 만약 su 명령 후 비밀번호 입력에서 막힌다면, `sudo passwd root` 명령어로 비밀번호를 새롭게 지정한다.
+
+pretrouting rules 리스트 출력하기
+
+`iptables -t nat -v -L PREROUTING -n --line-number`
+
+prerouting nat rule 삭제하기
+
+`iptables -t nat -D PREROUTING {rule-number-here}`
+
+# cloudWatch를 이용한 EC2 logging
+
+CloudWatch - 로그 그룹 생성
+
+SSM - 세션 관리자 - 편집 - CloudWatch 로그 그룹 + Allow only encrypted.. 해제
+
+EC2 인스턴스에 `CloudWatchAgentServerPolicy` 권한 추가
+
+# 방화벽 해지 (인바운드 & 아웃바운드)
+
+4. 방화벽을 해지해주어야 접속이 가능하다. 인스턴스를 클릭한 채 하단에 [보안] 탭을 눌러보면 인바운드 규칙과 아웃바운드 규칙이 있다. 인바운드는 외부에서 EC2 인스턴스로 접속함을 의미하고, 아웃바운드는 EC2 인스턴스에서 바깥쪽으로 접근하는 것이다. 아웃바운드는 활짝 열어두고 인바운드는 최소한으로 열어두어야 보안상 안전하다.
+
+22번 -> SSH
+
+80번 -> 외부에서 접근하기 위해 열어둬야 함
+
+[보안 그룹]에서 인바운드 HTTP 규칙을 추가한다. 포트는 80번으로 자동 설정되고, '소스'를 0.0.0.0/0으로 설정하여 누구나 접속할 수 있게 한다.
+
+# 비용?
+
+인스턴스를 중지하면 저장장치에 대한 비용만 청구된다. 단 재시작시 IP가 변경된다.
+
+인스턴스를 종료하면 비용 청구를 완전히 막는다.
+

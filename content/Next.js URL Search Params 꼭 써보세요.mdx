@@ -1,14 +1,11 @@
 ---
-publish_date: 2024-12-22
 tags:
   - Nextjs
   - URL
 slug: url-search-params
 title: Next.js URL Search Params 꼭 써보세요
+date: '2024-12-22'
 ---
-
-
-
 Next.js App router 관련 문서를 읽다 보면 `URL Search Param` 관련된 자료를 심심치 않게 찾아볼 수 있다. 공식 문서에서 제공하는 [Learn](https://nextjs.org/learn/dashboard-app/adding-search-and-pagination#why-use-url-search-params), [playground](https://app-router.vercel.app/patterns/search-params) 페이지에는 URL Search Param 관련 섹션이 따로 있을 정도이고, 이외 Docs 에서도 짧막하게 언급되고 예시로 보여지고 링크가 걸려있는 경우를 여럿 봤다. 정리하자면, URL Search Params는 App rotuer에서 적극적으로 권장되는 패턴인 것이다.
 
 부푼 기대감을 떠안고 URL Search Params 패턴을 프로젝트 초기 단계부터 적극 도입했다. 이제는 마무리 된 프로젝트를 돌이켜보면, 과정도 결과도 만족스럽다. 그래서 관련 내용을 정리하고자 한다.
@@ -90,7 +87,6 @@ async function MediaPage({
   
 export default MediaPage;
 ```
-
 
 ``` tsx
 'use client';
@@ -217,9 +213,7 @@ function Pagination({ totalPages, currentPage, className }: Props) {
 export default Pagination;
 ```
 
-
 ![Obsidian image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/1e723817-cdcc-407f-6b62-208c22721400/post)
-
 
 # 주의사항 (꿀팁)
 
@@ -244,7 +238,6 @@ export default Pagination;
 1. React에서 라우팅은 transition으로 처리하기를 권장하고 있고, Next.js Router도 이를 따르고 있다.
 2. transition은 `<Suspense>`에 fallback 되지 않도록 설계되었다.  [링크](https://ko.react.dev/reference/react/Suspense#preventing-already-revealed-content-from-hiding)
 3. URL 업데이트 과정에서 발생하는 data re-fetching 또한 transition으로 간주되어서 `<Suspense>`에 fallback 되지 않았던 것이다.
-
 
 > [!info] stale data is better than nothing(fallback)
 > 이러한 설계는 stale data is better than nothing(fallback) 이라는 원칙에서 비롯된 것으로 보여진다. (이름은 내가 붙였다) tanstackQuery에서 keepPreviousData라는 옵션을 제공하는 이유도 이와 같다.
