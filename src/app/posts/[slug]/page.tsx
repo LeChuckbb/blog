@@ -44,7 +44,8 @@ export default async function Page({
 }
 
 function getFileNameBySlug(slug: string): string | null {
-  const post = postsData.posts.find((post) => post.slug === slug);
+  const decodedSlug = decodeURIComponent(slug);
+  const post = postsData.posts.find((post) => post.slug === decodedSlug);
   if (!post) return null;
 
   return `${post.title}.mdx`;
