@@ -7,51 +7,144 @@ description: null
 date: '2022-03-30'
 title: AWS EC2에 Docker-Compose 구축하기
 ---
-EC2 터미널에서 아래 명령어를 수행하면 된다.
-
-* `sudo apt update`
-
-* `sudo apt install docker docker.io`
-
-* `docker -v`로 설치 확인
-
-* `sudo service docker start`로 도커 시작하기
-
-* `sudo usermod -a -G docker $USER` 사용자를 USER 그룹에 추가하기
-
-* 로그아웃 후 재접속하거나 다음 명령어를 입력하여 도커 권한을 적용한다. `newgrp docker`
-
-* docker-compose 설치 `sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose` 설치 후 권한 부여. `sudo chmod +x /usr/local/bin/docker-compose`  [npearce/install-docker.md](https://gist.github.com/npearce/6f3c7826c7499587f00957fee62f8ee9) 참조 
-
-* .h5 파일이 100MB가 넘어가므로 git-lfs를 설치해야 한다. `sudo apt install git-lfs` 
-
-* git clone으로 Docker-compose가 포함된 프로젝트 가져오기
-
-* .h5 파일은 따로 pull 해야 한다. `git lfs pull`
-
-`sudo docker-compose up -d` 도커 컴포즈 실행하기
-
-`docker-compose build --no-cache`
-
-용량 확인 `df -h`, `du -hs *`
-
-`sudo docker system prune --all --volumes --force` 도커의 (거의 모든) 미사용중인 파일 삭제. 용량이 부족할 때 사용하자.
-
-`docker kill $(docker ps -q)` 실행중인 모든 도커 컨테이너 종료하기
-
-## 메모리 스왑하기
-
-`sudo dd if=/dev/zero of=/swapfile bs=128M count=16`
-
-https://sundries-in-myidea.tistory.com/102
-
-## 용량 늘리기
-
-https://velog.io/@hyeonseop/ec2-%EC%9A%A9%EB%9F%89-full%EC%9D%BC-%EB%95%8C-%EB%8C%80%EC%B2%98%EB%B2%95
-
-## Container Shell에 접속하기
-
-`docker exec -it <container ID> /bin/sh`
-
-`exit`
-
+import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
+function _createMdxContent(props) {
+  const _components = {
+    a: "a",
+    code: "code",
+    h2: "h2",
+    li: "li",
+    p: "p",
+    ul: "ul",
+    ...props.components
+  };
+  return _jsxs(_Fragment, {
+    children: [_jsx(_components.p, {
+      children: "EC2 터미널에서 아래 명령어를 수행하면 된다."
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: _jsx(_components.code, {
+            children: "sudo apt update"
+          })
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: _jsx(_components.code, {
+            children: "sudo apt install docker docker.io"
+          })
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "docker -v"
+          }), "로 설치 확인"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "sudo service docker start"
+          }), "로 도커 시작하기"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "sudo usermod -a -G docker $USER"
+          }), " 사용자를 USER 그룹에 추가하기"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["로그아웃 후 재접속하거나 다음 명령어를 입력하여 도커 권한을 적용한다. ", _jsx(_components.code, {
+            children: "newgrp docker"
+          })]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["docker-compose 설치 ", _jsx(_components.code, {
+            children: "sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose"
+          }), " 설치 후 권한 부여. ", _jsx(_components.code, {
+            children: "sudo chmod +x /usr/local/bin/docker-compose"
+          }), "  ", _jsx(_components.a, {
+            href: "https://gist.github.com/npearce/6f3c7826c7499587f00957fee62f8ee9",
+            children: "npearce/install-docker.md"
+          }), " 참조"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [".h5 파일이 100MB가 넘어가므로 git-lfs를 설치해야 한다. ", _jsx(_components.code, {
+            children: "sudo apt install git-lfs"
+          })]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "git clone으로 Docker-compose가 포함된 프로젝트 가져오기"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [".h5 파일은 따로 pull 해야 한다. ", _jsx(_components.code, {
+            children: "git lfs pull"
+          })]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "sudo docker-compose up -d"
+      }), " 도커 컴포즈 실행하기"]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "docker-compose build --no-cache"
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: ["용량 확인 ", _jsx(_components.code, {
+        children: "df -h"
+      }), ", ", _jsx(_components.code, {
+        children: "du -hs *"
+      })]
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "sudo docker system prune --all --volumes --force"
+      }), " 도커의 (거의 모든) 미사용중인 파일 삭제. 용량이 부족할 때 사용하자."]
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "docker kill $(docker ps -q)"
+      }), " 실행중인 모든 도커 컨테이너 종료하기"]
+    }), "\n", _jsx(_components.h2, {
+      children: "메모리 스왑하기"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "sudo dd if=/dev/zero of=/swapfile bs=128M count=16"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://sundries-in-myidea.tistory.com/102",
+        children: "https://sundries-in-myidea.tistory.com/102"
+      })
+    }), "\n", _jsx(_components.h2, {
+      children: "용량 늘리기"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://velog.io/@hyeonseop/ec2-%EC%9A%A9%EB%9F%89-full%EC%9D%BC-%EB%95%8C-%EB%8C%80%EC%B2%98%EB%B2%95",
+        children: "https://velog.io/@hyeonseop/ec2-%EC%9A%A9%EB%9F%89-full%EC%9D%BC-%EB%95%8C-%EB%8C%80%EC%B2%98%EB%B2%95"
+      })
+    }), "\n", _jsx(_components.h2, {
+      children: "Container Shell에 접속하기"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "docker exec -it <container ID> /bin/sh"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "exit"
+      })
+    })]
+  });
+}
+export default function MDXContent(props = {}) {
+  const {wrapper: MDXLayout} = props.components || ({});
+  return MDXLayout ? _jsx(MDXLayout, {
+    ...props,
+    children: _jsx(_createMdxContent, {
+      ...props
+    })
+  }) : _createMdxContent(props);
+}

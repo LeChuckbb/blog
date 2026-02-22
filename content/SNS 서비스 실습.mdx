@@ -5,189 +5,364 @@ description: null
 date: '2022-03-14'
 title: SNS 서비스 실습
 ---
-SNS 앱 NodeBird
-
-* 로그인
-
-* 이미지 업로그
-
-* 게시글 작성
-
-* 해시태그 검색
-
-* 팔로잉
-
-# 프로젝트 구조
-
-route
-
-`routes/page.js`
-`GET /` -> render main.html
-`GET /profile` -> render profile.html
-`GET /join` -> render join.html
-
-`routes/auth.js`
-`GET /auth/logout` -> 
-`GET /auth/kakao` ->
-
-`POST /auth/join` -> 
-`POST /auth/login` -> 
-
-`routes/post.js`
-`POST /post` -> 게시글 업로드.
-`POST /post/img` -> 이미지 업로드. multer upload.single()
-
-``` cs
-\
-\--- config/config.json
-\--- models/index.js
-\---		hashtag.js
-\---		post.js
-\---		user.js
-\--- passport/index.js
-\---		kakaoStrategy.js
-\---		localStrategy.js
-\--- public/main.css
-\--- routes/auth.js
-\---		middlewares.js -> 로그인/로그아웃 접근권한 제어 미들웨어
-\---		page.js
-\---		post.js
-\---		user.js
-\--- views/main.html
-\---		error.html
-\---		layout.html
-\---		join.html
-\---		profile.html
-```
-
-# MySQL 세팅하기
-
-로그인 - user table
-
-게시글 - post table
-
-해시태그 - hashtag table
-
-## 테이블간 관계
-
-NodeBird 프로젝트 내 모델은 총 다섯개다. 직접 생성한 User, Hashtag, Post 모델이 있고, 모델간 관계를 통해 파생된 PostHashtag, Follow 모델이 있다.
-
-팔로잉은 같은 테이블간 N:M 관계를 맺는다.
-
-User can follow A,B,C
-
-A,B,C can be User's follower
-
-![](https://images.velog.io/images/lechuck/post/9e2b3c93-42c2-4c84-bdf5-96e35af48513/image.png)
-
-![](https://images.velog.io/images/lechuck/post/43e85288-015d-44cd-b16c-61e9b9021f04/image.png)
-
-N:M 관계로 파생된 Follow 모델(테이블)에는 `db.sequelize.models.Follow`와 같은 방식으로 접근할 수 있다.
-
-* user.getPosts(), user.addPosts()
-
-![](https://images.velog.io/images/lechuck/post/3073d248-b326-4b51-8e6a-a9052bcd86c5/image.png)
-
-![](https://images.velog.io/images/lechuck/post/0c558f70-92df-4bca-84d5-b9c10c7e77e2/image.png)
-
-* post.getHashtags(), post.addHashtags()
-
-* hashtags.getPosts(), hashtags.addPosts()
-
-# Passport를 이용한 로그인 구현
-
-[Passport.js](https://www.passportjs.org/)
-
-패스포트는 인증(Authentication)과 인가(Authorization)를 쉽게 해주는 Node.js 미들웨어다. 패스포트는 요청(req)을 인증(Authenticate)하기 위한 목적으로 설계되었다. 패스포트는 인증 과정을 깔끔하게 캡슐화하여 디테일한 부분은 위임하고, 개발이 편리해지게끔 돕는다.
-
-패스포트는 아래와 같은 간단한 명령문을 통해 인증 과정에서의 복잡성을 줄였다.
-
-`app.post('/login/password', passport.authenticate('local'));`
-
-위 명령문 뒤에 숨어있는 핵심 콘셉트는 다음과 같다.
-
-* middleware
-
-* startegies
-
-* sessions
-
-`passport.authenticate()`는 request를 authenticate하기 위한 middleware다. strategy에 의해 인증이 성공했을 경우 `req.user` 속성에 인증된 유저 정보가 세팅되고, session이 생성된다.
-
-인증 메커니즘은 strategy에 의해 구현된다. `passport-local`이라는 대표적인 strategy는 username과 password로 사용자를 인증하지만, 다른 strategy에서는 username과 password 외의 것으로 인증 메커니즘을 구현할 수가 있는 것이다.
-
-![](https://images.velog.io/images/lechuck/post/c44f56e6-ce32-4602-b00c-85ac10b6089a/image.png)
-
-## strategy 설치 및 configure
-
-패스포트 strategy는 npm을 통해 설치할 수 있다.
-
-`npm i passport passport-local passport-kakao bcrypt`
-
-패스포트 strategy를 설치했으면 configuration 과정을 밟아야 한다. `localStrategy` 생성자는 함수를 인자로 전달받는데 이를 `verify function`이라고 부른다. verify function은 db query를 통해 유저 자격을 검증하고, callback 함수 done(user)을 호출한다. 검증된 user 정보를 done() 콜백 함수에 전달해서 이후 `req.login(user)` 명령이 가능하게 한다.
-
-![](https://images.velog.io/images/lechuck/post/9dcb7901-f1c8-4452-b5a6-0a4a988691e8/image.png)
-
-strategy를 configure했으면, `.use`를 통해 register해야 한다.
-``` js
-// app.js
-const passportConfig = require('./passport');
-
-passportConfig();
-
-app.use(passport.initialize());
-app.use(passport.session());
-```
-
-register가 완료되면, `passport.authenticate(strategy 이름)`과 같이 authenticate() 미들웨어의 첫 번째 인수로 strategy를 전달하여 사용할 수 있다.
-
-![](https://images.velog.io/images/lechuck/post/9ec4f7ff-187f-4c0c-ad0f-a00015969f43/image.png)
-
-![](https://images.velog.io/images/lechuck/post/55510dc2-0545-4d8c-953a-6756391a5d6a/image.png)
-
-## 로그인 과정 개요
-
-1) HTML `<form>`에서 `POST/ auth/login`로그인 요청 (views/layout.html)
-
-2) 라우터에서 `passport.authenticate(local, callback)` 메서드 호출. local Startegy를 수행한 후 성공 or 실패시 callback을 실행한다. (routes/page.js)
-
-3) local Strategy에서는 사용자가 HTML form에 입력한 정보가 유효한 정보인지 DB와 대조해보고 대조에 성공하면 해당 회원정보(exUser)를 `done()` 콜백함수의 인자(user)로 전달해서 authenticate의 두 번째 인자인 callback을 실행한다. (passport/localStrategy.js -> routes/page.js)
-
-4) callback에서는 `req.login(user)`를 수행한다. login 메서드는 passport가 req에 추가한 것. `req.login()`은 `passport.serializeUser(user)`를 호출한다.
-
-5) `passport.serializeUser()`에서는 전달받은 user를 `req.session`에 추가한다.
-
-6) 로그인 완료
-
-![](https://images.velog.io/images/lechuck/post/cd9559a2-0593-418f-a85f-77dc9f0883ba/image.png)
-
-## 로그인 이후의 과정
-
-1) 요청이 들어온다
-
-2) 라우터에 요청이 도달하기 전에 `passport.session` 미들웨어가 `passport.deserializerUser()` 메서드를 호출한다
-
-3) `req.session`에 저장된 아이디로 db에서 사용자를 조회한다
-
-4) 조회된 사용자 정보를 `req.user`에 저장한다
-
-5) 라우터에서 `req.user` 객체 사용이 가능해진다.
-
-## local login
-
-로컬 로그인이란 다른 SNS 서비스를 통해 로그인하지 않고 자체적으로 회원가입 후 로그인하는 방식.
-
-#### 로그인/로그아웃 상태에 따른 접근 권한 부여
-
-Passport는 req 객체에 `req.isAuthenticated()`라는 메서드를 부여한다. 로그인 중이면 `req.isAuthenticated()`의 값이 true이고, 로그아웃 중이면 false다. 따라서 이 메서드로 로그인 여부를 파악할 수 있다.
-
-* 로그아웃 라우터, 이미지 업로드 라우터 -> 로그인한 사람만 접근 가능
-
-* 회원가입 라우터, 로그인 라우터 -> 로그인하지 않은 사람만 접근 가능
-
-`isLoggedIn, isNotLoggedIn` 미들웨어를 만들어서 page, auth 등의 라우터에 적용하자. 이를테면, `router.post()` 미들웨어를 통해 `POST /login` 같은 HTTP 요청을 보낼 때 `router.post(path, isNotLoggedIn)`와 같이 사용하여 로그인하지 않은 유저만 POST login 요청을 보낼 수 있도록 만들자.
-
-## kakao login
-
-SNS 로그인은 첫 로그인한 경우에 한해 회원가입 처리를 하고, 두 번째 로그인부터는 로그인 처리를 해야 한다.
-
+import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
+function _createMdxContent(props) {
+  const _components = {
+    a: "a",
+    code: "code",
+    h1: "h1",
+    h2: "h2",
+    h4: "h4",
+    img: "img",
+    li: "li",
+    ol: "ol",
+    p: "p",
+    pre: "pre",
+    ul: "ul",
+    ...props.components
+  };
+  return _jsxs(_Fragment, {
+    children: [_jsx(_components.p, {
+      children: "SNS 앱 NodeBird"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "로그인"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "이미지 업로그"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "게시글 작성"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "해시태그 검색"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "팔로잉"
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h1, {
+      children: "프로젝트 구조"
+    }), "\n", _jsx(_components.p, {
+      children: "route"
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "routes/page.js"
+      }), "\n", _jsx(_components.code, {
+        children: "GET /"
+      }), " -> render main.html\n", _jsx(_components.code, {
+        children: "GET /profile"
+      }), " -> render profile.html\n", _jsx(_components.code, {
+        children: "GET /join"
+      }), " -> render join.html"]
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "routes/auth.js"
+      }), "\n", _jsx(_components.code, {
+        children: "GET /auth/logout"
+      }), " ->\n", _jsx(_components.code, {
+        children: "GET /auth/kakao"
+      }), " ->"]
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "POST /auth/join"
+      }), " ->\n", _jsx(_components.code, {
+        children: "POST /auth/login"
+      }), " ->"]
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "routes/post.js"
+      }), "\n", _jsx(_components.code, {
+        children: "POST /post"
+      }), " -> 게시글 업로드.\n", _jsx(_components.code, {
+        children: "POST /post/img"
+      }), " -> 이미지 업로드. multer upload.single()"]
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-cs",
+        children: "\\\n\\--- config/config.json\n\\--- models/index.js\n\\---\t\thashtag.js\n\\---\t\tpost.js\n\\---\t\tuser.js\n\\--- passport/index.js\n\\---\t\tkakaoStrategy.js\n\\---\t\tlocalStrategy.js\n\\--- public/main.css\n\\--- routes/auth.js\n\\---\t\tmiddlewares.js -> 로그인/로그아웃 접근권한 제어 미들웨어\n\\---\t\tpage.js\n\\---\t\tpost.js\n\\---\t\tuser.js\n\\--- views/main.html\n\\---\t\terror.html\n\\---\t\tlayout.html\n\\---\t\tjoin.html\n\\---\t\tprofile.html\n"
+      })
+    }), "\n", _jsx(_components.h1, {
+      children: "MySQL 세팅하기"
+    }), "\n", _jsx(_components.p, {
+      children: "로그인 - user table"
+    }), "\n", _jsx(_components.p, {
+      children: "게시글 - post table"
+    }), "\n", _jsx(_components.p, {
+      children: "해시태그 - hashtag table"
+    }), "\n", _jsx(_components.h2, {
+      children: "테이블간 관계"
+    }), "\n", _jsx(_components.p, {
+      children: "NodeBird 프로젝트 내 모델은 총 다섯개다. 직접 생성한 User, Hashtag, Post 모델이 있고, 모델간 관계를 통해 파생된 PostHashtag, Follow 모델이 있다."
+    }), "\n", _jsx(_components.p, {
+      children: "팔로잉은 같은 테이블간 N:M 관계를 맺는다."
+    }), "\n", _jsx(_components.p, {
+      children: "User can follow A,B,C"
+    }), "\n", _jsx(_components.p, {
+      children: "A,B,C can be User's follower"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/9e2b3c93-42c2-4c84-bdf5-96e35af48513/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/43e85288-015d-44cd-b16c-61e9b9021f04/image.png",
+        alt: ""
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: ["N:M 관계로 파생된 Follow 모델(테이블)에는 ", _jsx(_components.code, {
+        children: "db.sequelize.models.Follow"
+      }), "와 같은 방식으로 접근할 수 있다."]
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsx(_components.li, {
+        children: "user.getPosts(), user.addPosts()"
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/3073d248-b326-4b51-8e6a-a9052bcd86c5/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/0c558f70-92df-4bca-84d5-b9c10c7e77e2/image.png",
+        alt: ""
+      })
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "post.getHashtags(), post.addHashtags()"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "hashtags.getPosts(), hashtags.addPosts()"
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h1, {
+      children: "Passport를 이용한 로그인 구현"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://www.passportjs.org/",
+        children: "Passport.js"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "패스포트는 인증(Authentication)과 인가(Authorization)를 쉽게 해주는 Node.js 미들웨어다. 패스포트는 요청(req)을 인증(Authenticate)하기 위한 목적으로 설계되었다. 패스포트는 인증 과정을 깔끔하게 캡슐화하여 디테일한 부분은 위임하고, 개발이 편리해지게끔 돕는다."
+    }), "\n", _jsx(_components.p, {
+      children: "패스포트는 아래와 같은 간단한 명령문을 통해 인증 과정에서의 복잡성을 줄였다."
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "app.post('/login/password', passport.authenticate('local'));"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "위 명령문 뒤에 숨어있는 핵심 콘셉트는 다음과 같다."
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "middleware"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "startegies"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "sessions"
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "passport.authenticate()"
+      }), "는 request를 authenticate하기 위한 middleware다. strategy에 의해 인증이 성공했을 경우 ", _jsx(_components.code, {
+        children: "req.user"
+      }), " 속성에 인증된 유저 정보가 세팅되고, session이 생성된다."]
+    }), "\n", _jsxs(_components.p, {
+      children: ["인증 메커니즘은 strategy에 의해 구현된다. ", _jsx(_components.code, {
+        children: "passport-local"
+      }), "이라는 대표적인 strategy는 username과 password로 사용자를 인증하지만, 다른 strategy에서는 username과 password 외의 것으로 인증 메커니즘을 구현할 수가 있는 것이다."]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/c44f56e6-ce32-4602-b00c-85ac10b6089a/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.h2, {
+      children: "strategy 설치 및 configure"
+    }), "\n", _jsx(_components.p, {
+      children: "패스포트 strategy는 npm을 통해 설치할 수 있다."
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "npm i passport passport-local passport-kakao bcrypt"
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: ["패스포트 strategy를 설치했으면 configuration 과정을 밟아야 한다. ", _jsx(_components.code, {
+        children: "localStrategy"
+      }), " 생성자는 함수를 인자로 전달받는데 이를 ", _jsx(_components.code, {
+        children: "verify function"
+      }), "이라고 부른다. verify function은 db query를 통해 유저 자격을 검증하고, callback 함수 done(user)을 호출한다. 검증된 user 정보를 done() 콜백 함수에 전달해서 이후 ", _jsx(_components.code, {
+        children: "req.login(user)"
+      }), " 명령이 가능하게 한다."]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/9dcb7901-f1c8-4452-b5a6-0a4a988691e8/image.png",
+        alt: ""
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: ["strategy를 configure했으면, ", _jsx(_components.code, {
+        children: ".use"
+      }), "를 통해 register해야 한다."]
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-js",
+        children: "// app.js\nconst passportConfig = require('./passport');\n\npassportConfig();\n\napp.use(passport.initialize());\napp.use(passport.session());\n"
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: ["register가 완료되면, ", _jsx(_components.code, {
+        children: "passport.authenticate(strategy 이름)"
+      }), "과 같이 authenticate() 미들웨어의 첫 번째 인수로 strategy를 전달하여 사용할 수 있다."]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/9ec4f7ff-187f-4c0c-ad0f-a00015969f43/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/55510dc2-0545-4d8c-953a-6756391a5d6a/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.h2, {
+      children: "로그인 과정 개요"
+    }), "\n", _jsxs(_components.ol, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["HTML ", _jsx(_components.code, {
+            children: "<form>"
+          }), "에서 ", _jsx(_components.code, {
+            children: "POST/ auth/login"
+          }), "로그인 요청 (views/layout.html)"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["라우터에서 ", _jsx(_components.code, {
+            children: "passport.authenticate(local, callback)"
+          }), " 메서드 호출. local Startegy를 수행한 후 성공 or 실패시 callback을 실행한다. (routes/page.js)"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["local Strategy에서는 사용자가 HTML form에 입력한 정보가 유효한 정보인지 DB와 대조해보고 대조에 성공하면 해당 회원정보(exUser)를 ", _jsx(_components.code, {
+            children: "done()"
+          }), " 콜백함수의 인자(user)로 전달해서 authenticate의 두 번째 인자인 callback을 실행한다. (passport/localStrategy.js -> routes/page.js)"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["callback에서는 ", _jsx(_components.code, {
+            children: "req.login(user)"
+          }), "를 수행한다. login 메서드는 passport가 req에 추가한 것. ", _jsx(_components.code, {
+            children: "req.login()"
+          }), "은 ", _jsx(_components.code, {
+            children: "passport.serializeUser(user)"
+          }), "를 호출한다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "passport.serializeUser()"
+          }), "에서는 전달받은 user를 ", _jsx(_components.code, {
+            children: "req.session"
+          }), "에 추가한다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "로그인 완료"
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/cd9559a2-0593-418f-a85f-77dc9f0883ba/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.h2, {
+      children: "로그인 이후의 과정"
+    }), "\n", _jsxs(_components.ol, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "요청이 들어온다"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["라우터에 요청이 도달하기 전에 ", _jsx(_components.code, {
+            children: "passport.session"
+          }), " 미들웨어가 ", _jsx(_components.code, {
+            children: "passport.deserializerUser()"
+          }), " 메서드를 호출한다"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "req.session"
+          }), "에 저장된 아이디로 db에서 사용자를 조회한다"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["조회된 사용자 정보를 ", _jsx(_components.code, {
+            children: "req.user"
+          }), "에 저장한다"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["라우터에서 ", _jsx(_components.code, {
+            children: "req.user"
+          }), " 객체 사용이 가능해진다."]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "local login"
+    }), "\n", _jsx(_components.p, {
+      children: "로컬 로그인이란 다른 SNS 서비스를 통해 로그인하지 않고 자체적으로 회원가입 후 로그인하는 방식."
+    }), "\n", _jsx(_components.h4, {
+      children: "로그인/로그아웃 상태에 따른 접근 권한 부여"
+    }), "\n", _jsxs(_components.p, {
+      children: ["Passport는 req 객체에 ", _jsx(_components.code, {
+        children: "req.isAuthenticated()"
+      }), "라는 메서드를 부여한다. 로그인 중이면 ", _jsx(_components.code, {
+        children: "req.isAuthenticated()"
+      }), "의 값이 true이고, 로그아웃 중이면 false다. 따라서 이 메서드로 로그인 여부를 파악할 수 있다."]
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "로그아웃 라우터, 이미지 업로드 라우터 -> 로그인한 사람만 접근 가능"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "회원가입 라우터, 로그인 라우터 -> 로그인하지 않은 사람만 접근 가능"
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "isLoggedIn, isNotLoggedIn"
+      }), " 미들웨어를 만들어서 page, auth 등의 라우터에 적용하자. 이를테면, ", _jsx(_components.code, {
+        children: "router.post()"
+      }), " 미들웨어를 통해 ", _jsx(_components.code, {
+        children: "POST /login"
+      }), " 같은 HTTP 요청을 보낼 때 ", _jsx(_components.code, {
+        children: "router.post(path, isNotLoggedIn)"
+      }), "와 같이 사용하여 로그인하지 않은 유저만 POST login 요청을 보낼 수 있도록 만들자."]
+    }), "\n", _jsx(_components.h2, {
+      children: "kakao login"
+    }), "\n", _jsx(_components.p, {
+      children: "SNS 로그인은 첫 로그인한 경우에 한해 회원가입 처리를 하고, 두 번째 로그인부터는 로그인 처리를 해야 한다."
+    })]
+  });
+}
+export default function MDXContent(props = {}) {
+  const {wrapper: MDXLayout} = props.components || ({});
+  return MDXLayout ? _jsx(MDXLayout, {
+    ...props,
+    children: _jsx(_createMdxContent, {
+      ...props
+    })
+  }) : _createMdxContent(props);
+}

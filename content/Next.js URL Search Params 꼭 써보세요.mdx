@@ -6,250 +6,256 @@ slug: url-search-params
 title: Next.js URL Search Params 꼭 써보세요
 date: '2024-12-22'
 ---
-Next.js App router 관련 문서를 읽다 보면 `URL Search Param` 관련된 자료를 심심치 않게 찾아볼 수 있다. 공식 문서에서 제공하는 [Learn](https://nextjs.org/learn/dashboard-app/adding-search-and-pagination#why-use-url-search-params), [playground](https://app-router.vercel.app/patterns/search-params) 페이지에는 URL Search Param 관련 섹션이 따로 있을 정도이고, 이외 Docs 에서도 짧막하게 언급되고 예시로 보여지고 링크가 걸려있는 경우를 여럿 봤다. 정리하자면, URL Search Params는 App rotuer에서 적극적으로 권장되는 패턴인 것이다.
-
-부푼 기대감을 떠안고 URL Search Params 패턴을 프로젝트 초기 단계부터 적극 도입했다. 이제는 마무리 된 프로젝트를 돌이켜보면, 과정도 결과도 만족스럽다. 그래서 관련 내용을 정리하고자 한다.
-
-# 어떤 장점이 있을까?
-
-## 1. 서버 렌더링과의 자연스러운 융화
-
-App router의 Page는 기본적으로 서버에서 렌더링 된다. URL은 서버에서도 접근할 수 있는 자원이기 때문에 서버 사이드 렌더링에 자연스럽게 융화된다. 이 덕분에 서버 렌더링에서부터 올바른 상태값으로 페이지를 그려서 page initial load 까지  깔끔하게 이어질 수 있다.
-
-## 2. 상태관리 측면에서의 편리성
-
-### Props Drilling 해소
-
-page는 일종의 root여서 하위 컴포넌트에 상태를 뿌려줘야 하는 경우가 많다. 만약 대상 컴포넌트가 여러 컴포넌트로 중첩되어 있다면 Props Drilling 문제를 해소하기 위해서 Context API를 활용하는게 일반적이다. 그런데 URL은 모든 하위 클라이언트 컴포넌트에서 hook을 통해 직접 접근할 수 있는 자원이므로 Context 정의 없이 간편하게 해결할 수 있는 부분들이 편리하게 다가왔다.
-
-### 컴포넌트와 상태 연동시 URL을 단일 진실 공급원으로 활용
-
-후술할 pagination 컴포넌트 참고..
-
-## 3. 새로고침, 앞/뒤로가기 동작에도 보존되는 상태
-
-### bookmarkable
-
-페이지의 현재 상태가 캡쳐되어서 브라우저의 뒤로가기/앞으로가기 동작에도 각 페이지의 상태(스냅샷)가 유지되도록 하려면 브라우저의 history를 제어해야 한다. 이 때 보존하고 싶은 상태를 URL에 저장하고, 브라우저 history를 제어하도록 확장된 Next.js의 useRouter hook을 사용하면 손쉽게 구현 가능하다. 더욱이 bookmarkable 기능은 필요에 따라 언제든 on/off할 수 있다. (`router.push` or `router.replace`)
-
-ex) 사용자가 검색 필드를 이용해 검색한 내역들을 history에 쌓아두면 '뒤로가기'시에 바로 이전에 검색한 내역이 보여진다.
-### persist
-
-브라우저의 새로고침시에도 현재 페이지의 상태가 유지되도록 하는 기능이 필요할 때, 해당 상태를 URL에서 관리하면 손쉽게 구현할 수 있다.
-
-## 4. URL을 이용한 공유(Sharable)
-
-3번에서 파생되는 장점이다. bookmarkable & persist한 속성 덕분에, 내가 보고 있는 화면의 복잡한 상태 그대로 다른 사용자에게 공유할 수 있다.
-
-심지어 Modal도 URL로 관리하면 모달이 팝업된 상태 그대로 공유할 수 있다. [링크](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes#modals)
-
-## 5. 분석(Analytics) 및 추적(Tracking) 용이성
-
-URL에 사용자 행동의 의도같은 것이 드러나는 까닭에 별도의 추가 코딩 없이 사용자 데이터를 획득할 수 있다.
-
-# 적용 방법 및 예시
-
-기본적으로 Next.js에서 제공하는 `useSearchParams`, `usePathname`, `useRouter` 세 가지 훅을 활용하여 기능을 완성한다.
-
-1. `useSearchParams` 훅은 현재 URL의 query string을 읽기 전용 객체로 반환해준다. 이 때 객체는 web API의 URLSearchParams 인터페이스를 준수하는 형태다. 
-2. `usePathname` 훅은 현재 URL의 pathname을 문자열로 반환해준다.
-3. 마지막으로 `useRouter` 훅은 위 두 가지 훅으로 만들어낸 url로 업데이트하는 역할을 담당한다.
-
-##  Search & Pagination 예시
-
-``` tsx
-// page.tsx 
-  
-const getSearchParams = (params: MediaSearchParams) => {  
-  return {  
-    page: params.page ?? 1,  
-    limit: params.limit ?? 15,  
-    name: params.name ?? '',  
-  };};  
-  
-async function MediaPage({  
-  searchParams = {},  
-}: {  
-  searchParams?: MediaSearchParams;  
-}) {  
-  const params = getSearchParams(searchParams);  
-  return (  
-    <section>  
-        <div>  
-          <MediaController />  
-          <Suspense fallback={<MediaListSkeleton />}>  
-            <MediaListWithPagination params={params} />  
-          </Suspense>  
-        </div>  
-      </section>  
-    );
-}  
-  
-export default MediaPage;
-```
-
-``` tsx
-'use client';
-import {useSearchParams, usePathanme, useRouter} from 'next/navigation';
-
-export default function MediaController(){
-	const searchParams = useSearchParams();
-	const pathname = usePathname();
-	const {push} = useRouter();
-
-	const handleSearch = (term : string) => {
-		const params = new URLSearchParams(searchParams);
-		if(term) {
-			params.set('query', term);
-		} else {
-			params.delete('query');
-		}
-		push(`${pathname}?${params.toString()}`);
-	}
-
-	return (
-		...
-		<SearchInput
-			onChange={(e) => handleSearch(e.targer.value)}
-			defaultValue={searchParams.get('query')?.toString()}
-		/>
-	)
+import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
+function _createMdxContent(props) {
+  const _components = {
+    a: "a",
+    blockquote: "blockquote",
+    code: "code",
+    h1: "h1",
+    h2: "h2",
+    h3: "h3",
+    img: "img",
+    li: "li",
+    ol: "ol",
+    p: "p",
+    pre: "pre",
+    ...props.components
+  };
+  return _jsxs(_Fragment, {
+    children: [_jsxs(_components.p, {
+      children: ["Next.js App router 관련 문서를 읽다 보면 ", _jsx(_components.code, {
+        children: "URL Search Param"
+      }), " 관련된 자료를 심심치 않게 찾아볼 수 있다. 공식 문서에서 제공하는 ", _jsx(_components.a, {
+        href: "https://nextjs.org/learn/dashboard-app/adding-search-and-pagination#why-use-url-search-params",
+        children: "Learn"
+      }), ", ", _jsx(_components.a, {
+        href: "https://app-router.vercel.app/patterns/search-params",
+        children: "playground"
+      }), " 페이지에는 URL Search Param 관련 섹션이 따로 있을 정도이고, 이외 Docs 에서도 짧막하게 언급되고 예시로 보여지고 링크가 걸려있는 경우를 여럿 봤다. 정리하자면, URL Search Params는 App rotuer에서 적극적으로 권장되는 패턴인 것이다."]
+    }), "\n", _jsx(_components.p, {
+      children: "부푼 기대감을 떠안고 URL Search Params 패턴을 프로젝트 초기 단계부터 적극 도입했다. 이제는 마무리 된 프로젝트를 돌이켜보면, 과정도 결과도 만족스럽다. 그래서 관련 내용을 정리하고자 한다."
+    }), "\n", _jsx(_components.h1, {
+      children: "어떤 장점이 있을까?"
+    }), "\n", _jsx(_components.h2, {
+      children: "1. 서버 렌더링과의 자연스러운 융화"
+    }), "\n", _jsx(_components.p, {
+      children: "App router의 Page는 기본적으로 서버에서 렌더링 된다. URL은 서버에서도 접근할 수 있는 자원이기 때문에 서버 사이드 렌더링에 자연스럽게 융화된다. 이 덕분에 서버 렌더링에서부터 올바른 상태값으로 페이지를 그려서 page initial load 까지  깔끔하게 이어질 수 있다."
+    }), "\n", _jsx(_components.h2, {
+      children: "2. 상태관리 측면에서의 편리성"
+    }), "\n", _jsx(_components.h3, {
+      children: "Props Drilling 해소"
+    }), "\n", _jsx(_components.p, {
+      children: "page는 일종의 root여서 하위 컴포넌트에 상태를 뿌려줘야 하는 경우가 많다. 만약 대상 컴포넌트가 여러 컴포넌트로 중첩되어 있다면 Props Drilling 문제를 해소하기 위해서 Context API를 활용하는게 일반적이다. 그런데 URL은 모든 하위 클라이언트 컴포넌트에서 hook을 통해 직접 접근할 수 있는 자원이므로 Context 정의 없이 간편하게 해결할 수 있는 부분들이 편리하게 다가왔다."
+    }), "\n", _jsx(_components.h3, {
+      children: "컴포넌트와 상태 연동시 URL을 단일 진실 공급원으로 활용"
+    }), "\n", _jsx(_components.p, {
+      children: "후술할 pagination 컴포넌트 참고.."
+    }), "\n", _jsx(_components.h2, {
+      children: "3. 새로고침, 앞/뒤로가기 동작에도 보존되는 상태"
+    }), "\n", _jsx(_components.h3, {
+      children: "bookmarkable"
+    }), "\n", _jsxs(_components.p, {
+      children: ["페이지의 현재 상태가 캡쳐되어서 브라우저의 뒤로가기/앞으로가기 동작에도 각 페이지의 상태(스냅샷)가 유지되도록 하려면 브라우저의 history를 제어해야 한다. 이 때 보존하고 싶은 상태를 URL에 저장하고, 브라우저 history를 제어하도록 확장된 Next.js의 useRouter hook을 사용하면 손쉽게 구현 가능하다. 더욱이 bookmarkable 기능은 필요에 따라 언제든 on/off할 수 있다. (", _jsx(_components.code, {
+        children: "router.push"
+      }), " or ", _jsx(_components.code, {
+        children: "router.replace"
+      }), ")"]
+    }), "\n", _jsx(_components.p, {
+      children: "ex) 사용자가 검색 필드를 이용해 검색한 내역들을 history에 쌓아두면 '뒤로가기'시에 바로 이전에 검색한 내역이 보여진다."
+    }), "\n", _jsx(_components.h3, {
+      children: "persist"
+    }), "\n", _jsx(_components.p, {
+      children: "브라우저의 새로고침시에도 현재 페이지의 상태가 유지되도록 하는 기능이 필요할 때, 해당 상태를 URL에서 관리하면 손쉽게 구현할 수 있다."
+    }), "\n", _jsx(_components.h2, {
+      children: "4. URL을 이용한 공유(Sharable)"
+    }), "\n", _jsx(_components.p, {
+      children: "3번에서 파생되는 장점이다. bookmarkable & persist한 속성 덕분에, 내가 보고 있는 화면의 복잡한 상태 그대로 다른 사용자에게 공유할 수 있다."
+    }), "\n", _jsxs(_components.p, {
+      children: ["심지어 Modal도 URL로 관리하면 모달이 팝업된 상태 그대로 공유할 수 있다. ", _jsx(_components.a, {
+        href: "https://nextjs.org/docs/app/building-your-application/routing/parallel-routes#modals",
+        children: "링크"
+      })]
+    }), "\n", _jsx(_components.h2, {
+      children: "5. 분석(Analytics) 및 추적(Tracking) 용이성"
+    }), "\n", _jsx(_components.p, {
+      children: "URL에 사용자 행동의 의도같은 것이 드러나는 까닭에 별도의 추가 코딩 없이 사용자 데이터를 획득할 수 있다."
+    }), "\n", _jsx(_components.h1, {
+      children: "적용 방법 및 예시"
+    }), "\n", _jsxs(_components.p, {
+      children: ["기본적으로 Next.js에서 제공하는 ", _jsx(_components.code, {
+        children: "useSearchParams"
+      }), ", ", _jsx(_components.code, {
+        children: "usePathname"
+      }), ", ", _jsx(_components.code, {
+        children: "useRouter"
+      }), " 세 가지 훅을 활용하여 기능을 완성한다."]
+    }), "\n", _jsxs(_components.ol, {
+      children: ["\n", _jsxs(_components.li, {
+        children: [_jsx(_components.code, {
+          children: "useSearchParams"
+        }), " 훅은 현재 URL의 query string을 읽기 전용 객체로 반환해준다. 이 때 객체는 web API의 URLSearchParams 인터페이스를 준수하는 형태다."]
+      }), "\n", _jsxs(_components.li, {
+        children: [_jsx(_components.code, {
+          children: "usePathname"
+        }), " 훅은 현재 URL의 pathname을 문자열로 반환해준다."]
+      }), "\n", _jsxs(_components.li, {
+        children: ["마지막으로 ", _jsx(_components.code, {
+          children: "useRouter"
+        }), " 훅은 위 두 가지 훅으로 만들어낸 url로 업데이트하는 역할을 담당한다."]
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "Search & Pagination 예시"
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-tsx",
+        children: "// page.tsx \n  \nconst getSearchParams = (params: MediaSearchParams) => {  \n  return {  \n    page: params.page ?? 1,  \n    limit: params.limit ?? 15,  \n    name: params.name ?? '',  \n  };};  \n  \nasync function MediaPage({  \n  searchParams = {},  \n}: {  \n  searchParams?: MediaSearchParams;  \n}) {  \n  const params = getSearchParams(searchParams);  \n  return (  \n    <section>  \n        <div>  \n          <MediaController />  \n          <Suspense fallback={<MediaListSkeleton />}>  \n            <MediaListWithPagination params={params} />  \n          </Suspense>  \n        </div>  \n      </section>  \n    );\n}  \n  \nexport default MediaPage;\n"
+      })
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-tsx",
+        children: "'use client';\nimport {useSearchParams, usePathanme, useRouter} from 'next/navigation';\n\nexport default function MediaController(){\n\tconst searchParams = useSearchParams();\n\tconst pathname = usePathname();\n\tconst {\bpush} = useRouter();\n\n\tconst handleSearch = (term : string) => {\n\t\tconst params = new URLSearchParams(searchParams);\n\t\tif(term) {\n\t\t\tparams.set('query', term);\n\t\t} else {\n\t\t\tparams.delete('query');\n\t\t}\n\t\tpush(`${pathname}?${params.toString()}`);\n\t}\n\n\treturn (\n\t\t...\n\t\t<SearchInput\n\t\t\tonChange={(e) => handleSearch(e.targer.value)}\n\t\t\tdefaultValue={searchParams.get('query')?.toString()}\n\t\t/>\n\t)\n}\n"
+      })
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-tsx",
+        children: "interface Props {  \n  params: MediaSearchParams;  \n}  \n  \nasync function MediaListWithPagination({  \n  params: { limit, page, name },  \n}: Props) {  \n\tconst data = await mediaAPI.List({ limit, page, name });  \n\tif (data.items.length === 0) {  \n\t    return (  \n\t      <NoContent  \n\t        title=\"아직 생성된 매체가 없습니다\"  \n\t        subTitle=\"매체등록을 통해 신규 매체를 생성해보세요.\"  \n\t      />  \n\t    );  \n\t}\n\tconst totalPages = Math.ceil(data.total / data.limit);\n  \n  return (  \n\t    <div>  \n\t      <MediaList data={data} />  \n\t      <Pagination \n\t\t      totalPages={totalPages} \n\t\t      currentPage={page ?? 1} \n\t\t\t/>  \n\t    </div>  \n\t  );\n\t}  \n  \nexport default MediaListWithPagination;\n"
+      })
+    }), "\n", _jsx(_components.h3, {
+      children: "Search"
+    }), "\n", _jsxs(_components.p, {
+      children: ["먼저 검색어를 URL로 관리한 부분을 살펴보자. 사용자가 Input에 입력하면 ", _jsx(_components.code, {
+        children: "<MeidaController>"
+      }), " client component에서 입력을 받아 URL을 업데이트한다. ", _jsx(_components.code, {
+        children: "useRouter"
+      }), " 훅의 ", _jsx(_components.code, {
+        children: "push"
+      }), " , ", _jsx(_components.code, {
+        children: "replace"
+      }), " 메서드는 페이지 리로딩을 유발하기 때문에 ", _jsx(_components.code, {
+        children: "<MediaListWithPagination>"
+      }), " Server Component에서 업데이트된 URL 내역으로 데이터를 다시 불러오고 사용자가 검색한 내역을 List로 그려주게 된다."]
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsx(_components.p, {
+        children: "[!info] 구현 디테일"
+      }), "\n", _jsxs(_components.ol, {
+        children: ["\n", _jsx(_components.li, {
+          children: "event handler에 debounce를 부착하자"
+        }), "\n", _jsx(_components.li, {
+          children: "useURLState hook을 만들어서 getURLState, setURLState 함수로 반복되는 로직을 추상화하자."
+        }), "\n", _jsxs(_components.li, {
+          children: ["URLSearchParam 값이 Client Component/Server Component에 전달되는 방식에 유의할 것. Client Component에서는 가급적 useSearchParams 훅을 통해 가져오는 방식이 비용절감 측면에서 권장된다고 함. ", _jsx(_components.a, {
+            href: "https://nextjs.org/learn/dashboard-app/adding-search-and-pagination#4-updating-the-table",
+            children: "참고"
+          })]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h3, {
+      children: "Pagination"
+    }), "\n", _jsxs(_components.p, {
+      children: ["다음으로 현재 페이지를 URL로 관리한 부분이다. 사용자가 ", _jsx(_components.code, {
+        children: "<Pagination>"
+      }), " 컴포넌트 내부의 Page button을 클릭하면 URL이 업데이트 된다. page.tsx에서 prop으로 받아온 page값으로 데이터를 다시 불러와 화면에 그려주고,", _jsx(_components.code, {
+        children: "<Pagination>"
+      }), " 컴포넌트에 전달하여 활성화된 페이지 번호를 바꿔주면 끝날 정도로 간단하다."]
+    }), "\n", _jsxs(_components.p, {
+      children: ["개인적으로 URLSearchParams를 사용하면서 만족스러웠던 부분이다. 기존에는 페이지네이션 컴포넌트를 외부에서 제어할 수 있게 현재 페이지를 가리키는 useState 같은 상태 정의가 필수적이었는데 그 과정을 생략할수가 있게 되었다. 단순히 코드 몇 줄 제거해서 얻게 된 만족감이 아니다. 상태를 URL이라는 단일 진실 공급원까지 끌어 올려서 얻게되는 구조적 깔끔함이 컸다. 이에 대한 자세한 내용은 ", _jsx(_components.a, {
+        href: "https://buildui.com/posts/how-to-control-a-react-component-with-the-url#introduction",
+        children: "잘 정리된 글"
+      }), "을 참고하자."]
+    }), "\n", _jsx(_components.p, {
+      children: "아래는 참고를 위한 Pagination의 pseudo 코드다. Radix에서 제공하는 RadioGroup을 확장해서 만들었다."
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-tsx",
+        children: "'use client';  \n  \nfunction Pagination({ totalPages, currentPage, className }: Props) {  \n  const {  \n    getPaginationGroup,  \n    handleNextGroup,  \n    handlePrevGroup,  \n    handleValueChange,  \n    isPrevExist,  \n    isNextExist,  \n    curPage,  \n  } = usePagination({ totalPages, currentPageFormProps: currentPage });  \n  const paginationGroup = getPaginationGroup();  \n  \n  return (  \n    <div>  \n      <PaginationButton  \n        arrowDirection=\"left\"  \n        onClick={handlePrevGroup}  \n        disabled={!isPrevExist}  \n      />      \n      <RadioGroupCore.Root  \n        defaultValue={String(curPage)}   \n        value={String(curPage)}  \n        onValueChange={handleValueChange}  \n      >        {paginationGroup.map((page, idx) => (  \n          <RadioGroupCore.Item  \n            value={String(page)}  \n            id={String(page)}  \n            key={idx}  \n            disabled={page === 0}  \n          >            <PaginationItem page={page} isEllipsis={page === 0} />  \n          </RadioGroupCore.Item>  \n        ))}      </RadioGroupCore.Root>  \n      <PaginationButton  \n        arrowDirection=\"right\"  \n        onClick={handleNextGroup}  \n        disabled={!isNextExist}  \n      />\n    </div>  \n  );}  \n  \nexport default Pagination;\n"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/1e723817-cdcc-407f-6b62-208c22721400/post",
+        alt: "Obsidian image"
+      })
+    }), "\n", _jsx(_components.h1, {
+      children: "주의사항 (꿀팁)"
+    }), "\n", _jsx(_components.h2, {
+      children: "useTransition/useOptimistic hook의 적극적인 활용이 필요합니다"
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "useRouter"
+      }), "를 이용한 라우팅은 서버 중심적이다. 따라서 서버에서 업데이트한 내역을 Client에 RSC payload 형태로 전달해주기 까지 round tirp이 발생한다. 이 때의 부자연스러운 UI/UX를 해소해주는 hook이 바로 ", _jsx(_components.code, {
+        children: "useTransition"
+      }), ", ", _jsx(_components.code, {
+        children: "useOptimistic"
+      }), "이다."]
+    }), "\n", _jsx(_components.p, {
+      children: "내가 겪은 문제는 두 가지 였는데, 위 훅을 사용하여 해결할 수 있었다."
+    }), "\n", _jsx(_components.h3, {
+      children: "1. 클릭한 내역이 곧바로 UI에 반영되지 않는 문제"
+    }), "\n", _jsxs(_components.ol, {
+      children: ["\n", _jsx(_components.li, {
+        children: "페이지네이션에서 1번 -> 2번 페이지 이동에 딜레이가 있는 것"
+      }), "\n", _jsx(_components.li, {
+        children: "사이드바 열림/접힘 모드에 딜레이가 있는 것"
+      }), "\n", _jsx(_components.li, {
+        children: "사이드바 내부의 아코디언 열림/닫힘에 딜레이가 있는 것"
+      }), "\n"]
+    }), "\n", _jsx(_components.h3, {
+      children: "2. URL 업데이트로 인한 data re-fetching시에 Suspense로 fallback되지 않는 문제"
+    }), "\n", _jsxs(_components.p, {
+      children: ["사용자가 검색어를 입력해서 데이터를 불러오는 동안에 아무런 loading indicator가 없었다. 이로인해 1~2초씩 검색이 지연되는 경우에는 '검색이 되고 있는건가?' 생각이 들 정도의 불편한 상황이 연출되었다. 이를 해결하기 위해서 처음에는 ", _jsx(_components.code, {
+        children: "<Suspense>"
+      }), "로 감싸고 스켈레톤을 보여주려 했다."]
+    }), "\n", _jsxs(_components.p, {
+      children: ["그런데 아무리 애써도 ", _jsx(_components.code, {
+        children: "<Suspense>"
+      }), "로 fallback 되지가 않았다. 이유를 살펴보니 다음과 같았다."]
+    }), "\n", _jsxs(_components.ol, {
+      children: ["\n", _jsx(_components.li, {
+        children: "React에서 라우팅은 transition으로 처리하기를 권장하고 있고, Next.js Router도 이를 따르고 있다."
+      }), "\n", _jsxs(_components.li, {
+        children: ["transition은 ", _jsx(_components.code, {
+          children: "<Suspense>"
+        }), "에 fallback 되지 않도록 설계되었다.  ", _jsx(_components.a, {
+          href: "https://ko.react.dev/reference/react/Suspense#preventing-already-revealed-content-from-hiding",
+          children: "링크"
+        })]
+      }), "\n", _jsxs(_components.li, {
+        children: ["URL 업데이트 과정에서 발생하는 data re-fetching 또한 transition으로 간주되어서 ", _jsx(_components.code, {
+          children: "<Suspense>"
+        }), "에 fallback 되지 않았던 것이다."]
+      }), "\n"]
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsx(_components.p, {
+        children: "[!info] stale data is better than nothing(fallback)\n이러한 설계는 stale data is better than nothing(fallback) 이라는 원칙에서 비롯된 것으로 보여진다. (이름은 내가 붙였다) tanstackQuery에서 keepPreviousData라는 옵션을 제공하는 이유도 이와 같다."
+      }), "\n", _jsx(_components.p, {
+        children: "그래서 이상적인 UI/UX를 구현하기 위해서는,"
+      }), "\n", _jsx(_components.p, {
+        children: "첫 번째 페이지 로딩시에는 Next.js loading.tsx 혹은 Suspense를 활용해서 스켈레톤을 보여주면 된다. 이 때는 아무것도 보여줄 게 없기 때문이다."
+      }), "\n", _jsx(_components.p, {
+        children: "이후 발생하는 data re-fetching 부터는 아무것도 없는 상태로 fallback 시키지 않고 오래된 데이터라도 보여주는게 낫다. 오래된 데이터를 보여주면서도 적당한 loading indicator를 보여줄 방법은 많다. 데이터 출력부에 opacity/blur 처리를 할 수 있고, action을 trigger한 부분에 동적인 아이콘을  그려줄 수도 있을 것이다."
+      }), "\n"]
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "useTransition"
+      }), ", ", _jsx(_components.code, {
+        children: "useOptimistic"
+      }), "을 활용하여 위 문제들을 해결하는 자세한 방법은 ", _jsx(_components.a, {
+        href: "https://buildui.com/posts/instant-search-params-with-react-server-components",
+        children: "링크"
+      }), "를 참고하기 바란다!"]
+    }), "\n", _jsx(_components.h2, {
+      children: "history에 좀 더 신경을 써야 합니다"
+    }), "\n", _jsx(_components.p, {
+      children: "페이지 이동간에 불필요한 URL Query는 제거하고, 꼭 필요한 query만 보존될 수 있도록 관리가 필요하다. 이를테면 A 페이지의 검색내역, 페이지네이션 번호는 다른 페이지에서 필요하지 않다. 하지만 모든 페이지에 존재하는 Sidebar의 열림/접힘 모드는 필요할 것이다."
+    })]
+  });
 }
-```
-
-``` tsx  
-interface Props {  
-  params: MediaSearchParams;  
-}  
-  
-async function MediaListWithPagination({  
-  params: { limit, page, name },  
-}: Props) {  
-	const data = await mediaAPI.List({ limit, page, name });  
-	if (data.items.length === 0) {  
-	    return (  
-	      <NoContent  
-	        title="아직 생성된 매체가 없습니다"  
-	        subTitle="매체등록을 통해 신규 매체를 생성해보세요."  
-	      />  
-	    );  
-	}
-	const totalPages = Math.ceil(data.total / data.limit);
-  
-  return (  
-	    <div>  
-	      <MediaList data={data} />  
-	      <Pagination 
-		      totalPages={totalPages} 
-		      currentPage={page ?? 1} 
-			/>  
-	    </div>  
-	  );
-	}  
-  
-export default MediaListWithPagination;
-```
-
-### Search
-
-먼저 검색어를 URL로 관리한 부분을 살펴보자. 사용자가 Input에 입력하면 `<MeidaController>` client component에서 입력을 받아 URL을 업데이트한다. `useRouter` 훅의 `push` , `replace` 메서드는 페이지 리로딩을 유발하기 때문에 `<MediaListWithPagination>` Server Component에서 업데이트된 URL 내역으로 데이터를 다시 불러오고 사용자가 검색한 내역을 List로 그려주게 된다.
-
-> [!info] 구현 디테일
-> 1. event handler에 debounce를 부착하자
-> 2. useURLState hook을 만들어서 getURLState, setURLState 함수로 반복되는 로직을 추상화하자.
-> 3. URLSearchParam 값이 Client Component/Server Component에 전달되는 방식에 유의할 것. Client Component에서는 가급적 useSearchParams 훅을 통해 가져오는 방식이 비용절감 측면에서 권장된다고 함. [참고](https://nextjs.org/learn/dashboard-app/adding-search-and-pagination#4-updating-the-table)
-
-### Pagination
-
-다음으로 현재 페이지를 URL로 관리한 부분이다. 사용자가 `<Pagination>` 컴포넌트 내부의 Page button을 클릭하면 URL이 업데이트 된다. page.tsx에서 prop으로 받아온 page값으로 데이터를 다시 불러와 화면에 그려주고,`<Pagination>` 컴포넌트에 전달하여 활성화된 페이지 번호를 바꿔주면 끝날 정도로 간단하다. 
-
-개인적으로 URLSearchParams를 사용하면서 만족스러웠던 부분이다. 기존에는 페이지네이션 컴포넌트를 외부에서 제어할 수 있게 현재 페이지를 가리키는 useState 같은 상태 정의가 필수적이었는데 그 과정을 생략할수가 있게 되었다. 단순히 코드 몇 줄 제거해서 얻게 된 만족감이 아니다. 상태를 URL이라는 단일 진실 공급원까지 끌어 올려서 얻게되는 구조적 깔끔함이 컸다. 이에 대한 자세한 내용은 [잘 정리된 글](https://buildui.com/posts/how-to-control-a-react-component-with-the-url#introduction)을 참고하자.
-
-아래는 참고를 위한 Pagination의 pseudo 코드다. Radix에서 제공하는 RadioGroup을 확장해서 만들었다.
-
-``` tsx
-'use client';  
-  
-function Pagination({ totalPages, currentPage, className }: Props) {  
-  const {  
-    getPaginationGroup,  
-    handleNextGroup,  
-    handlePrevGroup,  
-    handleValueChange,  
-    isPrevExist,  
-    isNextExist,  
-    curPage,  
-  } = usePagination({ totalPages, currentPageFormProps: currentPage });  
-  const paginationGroup = getPaginationGroup();  
-  
-  return (  
-    <div>  
-      <PaginationButton  
-        arrowDirection="left"  
-        onClick={handlePrevGroup}  
-        disabled={!isPrevExist}  
-      />      
-      <RadioGroupCore.Root  
-        defaultValue={String(curPage)}   
-        value={String(curPage)}  
-        onValueChange={handleValueChange}  
-      >        {paginationGroup.map((page, idx) => (  
-          <RadioGroupCore.Item  
-            value={String(page)}  
-            id={String(page)}  
-            key={idx}  
-            disabled={page === 0}  
-          >            <PaginationItem page={page} isEllipsis={page === 0} />  
-          </RadioGroupCore.Item>  
-        ))}      </RadioGroupCore.Root>  
-      <PaginationButton  
-        arrowDirection="right"  
-        onClick={handleNextGroup}  
-        disabled={!isNextExist}  
-      />
-    </div>  
-  );}  
-  
-export default Pagination;
-```
-
-![Obsidian image](https://imagedelivery.net/0ls7rUWRjBE8C2UFoz_eSw/1e723817-cdcc-407f-6b62-208c22721400/post)
-
-# 주의사항 (꿀팁)
-
-## useTransition/useOptimistic hook의 적극적인 활용이 필요합니다
-
-`useRouter`를 이용한 라우팅은 서버 중심적이다. 따라서 서버에서 업데이트한 내역을 Client에 RSC payload 형태로 전달해주기 까지 round tirp이 발생한다. 이 때의 부자연스러운 UI/UX를 해소해주는 hook이 바로 `useTransition`, `useOptimistic`이다.
-
-내가 겪은 문제는 두 가지 였는데, 위 훅을 사용하여 해결할 수 있었다.
-
-### 1. 클릭한 내역이 곧바로 UI에 반영되지 않는 문제
-
-1. 페이지네이션에서 1번 -> 2번 페이지 이동에 딜레이가 있는 것
-2. 사이드바 열림/접힘 모드에 딜레이가 있는 것
-3. 사이드바 내부의 아코디언 열림/닫힘에 딜레이가 있는 것
-
-### 2. URL 업데이트로 인한 data re-fetching시에 Suspense로 fallback되지 않는 문제
-
-사용자가 검색어를 입력해서 데이터를 불러오는 동안에 아무런 loading indicator가 없었다. 이로인해 1~2초씩 검색이 지연되는 경우에는 '검색이 되고 있는건가?' 생각이 들 정도의 불편한 상황이 연출되었다. 이를 해결하기 위해서 처음에는 `<Suspense>`로 감싸고 스켈레톤을 보여주려 했다.
-
-그런데 아무리 애써도 `<Suspense>`로 fallback 되지가 않았다. 이유를 살펴보니 다음과 같았다.
-
-1. React에서 라우팅은 transition으로 처리하기를 권장하고 있고, Next.js Router도 이를 따르고 있다.
-2. transition은 `<Suspense>`에 fallback 되지 않도록 설계되었다.  [링크](https://ko.react.dev/reference/react/Suspense#preventing-already-revealed-content-from-hiding)
-3. URL 업데이트 과정에서 발생하는 data re-fetching 또한 transition으로 간주되어서 `<Suspense>`에 fallback 되지 않았던 것이다.
-
-> [!info] stale data is better than nothing(fallback)
-> 이러한 설계는 stale data is better than nothing(fallback) 이라는 원칙에서 비롯된 것으로 보여진다. (이름은 내가 붙였다) tanstackQuery에서 keepPreviousData라는 옵션을 제공하는 이유도 이와 같다.
-> 
-> 그래서 이상적인 UI/UX를 구현하기 위해서는,
-> 
-> 첫 번째 페이지 로딩시에는 Next.js loading.tsx 혹은 Suspense를 활용해서 스켈레톤을 보여주면 된다. 이 때는 아무것도 보여줄 게 없기 때문이다.
-> 
-> 이후 발생하는 data re-fetching 부터는 아무것도 없는 상태로 fallback 시키지 않고 오래된 데이터라도 보여주는게 낫다. 오래된 데이터를 보여주면서도 적당한 loading indicator를 보여줄 방법은 많다. 데이터 출력부에 opacity/blur 처리를 할 수 있고, action을 trigger한 부분에 동적인 아이콘을  그려줄 수도 있을 것이다.
-
-`useTransition`, `useOptimistic`을 활용하여 위 문제들을 해결하는 자세한 방법은 [링크](https://buildui.com/posts/instant-search-params-with-react-server-components)를 참고하기 바란다! 
-
-## history에 좀 더 신경을 써야 합니다
-
-페이지 이동간에 불필요한 URL Query는 제거하고, 꼭 필요한 query만 보존될 수 있도록 관리가 필요하다. 이를테면 A 페이지의 검색내역, 페이지네이션 번호는 다른 페이지에서 필요하지 않다. 하지만 모든 페이지에 존재하는 Sidebar의 열림/접힘 모드는 필요할 것이다.
+export default function MDXContent(props = {}) {
+  const {wrapper: MDXLayout} = props.components || ({});
+  return MDXLayout ? _jsx(MDXLayout, {
+    ...props,
+    children: _jsx(_createMdxContent, {
+      ...props
+    })
+  }) : _createMdxContent(props);
+}

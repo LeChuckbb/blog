@@ -6,163 +6,381 @@ description: null
 date: '2022-03-24'
 title: Docker
 ---
-# Docker란?
-
-Docker는 contianer라는 독립된 환경에서 애플리케이션을 패키징하고 실행할 수 있는 환경을 제공한다. container는 애플리케이션을 가동하는 데 필요한 모든 것을 다 포함하고 있다. 그럼에도 충분히 가벼워서 다른 사용자에게 이 container를 제공함으로써 똑같은 개발환경을 보장할 수 있다.
-
-# Docker architecture
-
-![](https://images.velog.io/images/lechuck/post/4f662a2a-d5bb-4c66-8832-9ac97f88afa4/image.png)
-
-* docker는 client-server 아키텍쳐를 취한다.
-
-* docker client는 REST API를 이용해 docker daemon과 통신하며 docker container를 build, run, distrbiute한다.
-
-* 사용자가 docker client에 `docker run`과 같은 명령어를 입력하면, client는 daemon에 이 명령을 요청한다.
-
-* daemon은 images, container, networks, volumes와 같은 docker objects를 관리한다.
-
-* docker registry에서 docker images를 보관한다. Docker hub는 public registry다.
-
-## file system
-
-* Docker container 내부에서 생성된 파일들은 Docker container가 삭제됨에 따라 함께 사라진다.
-
-* Docker는 container가 host machine에 파일을 저장할 수 있는 방법으로 두 가지 옵션을 제공한다. volumes와 bind mounts다.
-
-* 또한 host system의 memory에 파일을 저장하는 형식인 tmpfs도 있다. widnows에선 tmpfs가 아닌 pipe로 명칭된다
-
-* 위 세 가지 방식의 차이점을 구별하는 방법은 저장된 파일들이 docker host 어디에 위치하는가를 살펴보는 것이다.
-
-![](https://images.velog.io/images/lechuck/post/8c2c263c-17e6-4ffe-962b-e72ecf83f6f6/image.png)
-
-* volumes는 Docker linux 내 /var/lib/docker/volumes에 저장한다. 일반적인 경우 volumes 사용이 권장된다.
-
-* bind mounts는 host system 어느곳에든 저장할 수 있다.
-
-![](https://images.velog.io/images/lechuck/post/d00ad78a-4678-4f57-991f-96501e7ff002/image.png)
-
-> volumes은 추후 직접 사용해보고 정리할 것!
-
-## Dockerfile
-
-[Dockerfile reference](https://docs.docker.com/engine/reference/builder/)
-
-Dockerfile은 일종의 지침이다. Docker는 Dockerfile을 build하여 Image를 만들어낸다.
-
-* copy files
-
-* Install dependencies
-
-* Set environment variables
-
-* Run setup scripts
-
-## Image
-
-* snapshot of Application
-
-* Docker container 생성을 위한 read-only layer (수정 불가능)
-
-* 각 container의 filesystem을 포함한다?
-
-## Container
-
-* Image를 가동하는 일종의 고립된 환경(각 Container 별 파일 시스템)
-
-* 호스트 시스템의 다른 모든 프로세스와 격리된 환경.
-
-* 어떠한 OS에서든 Docker만 설치되어 있다면 가동할 수 있다.
-
-* container에 stroage를 부착하거나, 하나 이상의 네트워크를 연결하거나, 아니면 container의 현재 상태를 기반으로 새로운 image를 만들어낼 수 있다.
-
-## Network
-[Docker 네트워크 사용법](https://www.daleseo.com/docker-networks/)
-
-[Docker Compose 네트워크](https://www.daleseo.com/docker-compose-networks/)
-
-docker container는 기본적으로 다른 container와의 통신이 불가능하지만, docker network를 통해 서로를 연결함으로써 통신할 수 있다.
-
-* docker compose를 통해 여러 container들을 묶어서 사용해본 관계로 직접적인 docker network 설정 경험은 아직 없다.
-
-* docker container의 ip주소에 직접 HTTP 요청을 보냄으로써 통신이 가능한 것을 확인했다. 다만 container ip 주소가 고정 가능한것인지는 파악하지 못했다.
-
-![](https://images.velog.io/images/lechuck/post/44f8e190-2be3-44bd-9af7-6bb92cd862fb/image.png)
-<p style="text-align:center"> 이미지 출처 : 생활코딩</p>
-host port와 container port에 대해 유념할 것.
-
-# Dockerfile 작성법
-
-![](https://images.velog.io/images/lechuck/post/d41b51ae-4ca2-4520-a578-0d51fe67bbf2/image.png)
-
-# Compose specifiaction
-
-Compoer file은 도커 애플리케이션의 services, networks, volumes를 정의하는 YAML 파일이다.
-
-* `services` : container image를 실행하는 추상적인 개념. 그리고 이 services는 `Networks`를 통해 상호간 통신이 가능하다.
-
-* `Networks` : 함께 연결된 Services 내부의 container 간에 IP 경로를 설정한다.
-
-* `Volumes` : Services는 Volumes를 통해 persistent data를 보관한다.
-
-* `Configure` : 런타임 또는 플랫폼에 의존적인 configuration data를 필요로 하는 Services에서 사용된다.
-
-* `Secret` : configuration data 중에서도 보안에 민감한 데이터에 사용된다.
-
-* Project : 플랫폼에 application의 specification을 개별적으로 배포하는 것. Project는 Compose-platform? 내에 존재하는 다른 apllication을 구분짓고, 리소스를 분리한다.
-
-* compose 파일명은 `compose.yaml` 또는 `compose.yml`이 권장된다. `docker-compose.yaml`, `docker-compose.yml` 형식도 지원한다.
-
-* `depends_on` : 서비스간 종속성을 설정함. react 서비스에서 `depends_on: - nginx`와 같이 설정하였다면 react contianer는 nginx container 만들어진 후에 만들어진다. 
-
-[Compose file reference](https://docs.docker.com/compose/compose-file/)
-
-# Docker-compose network
-
-기본적으로 Docker compose는 디폴트 네트워크에 모든 container를 연결한다.
-
-`ports`는
-
-# 실습
-
-## 1. Dockerfile을 build해서 Image 만들기
-
-vs code에서 Docker extension을 설치하면 Dockerfile과 docker-compose.yml 파일 작성 시 문법적 도움(IntelliSense)을 받을 수 있다.
-
-`docker build -f Dockerfile -t theraphy-node .`
-
-* `-f` : (input) Dockerfile의 파일명을 지정. Dockerfile은 다른 이름으로 작성될 수 있기 때문
-
-* `-t` : (output) 생성할 Image name을 지정
-
-* `.`(build context) : 현재 경로에 dockerfile이 있음을 명시. build context를 지정하는 것.
-
-> build context는 이미지 생성에 필요한 파일들이 담긴 디렉토리를 의미한다.
-
-## 2. Image로 Docker Contaier 실행해보기
-
-`docker run -d -p 3001:3001 theraphy-node`
-
-* `-d` : detached mode. container가 background에서 가동되어 terminal 사용에 지장이 없게
-
-* `-p` : port 지정. host : container. 외부 PC에서 HTTP 요청을 하면 host port에 요청이 되는 것. 이를 container port에도 연결해줘야 한다.
-
-## 3. docker-compose 사용해보기
-
-![](https://images.velog.io/images/lechuck/post/b994fc4b-bc58-4080-97bf-b96b90e5d34a/image.png)
-
-각각의 image를 docker hub에 push하고, 이를 다른 환경에서 pull하여 사용할 수도 있지만 번거롭다. 프로젝트 루트 폴더에 docker-compose.yml 파일을 만들어두고, github에서 해당 프로젝트를 pull하여 `docker-compose up` 명령어로 단번에 실행시키는 방법이 편리하다.
-
-`docker network ls`
-
-`docker network inspect [network name]` 명령을 활용하면 구조를 파악하기에 좋다.
-
-# references
-
-[Docker 개념과 Architecture 정리](https://www.leafcats.com/146)
-
-[Dockerfile에서 자주 쓰이는 명령어](https://www.daleseo.com/dockerfile/)
-
-[Language-specific guides/Node.js](https://docs.docker.com/language/nodejs/develop/)
-
-[생활코딩 Docker 입문수업](https://www.youtube.com/channel/UCvc8kv-i5fvFTJBFAk6n1SA)
+import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
+function _createMdxContent(props) {
+  const _components = {
+    a: "a",
+    blockquote: "blockquote",
+    code: "code",
+    h1: "h1",
+    h2: "h2",
+    img: "img",
+    li: "li",
+    p: "p",
+    ul: "ul",
+    ...props.components
+  };
+  return _jsxs(_Fragment, {
+    children: [_jsx(_components.h1, {
+      children: "Docker란?"
+    }), "\n", _jsx(_components.p, {
+      children: "Docker는 contianer라는 독립된 환경에서 애플리케이션을 패키징하고 실행할 수 있는 환경을 제공한다. container는 애플리케이션을 가동하는 데 필요한 모든 것을 다 포함하고 있다. 그럼에도 충분히 가벼워서 다른 사용자에게 이 container를 제공함으로써 똑같은 개발환경을 보장할 수 있다."
+    }), "\n", _jsx(_components.h1, {
+      children: "Docker architecture"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/4f662a2a-d5bb-4c66-8832-9ac97f88afa4/image.png",
+        alt: ""
+      })
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "docker는 client-server 아키텍쳐를 취한다."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "docker client는 REST API를 이용해 docker daemon과 통신하며 docker container를 build, run, distrbiute한다."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["사용자가 docker client에 ", _jsx(_components.code, {
+            children: "docker run"
+          }), "과 같은 명령어를 입력하면, client는 daemon에 이 명령을 요청한다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "daemon은 images, container, networks, volumes와 같은 docker objects를 관리한다."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "docker registry에서 docker images를 보관한다. Docker hub는 public registry다."
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "file system"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "Docker container 내부에서 생성된 파일들은 Docker container가 삭제됨에 따라 함께 사라진다."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "Docker는 container가 host machine에 파일을 저장할 수 있는 방법으로 두 가지 옵션을 제공한다. volumes와 bind mounts다."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "또한 host system의 memory에 파일을 저장하는 형식인 tmpfs도 있다. widnows에선 tmpfs가 아닌 pipe로 명칭된다"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "위 세 가지 방식의 차이점을 구별하는 방법은 저장된 파일들이 docker host 어디에 위치하는가를 살펴보는 것이다."
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/8c2c263c-17e6-4ffe-962b-e72ecf83f6f6/image.png",
+        alt: ""
+      })
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "volumes는 Docker linux 내 /var/lib/docker/volumes에 저장한다. 일반적인 경우 volumes 사용이 권장된다."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "bind mounts는 host system 어느곳에든 저장할 수 있다."
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/d00ad78a-4678-4f57-991f-96501e7ff002/image.png",
+        alt: ""
+      })
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsx(_components.p, {
+        children: "volumes은 추후 직접 사용해보고 정리할 것!"
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "Dockerfile"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://docs.docker.com/engine/reference/builder/",
+        children: "Dockerfile reference"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "Dockerfile은 일종의 지침이다. Docker는 Dockerfile을 build하여 Image를 만들어낸다."
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "copy files"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "Install dependencies"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "Set environment variables"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "Run setup scripts"
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "Image"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "snapshot of Application"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "Docker container 생성을 위한 read-only layer (수정 불가능)"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "각 container의 filesystem을 포함한다?"
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "Container"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "Image를 가동하는 일종의 고립된 환경(각 Container 별 파일 시스템)"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "호스트 시스템의 다른 모든 프로세스와 격리된 환경."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "어떠한 OS에서든 Docker만 설치되어 있다면 가동할 수 있다."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "container에 stroage를 부착하거나, 하나 이상의 네트워크를 연결하거나, 아니면 container의 현재 상태를 기반으로 새로운 image를 만들어낼 수 있다."
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "Network"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://www.daleseo.com/docker-networks/",
+        children: "Docker 네트워크 사용법"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://www.daleseo.com/docker-compose-networks/",
+        children: "Docker Compose 네트워크"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "docker container는 기본적으로 다른 container와의 통신이 불가능하지만, docker network를 통해 서로를 연결함으로써 통신할 수 있다."
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "docker compose를 통해 여러 container들을 묶어서 사용해본 관계로 직접적인 docker network 설정 경험은 아직 없다."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "docker container의 ip주소에 직접 HTTP 요청을 보냄으로써 통신이 가능한 것을 확인했다. 다만 container ip 주소가 고정 가능한것인지는 파악하지 못했다."
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/44f8e190-2be3-44bd-9af7-6bb92cd862fb/image.png",
+        alt: ""
+      }), "\n", _jsx("p", {
+        style: "text-align:center",
+        children: " 이미지 출처 : 생활코딩"
+      }), "\nhost port와 container port에 대해 유념할 것."]
+    }), "\n", _jsx(_components.h1, {
+      children: "Dockerfile 작성법"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/d41b51ae-4ca2-4520-a578-0d51fe67bbf2/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.h1, {
+      children: "Compose specifiaction"
+    }), "\n", _jsx(_components.p, {
+      children: "Compoer file은 도커 애플리케이션의 services, networks, volumes를 정의하는 YAML 파일이다."
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "services"
+          }), " : container image를 실행하는 추상적인 개념. 그리고 이 services는 ", _jsx(_components.code, {
+            children: "Networks"
+          }), "를 통해 상호간 통신이 가능하다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "Networks"
+          }), " : 함께 연결된 Services 내부의 container 간에 IP 경로를 설정한다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "Volumes"
+          }), " : Services는 Volumes를 통해 persistent data를 보관한다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "Configure"
+          }), " : 런타임 또는 플랫폼에 의존적인 configuration data를 필요로 하는 Services에서 사용된다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "Secret"
+          }), " : configuration data 중에서도 보안에 민감한 데이터에 사용된다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "Project : 플랫폼에 application의 specification을 개별적으로 배포하는 것. Project는 Compose-platform? 내에 존재하는 다른 apllication을 구분짓고, 리소스를 분리한다."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["compose 파일명은 ", _jsx(_components.code, {
+            children: "compose.yaml"
+          }), " 또는 ", _jsx(_components.code, {
+            children: "compose.yml"
+          }), "이 권장된다. ", _jsx(_components.code, {
+            children: "docker-compose.yaml"
+          }), ", ", _jsx(_components.code, {
+            children: "docker-compose.yml"
+          }), " 형식도 지원한다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "depends_on"
+          }), " : 서비스간 종속성을 설정함. react 서비스에서 ", _jsx(_components.code, {
+            children: "depends_on: - nginx"
+          }), "와 같이 설정하였다면 react contianer는 nginx container 만들어진 후에 만들어진다."]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://docs.docker.com/compose/compose-file/",
+        children: "Compose file reference"
+      })
+    }), "\n", _jsx(_components.h1, {
+      children: "Docker-compose network"
+    }), "\n", _jsx(_components.p, {
+      children: "기본적으로 Docker compose는 디폴트 네트워크에 모든 container를 연결한다."
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "ports"
+      }), "는"]
+    }), "\n", _jsx(_components.h1, {
+      children: "실습"
+    }), "\n", _jsx(_components.h2, {
+      children: "1. Dockerfile을 build해서 Image 만들기"
+    }), "\n", _jsx(_components.p, {
+      children: "vs code에서 Docker extension을 설치하면 Dockerfile과 docker-compose.yml 파일 작성 시 문법적 도움(IntelliSense)을 받을 수 있다."
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "docker build -f Dockerfile -t theraphy-node ."
+      })
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "-f"
+          }), " : (input) Dockerfile의 파일명을 지정. Dockerfile은 다른 이름으로 작성될 수 있기 때문"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "-t"
+          }), " : (output) 생성할 Image name을 지정"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "."
+          }), "(build context) : 현재 경로에 dockerfile이 있음을 명시. build context를 지정하는 것."]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsx(_components.p, {
+        children: "build context는 이미지 생성에 필요한 파일들이 담긴 디렉토리를 의미한다."
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "2. Image로 Docker Contaier 실행해보기"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "docker run -d -p 3001:3001 theraphy-node"
+      })
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "-d"
+          }), " : detached mode. container가 background에서 가동되어 terminal 사용에 지장이 없게"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "-p"
+          }), " : port 지정. host : container. 외부 PC에서 HTTP 요청을 하면 host port에 요청이 되는 것. 이를 container port에도 연결해줘야 한다."]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "3. docker-compose 사용해보기"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/b994fc4b-bc58-4080-97bf-b96b90e5d34a/image.png",
+        alt: ""
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: ["각각의 image를 docker hub에 push하고, 이를 다른 환경에서 pull하여 사용할 수도 있지만 번거롭다. 프로젝트 루트 폴더에 docker-compose.yml 파일을 만들어두고, github에서 해당 프로젝트를 pull하여 ", _jsx(_components.code, {
+        children: "docker-compose up"
+      }), " 명령어로 단번에 실행시키는 방법이 편리하다."]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "docker network ls"
+      })
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "docker network inspect [network name]"
+      }), " 명령을 활용하면 구조를 파악하기에 좋다."]
+    }), "\n", _jsx(_components.h1, {
+      children: "references"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://www.leafcats.com/146",
+        children: "Docker 개념과 Architecture 정리"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://www.daleseo.com/dockerfile/",
+        children: "Dockerfile에서 자주 쓰이는 명령어"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://docs.docker.com/language/nodejs/develop/",
+        children: "Language-specific guides/Node.js"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://www.youtube.com/channel/UCvc8kv-i5fvFTJBFAk6n1SA",
+        children: "생활코딩 Docker 입문수업"
+      })
+    })]
+  });
+}
+export default function MDXContent(props = {}) {
+  const {wrapper: MDXLayout} = props.components || ({});
+  return MDXLayout ? _jsx(MDXLayout, {
+    ...props,
+    children: _jsx(_createMdxContent, {
+      ...props
+    })
+  }) : _createMdxContent(props);
+}

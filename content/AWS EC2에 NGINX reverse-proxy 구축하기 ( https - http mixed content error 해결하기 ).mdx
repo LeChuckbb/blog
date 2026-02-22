@@ -8,118 +8,200 @@ description: null
 date: '2022-04-07'
 title: AWS EC2에 NGINX reverse-proxy 구축하기 ( https - http mixed content error 해결하기 )
 ---
-* `apt install nginx`
-
-* `vim /etc/nginx/nginx.conf`
-
-# Docker-compose에 NGINX 적용하기
-
-React, Node, Flask 환경을 구동하는 세 개의 컨테이너를 하나로 묶은 Docker-compose가 있다. 여기에 NGINX를 도입해볼 것이다.
-
-![](https://velog.velcdn.com/images/lechuck/post/502fefd9-5178-4df4-9a9c-937a73074f02/image.png)
-
-## 도커를 이용한 NGINX 설치 및 가동
-
-* `docker pull nginx` (NGINX 도커 이미지를 받는다)
-
-* `docker container run --name nginxServer -d -p 8080:80 nginx` (NGINX는 80번 포트를 사용한다)
-
-* `docker build --tag nginx-test:1.0 .` (도커 이미지 생성)
-
-* `docker run nginx-test:1.0` 
-
-## NGINX 
-
-nginx는 마스터 프로세스와 여러 개의 워커 프로세스로 구성된다. 마스터 프로세스는 configuration file을 읽어들여 워커 프로세스의 수를 조정하고 유지한다. 워커 프로세스는 실질적으로 요청을 수행하는 역할을 맡는다.
-
-## start, stop, and reload config
-
-* start (run excutable file) `nginx -s start(signal)`
-
-* `nginx -s stop/quit/reload/reopen(signal)`
-
-configuration file에 적용된 변화는 reload되어야만 nginx에 반영된다. 마스터 프로세스가 reload signal을 전달받으면, configuration file 내 변화된 문법을 체크하고 적용한다. 적용에 성공하면 새로운 워커 프로세스를 시작하고 이전의 워커 프로세스에는 메시지를 보내 shutting donw 시킨다.
-
-## configuration file
-
-nginx는 config file에 지정된 지시문(Directives)에 의해 제어되는 모듈들로 구성된다. directives는 simple directives와 block directives로 나뉜다.
-
-* simple directives : `name parameter;` 형식
-
-* block directives : `http {} server{} location paramter {}`
-
-### Serving Static Content
-
-* server : `listen`과 `server name`으로 port를 구분한다.
-
-``` nginx
-http{
-	server{
-    }
+import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
+function _createMdxContent(props) {
+  const _components = {
+    a: "a",
+    code: "code",
+    h1: "h1",
+    h2: "h2",
+    h3: "h3",
+    img: "img",
+    li: "li",
+    p: "p",
+    pre: "pre",
+    ul: "ul",
+    ...props.components
+  };
+  return _jsxs(_Fragment, {
+    children: [_jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: _jsx(_components.code, {
+            children: "apt install nginx"
+          })
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: _jsx(_components.code, {
+            children: "vim /etc/nginx/nginx.conf"
+          })
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h1, {
+      children: "Docker-compose에 NGINX 적용하기"
+    }), "\n", _jsx(_components.p, {
+      children: "React, Node, Flask 환경을 구동하는 세 개의 컨테이너를 하나로 묶은 Docker-compose가 있다. 여기에 NGINX를 도입해볼 것이다."
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://velog.velcdn.com/images/lechuck/post/502fefd9-5178-4df4-9a9c-937a73074f02/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.h2, {
+      children: "도커를 이용한 NGINX 설치 및 가동"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "docker pull nginx"
+          }), " (NGINX 도커 이미지를 받는다)"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "docker container run --name nginxServer -d -p 8080:80 nginx"
+          }), " (NGINX는 80번 포트를 사용한다)"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "docker build --tag nginx-test:1.0 ."
+          }), " (도커 이미지 생성)"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: _jsx(_components.code, {
+            children: "docker run nginx-test:1.0"
+          })
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "NGINX"
+    }), "\n", _jsx(_components.p, {
+      children: "nginx는 마스터 프로세스와 여러 개의 워커 프로세스로 구성된다. 마스터 프로세스는 configuration file을 읽어들여 워커 프로세스의 수를 조정하고 유지한다. 워커 프로세스는 실질적으로 요청을 수행하는 역할을 맡는다."
+    }), "\n", _jsx(_components.h2, {
+      children: "start, stop, and reload config"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["start (run excutable file) ", _jsx(_components.code, {
+            children: "nginx -s start(signal)"
+          })]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: _jsx(_components.code, {
+            children: "nginx -s stop/quit/reload/reopen(signal)"
+          })
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: "configuration file에 적용된 변화는 reload되어야만 nginx에 반영된다. 마스터 프로세스가 reload signal을 전달받으면, configuration file 내 변화된 문법을 체크하고 적용한다. 적용에 성공하면 새로운 워커 프로세스를 시작하고 이전의 워커 프로세스에는 메시지를 보내 shutting donw 시킨다."
+    }), "\n", _jsx(_components.h2, {
+      children: "configuration file"
+    }), "\n", _jsx(_components.p, {
+      children: "nginx는 config file에 지정된 지시문(Directives)에 의해 제어되는 모듈들로 구성된다. directives는 simple directives와 block directives로 나뉜다."
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["simple directives : ", _jsx(_components.code, {
+            children: "name parameter;"
+          }), " 형식"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["block directives : ", _jsx(_components.code, {
+            children: "http {} server{} location paramter {}"
+          })]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h3, {
+      children: "Serving Static Content"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["server : ", _jsx(_components.code, {
+          children: "listen"
+        }), "과 ", _jsx(_components.code, {
+          children: "server name"
+        }), "으로 port를 구분한다."]
+      }), "\n"]
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-nginx",
+        children: "http{\n\tserver{\n    }\n}\n"
+      })
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["location : server 내에 location 블락 지시문을 둔다. location에는 ", _jsx(_components.code, {
+          children: "/"
+        }), " prefix를 명시하여 request의 URI와 비교한다. 매칭되는 URI는 root에 명시된 경로를 형성한다?"]
+      }), "\n"]
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-nginx",
+        children: "location / {\n\troot /data/www;\n}\n"
+      })
+    }), "\n", _jsx(_components.h3, {
+      children: "Setting Up a Simple Proxy Server"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["proxy_pass : ", _jsx(_components.code, {
+            children: "location"
+          }), " 블록에 protocol, name and port로 이루어진 proxied server를 명시한다. ex) ", _jsx(_components.a, {
+            href: "http://localhost:8080",
+            children: "http://localhost:8080"
+          }), ";"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: ["server name : ", _jsx(_components.code, {
+            children: "server_name"
+          }), " directive로 정의되고, 주어진 요청에 사용되는 server block을 결정한다."]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-nginx",
+        children: "server {\n    listen       80;\n    server_name  example.org  www.example.org;\n    ...\n}\n\nserver {\n    listen       80;\n    server_name  *.example.org;\n    ...\n}\n\nserver {\n    listen       80;\n    server_name  mail.*;\n    ...\n}\n\nserver {\n    listen       80;\n    server_name  ~^(?<user>.+)\\.example\\.net$;\n    ...\n}\n"
+      })
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["upstream : ", _jsx(_components.code, {
+          children: "proxy_pass"
+        }), "를 통해 nginx가 받은 요청들을 넘겨 줄 서버를 정의하는 지시자."]
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://velog.velcdn.com/cloudflare/lechuck/4ed61e96-4d44-419e-827e-4c02176f4ddc/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://lahuman.github.io/nginx_location_options/",
+        children: " TIP Nginx location 설정 옵션 정보"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "변수"
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-shell",
+        children: "<http://opentutorials.org:80/production/module/index.php?type=module&id=12>\n\n$host : opentutorials.org\n$uri : /production/module/index.php\n$args : type=module&id=12\nserver_addr : 115.68.24.88\nserver_name : localhost\nserver_port : 80\nserver_protocol : HTTP/1.1\n$arg_type : module\n$request_uri : /production/module/index.php?type=module&id=12\n$request_filename : /usr/local/nginx/html/production/module/index.php\n"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://soniacomp.medium.com/nginx-server-7ebf335c3fb0",
+        children: "Nginx Server 설정 및 튜닝 방법"
+      })
+    })]
+  });
 }
-```
-
-* location : server 내에 location 블락 지시문을 둔다. location에는 `/` prefix를 명시하여 request의 URI와 비교한다. 매칭되는 URI는 root에 명시된 경로를 형성한다?
-
-``` nginx
-location / {
-	root /data/www;
+export default function MDXContent(props = {}) {
+  const {wrapper: MDXLayout} = props.components || ({});
+  return MDXLayout ? _jsx(MDXLayout, {
+    ...props,
+    children: _jsx(_createMdxContent, {
+      ...props
+    })
+  }) : _createMdxContent(props);
 }
-```
-
-### Setting Up a Simple Proxy Server
-
-* proxy_pass : `location` 블록에 protocol, name and port로 이루어진 proxied server를 명시한다. ex) http://localhost:8080;
-
-* server name : `server_name` directive로 정의되고, 주어진 요청에 사용되는 server block을 결정한다.
-
-``` nginx
-server {
-    listen       80;
-    server_name  example.org  www.example.org;
-    ...
-}
-
-server {
-    listen       80;
-    server_name  *.example.org;
-    ...
-}
-
-server {
-    listen       80;
-    server_name  mail.*;
-    ...
-}
-
-server {
-    listen       80;
-    server_name  ~^(?<user>.+)\.example\.net$;
-    ...
-}
-```
-
-* upstream : `proxy_pass`를 통해 nginx가 받은 요청들을 넘겨 줄 서버를 정의하는 지시자.
-
-![](https://velog.velcdn.com/cloudflare/lechuck/4ed61e96-4d44-419e-827e-4c02176f4ddc/image.png)
-
-[ TIP Nginx location 설정 옵션 정보](https://lahuman.github.io/nginx_location_options/)
-
-변수
-
-``` shell
-<http://opentutorials.org:80/production/module/index.php?type=module&id=12>
-
-$host : opentutorials.org
-$uri : /production/module/index.php
-$args : type=module&id=12
-server_addr : 115.68.24.88
-server_name : localhost
-server_port : 80
-server_protocol : HTTP/1.1
-$arg_type : module
-$request_uri : /production/module/index.php?type=module&id=12
-$request_filename : /usr/local/nginx/html/production/module/index.php
-```
-
-[Nginx Server 설정 및 튜닝 방법](https://soniacomp.medium.com/nginx-server-7ebf335c3fb0)

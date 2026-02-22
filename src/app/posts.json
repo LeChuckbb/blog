@@ -10,24 +10,6 @@
       ]
     },
     {
-      "slug": "5.18",
-      "date": "2024-11-24",
-      "title": "소년이 온다를 읽고",
-      "tags": [
-        "책",
-        "영화",
-        "역사"
-      ]
-    },
-    {
-      "slug": "geultto",
-      "date": "2024-10-11",
-      "title": "글또 10기를 시작하며",
-      "tags": [
-        "활동"
-      ]
-    },
-    {
       "slug": "apply-geultto",
       "date": "2024-09-20",
       "title": "글또 10기 지원 - 내 삶의 지도",
@@ -112,16 +94,6 @@
       ]
     },
     {
-      "slug": "study-react18",
-      "date": "2023-05-30",
-      "title": "리액트 최신 동향 살펴보기",
-      "tags": [
-        "RSC",
-        "React18",
-        "SSR"
-      ]
-    },
-    {
       "slug": "blog-making-retrospection",
       "date": "2023-05-23",
       "title": "블로그 제작 회고",
@@ -160,14 +132,6 @@
       "title": "원티드 FE 프리온보딩 회고 (1)",
       "tags": [
         "회고"
-      ]
-    },
-    {
-      "slug": "2022-11-read",
-      "date": "2022-11-30",
-      "title": "2022.11 독서",
-      "tags": [
-        "책"
       ]
     },
     {
@@ -252,15 +216,6 @@
       "tags": []
     },
     {
-      "slug": "mySQL",
-      "date": "2022-03-13",
-      "title": "DB (MySQL)",
-      "tags": [
-        "DB",
-        "MySQL"
-      ]
-    },
-    {
       "slug": "terminal",
       "date": "2022-03-07",
       "title": "터미널",
@@ -276,22 +231,6 @@
       "tags": [
         "CSS",
         "Sass"
-      ]
-    },
-    {
-      "slug": "template-engine",
-      "date": "2022-02-24",
-      "title": "템플릿 엔진",
-      "tags": [
-        "Nodejs"
-      ]
-    },
-    {
-      "slug": "express",
-      "date": "2022-02-22",
-      "title": "express로 서버 구축하기",
-      "tags": [
-        "Nodejs"
       ]
     },
     {
@@ -311,101 +250,12 @@
       ]
     },
     {
-      "slug": "cookie-session-token",
-      "date": "2022-02-21",
-      "title": "쿠키와 세션, 토큰",
-      "tags": [
-        "Nodejs"
-      ]
-    },
-    {
-      "slug": "2022-01-read",
-      "date": "2022-02-08",
-      "title": "2022.01 독서",
-      "tags": [
-        "책"
-      ]
-    },
-    {
-      "slug": "coding-test-regexp",
-      "date": "2021-12-16",
-      "title": "정규표현식과 코테 문제 (신규 아이디 추천)",
-      "tags": [
-        "algorithm",
-        "정규표현식",
-        "코테"
-      ]
-    },
-    {
       "slug": "BEM",
       "date": "2021-12-06",
       "title": "BEM",
       "tags": [
         "BEM",
         "CSS"
-      ]
-    },
-    {
-      "slug": "2021-11-read",
-      "date": "2021-11-28",
-      "title": "2021.11 독서",
-      "tags": [
-        "책"
-      ]
-    },
-    {
-      "slug": "browser-events",
-      "date": "2021-11-21",
-      "title": "브라우저 이벤트",
-      "tags": []
-    },
-    {
-      "slug": "dom-api",
-      "date": "2021-11-07",
-      "title": "DOM API",
-      "tags": []
-    },
-    {
-      "slug": "2021-10-read",
-      "date": "2021-11-02",
-      "title": "2021.10 독서",
-      "tags": [
-        "책"
-      ]
-    },
-    {
-      "slug": "browser-rendering",
-      "date": "2021-10-25",
-      "title": "브라우저 렌더링 최적화",
-      "tags": [
-        "browser",
-        "rendering"
-      ]
-    },
-    {
-      "slug": "critical-rendering-path",
-      "date": "2021-10-25",
-      "title": "브라우저의 렌더링 과정(Critical Rendering Path)",
-      "tags": [
-        "browser",
-        "rendering"
-      ]
-    },
-    {
-      "slug": "redux",
-      "date": "2021-08-20",
-      "title": "React Redux 코드 리팩토링",
-      "tags": [
-        "Redux",
-        "Redux-toolkit"
-      ]
-    },
-    {
-      "slug": "liu-book",
-      "date": "2021-08-02",
-      "title": "어딘가 상상도 못 할 곳에, 수많은 순록 떼가",
-      "tags": [
-        "책"
       ]
     },
     {
@@ -422,54 +272,6 @@
       "title": "React SSR(2)",
       "tags": [
         "SSR"
-      ]
-    },
-    {
-      "slug": "ssr-1",
-      "date": "2021-07-04",
-      "title": "React SSR(1)",
-      "tags": [
-        "SSR"
-      ]
-    },
-    {
-      "slug": "book-next-killer-app",
-      "date": "2021-06-23",
-      "title": "넥스트 킬러앱",
-      "tags": [
-        "책"
-      ]
-    },
-    {
-      "slug": "redux-4",
-      "date": "2021-06-21",
-      "title": "Redux(4) - 미들웨어 redux-saga",
-      "tags": [
-        "Redux"
-      ]
-    },
-    {
-      "slug": "redux-3",
-      "date": "2021-06-20",
-      "title": "Redux(3) - 미들웨어 redux-thunk",
-      "tags": [
-        "Redux"
-      ]
-    },
-    {
-      "slug": "redux-2",
-      "date": "2021-06-18",
-      "title": "Redux(2) - 활용 예시",
-      "tags": [
-        "Redux"
-      ]
-    },
-    {
-      "slug": "redux-1",
-      "date": "2021-06-16",
-      "title": "Redux(1) - 개념 및 구조",
-      "tags": [
-        "Redux"
       ]
     },
     {
@@ -510,14 +312,6 @@
         "SSR",
         "CSR",
         "SSG"
-      ]
-    },
-    {
-      "slug": "markdown",
-      "date": "2021-06-10",
-      "title": "Markdown 문법 정리",
-      "tags": [
-        "markdown"
       ]
     }
   ]

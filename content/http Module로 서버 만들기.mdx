@@ -6,136 +6,226 @@ description: null
 date: '2022-02-21'
 title: http Module로 서버 만들기
 ---
-## http 모듈로 서버 만들기
-Node.js에서 제공하는 `http` 모듈을 사용해서 웹 브라우저의 요청을 처리할 서버를 구축할 수 있다.
-
-```javascript
-<script>
-  
-const http = require('http');
-
-http.createServer((req, res) => {
-    // createServer 메소드의 인자에 전달한 콜백함수.
-    // 요청이 들어올때마다 이 콜백 함수가 실행된다.
-
-    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-    res.write('<h1>Hello Node!</h1>');
-    res.end('<p>Hello Server!</p>');
-}).listen(8080, () => {
-    console.log('8080번 포트에서 서버 대기 중입니다!');
-});
-
-</script>
-
-```
-
-* `http.createServer()` : 새로운 http.Server 인스턴스를 반환한다. 이때 요청과 응답을 상징하는 req와 res는 stream이다.
-
-* `response.writeHead()` : 요청에 대한 응답 헤더 정보를 작성한다. 첫 번째 인수로 성공적인 요청을 의미하는 200을, 두 번째 인수로 응답에 대한 정보를 포함하는데, 여기서는 콘텐츠 형식이 HTML임을 알리고 있다.
-
-* `response.write()` : This sends a chunk of the response body. 데이터가 기록되는 부분을 본문(body)이라 한다. write()의 인자로는 문자열 혹은 버퍼가 전달될 수 있다. 여러 번 호출해서 여러 개 데이터를 보낼 수 있다.
-
-* `response.end()` : This method signals to the server that all of the response headers and body have been sent; The method, response.end(), MUST be called on each response. 에러가 발생했을 경우에도 응답해서 요청이 마무리되었음을 알려야 한다. 요청을 생략해선 안된다. 만약 `end` 메소드에 전달된 인수가 있다면 그 데이터도 클라이언트로 보낸 후 응답을 종료한다.
-
-* `http.listen()` : 8080 포트에서 요청이 오기를 기다린다. 요청이 들어오면 수행할 콜백 함수를 인자로 전달했다.
-
-> 포트는 서버 내에서 프로세스를 구분하는 번호다. 서버는 프로세스에 포트를 다르게 할당하여 들어오는 요청을 구분한다. 21(FTP), 80(HTTP), 443(HTTPS), 3306(MYSQL)와 같은 포트를 사용한다.
-http://gilbut.co.kr 같은 사이트들에는 80(HTTP) 포트 번호가 생략되어 있는 것이다. HTTPS의 경우도 마찬가지로 443(HTTPS) 포트 번호를 생략할 수 있다.
-
-write(), end()에 일일이 HTML 코드를 작성하는 것은 불편하므로, fs 모듈을 이용해 HTML 파일을 읽어와 전송하는 방법을 사용하자. 8081번 포트로 요청을 보내면 `index.html` 페이지를 출력하는 서버다.
-
-![](https://images.velog.io/images/lechuck/post/7732fbd5-53f7-45e0-bed5-4e373856240b/image.png)
-
-## REST와 라우팅
- 
- 주소에는 요청의 내용이 담겨있다. 서버에 요청할 때는 REST를 (명사를 사용할 것 등) 준수한 주소를 HTTP 요청 메서드와 함께 보낸다. 똑같은 주소에 GET 요청을 보낼 때와 POST 요청을 보낼 때의 동작을 달리 규정하는 방식으로 활용할 수 있다.
-
- ![](https://images.velog.io/images/lechuck/post/a7e3726a-d06d-4feb-bc5a-d848146a7caa/image.png)
- 
- 클라이언트에서 수정 버튼을 눌러서 DB에 저장된 '이순신'이라는 이름을 '안중근'으로 변경하는 내용의 HTTP 요청을 보내는 상황을 가정해보자. 이때 클라이언트는 다음과 같이 요청할 수 있다.
- 
- `await axios.put('/user/' + key, {name})`
- 
- 이에 서버는 아래와 같이 응답한다.
- 
- ``` html
- <script>
- 	http.createServer(async (req, res) => {
-    	try{
-        	 if (req.method === 'PUT') {
-            if (req.url.startsWith('/user/')) {
-                const key = req.url.split('/')[2];
-                let body = '';
-                req.on('data', (data) => {
-                    body += data;
-                });
-                return req.on('end', () => {
-                    console.log('PUT 본문(Body):', body);
-                    users[key] = JSON.parse(body).name;
-                    return res.end(JSON.stringify(users));
-                });
-            }
-        }
-    }
- </script>
- ```
- 
- 1. `req.method()`로 HTTP 요청 메서드(GET, POST, PUT 등) 구분.
-2. `req.url`로 요청 주소 구분.
-3. `req.on()` 으로 요청에 대한 응답 이벤트를 지정. 여기서 req는 stream이고, 스트림 이벤트 리스너인 .on()메소드를 사용한 모습이다.
-
-* stream Event 'data' : emits a Buffer or a string
-
-* stream Event 'end' : Emmited when the stream has received an EOF.
-
- Node.js 서버에서 요청과 응답은 이벤트 방식이다. 따라서 이벤트 리스터를 미리 등록해두면 클라이언트가 보낸 요청에 적절히 응답할 수 있게 된다
- 
-## https 모듈
-
-https란 http의 암호화된 버전이다. https는 클라이언트와 서버 간의 모든 커뮤니케이션을 암호화 하기 위해서 SSL(Secure Sockets Layer)이나 TLS(Transport Layer Security)를 사용한다. 즉, GET이나 POST 요청 등을 할 때 오가는 데이터를 암호화하는것.
-
-> SSL과 TLS라는 단어를 혼용해서 구분없이 사용하기도 한다. 가령, SSL을 사용한다고 해놓고 최신 TLS를 사용하는 경우가 있다. SSL 2.0과 3.0은 각각 2011, 2015년에 사용 중지되었기 때문에 현재는 TLS를 사용하는 것이 맞다.
-
-https는 인증 기관에서 인증서를 구입해야 적용할 수 있다. Let's Encrypt 같은 기관에서는 무료로 인증서를 발급해주기도 한다.
-
-## HTTP/1.1, HTTP/2
-
-### HTTP/1.1 (1997)
-
-* Connection 관리
-
-HTTP는 클라이언트-서버 간 TCP를 통한 connection을 구축한다. 초기 HTTP는 요청을 보내야 할 때마다 connection을 생성하고 닫는 형태의 `Short-lived connections`를 사용했다. 하지만 매번 TCP 연결을 여는 것은 자원 낭비이고 성능상의 제약이 분명하므로 HTTP/1.1에서는 `Persistent connection` 방식과 `HTTP Pipelining` 방식을 도입했다.
-
-![](https://images.velog.io/images/lechuck/post/a9e24a89-2b85-4acb-8b54-4d273ffba10b/image.png)
-
-Persistent connection은 연속적인 요청 사이에 connection을 끊지 않고 유지하여 새 connection을 여는데 소모되는 자원을 줄인다. HTTP Pipelining은 한 단계 더 나아가, 응답을 기다리지 않고 연속적인 요청을 보내서 네트워크 지연을 더욱 줄인다.
-
-그럼에도 HTTP Pipelining은 모던 브라우저에서 기본적으로 활성화되어 있지 않다. HOL(Head-of-line blocking) 문제에 취약하기 떄문이다. HTTP Pipelining은 HTTP/2에서 `multiplexing`으로 대체된다. HTTP/1.x 통신을 하는 모던 브라우저는 6~8개의 TCP 병렬 연결을 통해 속도를 끌어올리는 방식을 취하고 있다.
-
-> HOL은 먼저 받은 요청이 끝나지 않았음에도 다른 요청이 들어와 늦게 들어온 다른 요청들의 처리가 지연되는 문제를 말한다. 요청(Line)의 앞부분(Heade)에서 지연이 발생하고 전체적인 성능 저하로 이어지는 것. 즉, 요청을 보낸 순서대로 응답을 받을 수 있는 구조 때문에 문제가 발생하는 것.
-
-* 비상태(Stateless) 연결 또는 무상태 프로토콜
-
-HTTP/1.1은 TCP 연결이 설정되면서 요청과 응답이 진행되고, 이후 TCP 연결이 해제되기 때문에 둘 사이에는 연결 존재에 따른 상태 정보가 존재하지 않는다. 따라서 HTTP는 비상태Stateless 프로토콜로 분류된다. Stateless란 모든 connection이 독립적으로 다루어진다는 뜻이다. 각 connection에 대한 메모리가 없어서 한 connection의 요청이 끝나면 모든 정보가 소실된다.
-
-무상태 프로토콜은 진행 중인 송수신 정보를 처리하기 위한 저장 공간을 따로 마련할 필요가 없기 때문에 서버 디자인을 단순하게 구성할 수 있다. 단점은 매 요청마다 Request Line, Header와 같은 body 이외 추가 정보를 포함해야 한다는 것이다. 이 추가 정보는 서버가 해석해야 하기 때문에 부담이 될 수 있다.
-
-### HTTP/2 (2015)
-
-* multiplexing
-
-하나의 connection에서 다수의 입출력이 가능하다.
-
-* binary protocol
-
-기존 plain text로 데이터를 전송했던 HTTP1 구조에서 벗어나 binary format을 택한 HTTP2은 데이터를 더 잘개 쪼개서 관리할 수 있고, 이로 인해 multiplexing도 가능해진 것.
-
-![](https://images.velog.io/images/lechuck/post/f7544845-3101-45c6-b935-2bd6be830eda/image.png)
-
-## References
-
-[SSL vs. TLS - 차이점은 무엇인가?](https://smartits.tistory.com/209)
-
-[MDN - HTTP/1.x의 커넥션 관리](https://developer.mozilla.org/ko/docs/Web/HTTP/Connection_management_in_HTTP_1.x)
-
-[[HTTP] HTTP 2의 탄생 배경과 특징](https://americanopeople.tistory.com/115)
+import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
+function _createMdxContent(props) {
+  const _components = {
+    a: "a",
+    blockquote: "blockquote",
+    code: "code",
+    h2: "h2",
+    h3: "h3",
+    img: "img",
+    li: "li",
+    ol: "ol",
+    p: "p",
+    pre: "pre",
+    ul: "ul",
+    ...props.components
+  };
+  return _jsxs(_Fragment, {
+    children: [_jsx(_components.h2, {
+      children: "http 모듈로 서버 만들기"
+    }), "\n", _jsxs(_components.p, {
+      children: ["Node.js에서 제공하는 ", _jsx(_components.code, {
+        children: "http"
+      }), " 모듈을 사용해서 웹 브라우저의 요청을 처리할 서버를 구축할 수 있다."]
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-javascript",
+        children: "<script>\n  \nconst http = require('http');\n\nhttp.createServer((req, res) => {\n    // createServer 메소드의 인자에 전달한 콜백함수.\n    // 요청이 들어올때마다 이 콜백 함수가 실행된다.\n\n    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });\n    res.write('<h1>Hello Node!</h1>');\n    res.end('<p>Hello Server!</p>');\n}).listen(8080, () => {\n    console.log('8080번 포트에서 서버 대기 중입니다!');\n});\n\n</script>\n\n"
+      })
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "http.createServer()"
+          }), " : 새로운 http.Server 인스턴스를 반환한다. 이때 요청과 응답을 상징하는 req와 res는 stream이다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "response.writeHead()"
+          }), " : 요청에 대한 응답 헤더 정보를 작성한다. 첫 번째 인수로 성공적인 요청을 의미하는 200을, 두 번째 인수로 응답에 대한 정보를 포함하는데, 여기서는 콘텐츠 형식이 HTML임을 알리고 있다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "response.write()"
+          }), " : This sends a chunk of the response body. 데이터가 기록되는 부분을 본문(body)이라 한다. write()의 인자로는 문자열 혹은 버퍼가 전달될 수 있다. 여러 번 호출해서 여러 개 데이터를 보낼 수 있다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "response.end()"
+          }), " : This method signals to the server that all of the response headers and body have been sent; The method, response.end(), MUST be called on each response. 에러가 발생했을 경우에도 응답해서 요청이 마무리되었음을 알려야 한다. 요청을 생략해선 안된다. 만약 ", _jsx(_components.code, {
+            children: "end"
+          }), " 메소드에 전달된 인수가 있다면 그 데이터도 클라이언트로 보낸 후 응답을 종료한다."]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "http.listen()"
+          }), " : 8080 포트에서 요청이 오기를 기다린다. 요청이 들어오면 수행할 콜백 함수를 인자로 전달했다."]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsxs(_components.p, {
+        children: ["포트는 서버 내에서 프로세스를 구분하는 번호다. 서버는 프로세스에 포트를 다르게 할당하여 들어오는 요청을 구분한다. 21(FTP), 80(HTTP), 443(HTTPS), 3306(MYSQL)와 같은 포트를 사용한다.\n", _jsx(_components.a, {
+          href: "http://gilbut.co.kr",
+          children: "http://gilbut.co.kr"
+        }), " 같은 사이트들에는 80(HTTP) 포트 번호가 생략되어 있는 것이다. HTTPS의 경우도 마찬가지로 443(HTTPS) 포트 번호를 생략할 수 있다."]
+      }), "\n"]
+    }), "\n", _jsxs(_components.p, {
+      children: ["write(), end()에 일일이 HTML 코드를 작성하는 것은 불편하므로, fs 모듈을 이용해 HTML 파일을 읽어와 전송하는 방법을 사용하자. 8081번 포트로 요청을 보내면 ", _jsx(_components.code, {
+        children: "index.html"
+      }), " 페이지를 출력하는 서버다."]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/7732fbd5-53f7-45e0-bed5-4e373856240b/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.h2, {
+      children: "REST와 라우팅"
+    }), "\n", _jsx(_components.p, {
+      children: "주소에는 요청의 내용이 담겨있다. 서버에 요청할 때는 REST를 (명사를 사용할 것 등) 준수한 주소를 HTTP 요청 메서드와 함께 보낸다. 똑같은 주소에 GET 요청을 보낼 때와 POST 요청을 보낼 때의 동작을 달리 규정하는 방식으로 활용할 수 있다."
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/a7e3726a-d06d-4feb-bc5a-d848146a7caa/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "클라이언트에서 수정 버튼을 눌러서 DB에 저장된 '이순신'이라는 이름을 '안중근'으로 변경하는 내용의 HTTP 요청을 보내는 상황을 가정해보자. 이때 클라이언트는 다음과 같이 요청할 수 있다."
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "await axios.put('/user/' + key, {name})"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "이에 서버는 아래와 같이 응답한다."
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-html",
+        children: "<script>\n\thttp.createServer(async (req, res) => {\n   \ttry{\n       \t if (req.method === 'PUT') {\n           if (req.url.startsWith('/user/')) {\n               const key = req.url.split('/')[2];\n               let body = '';\n               req.on('data', (data) => {\n                   body += data;\n               });\n               return req.on('end', () => {\n                   console.log('PUT 본문(Body):', body);\n                   users[key] = JSON.parse(body).name;\n                   return res.end(JSON.stringify(users));\n               });\n           }\n       }\n   }\n</script>\n"
+      })
+    }), "\n", _jsxs(_components.ol, {
+      children: ["\n", _jsxs(_components.li, {
+        children: [_jsx(_components.code, {
+          children: "req.method()"
+        }), "로 HTTP 요청 메서드(GET, POST, PUT 등) 구분."]
+      }), "\n", _jsxs(_components.li, {
+        children: [_jsx(_components.code, {
+          children: "req.url"
+        }), "로 요청 주소 구분."]
+      }), "\n", _jsxs(_components.li, {
+        children: [_jsx(_components.code, {
+          children: "req.on()"
+        }), " 으로 요청에 대한 응답 이벤트를 지정. 여기서 req는 stream이고, 스트림 이벤트 리스너인 .on()메소드를 사용한 모습이다."]
+      }), "\n"]
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "stream Event 'data' : emits a Buffer or a string"
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "stream Event 'end' : Emmited when the stream has received an EOF."
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: "Node.js 서버에서 요청과 응답은 이벤트 방식이다. 따라서 이벤트 리스터를 미리 등록해두면 클라이언트가 보낸 요청에 적절히 응답할 수 있게 된다"
+    }), "\n", _jsx(_components.h2, {
+      children: "https 모듈"
+    }), "\n", _jsx(_components.p, {
+      children: "https란 http의 암호화된 버전이다. https는 클라이언트와 서버 간의 모든 커뮤니케이션을 암호화 하기 위해서 SSL(Secure Sockets Layer)이나 TLS(Transport Layer Security)를 사용한다. 즉, GET이나 POST 요청 등을 할 때 오가는 데이터를 암호화하는것."
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsx(_components.p, {
+        children: "SSL과 TLS라는 단어를 혼용해서 구분없이 사용하기도 한다. 가령, SSL을 사용한다고 해놓고 최신 TLS를 사용하는 경우가 있다. SSL 2.0과 3.0은 각각 2011, 2015년에 사용 중지되었기 때문에 현재는 TLS를 사용하는 것이 맞다."
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: "https는 인증 기관에서 인증서를 구입해야 적용할 수 있다. Let's Encrypt 같은 기관에서는 무료로 인증서를 발급해주기도 한다."
+    }), "\n", _jsx(_components.h2, {
+      children: "HTTP/1.1, HTTP/2"
+    }), "\n", _jsx(_components.h3, {
+      children: "HTTP/1.1 (1997)"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsx(_components.li, {
+        children: "Connection 관리"
+      }), "\n"]
+    }), "\n", _jsxs(_components.p, {
+      children: ["HTTP는 클라이언트-서버 간 TCP를 통한 connection을 구축한다. 초기 HTTP는 요청을 보내야 할 때마다 connection을 생성하고 닫는 형태의 ", _jsx(_components.code, {
+        children: "Short-lived connections"
+      }), "를 사용했다. 하지만 매번 TCP 연결을 여는 것은 자원 낭비이고 성능상의 제약이 분명하므로 HTTP/1.1에서는 ", _jsx(_components.code, {
+        children: "Persistent connection"
+      }), " 방식과 ", _jsx(_components.code, {
+        children: "HTTP Pipelining"
+      }), " 방식을 도입했다."]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/a9e24a89-2b85-4acb-8b54-4d273ffba10b/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "Persistent connection은 연속적인 요청 사이에 connection을 끊지 않고 유지하여 새 connection을 여는데 소모되는 자원을 줄인다. HTTP Pipelining은 한 단계 더 나아가, 응답을 기다리지 않고 연속적인 요청을 보내서 네트워크 지연을 더욱 줄인다."
+    }), "\n", _jsxs(_components.p, {
+      children: ["그럼에도 HTTP Pipelining은 모던 브라우저에서 기본적으로 활성화되어 있지 않다. HOL(Head-of-line blocking) 문제에 취약하기 떄문이다. HTTP Pipelining은 HTTP/2에서 ", _jsx(_components.code, {
+        children: "multiplexing"
+      }), "으로 대체된다. HTTP/1.x 통신을 하는 모던 브라우저는 6~8개의 TCP 병렬 연결을 통해 속도를 끌어올리는 방식을 취하고 있다."]
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsx(_components.p, {
+        children: "HOL은 먼저 받은 요청이 끝나지 않았음에도 다른 요청이 들어와 늦게 들어온 다른 요청들의 처리가 지연되는 문제를 말한다. 요청(Line)의 앞부분(Heade)에서 지연이 발생하고 전체적인 성능 저하로 이어지는 것. 즉, 요청을 보낸 순서대로 응답을 받을 수 있는 구조 때문에 문제가 발생하는 것."
+      }), "\n"]
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsx(_components.li, {
+        children: "비상태(Stateless) 연결 또는 무상태 프로토콜"
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: "HTTP/1.1은 TCP 연결이 설정되면서 요청과 응답이 진행되고, 이후 TCP 연결이 해제되기 때문에 둘 사이에는 연결 존재에 따른 상태 정보가 존재하지 않는다. 따라서 HTTP는 비상태Stateless 프로토콜로 분류된다. Stateless란 모든 connection이 독립적으로 다루어진다는 뜻이다. 각 connection에 대한 메모리가 없어서 한 connection의 요청이 끝나면 모든 정보가 소실된다."
+    }), "\n", _jsx(_components.p, {
+      children: "무상태 프로토콜은 진행 중인 송수신 정보를 처리하기 위한 저장 공간을 따로 마련할 필요가 없기 때문에 서버 디자인을 단순하게 구성할 수 있다. 단점은 매 요청마다 Request Line, Header와 같은 body 이외 추가 정보를 포함해야 한다는 것이다. 이 추가 정보는 서버가 해석해야 하기 때문에 부담이 될 수 있다."
+    }), "\n", _jsx(_components.h3, {
+      children: "HTTP/2 (2015)"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsx(_components.li, {
+        children: "multiplexing"
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: "하나의 connection에서 다수의 입출력이 가능하다."
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsx(_components.li, {
+        children: "binary protocol"
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: "기존 plain text로 데이터를 전송했던 HTTP1 구조에서 벗어나 binary format을 택한 HTTP2은 데이터를 더 잘개 쪼개서 관리할 수 있고, 이로 인해 multiplexing도 가능해진 것."
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.img, {
+        src: "https://images.velog.io/images/lechuck/post/f7544845-3101-45c6-b935-2bd6be830eda/image.png",
+        alt: ""
+      })
+    }), "\n", _jsx(_components.h2, {
+      children: "References"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://smartits.tistory.com/209",
+        children: "SSL vs. TLS - 차이점은 무엇인가?"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://developer.mozilla.org/ko/docs/Web/HTTP/Connection_management_in_HTTP_1.x",
+        children: "MDN - HTTP/1.x의 커넥션 관리"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://americanopeople.tistory.com/115",
+        children: "[HTTP] HTTP 2의 탄생 배경과 특징"
+      })
+    })]
+  });
+}
+export default function MDXContent(props = {}) {
+  const {wrapper: MDXLayout} = props.components || ({});
+  return MDXLayout ? _jsx(MDXLayout, {
+    ...props,
+    children: _jsx(_createMdxContent, {
+      ...props
+    })
+  }) : _createMdxContent(props);
+}

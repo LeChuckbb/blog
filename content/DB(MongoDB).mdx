@@ -8,118 +8,240 @@ description: null
 date: '2022-03-14'
 title: DB(MongoDB)
 ---
-MongoDB의 특징 중 하나는 js문법을 사용한다는 것이다. 백엔드를 node.js + MongoDB로 조합하면 js만으로 개발할 수 있다. 다만 MongoDB는 RDBMS가 아닌 NoSQL이라는 점을 유의해야 한다.
-
-## SQL vs NoSQL
-
-사용하는 용어가 다르다.
-
-* table = collection
-* row = document
-* column = field
-
-NoSQL에는 고정된 테이블이 없다. 컬렉션이라는 개념이 있긴 하지만 컬럼을 따로 정의하진 않는다. MySQL에서 users 테이블을 만들고 name, age 등의 컬럼을 정의한다면, NoSQL에선 users 컬렉션을 만들고 끝이다. users 컬렉션에는 어떠한 데이터든 들어갈 수 있다.
-
-NoSQL(Mongo DB)은 컬렉션 간 JOIN이 불가능하다. 하지만 확장성, 가용성 면에서 뛰어난 면모를 보인다. 데이터를 빠르게 넣을 수 있고 여러 서버에 데이터를 쉽게 분산할 수 있다.
-
-애플리케이션에 꼭 한 가지 DB만 사용해야 하는 것은 아니다. 항공사 예약 시스템의 경우, 비행기 표에 관한 정보가 모든 항공사에 일관성 있게 전달되어야 하므로 예약 처리 부분의 DB는 MySQL을 사용하고, 핵심 기능 외의 빅데이터, 메시징, 세션 관리 등에는 확장성과 가용성을 위해 MongoDB를 사용할 수 있다.
-
-## MongoDB
-
-`use admin`
-
-createUser() 메서드로 계정을 생성한다.
-
-`db.createUser({ user: '이름', pwd: '1234', roles: ['root'] })`
-
-다음 명령어를 통해 유저 목록을 확인할 수 있다.
-
-``` bash
-use admin
-db.system.users.find()
-```
-
-생성한 계정으로 접속하려면 MongoDB를 종료한 후 아래 명령어를 입력한다.
-
-`mongo admin -u 이름 -p 비밀번호`
-
-#### db 관련 명령어
-
-* `use 데이터베이스명` -> db 생성
-
-* `show dbs` -> db 목록 확인 (최소 한 개 이상의 데이터가 포함된 db)
-
-* `db` -> 현재 사용중인 db 확인
-
-#### collection 관련 명령어
-
-collection 생성 과정은 건너뛰어도 된다. document를 넣는 순간 collection도 자동으로 생성되기 때문이다.
-
-* `db.createCollection(컬렉션명)`
-
-* `show collections`
-
-> MongoDB에서는 하나의 데이터를 documnet라 부른다.
-
-## Create
-
-MongoDB는 기본적으로 js의 자료형을 따르고, 그 외 Binary Data, ObjectId, Int, Long, Decimal, Timestamp, JavaScript 등의 추가적인 자료형이 있다. 이중에서도 ObjectId, Binary Data, Timestamp가 자주 쓰인다.
-
-`db.컬렉션명.save(다큐먼트)` 명령어로 document를 생성할 수 있다.
-
-`db.users.save({ name: 'zero', age: 24, married: false, comment: '안녕하세요', createdAt: new Date() });`
-
-## Read
-
-* `db.collection.find(query, projection)`
-
-* 두 번쨰 인자인 projection에는 query 필터에 매칭되는 문서 중에서 따로 반환할 부분을 명시. 즉, query를 만족하면서 projection을 만족하는 조건만 출력됨.
-
-* `db.컬렉션명.find()` -> 컬렉션 내 모든 다큐먼트 조회
-
-* `db.users.find({ name:'zero'})` -> 컬렉션 내 name이 zero인 다큐먼트 조회
-
-* `db.users.find({}, {_id: 0, name: 1})` -> 컬렉션 내 다큐먼트들 중에서 name만 조회 
-
-* `db.users.find({ age: { $gt: 30 }, married: true }, {_id: 0, name: 1, age: 1});` -> age가 30 초과, married가 true인 다큐먼트의 name과 age를 조회
-
-* `db.users.find({}, {_id: 0, name: 1, age: 1}).sort({age: -1})` -> sort()에서 -1은 내림차순, 1은 오름차순이다.
-
-> MongoDB는 js 객체를 이용해서 명령어 쿼리를 작성하므로, $gt같은 특수한 연산자가 사용된다. sequelize query와 비슷하다.
-
-## Update
-
-* `db.collection.update(query,update)`
-
-* query를 update에 명시한 대로 수정한다.
-
-## Delete
-
-`db.collection.remove(query)`
-
-# 몽구스(Mongoose) ODM
-
-sequelize가 MySQL ORM(Object Relational Mapping)이었다면, 몽구스는 MongoDB ODM(Object Document Mapping)이다.
-
-MongoDB가 이미 자바스크립트인데도 굳이 js 객체와 매핑하는 이유는 MongoDB에 없는 기능들을 Mongoose가 보완해주기 때문이다.
-
-Mongoose에는 스키마(schema)가 생겨서 값 입력시 자료형을 실수하는 사태를 방지해준다. 즉, Mongoose는 MongoDB에 데이터를 넣기 전에 노드 서버 단에서 데이터를 한 번 필터링하는 역할을 맡는다.
-
-또한 Mongoose는 populate() 메서드를 통해 MySQL에 있는 JOIN기능을 보완한다.
-
-가독성이 높은 쿼리 빌더를 지원한다.
-
-## node - MongoDB 연결하기
-
-MongoDB는 주소를 사용해 연결한다. mongoose 패키지를 load하고 `mongoose.connect(주소, 옵션... )`과 같은 형태로 연결할 수 있다. 주소는 `mongodb://(username:password@)host(:port)(/(database)(?options))`와 같은 형태로 구성된다. 여기서 소괄호()로 표시한 부분은 생략이 가능하다. 보통 `mongodb://localhost:27017/myapp` 이런 형태의 주소를 사용한다.
-
-## 스키마 정의하기
-
-sequelize에서 models 폴더에 table을 만들었던 것처럼 Mongoose Schema를 만든다. 이 스키마에 _id 필드는 생략한다. Mongoose는 _id를 기본 키로 알아서 생성해준다.
-
->Everything in Mongoose starts with a Schema. Each schema maps to a **MongoDB collection(MySQL table)** and defines the shape of the documents within that collection.
-
-## 쿼리 수행하기
-
-[Mongoose v6.2.6: Queries](https://mongoosejs.com/docs/queries.html)
-
+import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
+function _createMdxContent(props) {
+  const _components = {
+    a: "a",
+    blockquote: "blockquote",
+    code: "code",
+    h1: "h1",
+    h2: "h2",
+    h4: "h4",
+    li: "li",
+    p: "p",
+    pre: "pre",
+    strong: "strong",
+    ul: "ul",
+    ...props.components
+  };
+  return _jsxs(_Fragment, {
+    children: [_jsx(_components.p, {
+      children: "MongoDB의 특징 중 하나는 js문법을 사용한다는 것이다. 백엔드를 node.js + MongoDB로 조합하면 js만으로 개발할 수 있다. 다만 MongoDB는 RDBMS가 아닌 NoSQL이라는 점을 유의해야 한다."
+    }), "\n", _jsx(_components.h2, {
+      children: "SQL vs NoSQL"
+    }), "\n", _jsx(_components.p, {
+      children: "사용하는 용어가 다르다."
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsx(_components.li, {
+        children: "table = collection"
+      }), "\n", _jsx(_components.li, {
+        children: "row = document"
+      }), "\n", _jsx(_components.li, {
+        children: "column = field"
+      }), "\n"]
+    }), "\n", _jsx(_components.p, {
+      children: "NoSQL에는 고정된 테이블이 없다. 컬렉션이라는 개념이 있긴 하지만 컬럼을 따로 정의하진 않는다. MySQL에서 users 테이블을 만들고 name, age 등의 컬럼을 정의한다면, NoSQL에선 users 컬렉션을 만들고 끝이다. users 컬렉션에는 어떠한 데이터든 들어갈 수 있다."
+    }), "\n", _jsx(_components.p, {
+      children: "NoSQL(Mongo DB)은 컬렉션 간 JOIN이 불가능하다. 하지만 확장성, 가용성 면에서 뛰어난 면모를 보인다. 데이터를 빠르게 넣을 수 있고 여러 서버에 데이터를 쉽게 분산할 수 있다."
+    }), "\n", _jsx(_components.p, {
+      children: "애플리케이션에 꼭 한 가지 DB만 사용해야 하는 것은 아니다. 항공사 예약 시스템의 경우, 비행기 표에 관한 정보가 모든 항공사에 일관성 있게 전달되어야 하므로 예약 처리 부분의 DB는 MySQL을 사용하고, 핵심 기능 외의 빅데이터, 메시징, 세션 관리 등에는 확장성과 가용성을 위해 MongoDB를 사용할 수 있다."
+    }), "\n", _jsx(_components.h2, {
+      children: "MongoDB"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "use admin"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "createUser() 메서드로 계정을 생성한다."
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "db.createUser({ user: '이름', pwd: '1234', roles: ['root'] })"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "다음 명령어를 통해 유저 목록을 확인할 수 있다."
+    }), "\n", _jsx(_components.pre, {
+      children: _jsx(_components.code, {
+        className: "language-bash",
+        children: "use admin\ndb.system.users.find()\n"
+      })
+    }), "\n", _jsx(_components.p, {
+      children: "생성한 계정으로 접속하려면 MongoDB를 종료한 후 아래 명령어를 입력한다."
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "mongo admin -u 이름 -p 비밀번호"
+      })
+    }), "\n", _jsx(_components.h4, {
+      children: "db 관련 명령어"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "use 데이터베이스명"
+          }), " -> db 생성"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "show dbs"
+          }), " -> db 목록 확인 (최소 한 개 이상의 데이터가 포함된 db)"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "db"
+          }), " -> 현재 사용중인 db 확인"]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h4, {
+      children: "collection 관련 명령어"
+    }), "\n", _jsx(_components.p, {
+      children: "collection 생성 과정은 건너뛰어도 된다. document를 넣는 순간 collection도 자동으로 생성되기 때문이다."
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: _jsx(_components.code, {
+            children: "db.createCollection(컬렉션명)"
+          })
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: _jsx(_components.code, {
+            children: "show collections"
+          })
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsx(_components.p, {
+        children: "MongoDB에서는 하나의 데이터를 documnet라 부른다."
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "Create"
+    }), "\n", _jsx(_components.p, {
+      children: "MongoDB는 기본적으로 js의 자료형을 따르고, 그 외 Binary Data, ObjectId, Int, Long, Decimal, Timestamp, JavaScript 등의 추가적인 자료형이 있다. 이중에서도 ObjectId, Binary Data, Timestamp가 자주 쓰인다."
+    }), "\n", _jsxs(_components.p, {
+      children: [_jsx(_components.code, {
+        children: "db.컬렉션명.save(다큐먼트)"
+      }), " 명령어로 document를 생성할 수 있다."]
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "db.users.save({ name: 'zero', age: 24, married: false, comment: '안녕하세요', createdAt: new Date() });"
+      })
+    }), "\n", _jsx(_components.h2, {
+      children: "Read"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: _jsx(_components.code, {
+            children: "db.collection.find(query, projection)"
+          })
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "두 번쨰 인자인 projection에는 query 필터에 매칭되는 문서 중에서 따로 반환할 부분을 명시. 즉, query를 만족하면서 projection을 만족하는 조건만 출력됨."
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "db.컬렉션명.find()"
+          }), " -> 컬렉션 내 모든 다큐먼트 조회"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "db.users.find({ name:'zero'})"
+          }), " -> 컬렉션 내 name이 zero인 다큐먼트 조회"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "db.users.find({}, {_id: 0, name: 1})"
+          }), " -> 컬렉션 내 다큐먼트들 중에서 name만 조회"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "db.users.find({ age: { $gt: 30 }, married: true }, {_id: 0, name: 1, age: 1});"
+          }), " -> age가 30 초과, married가 true인 다큐먼트의 name과 age를 조회"]
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsxs(_components.p, {
+          children: [_jsx(_components.code, {
+            children: "db.users.find({}, {_id: 0, name: 1, age: 1}).sort({age: -1})"
+          }), " -> sort()에서 -1은 내림차순, 1은 오름차순이다."]
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsx(_components.p, {
+        children: "MongoDB는 js 객체를 이용해서 명령어 쿼리를 작성하므로, $gt같은 특수한 연산자가 사용된다. sequelize query와 비슷하다."
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "Update"
+    }), "\n", _jsxs(_components.ul, {
+      children: ["\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: _jsx(_components.code, {
+            children: "db.collection.update(query,update)"
+          })
+        }), "\n"]
+      }), "\n", _jsxs(_components.li, {
+        children: ["\n", _jsx(_components.p, {
+          children: "query를 update에 명시한 대로 수정한다."
+        }), "\n"]
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "Delete"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.code, {
+        children: "db.collection.remove(query)"
+      })
+    }), "\n", _jsx(_components.h1, {
+      children: "몽구스(Mongoose) ODM"
+    }), "\n", _jsx(_components.p, {
+      children: "sequelize가 MySQL ORM(Object Relational Mapping)이었다면, 몽구스는 MongoDB ODM(Object Document Mapping)이다."
+    }), "\n", _jsx(_components.p, {
+      children: "MongoDB가 이미 자바스크립트인데도 굳이 js 객체와 매핑하는 이유는 MongoDB에 없는 기능들을 Mongoose가 보완해주기 때문이다."
+    }), "\n", _jsx(_components.p, {
+      children: "Mongoose에는 스키마(schema)가 생겨서 값 입력시 자료형을 실수하는 사태를 방지해준다. 즉, Mongoose는 MongoDB에 데이터를 넣기 전에 노드 서버 단에서 데이터를 한 번 필터링하는 역할을 맡는다."
+    }), "\n", _jsx(_components.p, {
+      children: "또한 Mongoose는 populate() 메서드를 통해 MySQL에 있는 JOIN기능을 보완한다."
+    }), "\n", _jsx(_components.p, {
+      children: "가독성이 높은 쿼리 빌더를 지원한다."
+    }), "\n", _jsx(_components.h2, {
+      children: "node - MongoDB 연결하기"
+    }), "\n", _jsxs(_components.p, {
+      children: ["MongoDB는 주소를 사용해 연결한다. mongoose 패키지를 load하고 ", _jsx(_components.code, {
+        children: "mongoose.connect(주소, 옵션... )"
+      }), "과 같은 형태로 연결할 수 있다. 주소는 ", _jsx(_components.code, {
+        children: "mongodb://(username:password@)host(:port)(/(database)(?options))"
+      }), "와 같은 형태로 구성된다. 여기서 소괄호()로 표시한 부분은 생략이 가능하다. 보통 ", _jsx(_components.code, {
+        children: "mongodb://localhost:27017/myapp"
+      }), " 이런 형태의 주소를 사용한다."]
+    }), "\n", _jsx(_components.h2, {
+      children: "스키마 정의하기"
+    }), "\n", _jsx(_components.p, {
+      children: "sequelize에서 models 폴더에 table을 만들었던 것처럼 Mongoose Schema를 만든다. 이 스키마에 _id 필드는 생략한다. Mongoose는 _id를 기본 키로 알아서 생성해준다."
+    }), "\n", _jsxs(_components.blockquote, {
+      children: ["\n", _jsxs(_components.p, {
+        children: ["Everything in Mongoose starts with a Schema. Each schema maps to a ", _jsx(_components.strong, {
+          children: "MongoDB collection(MySQL table)"
+        }), " and defines the shape of the documents within that collection."]
+      }), "\n"]
+    }), "\n", _jsx(_components.h2, {
+      children: "쿼리 수행하기"
+    }), "\n", _jsx(_components.p, {
+      children: _jsx(_components.a, {
+        href: "https://mongoosejs.com/docs/queries.html",
+        children: "Mongoose v6.2.6: Queries"
+      })
+    })]
+  });
+}
+export default function MDXContent(props = {}) {
+  const {wrapper: MDXLayout} = props.components || ({});
+  return MDXLayout ? _jsx(MDXLayout, {
+    ...props,
+    children: _jsx(_createMdxContent, {
+      ...props
+    })
+  }) : _createMdxContent(props);
+}
