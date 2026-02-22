@@ -81,32 +81,9 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
   items,
   className = "",
 }) => {
-  // ID 정규화 함수 (마크다운 파서와 동일한 규칙 적용)
+  // ID 정규화 함수 (tocUtil과 rehype-slug 모두 github-slugger를 사용하므로 ID가 일치함)
   const normalizeId = useCallback((id: string): string => {
-    // 실제 HTML ID 변환 규칙 적용
-    const normalizedId = id
-      .replace(/&/g, "--") // & 를 -- 로 변환
-      // .replace(/\s+/g, "-") // 공백을 - 로 변환
-      .toLowerCase();
-
-    // 정규화된 ID로 요소 찾기
-    const el = document.getElementById(normalizedId);
-    if (el) {
-      return normalizedId;
-    }
-
-    // 원본 ID로도 시도
-    const originalEl = document.getElementById(id);
-    if (originalEl) {
-      return id;
-    }
-
-    // 디버깅: 변환 과정 로그
-    console.warn(
-      `ToC: Element not found. Original: "${id}", Normalized: "${normalizedId}"`,
-    );
-
-    return normalizedId; // 정규화된 ID 반환 (요소가 없더라도)
+    return id;
   }, []);
 
   // 헤딩 요소들의 위치 계산
@@ -133,38 +110,11 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
         const el = document.getElementById(normalizedId);
 
         if (!el) {
-          console.warn(
-            `ToC: Element not found. Original: "${id}", Normalized: "${normalizedId}"`,
-          );
-          // 모든 가능한 ID들을 로그에 출력해서 디버깅 도움
-          const allIds = Array.from(document.querySelectorAll("[id]")).map(
-            (el) => el.id,
-          );
-          const similarIds = allIds.filter(
-            (existingId) =>
-              existingId.includes(id.replace(/-/g, "")) ||
-              id.replace(/-/g, "").includes(existingId),
-          );
-          if (similarIds.length > 0) {
-            console.log(`ToC: Similar IDs found:`, similarIds);
-          }
           return { id, top: 0 };
         }
 
         const rect = el.getBoundingClientRect();
         const top = rect.top + scrollTop;
-
-        // 디버깅을 위한 로그
-        if (id.includes("search") && id.includes("pagination")) {
-          console.log(`Debug ${id}:`, {
-            originalId: id,
-            normalizedId: normalizedId,
-            rect: rect,
-            scrollTop: scrollTop,
-            calculatedTop: top,
-            elementExists: !!el,
-          });
-        }
 
         return { id, top };
       })
@@ -184,11 +134,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
 
     // 유효한 headingTops만 필터링 (top이 0이 아닌 것들)
     const validHeadingTops = headingTops.filter(({ top, id }) => {
-      const isValid = top > 0 || document.getElementById(id);
-      if (!isValid) {
-        console.warn(`ToC: Invalid heading top for "${id}": ${top}`);
-      }
-      return isValid;
+      return top > 0 || document.getElementById(id);
     });
 
     // 현재 스크롤 위치에서 가장 가까운 헤딩 찾기
@@ -204,11 +150,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
       );
       if (activeLink) {
         activeLink.setAttribute("data-active", "true");
-
-        // 디버깅 로그
-        console.log(
-          `ToC: Active heading set to "${currentHeading.id}" (top: ${currentHeading.top}, scroll: ${scrollTop})`,
-        );
       }
     }
   }, []);
@@ -236,7 +177,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
       const trackScrollHeight = () => {
         const scrollHeight = document.body.scrollHeight;
         if (prevScrollHeight !== scrollHeight) {
-          console.log("ToC: Page height changed, recalculating positions");
           headingTops = settingHeadingTops();
           updateActiveStates(headingTops);
         }

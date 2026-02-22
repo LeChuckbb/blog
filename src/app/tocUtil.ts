@@ -1,5 +1,6 @@
 // utils/toc.ts
 import matter from "gray-matter";
+import GithubSlugger from "github-slugger";
 
 export interface TocItem {
   id: string;
@@ -8,29 +9,17 @@ export interface TocItem {
   children?: TocItem[];
 }
 
-// 문자열을 slug로 변환 (한글 지원)
-export function slugify(text: string): string {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-") // 공백을 하이픈으로
-    .replace(/[^\w가-힣\-]+/g, "") // 영문, 숫자, 한글, 하이픈만 유지
-    .replace(/\-\-+/g, "-") // 연속 하이픈을 하나로
-    .replace(/^-+/, "") // 앞쪽 하이픈 제거
-    .replace(/-+$/, ""); // 뒤쪽 하이픈 제거
-}
-
 // 마크다운에서 헤딩 추출
 export function extractHeadings(content: string): TocItem[] {
   const headingRegex = /^(#{1,6})\s+(.+)$/gm;
   const headings: TocItem[] = [];
+  const slugger = new GithubSlugger();
   let match;
 
   while ((match = headingRegex.exec(content)) !== null) {
     const level = match[1].length;
     const text = match[2].trim();
-    const id = slugify(text);
+    const id = slugger.slug(text);
 
     headings.push({
       id,
