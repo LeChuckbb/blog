@@ -1,0 +1,234 @@
+---
+tags:
+  - DB
+  - MySQL
+slug: mySQL
+description: null
+date: '2022-03-13'
+title: DB (MySQL)
+---
+
+지금까지는 모든 데이터를 변수에 저장했다. 이는 컴퓨터 메모리에 저장했다는 뜻이다. 따라서 서버가 종료되면 메모리가 정리되면서 저장했던 데이터도 사라져버린다. 이를 방지하기 위해선 DB를 사용해야 한다.
+
+# MySQL
+cmd에서 MySQL이 설치된 폴더 내 bin 폴더에 진입한 이후, `mysql -u root -p`를 입력하여 MySQL CLI를 실행한다. -u는 user를 의미하고, -p는 password를 입력하겠다는 의미다.
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-3a264741-2a66-40ea-912b-476e0a9ce415-image.png)
+
+표(table)의 개수가 많아지면 이를 database 혹은 schema로 grouping한다. schema들이 많아지면 database server로 관리한다. MySQL을 설치한 것은 database server를 설치한 것과 같다.
+
+## 데이터베이스(스키마) 생성하기
+
+먼저 데이터베이스(스키마)를 생성한다.
+
+`CREATE DATABASE nodejs;`
+
+데이터베이스(스키마)를 조작할 수 있는 명령어는 아래와 같다. 세미콜론은 임의로 생략했다.
+
+``` sql
+CREATE DATABSE {database name}
+DROP DATABASE {database name}
+SHOW DATABASES
+USE {database name}
+```
+
+## 테이블 생성하기
+
+``` sql
+CREATE TABLE nodejs.users (
+	id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    age INT UNSIGNED NOT NULL,
+    married TINYINT NOT NULL,
+    comment TEXT NULL,
+	created_at DATETIME NOT NULL DEFAULT now(),
+    PRIMARY KEY(id),
+    UNIQUE INDEX name_UNIQUE (name ASC)
+)
+    COMMENT = '사용자 정보'
+    DEFAULT CHARACTER SET = utf8
+    ENGINE = InnoDB;
+```
+
+nodejs 데이터베이스에 users라는 테이블을 만든다. 이 테이블은 id, name, age, married, comment, create_at 컬럼을 갖는다. TINYINT는 -128~127까지의 정수를 저장할 때 사용하는 자료형이고, COMMENT 옵션으로 테이블에 대한 설명을 덧붙였다. DEFAULT CHARACTER SET을 utf8으로 해서 한글 입력이 가능하게끔 했다.
+
+테이블을 조작할 수 있는 명령어는 아래와 같다.
+
+* CREATE TABLE \{database name.table name(컬럼 및 옵션)\}
+
+* DROP TABLE \{table name\}
+
+* DESC \{table name\}
+
+> DESC는 describe(묘사하다)의 약자다. 
+
+#### 외래 키(FK) 설정하기
+
+nodejs 데이터베이스에 comments라는 테이블을 추가할 것이다. 이 테이블엔 commenter라는 컬럼이 있는데, users 테이블의 기본키(PK)를 저장(연결)할 것이다. 이처럼 다른 테이블의 기본 키를 저장(연결)하는 컬럼을 외래키(FK)라고 부른다.
+
+~~~ sql
+CREATE TABLE nodejs.comments (
+	...
+    CONSTRAINT commenter
+    FOREIGN KEY (commenter)
+    REFERENCES nodejs.users (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    ...
+)
+~~~
+
+`CONSTRAINT {제약조건명} FOREIGN KEY {컬럼명} REFERENCES {참고하는 컬럼명}` 명령을 통해 외래 키를 지정할 수 있다. 또한 외래키로 테이블간 연결이 이루어졌으므로, 삭제와 업데이트 시 CASCADE 옵션을 달아서 사용자 정보에 변동이 있을 경우 댓글 정보 또한 변동되게끔 설정한다.
+
+## Create
+
+`INSERT INTO ~ VALUES ~` 명령어를 통해 테이블에 데이터를 넣을 수 있다. id는 AUTO_INCREMENT에 의해, create_at은 DEFAULT 값에 의해 자동으로 들어간다. 
+
+`INSERT INTO nodejs.users (name, age, married, comment) VALUES ('zero', 24, 0, '자기소개1');`
+
+## Read
+
+`SELECT {검색문법} FROM {데이터베이스명.테이블명}`
+
+검색문법 항목에 가지각색의 문법이 자리할 수 있다. DB를 잘한다는 것은 SELECT 문법을 자유자재로 다룰 수 있다는 것을 말한다.
+
+특정 컬럼만 조회가 가능하다.
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-2b44b41e-724e-4f9e-a885-3d04a2429131-image.png)
+
+`WHERE` 절을 사용하여 특정 조건을 가진 데이터만 조회할 수 있다.
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-2149b605-1fec-4cea-8b13-ad6f95e6791e-image.png)
+
+`ORDER BY {컬럼명} {ASC|DESC|` 를 통해 정렬도 가능하다.
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-2f52e824-2dc7-49e8-bf2e-1ae0b7042a64-image.png)
+
+`LIMIT {숫자}`를 통해 조회할 row 개수를 설정할 수 있다. 여기에 `OFFSET {건너뛸 숫자}`을 덧붙이면 게시판 페이지네이션 구현 시 유용하다. 1페이지당 20개를 출력하고, 지금 21~40을 출력할 2페이지라면, LIMIT 20 OFFSET 20과 같이 표현하면 된다.
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-5d8f2161-974e-410d-bcde-f55cf88d910b-image.png)
+
+## Update
+
+`UPDATE {테이블명} SET {컬럼명=바꿀 값} WHERE {조건}`
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-af5d2b1a-4b13-4f4d-b210-4d4be7d03368-image.png)
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-eb13b08c-b1ff-4cce-81bc-82eee65ae17c-image.png)
+
+## Delete
+
+`DELETE FROM {테이블명} WHERE {조건}`
+
+## Sequelize ORM (Node - DB 연결하기)
+
+Node와 DB를 연결해서 서버에서 DB를 조작할 수 있게끔 해보자. Sequelize는 ORM으로 js 객체와 DB의 릴레이션을 매핑해주는 도구다. Sequelize를 사용하면 js만으로 MySQL을 조작할 수 있다.
+
+`npm i express morgan nunjucks sequelize sequelize-cli mysql2`
+
+여기서 mysql2는 MySQL과 sequlize를 이어주는 드라이버다. DB 프로그램이 아니다.
+
+`npx sequlize init` 명령을 실행하면 config, models, migration, seeders 폴더가 생성된다.
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-51c34808-225a-4ed3-96cf-15b9b87a37ba-image.png)
+
+> MySQL CLI를 통해서 데이터베이스를 생성한 뒤 sequlize와 연결을 시도할 수도 있겠으나, sequlize에서 config.json 파일을 읽어들여 데이터베이스를 생성할 수도 있다. config.json에 데이터베이스 이름을 명시하고 `npx sequlize db:create` 명령어를 입력한다.
+
+### MySQL 연결하기
+
+sequelize 객체 생성 및 sequelize.sync() 메소드를 통한 서버-MySQL 동기화
+
+config/config.json 설정
+
+### 모델 정의하기 (init)
+
+MySQL에서 정의한 테이블을 sequelize에서도 정의해야 한다. MySQL 테이블은 sequelize 모델과 대응되므로, 잘 연결할 필요가 있다.
+
+여기서는 MySQL에 테이블로 정의해두었던 users, comments 테이블을 각각 sequelize 모델로 정의해보겠다. 테이블은 복수형을, 모델은 단수형을 사용하는 게 관례다.
+
+models/user.js
+
+models/comment.js
+
+모델은 `Sequelize.Model`을 상속(extends)한 클래스로 정의한다. 모델에는 테이블에 대한 설정을 하는 `static init()` 메서드와 다른 모델과의 관계를 기재하는 `static associate()` 메서드가 있다.
+
+모델 생성 후 user 모델과 comment 모델을 models/index.js의 db 객체에 담는다. 앞으로 db 객체에 접근하여 user, comment 모델에 접근이 가능하다.
+
+### 관계 정의하기 (associate)
+
+users 테이블과 comments 테이블 간 관계를 정의하자. user 한 명은 여러 개의 comment를 작성할 수 있다. 하지만 comment 하나에 user(commenter)가 여러명일 순 없다. 따라서 user가 1, comment가 N인 1:N 관계(hasMany)가 적용된다.
+
+MySQL의 JOIN으로 여러 테이블 간 관계를 파악해 결과를 도출해낼 수 있다. sequlize는 이 JOIN 기능도 알아서 구현한다. 대신 테이블 간 어떤 관계가 있는지 sequlize에 알려주어야 한다.
+
+* 1:1 사용자 - 사용자에 대한 정보 테이블 (hasOne/belongsTo)
+
+* 1:N 사용자 - 댓글 (hasMany/belongsTo)
+
+* N:N 게시글 - 해시태그 (belongsToMany)
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-37b3f000-7da9-42d5-89cc-dfbd54bbefc8-image.png)
+
+db.User.hasMany(db.Comment, \{...\})
+
+db.Comment.belongsTo(db.User, \{...\})
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-0023ef6c-a87f-4224-878d-ccb839a9fdbe-image.png)
+
+### 쿼리
+
+sequlize로 CRUD 작업을 수행하기 위해선 sequlize query를 알아야 한다.
+
+`INESERT INTO nodejs.users (name, age, married, comment) VALUES ('zero', 24, 0, '자기소개1');`
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-5d762314-50e1-4d9b-8663-312543ed4f8e-image.png)
+
+* User.findOne()
+
+* User.findAll() -> `SELECT * FROM users`
+
+* User.findAll(\{ attributes : ['name', 'married']\}); -> `SELECT name, married FROM users` 
+
+sequlize query를 사용하기 싫을 땐 아래와 같이 SQL 쿼리를 사용하면 된다.
+
+`const [result, metadata] = await sequelize.query('SELECT * FROM comments');`
+
+아래와 같이 http 통신으로 얻어진 값을 raw query로 구현할 수도 있을까?
+
+``` js
+const user = await User.create({
+    name: req.body.name,
+    age: req.body.age,
+    married: req.body.married,
+});
+```
+
+### 실습 프로젝트
+
+route
+`GET /` -> findAll() and render sequelize.html 
+
+`GET /users/` -> findAll() and next() to POST
+`POST /users/` -> create() User.
+`GET /users/:id/comments` -> findAll(User + Comment?)
+
+`POST /comments/` -> create() Comment.
+`PATCH /comments/:id` -> update() Comment.
+`DELETE /comments/:id` -> destroy() Comment.
+
+``` dir
+\--- app.js // express에 미들웨어, 패키지, router, nunjucks, sequelize를 load
+\--- models/index.js // config.json, sequelize load. db 객체 생성 및 user/comment model을 db 객체에 할당. exports db. 
+\			user.js
+\			comment.js
+\--- routes/index.js
+\			users.js
+\			comments.js
+\--- public/sequelize.js
+\--- views/sequelize.html // nunjucks template
+\			error.html
+\--- config/config.json
+```
+
+# Reference
+
+[생활코딩 - DATABASE2 MySQL](https://www.youtube.com/watch?v=h_XDmyz--0w&list=PLuHgQVnccGMCgrP_9HL3dAcvdt8qOZxjW&ab_channel=%EC%83%9D%ED%99%9C%EC%BD%94%EB%94%A9)

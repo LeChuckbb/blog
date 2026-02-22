@@ -7,165 +7,119 @@ description: BAM!이 아닌 BEM
 date: '2021-12-06'
 title: BEM
 ---
-import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
-function _createMdxContent(props) {
-  const _components = {
-    a: "a",
-    code: "code",
-    h2: "h2",
-    h3: "h3",
-    img: "img",
-    li: "li",
-    p: "p",
-    pre: "pre",
-    ul: "ul",
-    ...props.components
-  };
-  return _jsxs(_Fragment, {
-    children: [_jsx(_components.p, {
-      children: "CSS 네이밍 컨벤션인 BEM을 알아보도록 하자."
-    }), "\n", _jsx(_components.h2, {
-      children: "BEM이란?"
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.img, {
-        src: "https://velog.velcdn.com/images/lechuck/post/991700ad-1abc-48da-9e82-c5abaa002da6/image.png",
-        alt: ""
-      })
-    }), "\n", _jsx(_components.p, {
-      children: "BEM(Block, Elements and Modifiers)은 CSS 네이밍 컨벤션의 일종으로, 그 규칙이 간단해서 협업에 편의를 더해주고 CSS 명시도(Specificity)에서 비롯되는 Selector의 복잡성을 줄여준다."
-    }), "\n", _jsx(_components.p, {
-      children: "Block은 그 자체로 의미를 갖는 요소를 말한다(standalone entity that is meaningful on its own)."
-    }), "\n", _jsx(_components.p, {
-      children: "Element는 Block과 유사한 기능을 수행하면서도 Element 독립적으로는 의미를 갖지 못하는 요소를 말한다. 즉, Element는 Block에 의존적이다. (A part of a block that has no standalone meaning and is semantically tied to its block)"
-    }), "\n", _jsx(_components.p, {
-      children: "마지막으로 Modifier는 Block이나 Element의 flag다. Modifier는 Block이나 Element의 외관이나 행동을 변경할 때 쓰인다."
-    }), "\n", _jsxs(_components.p, {
-      children: ["BEM은 기본적으로 ", _jsx(_components.code, {
-        children: "Block__Element--Modifer"
-      }), ", 즉 ", _jsx(_components.code, {
-        children: "tab__item--focused(boolean)"
-      }), "와 같은 형태로 쓰인다. ", _jsx(_components.code, {
-        children: "form__login--theme-normal(key-value)"
-      }), "와 같이 'Modifier-value' 형태로도 사용된다."]
-    }), "\n", _jsxs(_components.ul, {
-      children: ["\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "BEM에 (HTML) ID Attribute는 사용되지 않는다. Class만 사용한다."
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "어떻게 보이는가(x) 어떤 목적인가(o)\n화면에 빨간색 에러 메시지를 띄우고 싶다면, .red가 아닌 .error라는 명칭을 부여해야 한다. 추후 에러 메시지의 색상을 빨강이 아닌 다른 색으로 변경할 수 있기 때문이다."
-        }), "\n"]
-      }), "\n"]
-    }), "\n", _jsx(_components.p, {
-      children: "BEM의 핵심이라고 생각되는 부분 또는 헷갈릴 수 있는 5가지 상황을 아래와 같이 정리했다."
-    }), "\n", _jsx(_components.h2, {
-      children: "코드로 살펴보는 BEM"
-    }), "\n", _jsx(_components.p, {
-      children: "case 1)"
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-html",
-        children: "// Bad case\n// .header .nav와 같이 .nav가 .header에 종속된다.\n<div class='header'>\n  <div class='nav'> </div>  \n</div>\n"
-      })
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-html",
-        children: "<div class='header'> // Block\n  <div class='header__nav'> </div> // Block__Element\n</div>\n"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: "case 2)"
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-html",
-        children: "// Bad case\n<form class='search-form'> // Block\n  <div class='search-form__content'> // Block__Element1\n    <input class='search-form__content__input'> // Block__Element1__Element2\n    <button class='search-form__content__button'> // Block__Element1__Element3\n"
-      })
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-html",
-        children: "// BEM은 구조의 깊이를 전달하지 않는다.\n// DOM 구조적으론 Element2,3이 Element1 하위에 위치하지만,\n// BEM 측면에선 그저 또 하나의 Block__Element다.\n// Block__Element__Element와 같이 꼬아선 안 된다.\n<form class='search-form'> \n  <div class='search-form__content'> // Block__Element1\n    <input class='search-form__input'> // Block__Element2\n    <button class='search-form__button'> // Block__Element3\n"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: "case 3)"
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-html",
-        children: "// Bad case\n<figure class='photo'>\n  <img>\n  <figcaption>\n"
-      })
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-html",
-        children: "// BEM은 클래스명을 생략해선 안 된다.\n// 클래스명을 생략하면 지금 당장은 간결해 보이고 좋으나,\n// 명시도가 증가해서 위험함.\n// .photo figcaption < .photo__caption\n<figure class='photo'>\n  <img class='photo__img'>\n  <figcaption class='photo__caption'>\n"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: "case 4)"
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-html",
-        children: "// Bad case\n<button class='btn--submit'>\n"
-      })
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-html",
-        children: "// btn에 변형이 있을 경우 --Modifier를 사용한다\n// 이때 Modifier는 btn을 대체하기 위함이 아닌 확장하는 용도다.\n// 따라서 btn--submit을 단독으로 사용해선 안 된다.\n<button class='btn btn--submit'>\n"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: "case 5)"
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-html",
-        children: "// BEM은 kebab-case, camelCase를 허용한다\n<div class='some-thesis some-thesis--fast-read'> // Block, Block--Modifier\n<div class='someThesis someThesis--fastRead'>\n"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.img, {
-        src: "https://images.velog.io/images/lechuck/post/862b17cd-6f9a-48e9-b119-0671646a6a29/image.png",
-        alt: ""
-      })
-    }), "\n", _jsxs(_components.p, {
-      children: ["토이 프로젝트에 BEM을 적용해본 모습. game 블록내에 여러가지 Element로 구성된 것을 볼 수 있다. ", _jsx(_components.code, {
-        children: "<i>"
-      }), "태그에도 game__icon과 같은 구조를 적용해야 맞는지는 잘 모르겠다."]
-    }), "\n", _jsx(_components.h3, {
-      children: "References"
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://velog.io/@teo/CSS-%EA%B3%B5%EB%B6%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%95%B4%EC%95%BC-%ED%95%98%EB%82%98%EC%9A%94-%EC%9D%B4%EB%A1%A0%ED%8E%B8-feat.-figma",
-        children: "CSS 공부 어떻게 해야 하나요? - 이론편 (feat. figma)"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://nykim.work/15",
-        children: "[CSS 방법론] BEM 방식"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "http://getbem.com/introduction/",
-        children: "BEM"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://naradesign.github.io/bem-by-example.html",
-        children: "예제로 이해하는 BEM."
-      })
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://velog.io/@teo/css-history-1",
-        children: "CSS 역사로 알아보는 CSS가 어려워진 이유"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://developer.mozilla.org/ko/docs/Web/CSS/Specificity",
-        children: "MDN - CSS 명시도(Specificity)"
-      })
-    })]
-  });
-}
-export default function MDXContent(props = {}) {
-  const {wrapper: MDXLayout} = props.components || ({});
-  return MDXLayout ? _jsx(MDXLayout, {
-    ...props,
-    children: _jsx(_createMdxContent, {
-      ...props
-    })
-  }) : _createMdxContent(props);
-}
+CSS 네이밍 컨벤션인 BEM을 알아보도록 하자.
+
+## BEM이란?
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-991700ad-1abc-48da-9e82-c5abaa002da6-image.png)
+
+BEM(Block, Elements and Modifiers)은 CSS 네이밍 컨벤션의 일종으로, 그 규칙이 간단해서 협업에 편의를 더해주고 CSS 명시도(Specificity)에서 비롯되는 Selector의 복잡성을 줄여준다.
+
+Block은 그 자체로 의미를 갖는 요소를 말한다(standalone entity that is meaningful on its own).
+
+Element는 Block과 유사한 기능을 수행하면서도 Element 독립적으로는 의미를 갖지 못하는 요소를 말한다. 즉, Element는 Block에 의존적이다. (A part of a block that has no standalone meaning and is semantically tied to its block)
+
+마지막으로 Modifier는 Block이나 Element의 flag다. Modifier는 Block이나 Element의 외관이나 행동을 변경할 때 쓰인다.
+
+BEM은 기본적으로 `Block__Element--Modifer`, 즉 `tab__item--focused(boolean)`와 같은 형태로 쓰인다. `form__login--theme-normal(key-value)`와 같이 'Modifier-value' 형태로도 사용된다.
+
+* BEM에 (HTML) ID Attribute는 사용되지 않는다. Class만 사용한다.
+
+* 어떻게 보이는가(x) 어떤 목적인가(o)
+화면에 빨간색 에러 메시지를 띄우고 싶다면, .red가 아닌 .error라는 명칭을 부여해야 한다. 추후 에러 메시지의 색상을 빨강이 아닌 다른 색으로 변경할 수 있기 때문이다.
+
+BEM의 핵심이라고 생각되는 부분 또는 헷갈릴 수 있는 5가지 상황을 아래와 같이 정리했다.
+
+## 코드로 살펴보는 BEM
+
+case 1)
+
+```html
+// Bad case
+// .header .nav와 같이 .nav가 .header에 종속된다.
+<div class='header'>
+  <div class='nav'> </div>  
+</div>
+```
+
+```html
+<div class='header'> // Block
+  <div class='header__nav'> </div> // Block__Element
+</div>
+```
+
+case 2)
+```html
+// Bad case
+<form class='search-form'> // Block
+  <div class='search-form__content'> // Block__Element1
+    <input class='search-form__content__input'> // Block__Element1__Element2
+    <button class='search-form__content__button'> // Block__Element1__Element3
+```
+
+```html
+// BEM은 구조의 깊이를 전달하지 않는다.
+// DOM 구조적으론 Element2,3이 Element1 하위에 위치하지만,
+// BEM 측면에선 그저 또 하나의 Block__Element다.
+// Block__Element__Element와 같이 꼬아선 안 된다.
+<form class='search-form'> 
+  <div class='search-form__content'> // Block__Element1
+    <input class='search-form__input'> // Block__Element2
+    <button class='search-form__button'> // Block__Element3
+```
+
+case 3)
+```html
+// Bad case
+<figure class='photo'>
+  <img>
+  <figcaption>
+```
+
+```html
+// BEM은 클래스명을 생략해선 안 된다.
+// 클래스명을 생략하면 지금 당장은 간결해 보이고 좋으나,
+// 명시도가 증가해서 위험함.
+// .photo figcaption < .photo__caption
+<figure class='photo'>
+  <img class='photo__img'>
+  <figcaption class='photo__caption'>
+```
+
+case 4)
+```html
+// Bad case
+<button class='btn--submit'>
+```
+
+```html
+// btn에 변형이 있을 경우 --Modifier를 사용한다
+// 이때 Modifier는 btn을 대체하기 위함이 아닌 확장하는 용도다.
+// 따라서 btn--submit을 단독으로 사용해선 안 된다.
+<button class='btn btn--submit'>
+```
+
+case 5)
+```html
+// BEM은 kebab-case, camelCase를 허용한다
+<div class='some-thesis some-thesis--fast-read'> // Block, Block--Modifier
+<div class='someThesis someThesis--fastRead'>
+```
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-862b17cd-6f9a-48e9-b119-0671646a6a29-image.png)
+
+토이 프로젝트에 BEM을 적용해본 모습. game 블록내에 여러가지 Element로 구성된 것을 볼 수 있다. `<i>`태그에도 game__icon과 같은 구조를 적용해야 맞는지는 잘 모르겠다.
+
+### References
+
+[CSS 공부 어떻게 해야 하나요? - 이론편 (feat. figma)](https://velog.io/@teo/CSS-%EA%B3%B5%EB%B6%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%95%B4%EC%95%BC-%ED%95%98%EB%82%98%EC%9A%94-%EC%9D%B4%EB%A1%A0%ED%8E%B8-feat.-figma)
+
+[[CSS 방법론] BEM 방식](https://nykim.work/15)
+
+[BEM](http://getbem.com/introduction/)
+
+[예제로 이해하는 BEM.](https://naradesign.github.io/bem-by-example.html)
+
+[CSS 역사로 알아보는 CSS가 어려워진 이유](https://velog.io/@teo/css-history-1)
+
+[MDN - CSS 명시도(Specificity)](https://developer.mozilla.org/ko/docs/Web/CSS/Specificity)

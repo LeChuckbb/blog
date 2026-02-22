@@ -1,0 +1,178 @@
+---
+tags:
+  - algorithm
+  - 정규표현식
+  - 코테
+slug: coding-test-regexp
+description: null
+date: '2021-12-16'
+title: 정규표현식과 코테 문제 (신규 아이디 추천)
+---
+프로그래머스에서 제공하는 코딩테스트 Lv1 문제,** \<신규 아이디 추천>** 을 풀기위해 정규표현식을 공부하고 실전에 바로 적용해보았더니 상당한 도움이 되었다. 학습한 내용을 정리하면서 각인시키도록 하자.
+
+# 📝 정규표현식 공부
+
+자바스크립트에서 정규표현식(이하 정규식)을 만드는 방법은 세 가지다.
+
+``` js
+<script>
+// 1. 정규식 리터럴 (슬래쉬로 감싸기)
+const exp = /ab+c/g;
+// 2. RegExp 리터럴
+const exp1 = new RegExp(/ab+c/, 'g');
+// 3. RegExp 생성자
+const exp2 = new RegExp('ab+c', 'g');
+</script>
+```
+
+## 특수 문자
+* \ (백슬래쉬) : 특수문자가 아닌 문자(non-special character) 앞에 사용될 경우 '해당 문자가 특별하게 사용되어야 함'을 나타낸다. 반대로, 특수문자 앞에 사용될 경우에는 '해당 문자는 특별하지 않으며 문자 그대로 해석되어야 함'을 뜻한다.
+`/a*/` -> 0개 이상의 a가 반복됨
+`/a\*/` -> 문자열 'a*'에 대응됨
+
+> RegExp 생성자 방식을 이용할 땐 \ 자체를 이스케이프 해주어야 한다. 즉, 정규식 리터럴이나 RegExp 리터럴에서는 `/a\*/`로 표현하면 될 것이 RegExp 생성자에서는 `'a\\*'`와 같이 표현해야 한다는 것이다. 정확한 이유는 모르겠는데, 아마 문자열 내에서 \가 해석되는 방식에 따른 문제인 것으로 보인다.
+
+* \{n\} (중괄호) : 앞의 표현식이 n번 나타나는 부분에 대응.
+	ex) `/a{2}/`는 문자열 'caandy'의 aa, 'caaaaandy'의 첫 aa에 대응된다.
+
+* \*: 앞의 표현식이 0회 이상 연속으로 반복되는 부분과 대응. \{0,\}과 같다.
+	ex) `/ab*c/`는 문자열 'abbbbc'에서 abbbbc에 대응된다. a와 c사이에서 반복되는 b여야만한다.
+    
+* \+ : 앞의 표현식이 1회 이상 연속으로 반복되는 부분과 대응. \{1,\}과 같다.
+	ex) `/a+/는 문자열 'caaaaandy'의 모든 a에 대응된다.
+
+* ? : 앞의 표현식이 0 또는 1회 등장하는 부분에 대응. \{0,1\}과 같다.
+	ex) `/e?le?/`는 문자열 'angel'의 el, 'oslo'의 l에 대응된다.
+    
+* ^ : 입력의 첫 글자에 대응.
+	ex) `/^A/`는 문자열 'An E'의 A에 대응된다.
+
+*  $  : 입력의 끝 글자에 대응.
+	ex) `/t$/`는 문자열 'eat'의 t에 대응된다.
+    
+> `/^$/`는 빈 문자열을 의미한다.
+
+* . : 개행 문자를 제외한 모든 단일 문자와 대응.
+	ex) `/.n/`는 문자열 'nay, an apple is on the tree'에서 an과 on에 대응된다.
+
+* (x) (소괄호) : 그룹화, 캡처 기능을 갖는다.
+
+* x | y : x 또는 y에 대응
+
+* \{ n, m\} : 앞 문자가 최소 n번, 최대 m번 반복되는 부분에 대응. 이때 n과 m은 양의 정수여야 하고 n\<=m을 만족해야 한다.
+
+* [xyz] : 문자셋(character set). 문자셋 내부에서는 특수 문자가 일반 문자로 대응된다. 따라서 이스케이프할 필요가 없다. 문자셋 내부에서는 하이픈을 이용해서 문자의 범위를 지정할 수 있다.
+	ex) `/[a-d]/`는 `/[abcd]/`와 동일하다. 문자열 'brisket'의 b, 'city'의 c에 대응한다. `/[a-z.]+/`는 문자열 'test.i.ng'에서 전체와 대응된다.
+    
+* [^xyz] : 부정 문자셋(negated) 또는 보충 문자셋(complemented)으로 불린다. 대괄호 내부에 등장하지 않는 모든 문자와 대응.
+	ex) `/[^a-c]/g`는 문자열 'brisket'에서 risket에 대응된다.
+
+* [\b] : 백스페이스. \b와 혼동하지 말 것.
+
+* \b : 단어 경계. 단어 문자인 `/[A-Za-z0-9_]/` 에 해당하는 단어들 사이에서 경계(공백 등)에 대응.
+	ex) `/\b[a-z]/g`는 문자열 'you like me'에서 y, l, m에 대응된다.
+
+* \w : 단어 문자. 밑줄 문자를 포함한 영문자와 숫자에 대응. 
+	ex) `/\w/g`는 문자열 '$5.28,'에서 5 2 8에 대응된다.
+    
+## 메서드
+
+#### String.replace() 
+
+String.replace() 함수는 첫 번째 인자로 전달된 패턴에 일치하는 부분을 두 번째 매개변수로 전달된 형태로 변경한다.
+
+두 번째 인자로 함수를 전달할 경우, 첫 번째 인자로 전달된 정규표현식의 매치가 수행된 후 함수를 호출하게 된다.
+
+ex) `'you like me'.replace(/\b[a-z]/g, char => char.toUpperCase())`의 결과는 'You Like Me'이다.
+
+# 🖥️ 실전 적용
+
+위와 같은 정도의 정규식 문법만 알아도 **\<신규 아이디 추천>** 문제를 풀기에는 충분했다. 인풋으로 주어진 난잡한 아이디를 특정 조건에 맞추어 간소화하는 문제다. 
+
+> 1단계 new__id의 모든 대문자를 대응되는 소문자로 치환합니다.
+2단계 new_id에서 알파벳 소문자, 숫자, 빼기(-), 밑줄(_), 마침표(.)를 제외한 모든 문자를 제거합니다.
+3단계 new_id에서 마침표(.)가 2번 이상 연속된 부분을 하나의 마침표(.)로 치환합니다.
+4단계 new_id에서 마침표(.)가 처음이나 끝에 위치한다면 제거합니다.
+5단계 new_id가 빈 문자열이라면, new_id에 "a"를 대입합니다.
+6단계 new_id의 길이가 16자 이상이면, new_id의 첫 15개의 문자를 제외한 나머지 문자들을 모두 제거합니다.
+     만약 제거 후 마침표(.)가 new_id의 끝에 위치한다면 끝에 위치한 마침표(.) 문자를 제거합니다.
+7단계 new_id의 길이가 2자 이하라면, new_id의 마지막 문자를 new_id의 길이가 3이 될 때까지 반복해서 끝에 붙입니다.
+
+처음에 짰던 코드는 아래와 같다. 잘 짠 코드라고는 할 수 없겠지만 정규식 하나하나 테스트해가며 비교적 빠른 속도로 작성했다.
+
+``` js
+<script>
+function solution(new_id) {
+    
+    // 1) 대문자 -> 소문자
+    const first = new_id.toLowerCase();
+    console.log(first);
+    
+    // 2) 소문자 알파벳, 숫자, 빼기(-), 밑줄(_), 마침표(.)를 제외한 모든 문자 제거
+    // match는 결과를 Array로 반환한다. join('')을 이용해서 배열을 구분자 없이 문자열로 변환한다.
+    let regex = /[a-z0-9-_.]/g;
+    const second = first.match(regex).join('');
+    console.log(second);
+    
+    // 3) 마침표(.)가 2번 이상 연속된 부분을 하나의 마침표로 치환
+    // regex = /.+/g;  // Fail
+    regex = /\.{2,}/g;
+    const third = second.replace(regex, '.');
+    console.log(third);
+    
+    // 4) 마침표가 처음이나 끝에 위치하면 제거한다
+    regex = /^(\.)|(\.)$/g;
+    const fourth = third.replace(regex, '');
+    console.log(`${fourth}`);
+    
+    // 5) 빈 문자열이면 a를 대입
+    let fifth;
+    fourth === "" ? fifth = 'a' : fifth = fourth;
+    console.log(fifth);
+    
+    // 6) 길이가 16자 이상이면, 첫 15개를 제외한 나머지 문자를 제거.
+    // 만약 제거 후 마침표가 문자열 끝에 위치한다면, 마침표를 제거.
+    let sixth;
+    fifth.length >= 16 
+        ? sixth = fifth.substr(0,15)
+        : sixth = fifth;
+    
+    regex = /\.$/g;
+    sixth = sixth.replace(regex, '');
+    console.log(sixth);
+    
+    // 7) 길이가 2자 이하라면, 마지막 문자를 길이 3이 될 때까지 반복.
+    if(sixth.length <= 2){
+        while(sixth.length < 3)
+            sixth += sixth[sixth.length-1];
+    }
+    console.log(sixth);
+    return sixth;
+}
+</script>
+```
+
+아래는 다른 사람이 짠 코드를 보고 조금 고쳐봤다. 정규식 `/^$/`이 빈 문자열을 의미한다는 점과 String.repeat() 메서드를 주의깊게 봤다.
+
+``` js
+<script>
+function solution(new_id){
+    const answer = new_id
+        .toLowerCase() // 1
+        .replace(/[^a-z0-9-_.]/g, '') // 2
+        .replace(/\.{2,}/g, '.') // 3
+        .replace(/^(\.)|(\.)$/g, '') // 4
+        .replace(/^$/g, 'a') // 5 /^$/은 빈 문자열을 의미한다
+        .slice(0,15).replace(/\.$/g, ''); // 6
+    
+    const len = answer.length;
+    return len > 2 ? answer : answer + answer.charAt(len-1).repeat(3 - len);
+}
+</script>
+```
+
+# 📚 Reference
+
+[MDN - 정규표현식 ](https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Regular_Expressions)
+
+[MDN - RegExp](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/RegExp)

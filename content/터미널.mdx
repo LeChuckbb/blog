@@ -7,149 +7,73 @@ description: null
 date: '2022-03-07'
 title: 터미널
 ---
-import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
-function _createMdxContent(props) {
-  const _components = {
-    a: "a",
-    blockquote: "blockquote",
-    code: "code",
-    h2: "h2",
-    h3: "h3",
-    img: "img",
-    li: "li",
-    p: "p",
-    pre: "pre",
-    ul: "ul",
-    ...props.components
-  };
-  return _jsxs(_Fragment, {
-    children: [_jsx(_components.p, {
-      children: "git bash"
-    }), "\n", _jsxs(_components.p, {
-      children: [_jsx(_components.code, {
-        children: "cd ~"
-      }), " 명령어로 home directory 진입"]
-    }), "\n", _jsxs(_components.p, {
-      children: [_jsx(_components.code, {
-        children: "touch .bashrc"
-      }), " 명령어로 .bashrc file을 생성"]
-    }), "\n", _jsx(_components.p, {
-      children: "WARNING: Found ~/.bashrc but no ~/.bash_profile, ~/.bash_login or ~/.profile."
-    }), "\n", _jsxs(_components.p, {
-      children: ["npm global 설치 경로 변경하기 : ", _jsx(_components.code, {
-        children: "npm config set preset 'path'"
-      })]
-    }), "\n", _jsx(_components.h2, {
-      children: "용어 정리"
-    }), "\n", _jsx(_components.p, {
-      children: "terminal -> OS를 조종하기 위한 emulator. program. 유저에게 command line을 제공한다. command line에는 $ prompt가 출력되어 명령어 입력 대기중임을 표시한다."
-    }), "\n", _jsx(_components.p, {
-      children: "console -> terminal이 Linux OS를 위한 것이었다면, console은 Widnow OS를 위한 것이다. Linux OS는 termianl에서 bash Shell을 주로 사용한다면 Window OS는 console에서 Command Prompt Shell을 주로 사용한다."
-    }), "\n", _jsx(_components.p, {
-      children: "Shell -> 유저가 terminal의 command line에 command를 입력하여 엔터 키를 누르면, terminal은 해당 명령어를 해석하기 위해 Linxu OS에서 동작하는 Shell에 전달한다. Shell은 명령어를 kernel-understandable form으로 해석 및 변환하여 kernel에 전달한다. 즉, shell은 end-user와 kernel 간 중재자다."
-    }), "\n", _jsxs(_components.p, {
-      children: ["bash -> Bourne Again SHell의 약자. 즉, shell의 일종. 터미널에서 주로 사용되는 language. 터미널 내부에서 어떤 language를 사용하고 있는지 확인하려면 ", _jsx(_components.code, {
-        children: "echo $0"
-      }), " 명령어를 입력한다."]
-    }), "\n", _jsx(_components.p, {
-      children: "zsh -> 터미널에서 주로 사용되는 language."
-    }), "\n", _jsx(_components.p, {
-      children: "kernel -> 시스템의 모든 것을 통제하는 OS의 핵심. 소프트웨어와 하드웨어 간 interface 역할을 한다. 0과 1로 이루어진 binaray languae만 해석할 수 있기에 terminal에서 유저가 입력한 command는 Shell을 통해 binary language로 번역되는 것."
-    }), "\n", _jsx(_components.h2, {
-      children: "문제1)"
-    }), "\n", _jsx(_components.p, {
-      children: "Git bash에서 parcel 명령어 입력 시 아래와 같이 출력되는 문제 해결하기"
-    }), "\n", _jsxs(_components.blockquote, {
-      children: ["\n", _jsx(_components.p, {
-        children: "해결하지 못함..."
-      }), "\n"]
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.img, {
-        src: "https://images.velog.io/images/lechuck/post/19363b4c-8658-4b1f-b648-af750e15cd08/image.png",
-        alt: ""
-      })
-    }), "\n", _jsx(_components.p, {
-      children: "parcel은 프로젝트 내 여러 파일을 하나의 파일로 bulid 해주는 bundler이다. Node.js 환경에서 패키지 관리 도구인 npm이나 yarn을 통해 설치할 수 있다. Git Bash가 아닌 Power Shell, Command Prompt와 같은 다른 Shell 에서는 parcel 명렁어가 정상 동작하는 것으로 미루어 보았을 때 Git Bash의 환경 설정쪽에 문제가 있어서 parcel이 설치된 경로를 못 찾고 있는 문제라고 판단했다."
-    }), "\n", _jsx(_components.p, {
-      children: "nvm을 사용하여 node.js version을 관리하고 있다. nvm을 설치하면 기존에 npm 폴더에서 관리되던 항목들을 삭제해주어야 한다. C:\\Users\\Park\\AppData\\Roaming\\npm 폴더에 아무런 패키지들이 설치되어 있지 않은 것을 확인했고, 폴더를 삭제했다."
-    }), "\n", _jsx(_components.p, {
-      children: "windows 시스템 환경 변수에 설정된 nvm 관련 변수는 아래와 같다. NVM_HOME : C:\\Users\\Park\\AppData\\Roaming\\nvm, NVM_SYMLINK : C:\\Program Files\\nodejs"
-    }), "\n", _jsx(_components.p, {
-      children: "NVM_HOME은 아래와 같은 구조를 갖는다."
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-path",
-        children: "NVM_HOME\n\\----- node_modules -> npm global로 설치한 패키지들을 관리\n\\----- v14.0.0      -> nvm으로 관리하는 node 14.0 version \n\\----- v16.0.0      \n\\ ...\n"
-      })
-    }), "\n", _jsxs(_components.p, {
-      children: [_jsx(_components.code, {
-        children: "npm -g i"
-      }), " 명령어로 설치한 parcel이 node_modules 디렉토리에서 관리되고 있는 것을 확인했다. 따라서 Git bash에서 parcel 명령어를 입력할 때 해당 폴더를 참조할 수 있도록 설정하면 될 것 같다."]
-    }), "\n", _jsx(_components.h3, {
-      children: "git bash 환경변수 관련 command"
-    }), "\n", _jsxs(_components.ul, {
-      children: ["\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: [_jsx(_components.code, {
-            children: "echo $환경변수이름"
-          }), " : 적용되어 있는 환경변수를 출력 (확인용도)"]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: [_jsx(_components.code, {
-            children: "export 환경변수이름=값"
-          }), " : export 명령어로 환경변수를 임시로 적용하기."]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["PATH에 환경변수를 추가할 때는 ", _jsx(_components.code, {
-            children: "export PATH=$PATH:값"
-          }), "과 같은 형식을 취해야 한다. ", _jsx(_components.code, {
-            children: "export PATH=값"
-          }), "은 기존 PATH 변수를 덮어씌운다."]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: ".bashrc 파일을 수정하여 환경변수를 영구적으로 적용하기. .bashrc 파일에 export 명령어를 사용하여 지정하면 된다."
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: [_jsx(_components.code, {
-            children: "env"
-          }), " : 환경변수 목록을 출력한다. (windows에선 set)"]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: [_jsx(_components.code, {
-            children: "ls $PATH"
-          }), " : 접근이 불가능한 path 목록을 볼 수 있다."]
-        }), "\n"]
-      }), "\n"]
-    }), "\n", _jsxs(_components.p, {
-      children: ["예상과는 달리 ", _jsx(_components.code, {
-        children: "export parcel=C:\\Users\\Park\\AppData\\Roaming\\nvm\\node_modules"
-      }), "와 같은 식으로 git bash에 parcel 환경 변수를 설정해주어도 parcel 명령어가 작동하질 않았다."]
-    }), "\n", _jsx(_components.h2, {
-      children: "references"
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://www.geeksforgeeks.org/what-is-terminal-console-shell-and-kernel/",
-        children: "What is Terminal, Console, Shell and Kernel?"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://chanos.tistory.com/entry/ETC-cmd%ED%94%84%EB%A1%AC%ED%8F%AC%ED%8A%B8-git-bash%EC%97%90%EC%84%9C-%ED%99%98%EA%B2%BD-%EB%B3%80%EC%88%98-%EC%84%A4%EC%A0%95-%EC%82%AD%EC%A0%9C-%EB%B0%A9%EB%B2%95-%ED%99%98%EA%B2%BD-%EB%B3%80%EC%88%98-%EA%B4%80%EB%A0%A8-%EB%AA%85%EB%A0%B9%EC%96%B4-%EB%AA%A8%EC%9D%8C",
-        children: "[ETC] cmd(프롬포트), git bash에서 환경 변수 설정, 삭제 방법, 환경 변수 관련 명령어 모음"
-      })
-    })]
-  });
-}
-export default function MDXContent(props = {}) {
-  const {wrapper: MDXLayout} = props.components || ({});
-  return MDXLayout ? _jsx(MDXLayout, {
-    ...props,
-    children: _jsx(_createMdxContent, {
-      ...props
-    })
-  }) : _createMdxContent(props);
-}
+git bash 
+
+`cd ~` 명령어로 home directory 진입	
+
+`touch .bashrc` 명령어로 .bashrc file을 생성
+
+WARNING: Found ~/.bashrc but no ~/.bash_profile, ~/.bash_login or ~/.profile.
+
+npm global 설치 경로 변경하기 : `npm config set preset 'path'`
+
+## 용어 정리
+
+terminal -> OS를 조종하기 위한 emulator. program. 유저에게 command line을 제공한다. command line에는 $ prompt가 출력되어 명령어 입력 대기중임을 표시한다.
+
+console -> terminal이 Linux OS를 위한 것이었다면, console은 Widnow OS를 위한 것이다. Linux OS는 termianl에서 bash Shell을 주로 사용한다면 Window OS는 console에서 Command Prompt Shell을 주로 사용한다.
+
+Shell -> 유저가 terminal의 command line에 command를 입력하여 엔터 키를 누르면, terminal은 해당 명령어를 해석하기 위해 Linxu OS에서 동작하는 Shell에 전달한다. Shell은 명령어를 kernel-understandable form으로 해석 및 변환하여 kernel에 전달한다. 즉, shell은 end-user와 kernel 간 중재자다.
+
+bash -> Bourne Again SHell의 약자. 즉, shell의 일종. 터미널에서 주로 사용되는 language. 터미널 내부에서 어떤 language를 사용하고 있는지 확인하려면 `echo $0` 명령어를 입력한다.
+
+zsh -> 터미널에서 주로 사용되는 language.
+
+kernel -> 시스템의 모든 것을 통제하는 OS의 핵심. 소프트웨어와 하드웨어 간 interface 역할을 한다. 0과 1로 이루어진 binaray languae만 해석할 수 있기에 terminal에서 유저가 입력한 command는 Shell을 통해 binary language로 번역되는 것.
+
+## 문제1) 
+
+Git bash에서 parcel 명령어 입력 시 아래와 같이 출력되는 문제 해결하기
+
+> 해결하지 못함...
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-19363b4c-8658-4b1f-b648-af750e15cd08-image.png)
+
+parcel은 프로젝트 내 여러 파일을 하나의 파일로 bulid 해주는 bundler이다. Node.js 환경에서 패키지 관리 도구인 npm이나 yarn을 통해 설치할 수 있다. Git Bash가 아닌 Power Shell, Command Prompt와 같은 다른 Shell 에서는 parcel 명렁어가 정상 동작하는 것으로 미루어 보았을 때 Git Bash의 환경 설정쪽에 문제가 있어서 parcel이 설치된 경로를 못 찾고 있는 문제라고 판단했다.
+
+nvm을 사용하여 node.js version을 관리하고 있다. nvm을 설치하면 기존에 npm 폴더에서 관리되던 항목들을 삭제해주어야 한다. C:\Users\Park\AppData\Roaming\npm 폴더에 아무런 패키지들이 설치되어 있지 않은 것을 확인했고, 폴더를 삭제했다.
+
+windows 시스템 환경 변수에 설정된 nvm 관련 변수는 아래와 같다. NVM_HOME : C:\Users\Park\AppData\Roaming\nvm, NVM_SYMLINK : C:\Program Files\nodejs
+
+NVM_HOME은 아래와 같은 구조를 갖는다.
+
+``` path
+NVM_HOME
+\----- node_modules -> npm global로 설치한 패키지들을 관리
+\----- v14.0.0      -> nvm으로 관리하는 node 14.0 version 
+\----- v16.0.0      
+\ ...
+```
+
+`npm -g i` 명령어로 설치한 parcel이 node_modules 디렉토리에서 관리되고 있는 것을 확인했다. 따라서 Git bash에서 parcel 명령어를 입력할 때 해당 폴더를 참조할 수 있도록 설정하면 될 것 같다.
+
+### git bash 환경변수 관련 command
+* `echo $환경변수이름` : 적용되어 있는 환경변수를 출력 (확인용도)
+
+*  `export 환경변수이름=값` : export 명령어로 환경변수를 임시로 적용하기. 
+
+* PATH에 환경변수를 추가할 때는 `export PATH=$PATH:값`과 같은 형식을 취해야 한다. `export PATH=값`은 기존 PATH 변수를 덮어씌운다. 
+
+* .bashrc 파일을 수정하여 환경변수를 영구적으로 적용하기. .bashrc 파일에 export 명령어를 사용하여 지정하면 된다.
+
+* `env` : 환경변수 목록을 출력한다. (windows에선 set)
+
+* `ls $PATH` : 접근이 불가능한 path 목록을 볼 수 있다.
+
+예상과는 달리 `export parcel=C:\Users\Park\AppData\Roaming\nvm\node_modules`와 같은 식으로 git bash에 parcel 환경 변수를 설정해주어도 parcel 명령어가 작동하질 않았다.
+
+## references
+
+[What is Terminal, Console, Shell and Kernel?](https://www.geeksforgeeks.org/what-is-terminal-console-shell-and-kernel/)
+
+[[ETC] cmd(프롬포트), git bash에서 환경 변수 설정, 삭제 방법, 환경 변수 관련 명령어 모음](https://chanos.tistory.com/entry/ETC-cmd%ED%94%84%EB%A1%AC%ED%8F%AC%ED%8A%B8-git-bash%EC%97%90%EC%84%9C-%ED%99%98%EA%B2%BD-%EB%B3%80%EC%88%98-%EC%84%A4%EC%A0%95-%EC%82%AD%EC%A0%9C-%EB%B0%A9%EB%B2%95-%ED%99%98%EA%B2%BD-%EB%B3%80%EC%88%98-%EA%B4%80%EB%A0%A8-%EB%AA%85%EB%A0%B9%EC%96%B4-%EB%AA%A8%EC%9D%8C)

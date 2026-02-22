@@ -62,6 +62,9 @@ class ObsidianTransformer {
       transformedContent = this.processImages(transformedContent);
     }
 
+    // MDX 특수문자 이스케이프 (코드 블록 바깥의 <, {}, <!-- --> 처리)
+    transformedContent = this.escapeMdxSpecialChars(transformedContent);
+
     // 2단계: @mdx-js/mdx로 완전한 MDX 변환 (라이브러리가 모든 호환성 문제 해결)
     try {
       // MDX 컴파일러 초기화 확인
@@ -74,15 +77,15 @@ class ObsidianTransformer {
         format: 'mdx'
       };
       
-      const mdxResult = await this.compile(transformedContent, mdxOptions);
-      
+      await this.compile(transformedContent, mdxOptions); // 검증만 수행
+
       // frontmatter 처리
-      const frontmatter = this.options.cleanFrontmatter 
+      const frontmatter = this.options.cleanFrontmatter
         ? this.cleanFrontmatter(parsed.data, filename)
         : parsed.data;
-      
-      // frontmatter와 content 다시 결합
-      const finalContent = matter.stringify(mdxResult.toString(), frontmatter);
+
+      // frontmatter와 content 다시 결합 (원본 마크다운 사용, JS 컴파일 결과 아님)
+      const finalContent = matter.stringify(transformedContent, frontmatter);
 
       return {
         content: finalContent,
@@ -238,8 +241,55 @@ class ObsidianTransformer {
   }
 
   /**
+   * MDX 특수문자 이스케이프 처리
+   * 코드 블록/인라인 코드 바깥의 <, {}, <!-- --> 를 이스케이프한다.
+   * @param {string} content
+   * @returns {string}
+   */
+  escapeMdxSpecialChars(content) {
+    const codeBlocks = [];
+    const inlineCodes = [];
+
+    // 1단계: 펜스 코드 블록 보호 (``` ... ```)
+    content = content.replace(/```[\s\S]*?```/g, (match) => {
+      const placeholder = `\x00CODEBLOCK${codeBlocks.length}\x00`;
+      codeBlocks.push(match);
+      return placeholder;
+    });
+
+    // 2단계: 인라인 코드 보호 (` ... `)
+    content = content.replace(/`[^`\n]+`/g, (match) => {
+      const placeholder = `\x00INLINE${inlineCodes.length}\x00`;
+      inlineCodes.push(match);
+      return placeholder;
+    });
+
+    // 3단계: HTML 주석 제거 (<!-- ... -->)
+    content = content.replace(/<!--[\s\S]*?-->/g, '');
+
+    // 4단계: < 이스케이프
+    // MDX는 유효한 HTML 태그도 JSX 규칙으로 파싱하므로, 속성이 있거나 닫히지 않는 태그는
+    // 에러를 일으킨다. 가장 안전한 전략: 모든 < 를 이스케이프하되, 마크다운 링크와
+    // 이미지([text](url), ![alt](src))의 URL 부분은 이미 처리됨.
+    // 단, 닫는 태그(</tag>)의 </ 도 이스케이프.
+    content = content.replace(/</g, '\\<');
+
+    // 5단계: { } 이스케이프
+    content = content.replace(/\{/g, '\\{');
+    content = content.replace(/\}/g, '\\}');
+
+    // 6단계: 인라인 코드 복원
+    content = content.replace(/\x00INLINE(\d+)\x00/g, (_, i) => inlineCodes[Number(i)]);
+
+    // 7단계: 펜스 코드 블록 복원
+    content = content.replace(/\x00CODEBLOCK(\d+)\x00/g, (_, i) => codeBlocks[Number(i)]);
+
+    return content;
+  }
+
+  /**
    * 변환된 콘텐츠 검증
-   * @param {string} content 
+   * @param {string} content
    * @returns {boolean}
    */
   validate(content) {

@@ -9,292 +9,140 @@ description: null
 date: '2022-03-30'
 title: Github Actions와 AWS CodeDeploy를 이용한 EC2-Docker-Compose 배포 자동화
 ---
-import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
-function _createMdxContent(props) {
-  const _components = {
-    a: "a",
-    blockquote: "blockquote",
-    code: "code",
-    h1: "h1",
-    h2: "h2",
-    h3: "h3",
-    img: "img",
-    li: "li",
-    p: "p",
-    strong: "strong",
-    ul: "ul",
-    ...props.components
-  };
-  return _jsxs(_Fragment, {
-    children: [_jsx(_components.p, {
-      children: "AWS EC2에 React/Node/flask로 이루어진 Docker-Compose 서버 환경을 구축했다. Docker 덕분에 1. git pull 2. docker-compose build & run과 같은 과정만으로도 간편하게 배포할 수 있게 되었지만, 좀 더 제대로 된 환경을 구축해보고 싶었다."
-    }), "\n", _jsx(_components.p, {
-      children: "이제는 git push만으로도 로컬의 변경사항이 서버에 반영된다. 하지만 테스트 과정을 구현하지 못한 점과 최종 목적지인 EC2에 도달하고나서야 빌드가 이루어진다는 취약점이 있다. 이로인해 push한 코드에 맹점이 있어서 빌드가 불가능함에도 EC2까지 전달되어 비용(내 돈)이 낭비될 우려가 있다. 따라서 로컬에서 docker-compose 빌드가 원활하게 되는지를 확인하고 push해야 한다. (다행히도 docker container는 다른 환경에서의 안정적인 빌드를 보장한다)"
-    }), "\n", _jsxs(_components.blockquote, {
-      children: ["\n", _jsx(_components.p, {
-        children: "github repo의 코드를 추가적으로 빌드할 것이 아닌 이상, 코드를 일일히 전달할 필요가 없다. EC2에서 그냥 git pull 하도록 deploy.sh를 작성하면 된다."
-      }), "\n"]
-    }), "\n", _jsxs(_components.blockquote, {
-      children: ["\n", _jsx(_components.p, {
-        children: "git lfs를 workflow에서 적용하여 100MB가 넘는 파일을  codeDeploy에 넘기면 에러가 발생한다."
-      }), "\n"]
-    }), "\n", _jsxs(_components.blockquote, {
-      children: ["\n", _jsx(_components.p, {
-        children: "docker image를 build하는데 시간이 너무 오래걸린다. docker-compose up 명령 수행에 7분 12초 정도가 소요된다."
-      }), "\n"]
-    }), "\n", _jsx(_components.h1, {
-      children: "CI/CD"
-    }), "\n", _jsx(_components.p, {
-      children: "코드 - 빌드 - 테스트 - 배포(개발환경 -> 운영환경)"
-    }), "\n", _jsx(_components.p, {
-      children: "Continous Integration 지속적인 통합"
-    }), "\n", _jsx(_components.p, {
-      children: "Continuous Delivery 지속적인 제공 -> 개발환경 배포까지만 자동화. 이후 운영환경에 배포는 직접"
-    }), "\n", _jsx(_components.p, {
-      children: "Continuous Deployment 지속적인 배포 -> 운영환경에 배포까지 자동화."
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.img, {
-        src: "https://media.vlpt.us/images/lechuck/post/86c2a887-4642-4644-860e-9c674421a2c3/image.png",
-        alt: ""
-      })
-    }), "\n", _jsxs(_components.blockquote, {
-      children: ["\n", _jsx(_components.p, {
-        children: "EC2에 build된 docker container를 전달하느냐, 코드 자체를 전달하느냐의 기로에서 후자를 택했다. 딥러닝 패키지를 포함한 docker image가 3GB에 육박했기 때문이다. AWS ECR/ECS, github ghcr와 같은 container 서비스를 이용했을 때 위와 같은 용량의 콘테이너를 무리 없이 전송할 수 있는지는 모르겠다. 하지만 아무리 서비스를 잘 구현했더라도 1MB의 소스코드를 EC2에 전달해서 docker build하여 사용하는 게 이치에 맞는 것 같았다."
-      }), "\n"]
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://www.youtube.com/watch?v=UF2Giz9PE-E&t=522s&ab_channel=BE%EB%A1%9C%EB%A7%88",
-        children: "AWS CodeDeploy와 Github Actions를 이용한 CI/CD 구축"
-      })
-    }), "\n", _jsx(_components.h1, {
-      children: "사전 준비"
-    }), "\n", _jsx(_components.h3, {
-      children: "S3 생성"
-    }), "\n", _jsx(_components.h3, {
-      children: "IAM 사용자 생성"
-    }), "\n", _jsx(_components.p, {
-      children: "S3/CodeDeply에 대한 Full Access를 갖는 사용자를 생성한다."
-    }), "\n", _jsxs(_components.ul, {
-      children: ["\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: _jsx(_components.code, {
-            children: "AmazonS3FullAccess"
-          })
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: _jsx(_components.code, {
-            children: "AWSCodeDeployFullAccess"
-          })
-        }), "\n"]
-      }), "\n"]
-    }), "\n", _jsx(_components.p, {
-      children: "생성 후 해당 사용자의 '액세스 키 ID'와 '비밀 액세스 키'를 Github repository - settings - secrets에 입력한다."
-    }), "\n", _jsx(_components.h3, {
-      children: "IAM 역할 생성"
-    }), "\n", _jsxs(_components.p, {
-      children: ["위와 동일한 두 개의 권한을 갖는 역할을 생성하여 EC2에 해당 역할을 부여한다. ", _jsx(_components.code, {
-        children: "EC2 인스턴스 - 보안 - IAM 역할 수정"
-      })]
-    }), "\n", _jsxs(_components.p, {
-      children: ["또한 ", _jsx(_components.code, {
-        children: "AWSCodeDeployRole"
-      }), " 권한을 갖는 역할을 하나 생성하여 CodeDeploy에 연결할 준비를 해둔다."]
-    }), "\n", _jsx(_components.h3, {
-      children: "EC2 인스턴스에서 프로그램 설치"
-    }), "\n", _jsxs(_components.ul, {
-      children: ["\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["aws corretto 다운로드 : ", _jsx(_components.code, {
-            children: "sudo wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.rpm -0 java11.rpm"
-          })]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["jdk 11 설치 : ", _jsx(_components.code, {
-            children: "Sudo apt localinstall jdk11.rpm"
-          })]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["ruby 설치 : ", _jsx(_components.code, {
-            children: "sudo apt install ruby"
-          })]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["서울 리전의 codeDeploy-resource-kit 다운로드 : ", _jsx(_components.code, {
-            children: "cd /home/ec2-user"
-          }), " ", _jsx(_components.code, {
-            children: "wget https://aws-codedploy-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/install"
-          })]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["실행 권한 부여 : ", _jsx(_components.code, {
-            children: "chmod +x ./install"
-          })]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["codeDeploy agent 설치 : ", _jsx(_components.code, {
-            children: "sudo ./install auto"
-          })]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["agent 설치 확인 : ", _jsx(_components.code, {
-            children: "sudo service codedeploy-agent status"
-          })]
-        }), "\n"]
-      }), "\n"]
-    }), "\n", _jsx(_components.h3, {
-      children: "CodeDeploy 설정"
-    }), "\n", _jsxs(_components.p, {
-      children: ["EC2/온프레미스 플랫폼의 CodeDeploy 애플리케이션을 생성한다. ", _jsx(_components.code, {
-        children: "CodeDeploy - 애플리케이션"
-      })]
-    }), "\n", _jsx(_components.p, {
-      children: "생성한 애플리케이션 내부에 배포 그룹을 생성한다. 여기에 앞서 생성한 IAM 역할의 ARN을 기재하고, '현재 위치', 'Amazon EC2 인스턴스', Name-theraphy(EC2 name), 'AllAtOnce', '로드 밸런싱 활성화 해제' 옵션으로 항목들을 채운다."
-    }), "\n", _jsx(_components.h1, {
-      children: "Github Actions"
-    }), "\n", _jsx(_components.p, {
-      children: "빌드, 테스트, 배포 파이프라인을 자동화해주는 CI/CD 플랫폼이다."
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.img, {
-        src: "https://media.vlpt.us/images/lechuck/post/2d657715-d107-4217-8885-3c82a281f920/image.png",
-        alt: ""
-      })
-    }), "\n", _jsx(_components.h2, {
-      children: "workflows"
-    }), "\n", _jsx(_components.p, {
-      children: "프로젝트 내 .github/workflows 폴더에 YAML 형식의 workflow 파일을 정의한다. repositiory에 이벤트가 발생할 때 수행되거나 수동적으로 작동시킬 수 있다. 프로젝트에 여러 개의 workflow를 정의하여 하나는 빌드/테스트를 수행하고 또 다른 하나에서 배포하는 식으로 동작시킬 수 있다."
-    }), "\n", _jsx(_components.p, {
-      children: "workflow는 jobs를 갖는다. 각각의 job은 가상 머신인 runner 혹은 container에 의해 실행된다."
-    }), "\n", _jsx(_components.h2, {
-      children: "Events"
-    }), "\n", _jsx(_components.p, {
-      children: "이벤트는 repository에 의해 유발되어 workflow를 동작시킨다. 이벤트는 pull request가 발생했을 때, issue를 생성했을 때, push할 때 생겨난다. (등등)"
-    }), "\n", _jsx(_components.h2, {
-      children: "jobs"
-    }), "\n", _jsxs(_components.p, {
-      children: ["job은 여러 steps의 집합이다. 각각의 step은 ", _jsx(_components.strong, {
-        children: "script"
-      }), "가 될 수 있고, ", _jsx(_components.strong, {
-        children: "action"
-      }), "이 될 수 있다."]
-    }), "\n", _jsx(_components.p, {
-      children: "하나의 runner에서 동작되는 step들은 서로간 데이터의 공유가 가능하다. 또한 여러 job들 사이에 dependency를 설정하여 작동 순서를 조작할 수 있다."
-    }), "\n", _jsx(_components.h2, {
-      children: "action"
-    }), "\n", _jsx(_components.p, {
-      children: "action은 복잡하고 반복되는 업무를 처리해주는 custon application이다. action을 활용하여 workflow 파일 내 반복되는 코드를 줄일 수 있다."
-    }), "\n", _jsx(_components.h2, {
-      children: "runners"
-    }), "\n", _jsx(_components.p, {
-      children: "runner는 트리거가 발동했을 때 workflow를 작동시키는 (github가 제공하는) 서버다."
-    }), "\n", _jsx(_components.h2, {
-      children: "workflow.yml"
-    }), "\n", _jsx(_components.p, {
-      children: "master 브랜치에 push 이벤트가 발생하면 runner에 의해 workflow에 정의해둔 jobs가 실행된다. 아래 workflow의 주요 기능은 AWS S3와 AWS CodeDeploy에 소스코드를 .zip 형태로 전달하는 것이다."
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.img, {
-        src: "https://media.vlpt.us/images/lechuck/post/b8c41eca-b701-4569-a935-5ac934b7c83a/image.png",
-        alt: ""
-      })
-    }), "\n", _jsx(_components.h1, {
-      children: "AWS CodeDeploy"
-    }), "\n", _jsxs(_components.p, {
-      children: ["AWS codeDeploy에서 deployment group 등 각종 설정을 끝마친 뒤 S3나 github에 **개정된 코드(revision)**을 업로드하면 본격적인 deploy 과정이 시작된다. revision에는 파일을 복사할 위치(EC2 인스턴스의 어느 폴더) 및 배포 스크립트를 실행할 시점 등이 명시된 ", _jsx(_components.strong, {
-        children: "AppSpec"
-      }), " 파일이 포함되어야 한다."]
-    }), "\n", _jsxs(_components.p, {
-      children: ["revision이 배포 그룹에 배포된다. 본 프로젝트에서는 Github Actions workflow에서 ", _jsx(_components.strong, {
-        children: "AWS CLI create-deployment"
-      }), " 명령을 통해 revision을 AWS CodeDeploy에 배포하고 있다. 이후 배포 그룹의  ", _jsx(_components.strong, {
-        children: "codeDeploy agent"
-      }), "는 revision의 bundle(zip 등)을 해제하고, appSpec에 명시된 위치로 파일을 복사하고, 배포 스크립트를 실행한다."]
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/deployment-steps-server.html",
-        children: "EC2/온프레미스 컴퓨팅 플랫폼의 배포"
-      })
-    }), "\n", _jsx(_components.h2, {
-      children: "appspec.yml"
-    }), "\n", _jsx(_components.p, {
-      children: "배포하는 동안 CodeDeploy agent는 AppSpec 파일의 hooks 섹션에서 현재 이벤트의 이름을 조회한다."
-    }), "\n", _jsx(_components.p, {
-      children: "AppSpec 파일의 hooks 섹션에 lifecycle과 script를 명시하여 해당 lifecycle에 수행시킬 동작을 규정할 수 있다. 회색으로 색칠된 event는 행동을 규정할 수 없다."
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.img, {
-        src: "https://media.vlpt.us/images/lechuck/post/fc77b766-7850-4708-8e37-d9506566c0b3/image.png",
-        alt: ""
-      })
-    }), "\n", _jsxs(_components.ul, {
-      children: ["\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "ApplicationStop : revision이 다운로드되기도 전에 발생하는 event. 이 event에서는 성공적인 deploy를 위해서 현재 설치되어 있는 패키지를 지우거나 작동중인 app을 중지할 수 있다."
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "DownloadBundle : codeDeploy agnet가 revision을 임시 폴더에 복사한다."
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "BefroeInstall : 파일의 복호화나 현재 버전의 백업과 같은 사전 설치 작업을 수행할 수 있다."
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "Install : codeDeploy agnet가 임시 폴더로부터 revision을 최종 목적 폴더(destination)로 복사한다."
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["AfterInstall : app에 대한 설정, 파일 접근 권한의 변경 등을 수행할 수 있다. ", _jsx(_components.strong, {
-            children: "deploy.sh"
-          }), "와 같은 쉘 스크립트를 수행시킬수도 있다."]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "ApplicationStart : ApplicationStop 이벤트 도중에 정지된 서비스를 재시작시킬 수 있다."
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "ValidateService : 성공적으로 deployment 되었는지를 검증할 수 있다."
-        }), "\n"]
-      }), "\n"]
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-server",
-        children: "AppSpec 'hooks' section"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.a, {
-        href: "https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/reference-appspec-file-structure-files.html",
-        children: "AppSpec 'files' 섹션(EC2/온프레미스 배포만 해당)"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.img, {
-        src: "https://media.vlpt.us/images/lechuck/post/4b13e90f-e3f8-464c-8e76-8f3219ee5248/image.png",
-        alt: ""
-      })
-    }), "\n", _jsx(_components.h2, {
-      children: "deploy.sh"
-    }), "\n", _jsx(_components.p, {
-      children: "deploy.sh에서는 간단한 동작만 수행한다. 실행중인 모든 도커 프로세스를 죽이고, docker-compose를 작동시킨다."
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.img, {
-        src: "https://media.vlpt.us/images/lechuck/post/9ba70905-be69-4b26-bf8a-9255392fa08a/image.png",
-        alt: ""
-      })
-    })]
-  });
-}
-export default function MDXContent(props = {}) {
-  const {wrapper: MDXLayout} = props.components || ({});
-  return MDXLayout ? _jsx(MDXLayout, {
-    ...props,
-    children: _jsx(_createMdxContent, {
-      ...props
-    })
-  }) : _createMdxContent(props);
-}
+AWS EC2에 React/Node/flask로 이루어진 Docker-Compose 서버 환경을 구축했다. Docker 덕분에 1. git pull 2. docker-compose build & run과 같은 과정만으로도 간편하게 배포할 수 있게 되었지만, 좀 더 제대로 된 환경을 구축해보고 싶었다.
+
+이제는 git push만으로도 로컬의 변경사항이 서버에 반영된다. 하지만 테스트 과정을 구현하지 못한 점과 최종 목적지인 EC2에 도달하고나서야 빌드가 이루어진다는 취약점이 있다. 이로인해 push한 코드에 맹점이 있어서 빌드가 불가능함에도 EC2까지 전달되어 비용(내 돈)이 낭비될 우려가 있다. 따라서 로컬에서 docker-compose 빌드가 원활하게 되는지를 확인하고 push해야 한다. (다행히도 docker container는 다른 환경에서의 안정적인 빌드를 보장한다)
+
+> github repo의 코드를 추가적으로 빌드할 것이 아닌 이상, 코드를 일일히 전달할 필요가 없다. EC2에서 그냥 git pull 하도록 deploy.sh를 작성하면 된다.
+
+> git lfs를 workflow에서 적용하여 100MB가 넘는 파일을  codeDeploy에 넘기면 에러가 발생한다. 
+
+> docker image를 build하는데 시간이 너무 오래걸린다. docker-compose up 명령 수행에 7분 12초 정도가 소요된다.
+
+# CI/CD
+
+코드 - 빌드 - 테스트 - 배포(개발환경 -> 운영환경)
+
+Continous Integration 지속적인 통합
+
+Continuous Delivery 지속적인 제공 -> 개발환경 배포까지만 자동화. 이후 운영환경에 배포는 직접
+
+Continuous Deployment 지속적인 배포 -> 운영환경에 배포까지 자동화.
+
+![](https://media.vlpt.us/images/lechuck/post/86c2a887-4642-4644-860e-9c674421a2c3/image.png)
+
+> EC2에 build된 docker container를 전달하느냐, 코드 자체를 전달하느냐의 기로에서 후자를 택했다. 딥러닝 패키지를 포함한 docker image가 3GB에 육박했기 때문이다. AWS ECR/ECS, github ghcr와 같은 container 서비스를 이용했을 때 위와 같은 용량의 콘테이너를 무리 없이 전송할 수 있는지는 모르겠다. 하지만 아무리 서비스를 잘 구현했더라도 1MB의 소스코드를 EC2에 전달해서 docker build하여 사용하는 게 이치에 맞는 것 같았다. 
+
+[AWS CodeDeploy와 Github Actions를 이용한 CI/CD 구축](https://www.youtube.com/watch?v=UF2Giz9PE-E&t=522s&ab_channel=BE%EB%A1%9C%EB%A7%88)
+
+# 사전 준비
+
+### S3 생성
+
+### IAM 사용자 생성
+S3/CodeDeply에 대한 Full Access를 갖는 사용자를 생성한다.
+
+* `AmazonS3FullAccess`
+
+* `AWSCodeDeployFullAccess`
+
+생성 후 해당 사용자의 '액세스 키 ID'와 '비밀 액세스 키'를 Github repository - settings - secrets에 입력한다.
+
+### IAM 역할 생성
+위와 동일한 두 개의 권한을 갖는 역할을 생성하여 EC2에 해당 역할을 부여한다. `EC2 인스턴스 - 보안 - IAM 역할 수정`
+
+또한 `AWSCodeDeployRole` 권한을 갖는 역할을 하나 생성하여 CodeDeploy에 연결할 준비를 해둔다.
+
+### EC2 인스턴스에서 프로그램 설치
+* aws corretto 다운로드 : `sudo wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.rpm -0 java11.rpm`
+
+* jdk 11 설치 : `Sudo apt localinstall jdk11.rpm`
+
+* ruby 설치 : `sudo apt install ruby`
+
+* 서울 리전의 codeDeploy-resource-kit 다운로드 : `cd /home/ec2-user` `wget https://aws-codedploy-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/install`
+
+* 실행 권한 부여 : `chmod +x ./install`
+
+* codeDeploy agent 설치 : `sudo ./install auto`
+
+* agent 설치 확인 : `sudo service codedeploy-agent status`
+
+### CodeDeploy 설정
+
+EC2/온프레미스 플랫폼의 CodeDeploy 애플리케이션을 생성한다. `CodeDeploy - 애플리케이션`
+
+생성한 애플리케이션 내부에 배포 그룹을 생성한다. 여기에 앞서 생성한 IAM 역할의 ARN을 기재하고, '현재 위치', 'Amazon EC2 인스턴스', Name-theraphy(EC2 name), 'AllAtOnce', '로드 밸런싱 활성화 해제' 옵션으로 항목들을 채운다.
+
+# Github Actions
+
+빌드, 테스트, 배포 파이프라인을 자동화해주는 CI/CD 플랫폼이다.
+
+![](https://media.vlpt.us/images/lechuck/post/2d657715-d107-4217-8885-3c82a281f920/image.png)
+
+## workflows
+프로젝트 내 .github/workflows 폴더에 YAML 형식의 workflow 파일을 정의한다. repositiory에 이벤트가 발생할 때 수행되거나 수동적으로 작동시킬 수 있다. 프로젝트에 여러 개의 workflow를 정의하여 하나는 빌드/테스트를 수행하고 또 다른 하나에서 배포하는 식으로 동작시킬 수 있다.
+
+workflow는 jobs를 갖는다. 각각의 job은 가상 머신인 runner 혹은 container에 의해 실행된다.
+
+## Events
+이벤트는 repository에 의해 유발되어 workflow를 동작시킨다. 이벤트는 pull request가 발생했을 때, issue를 생성했을 때, push할 때 생겨난다. (등등)
+
+## jobs
+job은 여러 steps의 집합이다. 각각의 step은 **script**가 될 수 있고, **action**이 될 수 있다. 
+
+하나의 runner에서 동작되는 step들은 서로간 데이터의 공유가 가능하다. 또한 여러 job들 사이에 dependency를 설정하여 작동 순서를 조작할 수 있다.
+
+## action
+action은 복잡하고 반복되는 업무를 처리해주는 custon application이다. action을 활용하여 workflow 파일 내 반복되는 코드를 줄일 수 있다.
+
+## runners
+runner는 트리거가 발동했을 때 workflow를 작동시키는 (github가 제공하는) 서버다.
+
+## workflow.yml
+
+master 브랜치에 push 이벤트가 발생하면 runner에 의해 workflow에 정의해둔 jobs가 실행된다. 아래 workflow의 주요 기능은 AWS S3와 AWS CodeDeploy에 소스코드를 .zip 형태로 전달하는 것이다.
+
+![](https://media.vlpt.us/images/lechuck/post/b8c41eca-b701-4569-a935-5ac934b7c83a/image.png)
+
+# AWS CodeDeploy
+
+AWS codeDeploy에서 deployment group 등 각종 설정을 끝마친 뒤 S3나 github에 **개정된 코드(revision)**을 업로드하면 본격적인 deploy 과정이 시작된다. revision에는 파일을 복사할 위치(EC2 인스턴스의 어느 폴더) 및 배포 스크립트를 실행할 시점 등이 명시된 **AppSpec** 파일이 포함되어야 한다.
+
+revision이 배포 그룹에 배포된다. 본 프로젝트에서는 Github Actions workflow에서 **AWS CLI create-deployment** 명령을 통해 revision을 AWS CodeDeploy에 배포하고 있다. 이후 배포 그룹의  **codeDeploy agent**는 revision의 bundle(zip 등)을 해제하고, appSpec에 명시된 위치로 파일을 복사하고, 배포 스크립트를 실행한다. 
+
+[EC2/온프레미스 컴퓨팅 플랫폼의 배포](https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/deployment-steps-server.html)
+
+## appspec.yml
+
+배포하는 동안 CodeDeploy agent는 AppSpec 파일의 hooks 섹션에서 현재 이벤트의 이름을 조회한다.
+
+AppSpec 파일의 hooks 섹션에 lifecycle과 script를 명시하여 해당 lifecycle에 수행시킬 동작을 규정할 수 있다. 회색으로 색칠된 event는 행동을 규정할 수 없다.
+
+![](https://media.vlpt.us/images/lechuck/post/fc77b766-7850-4708-8e37-d9506566c0b3/image.png)
+
+* ApplicationStop : revision이 다운로드되기도 전에 발생하는 event. 이 event에서는 성공적인 deploy를 위해서 현재 설치되어 있는 패키지를 지우거나 작동중인 app을 중지할 수 있다.
+
+* DownloadBundle : codeDeploy agnet가 revision을 임시 폴더에 복사한다.
+
+* BefroeInstall : 파일의 복호화나 현재 버전의 백업과 같은 사전 설치 작업을 수행할 수 있다.
+
+* Install : codeDeploy agnet가 임시 폴더로부터 revision을 최종 목적 폴더(destination)로 복사한다.
+
+* AfterInstall : app에 대한 설정, 파일 접근 권한의 변경 등을 수행할 수 있다. **deploy.sh**와 같은 쉘 스크립트를 수행시킬수도 있다.
+
+* ApplicationStart : ApplicationStop 이벤트 도중에 정지된 서비스를 재시작시킬 수 있다.
+
+* ValidateService : 성공적으로 deployment 되었는지를 검증할 수 있다.
+
+[AppSpec 'hooks' section](https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-server)
+
+[AppSpec 'files' 섹션(EC2/온프레미스 배포만 해당)](https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/reference-appspec-file-structure-files.html)
+
+![](https://media.vlpt.us/images/lechuck/post/4b13e90f-e3f8-464c-8e76-8f3219ee5248/image.png)
+
+## deploy.sh
+
+deploy.sh에서는 간단한 동작만 수행한다. 실행중인 모든 도커 프로세스를 죽이고, docker-compose를 작동시킨다.
+
+![](https://media.vlpt.us/images/lechuck/post/9ba70905-be69-4b26-bf8a-9255392fa08a/image.png)

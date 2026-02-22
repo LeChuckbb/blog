@@ -6,123 +6,52 @@ description: null
 date: '2022-02-21'
 title: npm으로 노드 패키지 관리하기
 ---
-import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from "react/jsx-runtime";
-function _createMdxContent(props) {
-  const _components = {
-    code: "code",
-    h3: "h3",
-    img: "img",
-    li: "li",
-    p: "p",
-    pre: "pre",
-    strong: "strong",
-    ul: "ul",
-    ...props.components
-  };
-  return _jsxs(_Fragment, {
-    children: [_jsx(_components.h3, {
-      children: "npm과 package.json"
-    }), "\n", _jsxs(_components.ul, {
-      children: ["\n", _jsxs(_components.li, {
-        children: ["package.json : 노드 프로젝트에 설치된 패키지의 버전을 관리하는 파일이다. 노드 프로젝트를 시작할 때 반드시 작성되어야 하는 파일이다. ", _jsx(_components.code, {
-          children: "npm init"
-        }), " 명령어를 활용하여 자동적으로 처리할 수 있다. yes의 약자인 ", _jsx(_components.code, {
-          children: "npm init -y"
-        }), " 명령어를 활용하면 생성 과정을 단축시킬 수 있다."]
-      }), "\n"]
-    }), "\n", _jsxs(_components.p, {
-      children: ["\"scripts\"는 npm 명령어를 저장해두는 부분이다. ", _jsx(_components.code, {
-        children: "npm run [스크립트 명령어]"
-      }), "를 입력하면 해당 스크립트가 실행된다. 보통 start 명령어에 ", _jsx(_components.code, {
-        children: "node [파일명]"
-      }), "을 지정해둬서 ", _jsx(_components.code, {
-        children: "npm start"
-      }), "와 같이 사용한다."]
-    }), "\n", _jsxs(_components.p, {
-      children: [_jsx(_components.code, {
-        children: "npm install [패키지명]"
-      }), " 명령어를 통해서 패키지를 설치하면package.json 파일에 \"dependencies\" 속성이 추가되고, 프로젝트에 node_modules 폴더가 추가된다. node_modules 폴더에는 설치한 패키지가 의존하는 패키지들이 들어가 있다. 또한 package.json 파일도 추가되는데, 바로 여기에 node_modules 폴더에 포함된 패키지들의 복잡한 의존 관계들이 명시되어 있다."]
-    }), "\n", _jsxs(_components.p, {
-      children: [_jsx(_components.code, {
-        children: "npm install"
-      }), " 명령어를 입력하면 node_modules 폴더를 생성하고 package.json에 명시된 패키지와 의존하는 패키지들을 자동으로 설치한다."]
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.img, {
-        src: "https://images.velog.io/images/lechuck/post/8da36a26-c64d-473f-9b11-6b6dbb56cfc5/image.png",
-        alt: ""
-      })
-    }), "\n", _jsxs(_components.ul, {
-      children: ["\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["개발용 패키지 (--save-dev or -D) : 실제 배포 시에는 사용되지 않고, 개발 중에만 사용되는 패키지. ", _jsx(_components.code, {
-            children: "npm install --save-dev [패키지명]"
-          })]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["전역 설치 (--global or -g) : 패키지를 현재 프로젝트의 node_modules 폴더에 설치하는 것이 아닌, npm이 설치되어 있는 폴더(C:\\Users\\사용자이름\\AppData\\Roaming\\npm)에 설치하는 것을 말한다. 이 경로는 보통 시스템 환경 변수에 등록되어 있으므로, 전역 설치한 패키지는 콘솔의 ", _jsx(_components.strong, {
-            children: "명령어"
-          }), "로 사용할 수 있다."]
-        }), "\n"]
-      }), "\n"]
-    }), "\n", _jsx(_components.h3, {
-      children: "SemVer 버전 넘버링"
-    }), "\n", _jsx(_components.p, {
-      children: "SemVer는 Semantic Versioning의 약어다. SemVer를 준수하는 노드 패키지들의 버전은 항상 세 자리로 구성된다."
-    }), "\n", _jsxs(_components.ul, {
-      children: ["\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "major 버전 : 하위 호환이 안 될 정도로 패키지의 내용이 수정되었을 때 버전을 올린다. 0.x.x는 초기 개발중임을 뜻한다."
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "minor 버전 : 하위 호환이 되는 기능 업데이트를 할 때 올린다."
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "patch 버전 : 새 기능이 추가되었다기 보다는 기존 기능에 문제가 있어 수정한 경우에 patch 버전을 올린다."
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsxs(_components.p, {
-          children: ["^Sem_Ver : minor 버전까지만 설치하거나 업데이트 한다는 의미. ", _jsx(_components.code, {
-            children: "npm i express@&1.1.1"
-          }), " 명령은 major 버전이 1을 초과한 2.x.x가  설치되지 않음을 뜻한다."]
-        }), "\n"]
-      }), "\n", _jsxs(_components.li, {
-        children: ["\n", _jsx(_components.p, {
-          children: "~Sem_Ver : patch 버전까지만 설치되거나 업데이트한다."
-        }), "\n"]
-      }), "\n"]
-    }), "\n", _jsx(_components.h3, {
-      children: "nodemon"
-    }), "\n", _jsx(_components.p, {
-      children: "node.js 기반의 어플리케이션을 파일에 변화가 생겼을 때 자동으로 재시작해 주는 것."
-    }), "\n", _jsx(_components.p, {
-      children: _jsx(_components.code, {
-        children: "nodemon [your app name]"
-      })
-    }), "\n", _jsx(_components.p, {
-      children: "--watch 옵션을 통해서 path를 지정할 수 있다."
-    }), "\n", _jsx(_components.h3, {
-      children: "dotenv"
-    }), "\n", _jsxs(_components.p, {
-      children: ["프로젝트 폴더에 ", _jsx(_components.code, {
-        children: ".env"
-      }), " 환경변수 파일을 작성하여 관리한다. COOKIE_SECRET=cookiesecret 와 같이 key=value 꼴로 초기화하면 아래와 같은 방식으로 사용할 수 있다."]
-    }), "\n", _jsx(_components.pre, {
-      children: _jsx(_components.code, {
-        className: "language-javascript",
-        children: "const dotenv = require('dotenv');\n\ndotenv.config();\n\nconst hi = process.env.COOKIE_SECRET;\n"
-      })
-    })]
-  });
-}
-export default function MDXContent(props = {}) {
-  const {wrapper: MDXLayout} = props.components || ({});
-  return MDXLayout ? _jsx(MDXLayout, {
-    ...props,
-    children: _jsx(_createMdxContent, {
-      ...props
-    })
-  }) : _createMdxContent(props);
-}
+### npm과 package.json
+
+* package.json : 노드 프로젝트에 설치된 패키지의 버전을 관리하는 파일이다. 노드 프로젝트를 시작할 때 반드시 작성되어야 하는 파일이다. `npm init` 명령어를 활용하여 자동적으로 처리할 수 있다. yes의 약자인 `npm init -y` 명령어를 활용하면 생성 과정을 단축시킬 수 있다. 
+
+"scripts"는 npm 명령어를 저장해두는 부분이다. `npm run [스크립트 명령어]`를 입력하면 해당 스크립트가 실행된다. 보통 start 명령어에 `node [파일명]`을 지정해둬서 `npm start`와 같이 사용한다.
+
+`npm install [패키지명]` 명령어를 통해서 패키지를 설치하면package.json 파일에 "dependencies" 속성이 추가되고, 프로젝트에 node_modules 폴더가 추가된다. node_modules 폴더에는 설치한 패키지가 의존하는 패키지들이 들어가 있다. 또한 package.json 파일도 추가되는데, 바로 여기에 node_modules 폴더에 포함된 패키지들의 복잡한 의존 관계들이 명시되어 있다. 
+
+`npm install` 명령어를 입력하면 node_modules 폴더를 생성하고 package.json에 명시된 패키지와 의존하는 패키지들을 자동으로 설치한다.
+
+![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-8da36a26-c64d-473f-9b11-6b6dbb56cfc5-image.png)
+
+* 개발용 패키지 (--save-dev or -D) : 실제 배포 시에는 사용되지 않고, 개발 중에만 사용되는 패키지. `npm install --save-dev [패키지명]`
+
+* 전역 설치 (--global or -g) : 패키지를 현재 프로젝트의 node_modules 폴더에 설치하는 것이 아닌, npm이 설치되어 있는 폴더(C:\Users\사용자이름\AppData\Roaming\npm)에 설치하는 것을 말한다. 이 경로는 보통 시스템 환경 변수에 등록되어 있으므로, 전역 설치한 패키지는 콘솔의 **명령어**로 사용할 수 있다.
+
+### SemVer 버전 넘버링
+SemVer는 Semantic Versioning의 약어다. SemVer를 준수하는 노드 패키지들의 버전은 항상 세 자리로 구성된다.
+
+* major 버전 : 하위 호환이 안 될 정도로 패키지의 내용이 수정되었을 때 버전을 올린다. 0.x.x는 초기 개발중임을 뜻한다.
+
+* minor 버전 : 하위 호환이 되는 기능 업데이트를 할 때 올린다.
+
+* patch 버전 : 새 기능이 추가되었다기 보다는 기존 기능에 문제가 있어 수정한 경우에 patch 버전을 올린다.
+
+* ^Sem_Ver : minor 버전까지만 설치하거나 업데이트 한다는 의미. `npm i express@&1.1.1` 명령은 major 버전이 1을 초과한 2.x.x가  설치되지 않음을 뜻한다.
+
+* ~Sem_Ver : patch 버전까지만 설치되거나 업데이트한다.
+
+### nodemon 
+
+node.js 기반의 어플리케이션을 파일에 변화가 생겼을 때 자동으로 재시작해 주는 것.
+
+`nodemon [your app name]`
+
+--watch 옵션을 통해서 path를 지정할 수 있다.
+
+### dotenv
+
+프로젝트 폴더에 `.env` 환경변수 파일을 작성하여 관리한다. COOKIE_SECRET=cookiesecret 와 같이 key=value 꼴로 초기화하면 아래와 같은 방식으로 사용할 수 있다.
+
+```javascript
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const hi = process.env.COOKIE_SECRET;
+```
+
