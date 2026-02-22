@@ -19,6 +19,7 @@
     "@rehype-pretty/transformers": "^0.13.2",
     "@types/mdx": "^2.0.13",
     "clsx": "^2.1.1",
+    "github-slugger": "^2.0.0",
     "lodash": "^4.17.21",
     "next": "15.3.2",
     "react": "^19.0.0",
