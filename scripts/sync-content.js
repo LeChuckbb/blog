@@ -138,8 +138,8 @@ class ContentSyncer {
     
     console.log(`  📄 처리 중: ${filename}`);
 
-    // Obsidian → 표준 마크다운 변환
-    const { content: transformedContent, frontmatter } = this.transformer.transform(content, filename);
+    // Obsidian → MDX 변환 (async 처리)
+    const { content: transformedContent, frontmatter } = await this.transformer.transform(content, filename);
     
     // 출력 파일명 생성
     const outputFilename = this.generateOutputFilename(filename, frontmatter.slug);

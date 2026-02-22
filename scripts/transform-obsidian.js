@@ -1,7 +1,8 @@
 const matter = require('gray-matter');
 
 /**
- * Obsidian 마크다운을 표준 마크다운으로 변환하는 클래스
+ * Obsidian 마크다운을 MDX로 변환하는 클래스
+ * @mdx-js/mdx 컴파일러를 사용하여 모든 MDX 호환성 문제를 자동으로 해결
  */
 class ObsidianTransformer {
   constructor(options = {}) {
@@ -12,21 +13,43 @@ class ObsidianTransformer {
       processImages: true,
       ...options,
     };
+    
+    // MDX 컴파일러와 플러그인들을 dynamic import로 로드
+    this.compile = null;
+    this.remarkFrontmatter = null;
+    this.remarkGfm = null;
+  }
+
+  async initializeCompiler() {
+    if (!this.compile) {
+      const [
+        { compile },
+        remarkFrontmatter,
+        remarkGfm
+      ] = await Promise.all([
+        import('@mdx-js/mdx'),
+        import('remark-frontmatter'),
+        import('remark-gfm')
+      ]);
+      
+      this.compile = compile;
+      this.remarkFrontmatter = remarkFrontmatter.default;
+      this.remarkGfm = remarkGfm.default;
+    }
   }
 
   /**
    * 메인 변환 함수
    * @param {string} content - Obsidian 마크다운 콘텐츠
    * @param {string} filename - 파일명 (slug 생성용)
-   * @returns {object} { content, frontmatter }
+   * @returns {Promise<object>} { content, frontmatter }
    */
-  transform(content, filename) {
+  async transform(content, filename) {
     // frontmatter와 content 분리
     const parsed = matter(content);
     let transformedContent = parsed.content;
-    let frontmatter = { ...parsed.data };
 
-    // 각 변환 단계 실행
+    // 1단계: Obsidian 특수 문법 처리 (기존 로직 유지)
     if (this.options.removeComments) {
       transformedContent = this.removeObsidianComments(transformedContent);
     }
@@ -39,17 +62,36 @@ class ObsidianTransformer {
       transformedContent = this.processImages(transformedContent);
     }
 
-    if (this.options.cleanFrontmatter) {
-      frontmatter = this.cleanFrontmatter(frontmatter, filename);
+    // 2단계: @mdx-js/mdx로 완전한 MDX 변환 (라이브러리가 모든 호환성 문제 해결)
+    try {
+      // MDX 컴파일러 초기화 확인
+      await this.initializeCompiler();
+      
+      // MDX 컴파일 옵션
+      const mdxOptions = {
+        remarkPlugins: [this.remarkFrontmatter, this.remarkGfm],
+        development: false,
+        format: 'mdx'
+      };
+      
+      const mdxResult = await this.compile(transformedContent, mdxOptions);
+      
+      // frontmatter 처리
+      const frontmatter = this.options.cleanFrontmatter 
+        ? this.cleanFrontmatter(parsed.data, filename)
+        : parsed.data;
+      
+      // frontmatter와 content 다시 결합
+      const finalContent = matter.stringify(mdxResult.toString(), frontmatter);
+
+      return {
+        content: finalContent,
+        frontmatter,
+      };
+    } catch (error) {
+      console.error(`MDX 컴파일 오류 (${filename}):`, error.message);
+      throw error;
     }
-
-    // frontmatter와 content 다시 결합
-    const finalContent = matter.stringify(transformedContent, frontmatter);
-
-    return {
-      content: finalContent,
-      frontmatter,
-    };
   }
 
   /**

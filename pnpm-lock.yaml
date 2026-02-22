@@ -13,13 +13,16 @@ importers:
         version: 2.2.21(@heroui/system@2.4.17(@heroui/theme@2.4.17(tailwindcss@4.1.7))(framer-motion@12.18.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@heroui/theme@2.4.17(tailwindcss@4.1.7))(framer-motion@12.18.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@mdx-js/loader':
         specifier: ^3.1.0
-        version: 3.1.0(acorn@8.14.1)
+        version: 3.1.0
+      '@mdx-js/mdx':
+        specifier: ^3.1.1
+        version: 3.1.1
       '@mdx-js/react':
         specifier: ^3.1.0
         version: 3.1.0(@types/react@19.1.6)(react@19.1.0)
       '@next/mdx':
         specifier: ^15.3.2
-        version: 15.3.2(@mdx-js/loader@3.1.0(acorn@8.14.1))(@mdx-js/react@3.1.0(@types/react@19.1.6)(react@19.1.0))
+        version: 15.3.2(@mdx-js/loader@3.1.0)(@mdx-js/react@3.1.0(@types/react@19.1.6)(react@19.1.0))
       '@rehype-pretty/transformers':
         specifier: ^0.13.2
         version: 0.13.2
@@ -438,8 +441,8 @@ packages:
       webpack:
         optional: true
 
-  '@mdx-js/mdx@3.1.0':
-    resolution: {integrity: sha512-/QxEhPAvGwbQmy1Px8F899L5Uc2KZ6JtXwlCgJmjSTBedwOZkByYcBG4GceIGPXRDsmfxhHazuS+hlOShRLeDw==}
+  '@mdx-js/mdx@3.1.1':
+    resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
 
   '@mdx-js/react@3.1.0':
     resolution: {integrity: sha512-QjHtSaoameoalGnKDT3FoIl4+9RwyTmo9ZJGBdLOks/YOiWHoRDI3PUwEzOE7kEmGcV3AFcp9K6dYu9rEuKLAQ==}
@@ -3126,20 +3129,20 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@mdx-js/loader@3.1.0(acorn@8.14.1)':
+  '@mdx-js/loader@3.1.0':
     dependencies:
-      '@mdx-js/mdx': 3.1.0(acorn@8.14.1)
+      '@mdx-js/mdx': 3.1.1
       source-map: 0.7.4
     transitivePeerDependencies:
-      - acorn
       - supports-color
 
-  '@mdx-js/mdx@3.1.0(acorn@8.14.1)':
+  '@mdx-js/mdx@3.1.1':
     dependencies:
       '@types/estree': 1.0.7
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.4
       '@types/mdx': 2.0.13
+      acorn: 8.14.1
       collapse-white-space: 2.1.0
       devlop: 1.1.0
       estree-util-is-identifier-name: 3.0.0
@@ -3161,7 +3164,6 @@ snapshots:
       unist-util-visit: 5.0.0
       vfile: 6.0.3
     transitivePeerDependencies:
-      - acorn
       - supports-color
 
   '@mdx-js/react@3.1.0(@types/react@19.1.6)(react@19.1.0)':
@@ -3183,11 +3185,11 @@ snapshots:
     dependencies:
       fast-glob: 3.3.1
 
-  '@next/mdx@15.3.2(@mdx-js/loader@3.1.0(acorn@8.14.1))(@mdx-js/react@3.1.0(@types/react@19.1.6)(react@19.1.0))':
+  '@next/mdx@15.3.2(@mdx-js/loader@3.1.0)(@mdx-js/react@3.1.0(@types/react@19.1.6)(react@19.1.0))':
     dependencies:
       source-map: 0.7.4
     optionalDependencies:
-      '@mdx-js/loader': 3.1.0(acorn@8.14.1)
+      '@mdx-js/loader': 3.1.0
       '@mdx-js/react': 3.1.0(@types/react@19.1.6)(react@19.1.0)
 
   '@next/swc-darwin-arm64@15.3.2':
