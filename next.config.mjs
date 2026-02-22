@@ -17,7 +17,10 @@ const nextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   // Optionally, add any other Next.js config below
   images: {
-    remotePatterns: [new URL("https://imagedelivery.net/**")],
+    remotePatterns: [
+      new URL("https://imagedelivery.net/**"),
+      new URL("https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/**"),
+    ],
   },
 };
 
