@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useCallback } from "react";
-import { cn } from "@/src/app/util";
+import { cn } from "@/lib/utils";
 
 interface TocItem {
   id: string;
@@ -24,7 +24,6 @@ interface IHeadingTops {
   top: number;
 }
 
-// 크로스 브라우저 호환 스크롤 위치 가져오기
 const getScrollTop = (): number => {
   if (!document.body) return 0;
   if (document.documentElement && "scrollTop" in document.documentElement) {
@@ -46,12 +45,9 @@ const TocItemComponent: React.FC<TocItemProps> = ({ item, onItemClick }) => {
         }}
         className={cn(
           "block py-1 px-2 text-sm transition-colors duration-200 rounded",
-          // 기본 스타일
-          "text-white hover:text-gray-900 hover:bg-gray-50",
-          // 활성 상태 (data-attribute 기반)
-          "data-[active=true]:text-blue-600 data-[active=true]:bg-blue-50 data-[active=true]:font-medium",
-          // 레벨별 들여쓰기
-          item.level === 1 && "font-semibold",
+          "text-muted-foreground hover:text-foreground hover:bg-muted",
+          "data-[active=true]:text-primary data-[active=true]:font-medium",
+          item.level === 1 && "font-medium",
           item.level === 2 && "ml-2",
           item.level === 3 && "ml-4",
           item.level === 4 && "ml-6",
@@ -81,16 +77,13 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
   items,
   className = "",
 }) => {
-  // ID 정규화 함수 (tocUtil과 rehype-slug 모두 github-slugger를 사용하므로 ID가 일치함)
   const normalizeId = useCallback((id: string): string => {
     return id;
   }, []);
 
-  // 헤딩 요소들의 위치 계산
   const settingHeadingTops = useCallback((): IHeadingTops[] => {
     const scrollTop = getScrollTop();
 
-    // 평면화: 중첩된 items를 평면 배열로 변환
     const flattenItems = (items: TocItem[]): TocItem[] => {
       const result: TocItem[] = [];
       for (const item of items) {
@@ -118,27 +111,22 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
 
         return { id, top };
       })
-      .filter(({ top }) => top >= 0); // 유효하지 않은 위치값 필터링
+      .filter(({ top }) => top >= 0);
   }, [items, normalizeId]);
 
-  // 활성 상태 업데이트 함수
   const updateActiveStates = useCallback((headingTops: IHeadingTops[]) => {
     const scrollTop = getScrollTop();
 
-    // 모든 ToC 링크의 active 상태 초기화
     document.querySelectorAll("[data-toc-id]").forEach((link) => {
       link.setAttribute("data-active", "false");
     });
 
     if (!headingTops.length) return;
 
-    // 유효한 headingTops만 필터링 (top이 0이 아닌 것들)
     const validHeadingTops = headingTops.filter(({ top, id }) => {
       return top > 0 || document.getElementById(id);
     });
 
-    // 현재 스크롤 위치에서 가장 가까운 헤딩 찾기
-    // offset을 10px로 늘려서 더 정확한 감지
     const currentHeading = validHeadingTops
       .slice()
       .reverse()
@@ -154,18 +142,10 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
     }
   }, []);
 
-  // 헤딩 위치 추적 및 스크롤 이벤트 처리
   useEffect(() => {
-    // 초기 계산을 약간 지연시켜서 DOM이 완전히 렌더링된 후 실행
-    const initializeHeadings = () => {
-      const headingTops = settingHeadingTops();
-      updateActiveStates(headingTops);
-      return headingTops;
-    };
-
-    // 100ms 지연 후 초기화 (이미지나 동적 콘텐츠 로딩 고려)
     const initialTimeout = setTimeout(() => {
-      let headingTops = initializeHeadings();
+      let headingTops = settingHeadingTops();
+      updateActiveStates(headingTops);
       let prevScrollHeight = document.body.scrollHeight;
       let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
@@ -173,7 +153,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
         updateActiveStates(headingTops);
       };
 
-      // 0.25초마다 스크롤 높이 변화 감지하여 위치 재계산
       const trackScrollHeight = () => {
         const scrollHeight = document.body.scrollHeight;
         if (prevScrollHeight !== scrollHeight) {
@@ -184,14 +163,10 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
         timeoutId = setTimeout(trackScrollHeight, 250);
       };
 
-      // 스크롤 이벤트 리스너 등록
       window.addEventListener("scroll", onScroll, { passive: true });
-
-      // 주기적 업데이트 시작
       timeoutId = setTimeout(trackScrollHeight, 250);
 
-      // cleanup 함수를 전역으로 저장
-      (window as any).__tocCleanup = () => {
+      return () => {
         if (timeoutId) clearTimeout(timeoutId);
         window.removeEventListener("scroll", onScroll);
       };
@@ -199,10 +174,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
 
     return () => {
       clearTimeout(initialTimeout);
-      if ((window as any).__tocCleanup) {
-        (window as any).__tocCleanup();
-        delete (window as any).__tocCleanup;
-      }
     };
   }, [settingHeadingTops, updateActiveStates]);
 
@@ -221,9 +192,11 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
   }
 
   return (
-    <div className={cn("p-4", className)}>
-      <h3 className="font-semibold text-white mb-3">목차</h3>
-      <nav className="space-y-1">
+    <div className={cn("py-2", className)}>
+      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-2">
+        목차
+      </p>
+      <nav className="space-y-0.5">
         {items.map((item) => (
           <TocItemComponent
             key={item.id}

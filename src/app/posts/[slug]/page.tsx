@@ -8,71 +8,68 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const filePath = getFileNameBySlug(slug);
+  const post = getPostBySlug(slug);
 
-  if (!filePath) {
+  if (!post) {
     throw new Error(`Content file not found for slug: ${slug}`);
   }
 
+  const filePath = `${post.title}.mdx`;
+
   try {
-    // ToC 생성
     const tocItems = await generateTocFromFile(`./content/${filePath}`);
     const { default: Post } = await import(`@/content/${filePath}`);
 
-    console.log(filePath, tocItems);
     return (
-      <div className="flex gap-4 relative">
-        <div className="flex flex-col gap-2 pb-[120px] pt-6 px-4">
-          <h1 className="mb-8 text-4xl text-[40px] font-bold">
-            {filePath.split(".md")[0]}
-          </h1>
-          <Post />
+      <div className="mx-auto max-w-[var(--layout-max-width)] px-4 md:px-6">
+        <div className="flex gap-8 relative">
+          {/* Main Content */}
+          <article className="flex-1 min-w-0 max-w-[var(--content-max-width)] py-8 pb-24">
+            <header className="mb-8">
+              <h1 className="text-3xl font-bold tracking-tight mb-2">
+                {post.title}
+              </h1>
+              <time className="text-sm text-muted-foreground">{post.date}</time>
+            </header>
+            <div className="prose dark:prose-invert max-w-none">
+              <Post />
+            </div>
+          </article>
+
+          {/* Sidebar: lg 이상에서만 표시 */}
+          <aside className="hidden lg:block w-[var(--sidebar-width)] shrink-0">
+            <div className="sticky top-[calc(var(--nav-height)+1rem)]">
+              <TableOfContents items={tocItems} />
+            </div>
+          </aside>
         </div>
-        <aside className="w-64 shrink-0">
-          <div className="sticky border-l top-[64px] flex flex-col ">
-            <div className="p-4 border-b">published</div>
-            <div className="p-4 border-b">tags..</div>
-            <TableOfContents items={tocItems} />
-          </div>
-        </aside>
       </div>
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new Error(`Content file not found for slug: ${slug}`);
   }
 }
 
-function getFileNameBySlug(slug: string): string | null {
-  const decodedSlug = decodeURIComponent(slug);
-  const post = postsData.posts.find((post) => post.slug === decodedSlug);
-  if (!post) return null;
+interface Post {
+  slug: string;
+  title: string;
+  date: string;
+  tags?: string[];
+  description?: string;
+}
 
-  return `${post.title}.mdx`;
+function getPostBySlug(slug: string): Post | null {
+  const decodedSlug = decodeURIComponent(slug);
+  return (
+    (postsData.posts as Post[]).find((post) => post.slug === decodedSlug) ??
+    null
+  );
 }
 
 export async function generateStaticParams() {
   const slugs = postsData.posts.map((post) => post.slug);
   return slugs.map((slug) => ({ slug }));
 }
-
-// export async function generateStaticParams() {
-//   try {
-//     const frontmatters = await getAllFrontmatters();
-//     const slugs: { slug: string }[] = [];
-//
-//     for (const { data } of frontmatters) {
-//       if (data.slug) {
-//         slugs.push({ slug: data.slug });
-//       }
-//     }
-//
-//     console.log("Generated slugs from frontmatter:", slugs);
-//     return slugs;
-//   } catch (error) {
-//     console.error("Error reading frontmatter:", error);
-//     return [];
-//   }
-// }
 
 export const dynamicParams = false;

@@ -154,6 +154,7 @@ class ContentSyncer {
       title: frontmatter.title,
       date: frontmatter.date,
       tags: frontmatter.tags || [],
+      description: frontmatter.description || null,
       filename: outputFilename,
       originalFilename: filename,
     };
@@ -188,6 +189,7 @@ class ContentSyncer {
         date: post.date,
         title: post.title,
         tags: post.tags,
+        ...(post.description ? { description: post.description } : {}),
       }))
     };
 

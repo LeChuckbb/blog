@@ -7,8 +7,10 @@ import remarkFrontmatter from "remark-frontmatter";
 
 /** @type {import('rehype-pretty-code').Options} */
 const options = {
-  theme: "catppuccin-frappe",
-  // transformers: [transformerCopyButton({})],
+  theme: {
+    dark: "catppuccin-frappe",
+    light: "github-light",
+  },
 };
 
 /** @type {import('next').NextConfig} */
