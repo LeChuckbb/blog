@@ -193,9 +193,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
 
   return (
     <div className={cn("py-2", className)}>
-      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-2">
-        목차
-      </p>
       <nav className="space-y-0.5">
         {items.map((item) => (
           <TocItemComponent
