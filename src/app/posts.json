@@ -17,7 +17,8 @@
         "책",
         "영화",
         "역사"
-      ]
+      ],
+      "description": "<박하사탕>과 역사적 트라우마에 대하여"
     },
     {
       "slug": "geultto",
@@ -51,7 +52,8 @@
       "title": "2024년 1분기 회고",
       "tags": [
         "회고"
-      ]
+      ],
+      "description": "회고 재밌다"
     },
     {
       "slug": "PR-for-code-review",
@@ -91,7 +93,8 @@
       "tags": [
         "책",
         "SF"
-      ]
+      ],
+      "description": "켄 리우의 '신들은 죽임당하지 않을 것이다' 중에서"
     },
     {
       "slug": "next-auth",
@@ -168,7 +171,8 @@
       "title": "2022.11 독서",
       "tags": [
         "책"
-      ]
+      ],
+      "description": "생계형 개발자 / SI에서 살아남기 / 사람이 싫다 / 피,땀,픽셀 / 최소한의 선의"
     },
     {
       "slug": "grow-together",
@@ -177,7 +181,8 @@
       "tags": [
         "책",
         "조직문화"
-      ]
+      ],
+      "description": "개발 연차가 쌓였을 때 다시 읽어봐도 많은 도움이 될 책이다"
     },
     {
       "slug": "programmers-brain",
@@ -186,7 +191,8 @@
       "tags": [
         "생산성",
         "책"
-      ]
+      ],
+      "description": "효율이 밥 먹여준다"
     },
     {
       "slug": "nginx-reverse-proxy",
@@ -324,7 +330,8 @@
       "title": "2022.01 독서",
       "tags": [
         "책"
-      ]
+      ],
+      "description": "달까지 가자/ 나는 주니어 개발자 / 메타버스 / 공간의 미래 / 사람, 장소, 환대 / 아주 작은 습관의 힘"
     },
     {
       "slug": "coding-test-regexp",
@@ -343,7 +350,8 @@
       "tags": [
         "BEM",
         "CSS"
-      ]
+      ],
+      "description": "BAM!이 아닌 BEM"
     },
     {
       "slug": "2021-11-read",
@@ -351,7 +359,8 @@
       "title": "2021.11 독서",
       "tags": [
         "책"
-      ]
+      ],
+      "description": "손에 잡히는 서양 미술사 / 달리 나는 세상의 배꼽"
     },
     {
       "slug": "browser-events",
@@ -371,7 +380,8 @@
       "title": "2021.10 독서",
       "tags": [
         "책"
-      ]
+      ],
+      "description": "지구인만큼 지구를 사랑할 순 없어 / 나는 LINE 개발자입니다 / 실례지만, 이 책이 시급합니다"
     },
     {
       "slug": "browser-rendering",
@@ -414,7 +424,8 @@
       "title": "새로운 가난이 온다",
       "tags": [
         "책"
-      ]
+      ],
+      "description": "책은 이래야지"
     },
     {
       "slug": "ssr-2",
@@ -438,7 +449,8 @@
       "title": "넥스트 킬러앱",
       "tags": [
         "책"
-      ]
+      ],
+      "description": "재미없는 책을 읽은 시간은 낭비일까? 아니겠지? 그래도 화가 나는 건 어쩔 수 없다"
     },
     {
       "slug": "redux-4",

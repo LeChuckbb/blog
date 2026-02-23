@@ -241,6 +241,70 @@ class ObsidianTransformer {
   }
 
   /**
+   * Obsidian 콜아웃 블록을 HTML div로 변환
+   * > [!type] 제목
+   * > 내용...
+   * @param {string} content
+   * @returns {string}
+   */
+  convertCallouts(content) {
+    const calloutTypes = [
+      'info', 'warning', 'note', 'tip', 'caution', 'important',
+      'danger', 'bug', 'example', 'quote', 'abstract', 'todo',
+      'success', 'question', 'failure',
+    ];
+
+    const icons = {
+      info: 'ℹ️',
+      warning: '⚠️',
+      caution: '⚠️',
+      note: '📝',
+      tip: '💡',
+      important: '💡',
+      danger: '🐛',
+      bug: '🐛',
+      example: '📋',
+      quote: '💬',
+      abstract: '💬',
+      todo: '✅',
+      success: '✅',
+      question: '❓',
+      failure: '❌',
+    };
+
+    const typePattern = calloutTypes.join('|');
+    // 콜아웃 블록 전체 매칭: > [!type] 제목\n 으로 시작하는 연속된 > 라인들
+    const calloutRegex = new RegExp(
+      `^([ \\t]*>[ \\t]*\\[!(${typePattern})\\]([^\\n]*)\\n)((?:[ \\t]*>[ \\t]*[^\\n]*\\n?)*)`,
+      'gim'
+    );
+
+    return content.replace(calloutRegex, (match, firstLine, type, titleRest, bodyLines) => {
+      const lowerType = type.toLowerCase();
+      const icon = icons[lowerType] || '📌';
+      const title = titleRest.trim() || type.charAt(0).toUpperCase() + type.slice(1);
+
+      // > 접두사 제거하여 본문 추출
+      const body = bodyLines
+        .split('\n')
+        .map(line => line.replace(/^[ \t]*>[ \t]?/, ''))
+        .join('\n')
+        .trimEnd();
+
+      return `<div data-callout="${lowerType}" className="callout callout-${lowerType}">
+<div className="callout-title">${icon} ${title}</div>
+<div className="callout-content">
+
+${body}
+
+</div>
+</div>
+
+`;
+    });
+  }
+
+  /**
    * MDX 특수문자 이스케이프 처리
    * 코드 블록/인라인 코드 바깥의 <, {}, <!-- --> 를 이스케이프한다.
    * @param {string} content

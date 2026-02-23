@@ -18,7 +18,7 @@ export function extractHeadings(content: string): TocItem[] {
 
   while ((match = headingRegex.exec(content)) !== null) {
     const level = match[1].length;
-    const text = match[2].trim();
+    const text = match[2].trim().replace(/\\([<>])/g, "$1");
     const id = slugger.slug(text);
 
     headings.push({

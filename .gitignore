@@ -43,3 +43,11 @@ next-env.d.ts
 
 # worktrees
 .worktrees/
+
+# tooling
+.claude/
+.playwright-mcp/
+.serena/
+
+# local design references
+post-xl.png
