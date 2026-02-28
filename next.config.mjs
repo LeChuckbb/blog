@@ -42,6 +42,7 @@ const nextConfig = {
     remotePatterns: [
       new URL("https://imagedelivery.net/**"),
       new URL("https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/**"),
+      new URL("https://media.vlpt.us/**"),
     ],
   },
 };

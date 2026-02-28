@@ -6,6 +6,7 @@ tags:
   - GithubActions
 slug: github-actions와-aws-codedeploy를-이용한-ec2-docker-compose-배포-자동화
 description: null
+updated_at: 2026-02-28T00:00:00.000Z
 date: '2022-03-30'
 title: Github Actions와 AWS CodeDeploy를 이용한 EC2-Docker-Compose 배포 자동화
 ---
@@ -22,14 +23,11 @@ AWS EC2에 React/Node/flask로 이루어진 Docker-Compose 서버 환경을 구�
 # CI/CD
 
 코드 - 빌드 - 테스트 - 배포(개발환경 -> 운영환경)
+- Continous Integration 지속적인 통합
+- Continuous Delivery 지속적인 제공 -> 개발환경 배포까지만 자동화. 이후 운영환경에 배포는 직접
+- Continuous Deployment 지속적인 배포 -> 운영환경에 배포까지 자동화.
 
-Continous Integration 지속적인 통합
-
-Continuous Delivery 지속적인 제공 -> 개발환경 배포까지만 자동화. 이후 운영환경에 배포는 직접
-
-Continuous Deployment 지속적인 배포 -> 운영환경에 배포까지 자동화.
-
-![](https://media.vlpt.us/images/lechuck/post/86c2a887-4642-4644-860e-9c674421a2c3/image.png)
+![obsidian image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/1772284583177-svtn48.png)
 
 > EC2에 build된 docker container를 전달하느냐, 코드 자체를 전달하느냐의 기로에서 후자를 택했다. 딥러닝 패키지를 포함한 docker image가 3GB에 육박했기 때문이다. AWS ECR/ECS, github ghcr와 같은 container 서비스를 이용했을 때 위와 같은 용량의 콘테이너를 무리 없이 전송할 수 있는지는 모르겠다. 하지만 아무리 서비스를 잘 구현했더라도 1MB의 소스코드를 EC2에 전달해서 docker build하여 사용하는 게 이치에 맞는 것 같았다. 
 
@@ -78,7 +76,7 @@ EC2/온프레미스 플랫폼의 CodeDeploy 애플리케이션을 생성한다. 
 
 빌드, 테스트, 배포 파이프라인을 자동화해주는 CI/CD 플랫폼이다.
 
-![](https://media.vlpt.us/images/lechuck/post/2d657715-d107-4217-8885-3c82a281f920/image.png)
+![obsidian image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/1772284661120-yt7tok.png)
 
 ## workflows
 프로젝트 내 .github/workflows 폴더에 YAML 형식의 workflow 파일을 정의한다. repositiory에 이벤트가 발생할 때 수행되거나 수동적으로 작동시킬 수 있다. 프로젝트에 여러 개의 workflow를 정의하여 하나는 빌드/테스트를 수행하고 또 다른 하나에서 배포하는 식으로 동작시킬 수 있다.
@@ -103,7 +101,7 @@ runner는 트리거가 발동했을 때 workflow를 작동시키는 (github가 �
 
 master 브랜치에 push 이벤트가 발생하면 runner에 의해 workflow에 정의해둔 jobs가 실행된다. 아래 workflow의 주요 기능은 AWS S3와 AWS CodeDeploy에 소스코드를 .zip 형태로 전달하는 것이다.
 
-![](https://media.vlpt.us/images/lechuck/post/b8c41eca-b701-4569-a935-5ac934b7c83a/image.png)
+![obsidian image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/1772284674523-ayq2x7.png)
 
 # AWS CodeDeploy
 
@@ -119,30 +117,23 @@ revision이 배포 그룹에 배포된다. 본 프로젝트에서는 Github Acti
 
 AppSpec 파일의 hooks 섹션에 lifecycle과 script를 명시하여 해당 lifecycle에 수행시킬 동작을 규정할 수 있다. 회색으로 색칠된 event는 행동을 규정할 수 없다.
 
-![](https://media.vlpt.us/images/lechuck/post/fc77b766-7850-4708-8e37-d9506566c0b3/image.png)
+![obsidian image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/1772284763889-emdfx5.png)
 
 * ApplicationStop : revision이 다운로드되기도 전에 발생하는 event. 이 event에서는 성공적인 deploy를 위해서 현재 설치되어 있는 패키지를 지우거나 작동중인 app을 중지할 수 있다.
-
 * DownloadBundle : codeDeploy agnet가 revision을 임시 폴더에 복사한다.
-
 * BefroeInstall : 파일의 복호화나 현재 버전의 백업과 같은 사전 설치 작업을 수행할 수 있다.
-
 * Install : codeDeploy agnet가 임시 폴더로부터 revision을 최종 목적 폴더(destination)로 복사한다.
-
 * AfterInstall : app에 대한 설정, 파일 접근 권한의 변경 등을 수행할 수 있다. **deploy.sh**와 같은 쉘 스크립트를 수행시킬수도 있다.
-
 * ApplicationStart : ApplicationStop 이벤트 도중에 정지된 서비스를 재시작시킬 수 있다.
-
 * ValidateService : 성공적으로 deployment 되었는지를 검증할 수 있다.
 
 [AppSpec 'hooks' section](https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-server)
-
 [AppSpec 'files' 섹션(EC2/온프레미스 배포만 해당)](https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/reference-appspec-file-structure-files.html)
 
-![](https://media.vlpt.us/images/lechuck/post/4b13e90f-e3f8-464c-8e76-8f3219ee5248/image.png)
+![obsidian image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/1772284736909-vpy8zp.png)
 
 ## deploy.sh
 
 deploy.sh에서는 간단한 동작만 수행한다. 실행중인 모든 도커 프로세스를 죽이고, docker-compose를 작동시킨다.
 
-![](https://media.vlpt.us/images/lechuck/post/9ba70905-be69-4b26-bf8a-9255392fa08a/image.png)
+![obsidian image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/1772284749075-3lg5cp.png)
