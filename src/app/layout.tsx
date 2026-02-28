@@ -6,6 +6,7 @@ import "./callout.css";
 import Link from "next/link";
 import { ThemeProvider } from "@/src/app/_components/ThemeProvider";
 import { ThemeToggle } from "@/src/app/_components/ThemeToggle";
+import { ScrollToTop } from "@/src/app/_components/ScrollToTop";
 import { Button } from "@/components/ui/button";
 import { Github, FileText } from "lucide-react";
 
@@ -122,6 +123,7 @@ export default function RootLayout({
               {children}
             </main>
           </div>
+          <ScrollToTop />
         </ThemeProvider>
       </body>
     </html>
