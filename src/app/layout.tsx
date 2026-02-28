@@ -63,7 +63,7 @@ export default function RootLayout({
               <div className="xl:hidden mx-auto max-w-[var(--layout-max-width)] h-full px-4 md:px-6 flex items-center justify-between">
                 <Link
                   href="/"
-                  className={`${maruBuri.className} font-semibold text-primary hover:text-primary/80 transition-colors`}
+                  className={`${maruBuri.className} font-semibold text-primary hover:text-primary/80 transition-[color,transform] active:scale-95`}
                 >
                   LeChuck
                 </Link>
@@ -88,7 +88,7 @@ export default function RootLayout({
                   <div className="flex items-center gap-2">
                     <Link
                       href="/"
-                      className={`${maruBuri.className} text-lg font-semibold text-primary hover:text-primary/80 transition-colors`}
+                      className={`${maruBuri.className} text-lg font-semibold text-primary hover:text-primary/80 transition-[color,transform] active:scale-95`}
                     >
                       LeChuck
                     </Link>
@@ -101,7 +101,7 @@ export default function RootLayout({
                   <nav className="mt-6 pt-6 border-t border-border flex flex-col gap-1">
                     <Link
                       href="/"
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5 px-2 rounded-md hover:bg-accent"
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-[color,transform] py-1.5 px-2 rounded-md hover:bg-accent active:scale-[0.97]"
                     >
                       <FileText className="h-4 w-4" />
                       Posts
@@ -110,7 +110,7 @@ export default function RootLayout({
                       href={GITHUB_URL}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5 px-2 rounded-md hover:bg-accent"
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-[color,transform] py-1.5 px-2 rounded-md hover:bg-accent active:scale-[0.97]"
                     >
                       <Github className="h-4 w-4" />
                       GitHub
