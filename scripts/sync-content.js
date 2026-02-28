@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Config = require('./config');
 const ObsidianTransformer = require('./transform-obsidian');
+const { calculateReadingTime } = require('./reading-time');
 
 /**
  * 블로그 콘텐츠 동기화 클래스
@@ -140,14 +141,17 @@ class ContentSyncer {
 
     // Obsidian → MDX 변환 (async 처리)
     const { content: transformedContent, frontmatter } = await this.transformer.transform(content, filename);
-    
+
+    // 읽기 시간 계산 (변환 전 원본 content 기준)
+    const readingTime = calculateReadingTime(content);
+
     // 출력 파일명 생성
     const outputFilename = this.generateOutputFilename(filename, frontmatter.slug);
     const outputPath = path.join(this.config.contentPath, outputFilename);
-    
+
     // 변환된 내용을 파일로 저장
     fs.writeFileSync(outputPath, transformedContent);
-    
+
     // posts.json용 메타데이터 반환
     return {
       slug: frontmatter.slug,
@@ -155,6 +159,7 @@ class ContentSyncer {
       date: frontmatter.date,
       tags: frontmatter.tags || [],
       description: frontmatter.description || null,
+      readingTime,
       filename: outputFilename,
       originalFilename: filename,
     };
@@ -190,6 +195,7 @@ class ContentSyncer {
         title: post.title,
         tags: post.tags,
         ...(post.description ? { description: post.description } : {}),
+        readingTime: post.readingTime,
       }))
     };
 

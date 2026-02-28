@@ -7,7 +7,8 @@
       "tags": [
         "Nextjs",
         "URL"
-      ]
+      ],
+      "readingTime": 11
     },
     {
       "slug": "5.18",
@@ -18,7 +19,8 @@
         "영화",
         "역사"
       ],
-      "description": "<박하사탕>과 역사적 트라우마에 대하여"
+      "description": "<박하사탕>과 역사적 트라우마에 대하여",
+      "readingTime": 5
     },
     {
       "slug": "geultto",
@@ -26,7 +28,8 @@
       "title": "글또 10기를 시작하며",
       "tags": [
         "활동"
-      ]
+      ],
+      "readingTime": 4
     },
     {
       "slug": "apply-geultto",
@@ -35,7 +38,8 @@
       "tags": [
         "회고",
         "활동"
-      ]
+      ],
+      "readingTime": 7
     },
     {
       "slug": "2024-05",
@@ -44,7 +48,8 @@
       "tags": [
         "회고",
         "여행"
-      ]
+      ],
+      "readingTime": 7
     },
     {
       "slug": "2024Q1",
@@ -53,7 +58,8 @@
       "tags": [
         "회고"
       ],
-      "description": "회고 재밌다"
+      "description": "회고 재밌다",
+      "readingTime": 11
     },
     {
       "slug": "PR-for-code-review",
@@ -63,7 +69,8 @@
         "PR",
         "git",
         "코드리뷰"
-      ]
+      ],
+      "readingTime": 3
     },
     {
       "slug": "second-brain",
@@ -74,7 +81,8 @@
         "세컨드브레인",
         "제텔카스텐",
         "생산성"
-      ]
+      ],
+      "readingTime": 9
     },
     {
       "slug": "zettelkasten",
@@ -84,7 +92,8 @@
         "제텔카스텐",
         "세컨드브레인",
         "생산성"
-      ]
+      ],
+      "readingTime": 9
     },
     {
       "slug": "single-bit-error",
@@ -94,7 +103,8 @@
         "책",
         "SF"
       ],
-      "description": "켄 리우의 '신들은 죽임당하지 않을 것이다' 중에서"
+      "description": "켄 리우의 '신들은 죽임당하지 않을 것이다' 중에서",
+      "readingTime": 6
     },
     {
       "slug": "next-auth",
@@ -103,7 +113,8 @@
       "tags": [
         "Nextjs",
         "인증/인가"
-      ]
+      ],
+      "readingTime": 5
     },
     {
       "slug": "Nextjs-13-app-router",
@@ -112,7 +123,8 @@
       "tags": [
         "Nextjs",
         "RSC"
-      ]
+      ],
+      "readingTime": 6
     },
     {
       "slug": "study-react18",
@@ -122,7 +134,8 @@
         "RSC",
         "React18",
         "SSR"
-      ]
+      ],
+      "readingTime": 22
     },
     {
       "slug": "blog-making-retrospection",
@@ -130,7 +143,8 @@
       "title": "블로그 제작 회고",
       "tags": [
         "회고"
-      ]
+      ],
+      "readingTime": 4
     },
     {
       "slug": "wanted-fe-preonboard-3",
@@ -143,7 +157,8 @@
         "Reducer",
         "Memoization",
         "test"
-      ]
+      ],
+      "readingTime": 18
     },
     {
       "slug": "wanted-fe-preonboard-2",
@@ -155,7 +170,8 @@
         "CORS",
         "SOLID",
         "SoC"
-      ]
+      ],
+      "readingTime": 24
     },
     {
       "slug": "wanted-fe-preonboard-1",
@@ -163,7 +179,8 @@
       "title": "원티드 FE 프리온보딩 회고 (1)",
       "tags": [
         "회고"
-      ]
+      ],
+      "readingTime": 9
     },
     {
       "slug": "2022-11-read",
@@ -172,7 +189,8 @@
       "tags": [
         "책"
       ],
-      "description": "생계형 개발자 / SI에서 살아남기 / 사람이 싫다 / 피,땀,픽셀 / 최소한의 선의"
+      "description": "생계형 개발자 / SI에서 살아남기 / 사람이 싫다 / 피,땀,픽셀 / 최소한의 선의",
+      "readingTime": 17
     },
     {
       "slug": "grow-together",
@@ -182,7 +200,8 @@
         "책",
         "조직문화"
       ],
-      "description": "개발 연차가 쌓였을 때 다시 읽어봐도 많은 도움이 될 책이다"
+      "description": "개발 연차가 쌓였을 때 다시 읽어봐도 많은 도움이 될 책이다",
+      "readingTime": 9
     },
     {
       "slug": "programmers-brain",
@@ -192,7 +211,8 @@
         "생산성",
         "책"
       ],
-      "description": "효율이 밥 먹여준다"
+      "description": "효율이 밥 먹여준다",
+      "readingTime": 6
     },
     {
       "slug": "nginx-reverse-proxy",
@@ -202,7 +222,8 @@
         "AWS",
         "Nginx",
         "reverseProxy"
-      ]
+      ],
+      "readingTime": 3
     },
     {
       "slug": "aws-ec2-settings",
@@ -211,7 +232,8 @@
       "tags": [
         "AWS",
         "HTTPS"
-      ]
+      ],
+      "readingTime": 5
     },
     {
       "slug": "ec2-docker",
@@ -220,7 +242,8 @@
       "tags": [
         "AWS",
         "Docker"
-      ]
+      ],
+      "readingTime": 1
     },
     {
       "slug": "github-actions와-aws-codedeploy를-이용한-ec2-docker-compose-배포-자동화",
@@ -231,7 +254,8 @@
         "AWS",
         "EC2",
         "GithubActions"
-      ]
+      ],
+      "readingTime": 5
     },
     {
       "slug": "docker",
@@ -239,7 +263,8 @@
       "title": "Docker",
       "tags": [
         "Docker"
-      ]
+      ],
+      "readingTime": 4
     },
     {
       "slug": "mongo-db",
@@ -249,13 +274,15 @@
         "DB",
         "MongoDB",
         "Nodejs"
-      ]
+      ],
+      "readingTime": 4
     },
     {
       "slug": "sns-prac",
       "date": "2022-03-14",
       "title": "SNS 서비스 실습",
-      "tags": []
+      "tags": [],
+      "readingTime": 4
     },
     {
       "slug": "mySQL",
@@ -264,7 +291,8 @@
       "tags": [
         "DB",
         "MySQL"
-      ]
+      ],
+      "readingTime": 6
     },
     {
       "slug": "terminal",
@@ -273,7 +301,8 @@
       "tags": [
         "CLI",
         "Kernel"
-      ]
+      ],
+      "readingTime": 3
     },
     {
       "slug": "sass",
@@ -282,7 +311,8 @@
       "tags": [
         "CSS",
         "Sass"
-      ]
+      ],
+      "readingTime": 7
     },
     {
       "slug": "template-engine",
@@ -290,7 +320,8 @@
       "title": "템플릿 엔진",
       "tags": [
         "Nodejs"
-      ]
+      ],
+      "readingTime": 3
     },
     {
       "slug": "express",
@@ -298,7 +329,8 @@
       "title": "express로 서버 구축하기",
       "tags": [
         "Nodejs"
-      ]
+      ],
+      "readingTime": 8
     },
     {
       "slug": "http-module",
@@ -306,7 +338,8 @@
       "title": "http Module로 서버 만들기",
       "tags": [
         "Nodejs"
-      ]
+      ],
+      "readingTime": 6
     },
     {
       "slug": "npm",
@@ -314,7 +347,8 @@
       "title": "npm으로 노드 패키지 관리하기",
       "tags": [
         "Nodejs"
-      ]
+      ],
+      "readingTime": 2
     },
     {
       "slug": "cookie-session-token",
@@ -322,7 +356,8 @@
       "title": "쿠키와 세션, 토큰",
       "tags": [
         "Nodejs"
-      ]
+      ],
+      "readingTime": 5
     },
     {
       "slug": "2022-01-read",
@@ -331,7 +366,8 @@
       "tags": [
         "책"
       ],
-      "description": "달까지 가자/ 나는 주니어 개발자 / 메타버스 / 공간의 미래 / 사람, 장소, 환대 / 아주 작은 습관의 힘"
+      "description": "달까지 가자/ 나는 주니어 개발자 / 메타버스 / 공간의 미래 / 사람, 장소, 환대 / 아주 작은 습관의 힘",
+      "readingTime": 27
     },
     {
       "slug": "coding-test-regexp",
@@ -341,7 +377,8 @@
         "algorithm",
         "정규표현식",
         "코테"
-      ]
+      ],
+      "readingTime": 4
     },
     {
       "slug": "BEM",
@@ -351,7 +388,8 @@
         "BEM",
         "CSS"
       ],
-      "description": "BAM!이 아닌 BEM"
+      "description": "BAM!이 아닌 BEM",
+      "readingTime": 3
     },
     {
       "slug": "2021-11-read",
@@ -360,19 +398,22 @@
       "tags": [
         "책"
       ],
-      "description": "손에 잡히는 서양 미술사 / 달리 나는 세상의 배꼽"
+      "description": "손에 잡히는 서양 미술사 / 달리 나는 세상의 배꼽",
+      "readingTime": 4
     },
     {
       "slug": "browser-events",
       "date": "2021-11-21",
       "title": "브라우저 이벤트",
-      "tags": []
+      "tags": [],
+      "readingTime": 18
     },
     {
       "slug": "dom-api",
       "date": "2021-11-07",
       "title": "DOM API",
-      "tags": []
+      "tags": [],
+      "readingTime": 24
     },
     {
       "slug": "2021-10-read",
@@ -381,7 +422,8 @@
       "tags": [
         "책"
       ],
-      "description": "지구인만큼 지구를 사랑할 순 없어 / 나는 LINE 개발자입니다 / 실례지만, 이 책이 시급합니다"
+      "description": "지구인만큼 지구를 사랑할 순 없어 / 나는 LINE 개발자입니다 / 실례지만, 이 책이 시급합니다",
+      "readingTime": 4
     },
     {
       "slug": "browser-rendering",
@@ -390,7 +432,8 @@
       "tags": [
         "browser",
         "rendering"
-      ]
+      ],
+      "readingTime": 3
     },
     {
       "slug": "critical-rendering-path",
@@ -399,7 +442,8 @@
       "tags": [
         "browser",
         "rendering"
-      ]
+      ],
+      "readingTime": 8
     },
     {
       "slug": "redux",
@@ -408,7 +452,8 @@
       "tags": [
         "Redux",
         "Redux-toolkit"
-      ]
+      ],
+      "readingTime": 15
     },
     {
       "slug": "liu-book",
@@ -416,7 +461,8 @@
       "title": "어딘가 상상도 못 할 곳에, 수많은 순록 떼가",
       "tags": [
         "책"
-      ]
+      ],
+      "readingTime": 4
     },
     {
       "slug": "book-new-poverty",
@@ -425,7 +471,8 @@
       "tags": [
         "책"
       ],
-      "description": "책은 이래야지"
+      "description": "책은 이래야지",
+      "readingTime": 4
     },
     {
       "slug": "ssr-2",
@@ -433,7 +480,8 @@
       "title": "React SSR(2)",
       "tags": [
         "SSR"
-      ]
+      ],
+      "readingTime": 17
     },
     {
       "slug": "ssr-1",
@@ -441,7 +489,8 @@
       "title": "React SSR(1)",
       "tags": [
         "SSR"
-      ]
+      ],
+      "readingTime": 46
     },
     {
       "slug": "book-next-killer-app",
@@ -450,7 +499,8 @@
       "tags": [
         "책"
       ],
-      "description": "재미없는 책을 읽은 시간은 낭비일까? 아니겠지? 그래도 화가 나는 건 어쩔 수 없다"
+      "description": "재미없는 책을 읽은 시간은 낭비일까? 아니겠지? 그래도 화가 나는 건 어쩔 수 없다",
+      "readingTime": 4
     },
     {
       "slug": "redux-4",
@@ -458,7 +508,8 @@
       "title": "Redux(4) - 미들웨어 redux-saga",
       "tags": [
         "Redux"
-      ]
+      ],
+      "readingTime": 14
     },
     {
       "slug": "redux-3",
@@ -466,7 +517,8 @@
       "title": "Redux(3) - 미들웨어 redux-thunk",
       "tags": [
         "Redux"
-      ]
+      ],
+      "readingTime": 28
     },
     {
       "slug": "redux-2",
@@ -474,7 +526,8 @@
       "title": "Redux(2) - 활용 예시",
       "tags": [
         "Redux"
-      ]
+      ],
+      "readingTime": 27
     },
     {
       "slug": "redux-1",
@@ -482,7 +535,8 @@
       "title": "Redux(1) - 개념 및 구조",
       "tags": [
         "Redux"
-      ]
+      ],
+      "readingTime": 6
     },
     {
       "slug": "book-what-is-study",
@@ -490,7 +544,8 @@
       "title": "공부란 무엇인가",
       "tags": [
         "책"
-      ]
+      ],
+      "readingTime": 3
     },
     {
       "slug": "blog-making-retrospection-1",
@@ -501,7 +556,8 @@
         "netlify",
         "SEO",
         "회고"
-      ]
+      ],
+      "readingTime": 3
     },
     {
       "slug": "jamstack-and-static-web",
@@ -512,7 +568,8 @@
         "gatsby",
         "netlify",
         "staticWeb"
-      ]
+      ],
+      "readingTime": 4
     },
     {
       "slug": "ssr-csr-ssg",
@@ -522,7 +579,8 @@
         "SSR",
         "CSR",
         "SSG"
-      ]
+      ],
+      "readingTime": 5
     },
     {
       "slug": "markdown",
@@ -530,7 +588,8 @@
       "title": "Markdown 문법 정리",
       "tags": [
         "markdown"
-      ]
+      ],
+      "readingTime": 3
     }
   ]
 }

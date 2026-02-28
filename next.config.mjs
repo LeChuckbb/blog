@@ -3,7 +3,6 @@ import remarkGfm from "remark-gfm";
 import createMDX from "@next/mdx";
 import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkCallout from "@r4ai/remark-callout";
 import remarkFlexibleMarkers from "remark-flexible-markers";
@@ -61,15 +60,6 @@ const withMDX = createMDX({
     rehypePlugins: [
       [rehypePrettyCode, options],
       rehypeSlug,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "wrap",
-          properties: {
-            className: ["anchor-link"],
-          },
-        },
-      ],
     ],
   },
 });

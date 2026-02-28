@@ -45,8 +45,8 @@ const TocItemComponent: React.FC<TocItemProps> = ({ item, onItemClick }) => {
         }}
         className={cn(
           "block py-1 px-2 text-sm transition-colors duration-200 rounded",
-          "text-muted-foreground hover:text-foreground hover:bg-muted",
-          "data-[active=true]:text-primary data-[active=true]:font-medium",
+          "text-muted-foreground hover:text-foreground hover:bg-accent",
+          "data-[active=true]:text-primary data-[active=true]:font-medium data-[active=true]:bg-muted",
           item.level === 1 && "font-medium",
           item.level === 2 && "ml-2",
           item.level === 3 && "ml-4",

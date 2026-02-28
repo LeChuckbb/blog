@@ -31,12 +31,12 @@ export default function Home() {
   const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
 
   return (
-    <div className="mx-auto xl:mx-0 max-w-[var(--content-max-width)] px-4 md:px-6 xl:px-0 py-12">
+    <div className="max-w-[var(--content-max-width)] px-4 md:px-6 xl:px-0 py-12">
       {years.map((year) => (
         <section key={year} className="mb-10">
           <div className="flex gap-1.5 items-end">
-            <h2 className="text-3xl font-bold">{year}</h2>
-            <span className="text-sm font-normal text-muted-foreground">
+            <h2 className="text-3xl font-bold font-serif">{year}</h2>
+            <span className="text-sm font-normal text-muted-foreground font-serif">
               {postsByYear[year].length} post
               {postsByYear[year].length !== 1 ? "s" : ""}
             </span>
@@ -51,7 +51,7 @@ export default function Home() {
                 <time className="text-sm text-muted-foreground shrink-0 w-12">
                   {formatDate(post.date)}
                 </time>
-                <span className="text-sm text-primary group-hover:underline">
+                <span className="text-sm text-primary group-hover:underline font-semibold">
                   {post.title}
                 </span>
               </Link>

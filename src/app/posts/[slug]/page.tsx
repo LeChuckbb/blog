@@ -21,16 +21,24 @@ export default async function Page({
     const { default: Post } = await import(`@/content/${filePath}`);
 
     return (
-      <div className="py-8 pb-24 px-4 md:px-6 xl:px-0 xl:flex xl:gap-[var(--toc-gap)]">
+      <div className="pt-16 pb-24 px-4 md:px-6 xl:px-0 xl:flex xl:gap-[var(--toc-gap)]">
         {/* Main Content */}
         <article className="min-w-0 max-w-[var(--content-max-width)]">
           <header className="mb-8">
-            <h1 className="text-3xl font-bold tracking-tight mb-2">
+            <h1 className="text-5xl font-bold tracking-tight mb-2">
               {post.title}
             </h1>
-            <time className="text-sm text-muted-foreground">{post.date}</time>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground font-serif">
+              <time>{post.date}</time>
+              {post.readingTime && (
+                <>
+                  <span>·</span>
+                  <span>{post.readingTime} min to read</span>
+                </>
+              )}
+            </div>
           </header>
-          <div className="prose dark:prose-invert max-w-none">
+          <div className="prose dark:prose-invert max-w-none [word-break:keep-all] break-words">
             <Post />
           </div>
         </article>
@@ -55,6 +63,7 @@ interface Post {
   date: string;
   tags?: string[];
   description?: string;
+  readingTime?: number;
 }
 
 function getPostBySlug(slug: string): Post | null {

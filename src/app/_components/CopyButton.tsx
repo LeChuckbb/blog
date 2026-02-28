@@ -28,7 +28,7 @@ export function CopyButton({ preRef }: CopyButtonProps) {
   return (
     <button
       onClick={handleCopy}
-      className="copy-button"
+      className="absolute top-2 right-2 flex items-center justify-center w-8 h-8 rounded-md bg-secondary text-secondary-foreground border border-border cursor-pointer opacity-0 group-hover/code:opacity-100 transition-[opacity,background-color] duration-150 hover:bg-muted"
       aria-label={copied ? "복사됨" : "코드 복사"}
       title={copied ? "복사됨!" : "복사"}
     >

@@ -1,20 +1,36 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
+import "@fontsource-variable/asta-sans";
 import "./globals.css";
+import "./callout.css";
 import Link from "next/link";
 import { ThemeProvider } from "@/src/app/_components/ThemeProvider";
 import { ThemeToggle } from "@/src/app/_components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Github, FileText } from "lucide-react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const maruBuri = localFont({
+  src: [
+    {
+      path: "./fonts/MaruBuri-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/MaruBuri-SemiBold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+  ],
+  variable: "--font-maruburi",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const d2Coding = localFont({
+  src: "./fonts/D2Coding.woff2",
+  variable: "--font-d2coding",
+  weight: "400",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -32,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${maruBuri.variable} ${d2Coding.variable} antialiased bg-background text-foreground`}
       >
         <ThemeProvider
           attribute="class"
@@ -40,13 +56,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="xl:grid xl:grid-cols-[1fr_minmax(0,var(--content-max-width))_1fr] xl:min-h-screen">
+          <div className="xl:grid xl:grid-cols-[var(--sidebar-width)_1fr] xl:min-h-screen xl:max-w-[var(--layout-max-width)] xl:mx-auto">
             <header className="fixed top-0 left-0 right-0 z-50 h-[var(--nav-height)] bg-background/80 backdrop-blur-md border-b border-border xl:static xl:sticky xl:top-0 xl:col-start-1 xl:row-start-1 xl:h-screen xl:self-start xl:z-auto xl:bg-background xl:backdrop-blur-none xl:border-b-0 xl:border-r xl:border-border">
               {/* 모바일: 수평 배치 (xl 미만) */}
               <div className="xl:hidden mx-auto max-w-[var(--layout-max-width)] h-full px-4 md:px-6 flex items-center justify-between">
                 <Link
                   href="/"
-                  className="font-semibold text-primary hover:text-primary/80 transition-colors"
+                  className={`${maruBuri.className} font-semibold text-primary hover:text-primary/80 transition-colors`}
                 >
                   LeChuck
                 </Link>
@@ -64,40 +80,45 @@ export default function RootLayout({
                   <ThemeToggle />
                 </div>
               </div>
-              {/* xl: 수직 배치, 중앙 정렬 */}
-              <div className="hidden xl:flex xl:flex-col xl:h-full xl:p-6 xl:items-center">
-                {/* 상단: 로고 + 테마 토글 (가로 나란히) */}
-                <div className="flex items-center gap-2">
-                  <Link
-                    href="/"
-                    className="font-semibold text-primary hover:text-primary/80 transition-colors"
-                  >
-                    LeChuck
-                  </Link>
-                  <ThemeToggle />
+              {/* xl: 수직 배치, 우측 정렬 */}
+              <div className="hidden xl:flex xl:flex-col xl:h-full xl:py-6 xl:pl-6 xl:pr-6 xl:items-end">
+                <div className="w-[160px] flex flex-col">
+                  {/* 프로필 */}
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href="/"
+                      className={`${maruBuri.className} text-lg font-semibold text-primary hover:text-primary/80 transition-colors`}
+                    >
+                      LeChuck
+                    </Link>
+                    <ThemeToggle />
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                    개발, 독서, 생각을 기록하는 공간
+                  </p>
+                  {/* 네비게이션 */}
+                  <nav className="mt-6 pt-6 border-t border-border flex flex-col gap-1">
+                    <Link
+                      href="/"
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5 px-2 rounded-md hover:bg-accent"
+                    >
+                      <FileText className="h-4 w-4" />
+                      Posts
+                    </Link>
+                    <a
+                      href={GITHUB_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5 px-2 rounded-md hover:bg-accent"
+                    >
+                      <Github className="h-4 w-4" />
+                      GitHub
+                    </a>
+                  </nav>
                 </div>
-                {/* 네비게이션 링크 (아이콘 + 텍스트) */}
-                <nav className="mt-8 flex flex-col gap-1">
-                  <Link
-                    href="/"
-                    className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                  >
-                    <FileText className="h-4 w-4" />
-                    Posts
-                  </Link>
-                  <a
-                    href={GITHUB_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                  >
-                    <Github className="h-4 w-4" />
-                    GitHub
-                  </a>
-                </nav>
               </div>
             </header>
-            <main className="pt-[var(--nav-height)] xl:pt-0 xl:pl-8 xl:col-start-2 xl:col-span-2 xl:row-start-1">
+            <main className="pt-[var(--nav-height)] xl:pt-0 xl:pl-16 xl:pr-10 xl:col-start-2 xl:row-start-1">
               {children}
             </main>
           </div>
