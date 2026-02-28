@@ -21,11 +21,11 @@ export default async function Page({
     const { default: Post } = await import(`@/content/${filePath}`);
 
     return (
-      <div className="pt-16 pb-24 px-4 md:px-6 xl:px-0 xl:flex xl:gap-[var(--toc-gap)]">
+      <div className="pt-16 pb-24 px-4 md:px-6 xl:px-0 xl:flex xl:gap-[var(--toc-gap)] overflow-x-hidden">
         {/* Main Content */}
-        <article className="min-w-0 max-w-[var(--content-max-width)]">
+        <article className="min-w-0 w-full max-w-[var(--content-max-width)]">
           <header className="mb-8">
-            <h1 className="text-5xl font-bold tracking-tight mb-2">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2">
               {post.title}
             </h1>
             <div className="flex items-center gap-2 text-sm text-muted-foreground font-serif">
