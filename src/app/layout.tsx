@@ -163,12 +163,6 @@ export default function RootLayout({
               {children}
             </main>
           </div>
-          <footer className="border-t border-border mt-auto py-6 text-center text-xs text-muted-foreground">
-            <p>
-              © {new Date().getFullYear()} {siteConfig.author.name}. All rights
-              reserved.
-            </p>
-          </footer>
           <ScrollToTop />
         </ThemeProvider>
       </body>
