@@ -249,20 +249,25 @@ table {
 /* 코드 블록 듀얼 테마: shiki CSS 변수 → color 매핑 */
 [data-rehype-pretty-code-figure] code span {
   color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
+  background-color: transparent;
 }
 
 .dark [data-rehype-pretty-code-figure] code span {
   color: var(--shiki-dark);
-  background-color: var(--shiki-dark-bg);
+  background-color: transparent;
+}
+
+/* 구문 하이라이팅 없는 plain text span → foreground 색상 사용 */
+[data-rehype-pretty-code-figure] code span:not([style]) {
+  color: var(--foreground);
 }
 
 [data-rehype-pretty-code-figure] pre {
-  background-color: var(--shiki-light-bg) !important;
+  background-color: var(--muted) !important;
 }
 
 .dark [data-rehype-pretty-code-figure] pre {
-  background-color: var(--shiki-dark-bg) !important;
+  background-color: var(--muted) !important;
 }
 
 /* 코드 블록 스타일 */
@@ -272,6 +277,7 @@ table {
   border: 1px solid var(--border);
   padding: 0.75rem 0.75rem;
   margin: 0;
+  background-color: var(--muted);
 }
 
 .prose pre code {
