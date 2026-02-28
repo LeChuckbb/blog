@@ -1,13 +1,7 @@
 import postsData from "./posts.json";
 import Link from "next/link";
-
-interface Post {
-  slug: string;
-  title: string;
-  date: string;
-  tags?: string[];
-  description?: string;
-}
+import { Post } from "@/src/app/types";
+import { generateWebsiteJsonLd } from "@/src/app/lib/jsonLd";
 
 function formatDate(dateStr: string): string {
   const parts = dateStr.split("-");
@@ -18,6 +12,7 @@ function formatDate(dateStr: string): string {
 
 export default function Home() {
   const posts = postsData.posts as Post[];
+  const jsonLd = generateWebsiteJsonLd();
 
   // 년도별 그룹핑
   const postsByYear = posts.reduce<Record<string, Post[]>>((acc, post) => {
@@ -32,6 +27,13 @@ export default function Home() {
 
   return (
     <div className="max-w-[var(--content-max-width)] px-4 md:px-6 xl:px-0 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <h1 className="sr-only">
+        LeChuck&apos;s Blog - 개발, 독서, 생각을 기록하는 공간
+      </h1>
       {years.map((year) => (
         <section key={year} className="mb-10">
           <div className="flex gap-1.5 items-end">

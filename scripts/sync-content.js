@@ -152,17 +152,76 @@ class ContentSyncer {
     // 변환된 내용을 파일로 저장
     fs.writeFileSync(outputPath, transformedContent);
 
+    // description: frontmatter에 있으면 사용, 없으면 본문에서 자동 추출
+    const description = frontmatter.description || this.extractDescription(transformedContent);
+
     // posts.json용 메타데이터 반환
     return {
       slug: frontmatter.slug,
       title: frontmatter.title,
       date: frontmatter.date,
       tags: frontmatter.tags || [],
-      description: frontmatter.description || null,
+      description,
       readingTime,
       filename: outputFilename,
       originalFilename: filename,
     };
+  }
+
+  /**
+   * MDX 본문에서 첫 번째 의미 있는 텍스트 단락 추출 (최대 155자)
+   */
+  extractDescription(mdxContent) {
+    const lines = mdxContent.split('\n');
+    const skipPatterns = [
+      /^---/, // frontmatter 구분자
+      /^```/, // 코드블록
+      /^#+\s/, // 헤딩
+      /^>\s/, // blockquote
+      /^[-*+]\s/, // 리스트
+      /^\d+\.\s/, // 순서 있는 리스트
+      /^import\s/, // import 구문
+      /^export\s/, // export 구문
+      /^\s*$/, // 빈 줄
+      /^!?\[/, // 이미지/링크로 시작하는 줄
+    ];
+
+    let inFrontmatter = false;
+    let inCodeBlock = false;
+    let frontmatterCount = 0;
+
+    for (const line of lines) {
+      // frontmatter 처리
+      if (line.trim() === '---') {
+        frontmatterCount++;
+        inFrontmatter = frontmatterCount < 2;
+        continue;
+      }
+      if (inFrontmatter) continue;
+
+      // 코드블록 처리
+      if (line.trim().startsWith('```')) {
+        inCodeBlock = !inCodeBlock;
+        continue;
+      }
+      if (inCodeBlock) continue;
+
+      // 비텍스트 요소 건너뛰기
+      if (skipPatterns.some(p => p.test(line.trim()))) continue;
+
+      // 인라인 마크다운 제거 후 텍스트 추출
+      const text = line
+        .replace(/\*\*(.+?)\*\*/g, '$1') // bold
+        .replace(/\*(.+?)\*/g, '$1') // italic
+        .replace(/`(.+?)`/g, '$1') // inline code
+        .replace(/\[(.+?)\]\(.+?\)/g, '$1') // links
+        .trim();
+
+      if (text.length > 20) {
+        return text.length > 155 ? text.slice(0, 152) + '...' : text;
+      }
+    }
+    return '';
   }
 
   /**
@@ -194,7 +253,7 @@ class ContentSyncer {
         date: post.date,
         title: post.title,
         tags: post.tags,
-        ...(post.description ? { description: post.description } : {}),
+        description: post.description || "",
         readingTime: post.readingTime,
       }))
     };

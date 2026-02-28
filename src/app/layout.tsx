@@ -4,11 +4,13 @@ import "@fontsource-variable/asta-sans";
 import "./globals.css";
 import "./callout.css";
 import Link from "next/link";
+import Image from "next/image";
 import { ThemeProvider } from "@/src/app/_components/ThemeProvider";
 import { ThemeToggle } from "@/src/app/_components/ThemeToggle";
 import { ScrollToTop } from "@/src/app/_components/ScrollToTop";
 import { Button } from "@/components/ui/button";
 import { Github, FileText } from "lucide-react";
+import { siteConfig } from "@/src/app/siteConfig";
 
 const maruBuri = localFont({
   src: [
@@ -35,8 +37,37 @@ const d2Coding = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "LeChuck's Blog",
-  description: "개발, 독서, 생각을 기록하는 공간",
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.title}`,
+  },
+  description: siteConfig.description,
+  openGraph: {
+    type: "website",
+    locale: siteConfig.locale,
+    url: siteConfig.url,
+    siteName: siteConfig.title,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+  },
+  alternates: {
+    canonical: "/",
+    types: {
+      "application/rss+xml": "/feed.xml",
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 const GITHUB_URL = "https://github.com/LeChuckbb";
@@ -97,6 +128,15 @@ export default function RootLayout({
                   <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
                     개발, 독서, 생각을 기록하는 공간
                   </p>
+                  <div className="mt-3 overflow-hidden rounded-lg">
+                    <Image
+                      src="/og.jpg"
+                      alt="LeChuck's Blog"
+                      width={160}
+                      height={160}
+                      className="w-full h-auto"
+                    />
+                  </div>
                   {/* 네비게이션 */}
                   <nav className="mt-6 pt-6 border-t border-border flex flex-col gap-1">
                     <Link
@@ -123,6 +163,12 @@ export default function RootLayout({
               {children}
             </main>
           </div>
+          <footer className="border-t border-border mt-auto py-6 text-center text-xs text-muted-foreground">
+            <p>
+              © {new Date().getFullYear()} {siteConfig.author.name}. All rights
+              reserved.
+            </p>
+          </footer>
           <ScrollToTop />
         </ThemeProvider>
       </body>
