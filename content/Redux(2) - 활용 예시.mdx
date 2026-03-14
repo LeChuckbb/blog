@@ -49,9 +49,7 @@ CRA로 리액트 프로젝트를 생성한 뒤 `redux`, `react-redux` 라이브�
 yarn create react-app react-redux-tutorial
 cd react-redux-tutorial
 yarn add redux react-redux
-```
-
-Todos.js 파일에 `<TodoItem>`, `<Todos>` 두 개 컴포넌트를 작성하였는데 취향에 따라 파일 두 개로 분리해도 좋다. `<Counter>`, `<Todos>` 컴포넌트를 작성한 후 `<App>` 컴포넌트에 렌더링한다. 이후 브라우저에 정상 출력된 것을 확인.
+```Todos.js 파일에 `<TodoItem>`, `<Todos>` 두 개 컴포넌트를 작성하였는데 취향에 따라 파일 두 개로 분리해도 좋다. `<Counter>`, `<Todos>` 컴포넌트를 작성한 후 `<App>` 컴포넌트에 렌더링한다. 이후 브라우저에 정상 출력된 것을 확인.
 
 ```jsx
 // components/Counter.js
@@ -368,8 +366,7 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps,
 )(CounterContainer);
-```
-CounterContainer 컴포넌트는 `react-redux`에서 제공하는 `connect` 함수를 사용해서 리덕스와 연동한다. 앞서 `<Provider>` 컴포넌트로 감싸준 컴포넌트 안에서 connect 함수를 사용하여 실질적인 연결을 해주는 구조인 것으로 보인다. react-redux에서 제공하는 `Hooks`를 사용해서 connect 함수를 대체할 수 있다고 한다. 하지만 본 게시글에서는 connect만 다루도록 하겠다.
+```CounterContainer 컴포넌트는 `react-redux`에서 제공하는 `connect` 함수를 사용해서 리덕스와 연동한다. 앞서 `<Provider>` 컴포넌트로 감싸준 컴포넌트 안에서 connect 함수를 사용하여 실질적인 연결을 해주는 구조인 것으로 보인다. react-redux에서 제공하는 `Hooks`를 사용해서 connect 함수를 대체할 수 있다고 한다. 하지만 본 게시글에서는 connect만 다루도록 하겠다.
 
 > The connect() function connects a React component to a Redux store.
 

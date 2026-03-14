@@ -14,7 +14,7 @@ title: 정규표현식과 코테 문제 (신규 아이디 추천)
 
 자바스크립트에서 정규표현식(이하 정규식)을 만드는 방법은 세 가지다.
 
-``` js
+```js
 <script>
 // 1. 정규식 리터럴 (슬래쉬로 감싸기)
 const exp = /ab+c/g;
@@ -100,7 +100,7 @@ ex) `'you like me'.replace(/\b[a-z]/g, char => char.toUpperCase())`의 결과는
 
 처음에 짰던 코드는 아래와 같다. 잘 짠 코드라고는 할 수 없겠지만 정규식 하나하나 테스트해가며 비교적 빠른 속도로 작성했다.
 
-``` js
+```js
 <script>
 function solution(new_id) {
     
@@ -154,7 +154,7 @@ function solution(new_id) {
 
 아래는 다른 사람이 짠 코드를 보고 조금 고쳐봤다. 정규식 `/^$/`이 빈 문자열을 의미한다는 점과 String.repeat() 메서드를 주의깊게 봤다.
 
-``` js
+```js
 <script>
 function solution(new_id){
     const answer = new_id

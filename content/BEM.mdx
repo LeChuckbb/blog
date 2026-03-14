@@ -46,9 +46,7 @@ case 1)
 <div class='header'> // Block
   <div class='header__nav'> </div> // Block__Element
 </div>
-```
-
-case 2)
+```case 2)
 ```html
 // Bad case
 <form class='search-form'> // Block
@@ -66,9 +64,7 @@ case 2)
   <div class='search-form__content'> // Block__Element1
     <input class='search-form__input'> // Block__Element2
     <button class='search-form__button'> // Block__Element3
-```
-
-case 3)
+```case 3)
 ```html
 // Bad case
 <figure class='photo'>
@@ -84,9 +80,7 @@ case 3)
 <figure class='photo'>
   <img class='photo__img'>
   <figcaption class='photo__caption'>
-```
-
-case 4)
+```case 4)
 ```html
 // Bad case
 <button class='btn--submit'>
@@ -97,9 +91,7 @@ case 4)
 // 이때 Modifier는 btn을 대체하기 위함이 아닌 확장하는 용도다.
 // 따라서 btn--submit을 단독으로 사용해선 안 된다.
 <button class='btn btn--submit'>
-```
-
-case 5)
+```case 5)
 ```html
 // BEM은 kebab-case, camelCase를 허용한다
 <div class='some-thesis some-thesis--fast-read'> // Block, Block--Modifier

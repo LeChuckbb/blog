@@ -257,9 +257,7 @@ const SearchProvider = ({ children, setTodos }: SearchProps) => {
   )
 }
 
-```
-
-Reducer를 적용하니 코드가 깔끔해졌다. 이전에는 setTodos...setIsSearchLoading과 같이 각기 다른 명칭으로 상태 업데이트 함수가 호출되었는데, 이제는 dispatch라는 일관된 명칭으로 함수를 호출하니 가독성이 좋아졌다. 
+```Reducer를 적용하니 코드가 깔끔해졌다. 이전에는 setTodos...setIsSearchLoading과 같이 각기 다른 명칭으로 상태 업데이트 함수가 호출되었는데, 이제는 dispatch라는 일관된 명칭으로 함수를 호출하니 가독성이 좋아졌다. 
 
 또한 여러가지 상태와 상태 업데이트 함수가 state, dispatch로 통합되니 Context Provider의 value로 전달하는 인자의 개수가 줄었고, 이로인해 각종 이벤트 핸들러를 UI 컴포넌트 내부에서 무리없이 정의 및 사용할 수 있게 되었다. 그 전에는 UI 컴포넌트에서 이벤트 핸들러 정의를 위해 여러가지 상태, 상태 업데이트 함수를 받아오는 게 부담되어서 `SearchProvider`에서 그냥 이벤트 핸들러를 정의하고 내려주었던 부분이 있었다. 
 
@@ -336,9 +334,7 @@ const searchReducer = (
       return state
   }
 }
-```
-
-Search와 관련된 UI 컴포넌트를 Compound Compound 패턴으로 작성했다. Context로 Search를 감싸서 Search에서 사용될 상태와 함수를 Props Drilling없이 공유할 수 있어서 편리하다. 이런 구조를 활용하기 전에는 하나의 컴포넌트에 5~10개의 Props를 전달해주는 경우가 잦았는데, 이는 굉장히 읽기 힘들고 리팩토링하기 어려운 구조라고 생각한다.
+```Search와 관련된 UI 컴포넌트를 Compound Compound 패턴으로 작성했다. Context로 Search를 감싸서 Search에서 사용될 상태와 함수를 Props Drilling없이 공유할 수 있어서 편리하다. 이런 구조를 활용하기 전에는 하나의 컴포넌트에 5~10개의 Props를 전달해주는 경우가 잦았는데, 이는 굉장히 읽기 힘들고 리팩토링하기 어려운 구조라고 생각한다.
 
 Compound Componet 패턴을 활용하면 UI 컴포넌트를 레고 블록처럼 끼워넣고 뺄 수 있어서 확장에 용이한 구조를 가져갈 수 있다. 또한 리액트 선언형 패러다임에 적합한 패턴으로 보여진다.
 
@@ -483,9 +479,7 @@ git에서 특정 이벤트(pre-commit, pre-push) 발생시 각각 prettier와 li
 		"lint": "eslint --cache .",
   },
 }
-```
-
-4. husky를 통해 git`pre-commit`, `pre-push` hook 이벤트를 추가한다.
+```4. husky를 통해 git`pre-commit`, `pre-push` hook 이벤트를 추가한다.
 
 * `npx husky add .husky/pre-commit "npm run format"`
 * `npx husky add .husky/pre-push "npm run lint"`

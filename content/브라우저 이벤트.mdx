@@ -9,7 +9,7 @@ title: 브라우저 이벤트
 
 브라우저는 사용자가 버튼을 클릭하는 행위를 감지하여 버튼 이벤트를 발생시킬 수 있다. 그리고 특정 버튼 요소에서 클릭 이벤트가 발생하면 특정 함수(이벤트 핸들러)를 호출하도록 브라우저에게 위임(이벤트 핸들러 등록)할 수 있다. 즉, 함수를 언제 호출할지 알 수 없으므로 브라우저에게 함수 호출을 위임하는 것이다.
 
-``` html
+```html
 <script>
 	const btn = document.querySelector('button');
     // btn onclick 프로퍼티에 함수를 등록 (이벤트 핸들러 등록)
@@ -214,9 +214,7 @@ target과 currentTarget이 헷갈릴 수 있기 때문에 아래와 같은 코�
     <li id="banana">Banana</li>
     <li id="orange">Orange</li>
 </ul>
-```
-
-id가 banana인 `<li>` 태그를 클릭해서 클릭 이벤트가 발생한 상황을 가정해보자. 이때 생성된 이벤트 객체는 이벤트를 발생시킨 DOM 요소인 이벤트 타깃을 중심으로 DOM 트리를 통해 전파된다. \<span style="color:#ffdce0">캡처링 단계\</span>는 이벤트가 상위 요소에서 하위 요소 방향으로 전파되는 것을 뜻하고, \<span style="color:#ffdce0">타깃 단계\</span>는 이벤트가 이벤트 타깃에 도달된 것을 의미하며 \<span style="color:#ffdce0;">버블링 단계\</span>는 이벤트가 하위 요소에서 상위 요소 방향으로 전파되는 것을 말한다.
+```id가 banana인 `<li>` 태그를 클릭해서 클릭 이벤트가 발생한 상황을 가정해보자. 이때 생성된 이벤트 객체는 이벤트를 발생시킨 DOM 요소인 이벤트 타깃을 중심으로 DOM 트리를 통해 전파된다. \<span style="color:#ffdce0">캡처링 단계\</span>는 이벤트가 상위 요소에서 하위 요소 방향으로 전파되는 것을 뜻하고, \<span style="color:#ffdce0">타깃 단계\</span>는 이벤트가 이벤트 타깃에 도달된 것을 의미하며 \<span style="color:#ffdce0;">버블링 단계\</span>는 이벤트가 하위 요소에서 상위 요소 방향으로 전파되는 것을 말한다.
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-11793345-abb0-4de0-ae9c-96af52bc7ead-image.png)
 

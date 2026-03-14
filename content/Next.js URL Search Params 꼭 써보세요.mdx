@@ -57,7 +57,7 @@ URL에 사용자 행동의 의도같은 것이 드러나는 까닭에 별도의 
 
 ##  Search & Pagination 예시
 
-``` tsx
+```tsx
 // page.tsx 
   
 const getSearchParams = (params: MediaSearchParams) => {  
@@ -88,7 +88,7 @@ async function MediaPage({
 export default MediaPage;
 ```
 
-``` tsx
+```tsx
 'use client';
 import {useSearchParams, usePathanme, useRouter} from 'next/navigation';
 
@@ -117,7 +117,7 @@ export default function MediaController(){
 }
 ```
 
-``` tsx  
+```tsx  
 interface Props {  
   params: MediaSearchParams;  
 }  
@@ -167,7 +167,7 @@ export default MediaListWithPagination;
 
 아래는 참고를 위한 Pagination의 pseudo 코드다. Radix에서 제공하는 RadioGroup을 확장해서 만들었다.
 
-``` tsx
+```tsx
 'use client';  
   
 function Pagination({ totalPages, currentPage, className }: Props) {  

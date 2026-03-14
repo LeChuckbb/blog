@@ -25,7 +25,7 @@ cmd에서 MySQL이 설치된 폴더 내 bin 폴더에 진입한 이후, `mysql -
 
 데이터베이스(스키마)를 조작할 수 있는 명령어는 아래와 같다. 세미콜론은 임의로 생략했다.
 
-``` sql
+```sql
 CREATE DATABSE {database name}
 DROP DATABASE {database name}
 SHOW DATABASES
@@ -34,7 +34,7 @@ USE {database name}
 
 ## 테이블 생성하기
 
-``` sql
+```sql
 CREATE TABLE nodejs.users (
 	id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(20) NOT NULL,
@@ -48,9 +48,7 @@ CREATE TABLE nodejs.users (
     COMMENT = '사용자 정보'
     DEFAULT CHARACTER SET = utf8
     ENGINE = InnoDB;
-```
-
-nodejs 데이터베이스에 users라는 테이블을 만든다. 이 테이블은 id, name, age, married, comment, create_at 컬럼을 갖는다. TINYINT는 -128~127까지의 정수를 저장할 때 사용하는 자료형이고, COMMENT 옵션으로 테이블에 대한 설명을 덧붙였다. DEFAULT CHARACTER SET을 utf8으로 해서 한글 입력이 가능하게끔 했다.
+```nodejs 데이터베이스에 users라는 테이블을 만든다. 이 테이블은 id, name, age, married, comment, create_at 컬럼을 갖는다. TINYINT는 -128~127까지의 정수를 저장할 때 사용하는 자료형이고, COMMENT 옵션으로 테이블에 대한 설명을 덧붙였다. DEFAULT CHARACTER SET을 utf8으로 해서 한글 입력이 가능하게끔 했다.
 
 테이블을 조작할 수 있는 명령어는 아래와 같다.
 
@@ -194,7 +192,7 @@ sequlize query를 사용하기 싫을 땐 아래와 같이 SQL 쿼리를 사용�
 
 아래와 같이 http 통신으로 얻어진 값을 raw query로 구현할 수도 있을까?
 
-``` js
+```js
 const user = await User.create({
     name: req.body.name,
     age: req.body.age,
@@ -215,7 +213,7 @@ route
 `PATCH /comments/:id` -> update() Comment.
 `DELETE /comments/:id` -> destroy() Comment.
 
-``` dir
+```dir
 \--- app.js // express에 미들웨어, 패키지, router, nunjucks, sequelize를 load
 \--- models/index.js // config.json, sequelize load. db 객체 생성 및 user/comment model을 db 객체에 할당. exports db. 
 \			user.js

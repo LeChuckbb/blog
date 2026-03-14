@@ -81,9 +81,7 @@ watch.next( {type: 'HELLO' });
 // 이전 액션: {type: TEST}
 // 안녕하세요!
 // { value: unedfined, done: false} 
-```
-
-redux-saga는 위 코드와 비슷한 원리로 작동한다. redux-saga는 우리가 디스패치하는 액션을 모니터링해서 그에 따라 필요한 작업을 따로 수행할 수 있는 미들웨어다.
+```redux-saga는 위 코드와 비슷한 원리로 작동한다. redux-saga는 우리가 디스패치하는 액션을 모니터링해서 그에 따라 필요한 작업을 따로 수행할 수 있는 미들웨어다.
 
 # 2. redux-saga 사용해보기 (기본)
 
@@ -205,9 +203,7 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-```
-
-App 컴포넌트에서 CounterContainer를 렌더링 하게끔 지정해주고 결과를 확인해보자. counter 리덕스 모듈을 변경하기는 했지만 CounterContainer에서 수정할 것은 없다. 기존에 사용 중이던 thunk 함수와 똑같은 이름으로 액션 생성 함수를 만들었기 때문이다.
+```App 컴포넌트에서 CounterContainer를 렌더링 하게끔 지정해주고 결과를 확인해보자. counter 리덕스 모듈을 변경하기는 했지만 CounterContainer에서 수정할 것은 없다. 기존에 사용 중이던 thunk 함수와 똑같은 이름으로 액션 생성 함수를 만들었기 때문이다.
 
 ![image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/b155a093-2c41-42ba-0546-69822f86e200.jpg)
 

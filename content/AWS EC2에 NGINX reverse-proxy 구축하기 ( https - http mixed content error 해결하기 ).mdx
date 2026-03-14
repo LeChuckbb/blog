@@ -52,7 +52,7 @@ nginx는 config file에 지정된 지시문(Directives)에 의해 제어되는 �
 
 * server : `listen`과 `server name`으로 port를 구분한다.
 
-``` nginx
+```nginx
 http{
 	server{
     }
@@ -61,7 +61,7 @@ http{
 
 * location : server 내에 location 블락 지시문을 둔다. location에는 `/` prefix를 명시하여 request의 URI와 비교한다. 매칭되는 URI는 root에 명시된 경로를 형성한다?
 
-``` nginx
+```nginx
 location / {
 	root /data/www;
 }
@@ -73,7 +73,7 @@ location / {
 
 * server name : `server_name` directive로 정의되고, 주어진 요청에 사용되는 server block을 결정한다.
 
-``` nginx
+```nginx
 server {
     listen       80;
     server_name  example.org  www.example.org;
@@ -107,7 +107,7 @@ server {
 
 변수
 
-``` shell
+```shell
 <http://opentutorials.org:80/production/module/index.php?type=module&id=12>
 
 $host : opentutorials.org

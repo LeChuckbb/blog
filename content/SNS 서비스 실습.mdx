@@ -37,7 +37,7 @@ route
 `POST /post` -> 게시글 업로드.
 `POST /post/img` -> 이미지 업로드. multer upload.single()
 
-``` cs
+```cs
 \
 \--- config/config.json
 \--- models/index.js
@@ -129,7 +129,7 @@ N:M 관계로 파생된 Follow 모델(테이블)에는 `db.sequelize.models.Foll
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-9dcb7901-f1c8-4452-b5a6-0a4a988691e8-image.png)
 
 strategy를 configure했으면, `.use`를 통해 register해야 한다.
-``` js
+```js
 // app.js
 const passportConfig = require('./passport');
 
@@ -137,9 +137,7 @@ passportConfig();
 
 app.use(passport.initialize());
 app.use(passport.session());
-```
-
-register가 완료되면, `passport.authenticate(strategy 이름)`과 같이 authenticate() 미들웨어의 첫 번째 인수로 strategy를 전달하여 사용할 수 있다.
+```register가 완료되면, `passport.authenticate(strategy 이름)`과 같이 authenticate() 미들웨어의 첫 번째 인수로 strategy를 전달하여 사용할 수 있다.
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-9ec4f7ff-187f-4c0c-ad0f-a00015969f43-image.png)
 

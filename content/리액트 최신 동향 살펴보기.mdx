@@ -65,9 +65,7 @@ const handleClick = () => {
 });
 
 // 총 세 번 리렌더링 됨.
-```
-
-React 18부터는 이벤트 핸들러 외부에서도 batch update가 적용된다. `createRoot()` API를 적용하기만 하면 자동으로 상태 업데이트가 일괄 처리된다.
+```React 18부터는 이벤트 핸들러 외부에서도 batch update가 적용된다. `createRoot()` API를 적용하기만 하면 자동으로 상태 업데이트가 일괄 처리된다.
 
 앞으로 소개할 동시성을 비롯한 React 18의 추가적인 기능을 활용하기 위해서는 `createRoot()` API를 통해 앱을 렌더해야 한다.
 
@@ -159,9 +157,7 @@ const DetailsComponent = () => (
     <AvatarComponent />
   </Suspense>
 )
-```
-
-Suspense와 lazy로 처리된 코드가 chunk.js로 코드 분할 처리된 모습이다.
+```Suspense와 lazy로 처리된 코드가 chunk.js로 코드 분할 처리된 모습이다.
 
 ![image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/2b360330-7c18-4931-3534-0d92f526a700.jpg)
 

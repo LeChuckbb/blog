@@ -100,9 +100,7 @@ Thunk는 **특정 작업을 나중에 할 수 있도록 미루기 위해 함수 
 ```jsx
 const addOne = x => x + 1;
 addOne(1); // 2
-```
-
-addOne을 호출했을 때 바로 1+1이 연산되는 것을 볼 수 있다. 그런데 이 연산 작업을 나중으로 미루고(thunk) 싶다면?
+```addOne을 호출했을 때 바로 1+1이 연산되는 것을 볼 수 있다. 그런데 이 연산 작업을 나중으로 미루고(thunk) 싶다면?
 
 ```jsx
 const addOne = x => x + 1;
@@ -116,9 +114,7 @@ setTimeout(() => {
     const value = fn(); // fn이 실행되는 시점에 연산
     console.log(value);
 }, 1000);
-```
-
-1초가 지나면 fn() -> addOneThunk(1)의 return값인 thunk -> addOne(x)가 호출되는 구조다.
+```1초가 지나면 fn() -> addOneThunk(1)의 return값인 thunk -> addOne(x)가 호출되는 구조다.
 이를 화살표 함수로만 작성한다면 아래와 같다.
 
 ```jsx
@@ -214,9 +210,7 @@ const counter = handleActions(
 );
 
 export default counter;
-```
-
-Thunk 생성 함수를 아래와 같이 CounterContainer 컴포넌트에 적용한다. 그러면 카운터의 +1, -1 버튼을 눌렀을 때 1초 뒤에 적용되는 것을 볼 수 있다.
+```Thunk 생성 함수를 아래와 같이 CounterContainer 컴포넌트에 적용한다. 그러면 카운터의 +1, -1 버튼을 눌렀을 때 1초 뒤에 적용되는 것을 볼 수 있다.
 
 ```jsx
 // container/CounterContainer.js

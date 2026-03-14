@@ -51,7 +51,7 @@ HTML을 조작하기 위해서는 요소 노드 취득이 선행되어야 한다
 ### Document.prototype / Element.prototype
 `getElementById`를 제외한 요소 노드 취득 메서드는 모두 Document 인터페이스와 Element 인터페이스에 정의되어 있다. Document 인터페이스에서 제공한 메서드는 DOM의 루트 노드인 문서 노드, 즉 document를 통해 호출하여 DOM 전체에서 요소 노드를 탐색해 반환한다. 하지만 Element.prototype.getElementsByTagName 메서드는 특정 요소 노드를 통해 호출하며, 특정 요소 노드의 자손 노드 중에서 요소 노드를 탐색하여 반환한다.
 
-``` html
+```html
 <ul id="fruits">
     <li>Apple</li>
     <li>Banana</li>
@@ -76,7 +76,7 @@ HTML을 조작하기 위해서는 요소 노드 취득이 선행되어야 한다
 
 \<span style="color:red">**HTMLCollection**\</span>과 \<span style="color:red">**NodeList**\</span>는 모두 유사 배열 객체이면서 이터러블이다. 따라서 for...of 문으로 순회할 수 있으며 스프레드 문법을 사용해서 간단하게 배열로 변환할 수 있다. DOM 컬렉션 객체의 가장 중요한 특징은 \<span style="color:red">살아 있는live\</span> 객체라는 것이다. HTMLCollection은 언제나 live 객체로 동작하지만, NodeList는 경우에 따라 non-live 객체로 동작하기도 한다.
 
-``` html
+```html
 // live 객체의 폐해
 <ul id="fruits">
 	<li class="red">Apple</li>
@@ -100,7 +100,7 @@ HTML을 조작하기 위해서는 요소 노드 취득이 선행되어야 한다
 
 위 문제는 for문을 역방향으로 순회하거나, while문을 사용하는 방식으로 회피할 수 있다. HTMLCollection이 아닌 NodeList를 반환하는 `querySelectorAll` 메서드를 사용하는 방법도 있다. NodeList는 `childNodes` 프로퍼티가 반환한 객체가 아닌 경우는 non-live 객체로서 기능한다. **더 좋은 해결책은 DOM 컬렉션 객체를 사용하지 않는 것이다.** 스프레드 문법으로 DOM 컬렉션 객체를 배열로 변환하면 live 객체의 부작용도 회피할 수 있고 배열 고차함수도 활용할 수 있게 된다.
 
-``` js
+```js
 [...elems].forEach(elem => elem.className = 'blue');
 ```
 
@@ -141,7 +141,7 @@ HTML을 조작하기 위해서는 요소 노드 취득이 선행되어야 한다
 
 노드 객체의 nodeValue 프로퍼티를 참조하면 **노드 객체의 값(텍스트 노드의 텍스트)**를 반환한다. 따라서 텍스트 노드가 아닌 요소 노드나 문서 노드의 nodeValue 프로퍼티를 참조하면 텍스트 값을 찾을 수 없으므로, null을 반환한다.
 
-``` html
+```html
 <div id="foo">Hello</div>
 
 <script>
@@ -158,7 +158,7 @@ HTML을 조작하기 위해서는 요소 노드 취득이 선행되어야 한다
 
 `Node.prototype.textContent` 프로퍼티는 요소 노드의 텍스트와 모든 자손 노드의 텍스트를 모두 취득하거나(get) 변경한다(set). 요소 노드의 textContent 프로퍼티를 참조하면 요소 노드의 콘텐츠 영역(시작 태그와 종료 태그 사이) 내의 텍스트를 모두 반환한다. 즉, 요소 노드의 childNodes 프로퍼티가 반환한 모든 노드들의 텍스트 노드의 값인 텍스트를 모두 반환한다. 이때 HTML 마크업은 무시된다.
 
-``` html
+```html
 <div id="foo">Hello
 	<span> world! </span>
 </div>
@@ -166,9 +166,7 @@ HTML을 조작하기 위해서는 요소 노드 취득이 선행되어야 한다
 <script>
 	console.log(document.getElemntById('foo').textContent); // Hello world!
 </script>
-```
-
-nodeValue 프로퍼티는 텍스트 노드에 사용해야만 효과가 있기 때문에 활용하기가 좀 더 까다롭다. 단 textContente를 사용할때는 원하는 텍스트 노드만 조작할 수 있도록 자손 관계에 주의해야한다. `foo.firstChild.nodeValue === foo.textContent`
+```nodeValue 프로퍼티는 텍스트 노드에 사용해야만 효과가 있기 때문에 활용하기가 좀 더 까다롭다. 단 textContente를 사용할때는 원하는 텍스트 노드만 조작할 수 있도록 자손 관계에 주의해야한다. `foo.firstChild.nodeValue === foo.textContent`
 
 > `textContet`와 유사한 동작을 하는 `innerText` 프로퍼티가 있지만, 사용하지 않는 게 좋다. innerText는 CSS에 순종적이어서 CSS에 의해 비표시(vsibility:hidden)로 지정된 요소 노드의 텍스트를 반환하지 못한다. 또한 CSS를 고려해야 하므로 textContent 프로퍼티보다 느리다.
 
@@ -179,7 +177,7 @@ nodeValue 프로퍼티는 텍스트 노드에 사용해야만 효과가 있기 �
 ### innerHTML (XSS에 취약함)
 `Element.prototype.innerHTML` 프로퍼티는 요소 노드의 HTML 마크업을 취득(get)하거나 변경(set)한다. 요소 노드의 innerHTML 프로퍼티를 참조하면 요소 노드의 콘텐츠 영역(시작 태그와 종료 태그 사이) 내에 포함된 모든 HTML 마크업을 문자열로 반환한다.
 
-``` html
+```html
 <div id="foo"> Hello
 	<span>world!</span>
 </div>
@@ -193,9 +191,7 @@ nodeValue 프로퍼티는 텍스트 노드에 사용해야만 효과가 있기 �
         // 새로 작성한 HTML 마크업이 파싱되어 요소 노드의 자식 노드로 DOM에 반영된다.
     	foo.innerHTML = 'Hi <span>there!</span>;
 </script>
-```
-
-innerHTML 프로퍼티에 set한 HTML 마크업 문자열은 렌더링 엔진에 의해 파싱된다. 여기서 문제는, 사용자로부터 입력받은 데이터를 그대로 innerHTML 프로퍼티에 할당할 경우 크로스 사이트 스크립팅 공격(XSS)에 취약하므로 위험하다.
+```innerHTML 프로퍼티에 set한 HTML 마크업 문자열은 렌더링 엔진에 의해 파싱된다. 여기서 문제는, 사용자로부터 입력받은 데이터를 그대로 innerHTML 프로퍼티에 할당할 경우 크로스 사이트 스크립팅 공격(XSS)에 취약하므로 위험하다.
 
 HTML5는 innerHTML 프로퍼티로 삽인된 `<script>` 요소 내의 JS 코드를 실행하지 않는다. 하지만 조금만 방법을 달리해도 모던 브라우저에서도 동작하는 XSS 공격을 시행할 수 있다.
 
@@ -206,7 +202,7 @@ innerHTML의 또 다른 단점은 HTML 마크업 문자열을 할당(set)하는 
 ### 직접적인 노드 생성 및 추가 (createElement ~ appendChild)
 innerHTML 프로퍼티가 HTML 마크업을 파싱하여 노드를 생성하고 DOM에 반영하는 방식이었다면, 노드를 직접 생성/삽입/삭제/치환해서 DOM을 조작하는 방식도 있다.
 
-``` html
+```html
 <ul id='fruits">
 	<li>Apple</li>
 </ul>
@@ -247,7 +243,7 @@ innerHTML 프로퍼티가 HTML 마크업을 파싱하여 노드를 생성하고 
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-4e5cb40d-4bcd-4f98-9d8d-232e4d3852a1-image.png)
 
-``` html
+```html
 <script>
   // 텍스트 노드를 생성하여 요소 노드의 자식 노드로 추가하는 일반적인 과정
   li.appendChild(document.createTextNode('Banana'));
@@ -270,7 +266,7 @@ DOM에 요소 노드를 추가할 때는 `appendChild()`의 사용을 최소화�
 
 `Document.prototype.createDocumentFragament` 메서드는 비어 있는 DocumentFragment 노드를 생성하여 반환한다.
 
-``` html
+```html
 <ul id="fruits"></ul>
 
 <script>
@@ -311,7 +307,7 @@ insertBefore 메서드는 첫 번째 인수로 전달받은 노드를 두 번째
 #### 노드 이동
 DOM에 이미 존재하는 노드를 appendChild 또는 insertBefore 메서드를 사용하여 DOM에 다시 추가하면 현재 위치에서 노드를 제거하고 새로운 위치에 노드를 추가한다. 즉, 노드가 이동한다.
 
-``` html
+```html
 <ul id="fruits">
     <li>Apple</li>
     <li>Banana</li>
@@ -350,7 +346,7 @@ DOM에 이미 존재하는 노드를 appendChild 또는 insertBefore 메서드�
 ### 어트리뷰트 노드와 attributes 프로퍼티
 HTML 요소는 여러 개의 어트리뷰트attribute(속성)를 가질 수 있다. HTML 어트리뷰트는 HTML 요소의 동작에 필요한 추가 정보를 제공하는 역할을 맡는다. HTML 어트리뷰트는 HTML 요소의 시작 태그에 `어트리뷰트 이름="어트리뷰트 값"`과 같은 형식으로 정의한다.
 
-``` html
+```html
 <input id="user" type="text" value="ungmo2">
 ```
 
@@ -386,7 +382,7 @@ HTML 어트리뷰트는 HTML 문서가 파싱될 때 어트리뷰트 노드로 �
 
 앞서 소개한 attributes 프로퍼티와는 달리`Element.prototype.getAttribute/setAttribute` 메서드를 사용하면 get/set이 자유롭다. 
 
-``` html
+```html
 <input id="user" type="text" value="ungmo2">
 
 <script>
@@ -409,7 +405,7 @@ HTML 어트리뷰트는 HTML 문서가 파싱될 때 어트리뷰트 노드로 �
 
 DOM 프로퍼티는 setter/getter 모두 존재하는 접근자 프로퍼티다. 따라서 DOM 프로퍼티는 참조와 변경 모두 가능하다.
 
-``` html
+```html
 <input id="user" type="text" value="ungmo2">
 
 <script>
@@ -427,7 +423,7 @@ DOM 프로퍼티는 setter/getter 모두 존재하는 접근자 프로퍼티다.
 
 예를 들어 `<input id="user" type="text" value="ungmo2">`를 파싱하는 상황을 생각해보자. **input 요소의 value 어트리뷰트는 어트리뷰트 노드로 변환되어 요소 노드의 atrributes 프로퍼티에 저장된다. 이와는 별도로 value 어트리뷰트의 값은 요소 노드의 value 프로퍼티에 할당된다.** 따라서 input 요소의 요소 노드가 생성되어 첫 렌더링이 끝난 시점까지는 어트리뷰트 노드의 어트리뷰트 값과 요소 노드의 value 프로퍼티에 할당된 값이 HTML 어트리뷰트 값과 동일하다.
   
-``` html
+```html
 <input id="user" type="text" value="ungmo2">
   
 <script>
@@ -456,7 +452,7 @@ DOM 프로퍼티는 setter/getter 모두 존재하는 접근자 프로퍼티다.
   
 data 어트리뷰트의 값은 `HTMLElement.dataset 프로퍼티`로 취득할 수 있다. dataset 프로퍼티는 HTML 요소의 모든 data 어트리뷰트의 정보를 제공하는 DOMStringMap 객체를 반환한다. DOMStringMap 객체는 data 어트리뷰트의 data- 접두사 다음에 붙인 임의의 이름을 카멜 케이스로 변환한 프로퍼티를 가지고 있다. 이 프로퍼티로 data 어트리뷰트의 값을 취득하거나 변경할 수 있다.
   
-``` html
+```html
   <ul class="users">
     /* data 어트리뷰트 */
     <li id="1" data-user-id="7621" data-role="admin">Lee</li>
@@ -481,7 +477,7 @@ data 어트리뷰트의 값은 `HTMLElement.dataset 프로퍼티`로 취득할 �
 #### 인라인 스타일 조작
 `HTMLElement.prototype.style` 프로퍼티는 setter/getter 모두 존재하는 접근자 프로퍼티로서 요소 노드의 **인라인 스타일**을 취득하거나 추가 또는 변경한다.
 
-``` html
+```html
 <div style="color: red">Hello World</div>
     
 <script>
@@ -520,7 +516,7 @@ CSS class를 미리 정의해둔 다음 HTML 요소의 class 어트리뷰트 값
 
 `Element.prototype.classList` 프로퍼티는 class 어트리뷰트의 정보를 담은 DOMTokenList 객체를 반환한다. 
 
-``` html
+```html
 <div class="box red">Hello World!</div>
 
 <script>
@@ -533,9 +529,7 @@ CSS class를 미리 정의해둔 다음 HTML 요소의 class 어트리뷰트 값
   // .box 요소의 class 어트리뷰트 값 중에서 'red'만 'blue'로 변경
   box.classList.replace('red', 'blue');
 </script>
-```
-
-DOMTokenList 객체는 다음과 같이 class 어트리뷰트를 제어하는 유용한 메서드들을 제공한다. add(), remove(), item(), contains(), replace(), toggle() 등.
+```DOMTokenList 객체는 다음과 같이 class 어트리뷰트를 제어하는 유용한 메서드들을 제공한다. add(), remove(), item(), contains(), replace(), toggle() 등.
 
 #### 요소에 적용되어 있는 CSS 스타일 참조
 style 프로퍼티는 인라인 스타일만 반환한다. 따라서 클래스를 적용한 스타일이나 상속을 통해 암묵적으로 적용된 스타일은 참조할 수 없다. HTML 요소에 적용되어 있는 모든 CSS 스타일을 참조해야 할 경우 `window.getComputedStyle` 메서드를 사용한다.
