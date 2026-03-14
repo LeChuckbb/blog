@@ -42,7 +42,8 @@
     "remark-toc": "^9.0.0",
     "shiki": "^3.4.2",
     "tailwind-merge": "^3.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
