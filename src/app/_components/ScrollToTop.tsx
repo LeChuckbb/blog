@@ -39,7 +39,7 @@ export function ScrollToTop() {
           transition={{ duration: 0.3 }}
           onClick={scrollToTop}
           aria-label="맨 위로 이동"
-          className="xl:hidden fixed bottom-6 right-6 z-50 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background/80 backdrop-blur-sm text-primary active:scale-95"
+          className="fixed bottom-6 right-6 z-50 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background/80 backdrop-blur-sm text-primary active:scale-95"
         >
           <ArrowUp className="h-5 w-5" />
         </motion.button>
