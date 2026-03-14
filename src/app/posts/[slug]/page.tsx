@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import postsData from "@/src/app/posts.json";
 import { generateTocFromFile } from "@/src/app/tocUtil";
 import TableOfContents from "@/src/app/_components/TableOfContents";
+import SeriesNav, { SeriesData } from "@/src/app/_components/SeriesNav";
 import { siteConfig } from "@/src/app/siteConfig";
 import { generateBlogPostingJsonLd } from "@/src/app/lib/jsonLd";
 import { Post } from "@/src/app/types";
@@ -63,6 +64,7 @@ export default async function Page({
   try {
     const tocItems = await generateTocFromFile(`./content/${filePath}`);
     const { default: Post } = await import(`@/content/${filePath}`);
+    const seriesData = getSeriesData(post);
 
     return (
       <div className="pt-16 pb-24 px-4 md:px-6 xl:px-0 xl:flex xl:gap-[var(--toc-gap)]">
@@ -86,6 +88,7 @@ export default async function Page({
               )}
             </div>
           </header>
+          {seriesData && <SeriesNav {...seriesData} />}
           <div className="prose dark:prose-invert max-w-none [word-break:keep-all] break-words">
             <Post />
           </div>
@@ -111,6 +114,29 @@ function getPostBySlug(slug: string): Post | null {
     (postsData.posts as Post[]).find((post) => post.slug === decodedSlug) ??
     null
   );
+}
+
+function getSeriesData(post: Post): SeriesData | null {
+  if (!post.series) return null;
+
+  const seriesPosts = (postsData.posts as Post[])
+    .filter((p) => p.series === post.series)
+    .sort((a, b) => {
+      const dateA = new Date(a.date || "1900-01-01").getTime();
+      const dateB = new Date(b.date || "1900-01-01").getTime();
+      if (dateA !== dateB) return dateA - dateB;
+      return a.slug.localeCompare(b.slug);
+    });
+
+  if (seriesPosts.length <= 1) return null;
+
+  const currentIndex = seriesPosts.findIndex((p) => p.slug === post.slug);
+
+  return {
+    seriesName: post.series,
+    posts: seriesPosts.map((p) => ({ slug: p.slug, title: p.title })),
+    currentIndex,
+  };
 }
 
 export async function generateStaticParams() {
