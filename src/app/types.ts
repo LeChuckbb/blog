@@ -5,4 +5,5 @@ export interface Post {
   tags?: string[];
   description?: string;
   readingTime?: number;
+  series?: string;
 }

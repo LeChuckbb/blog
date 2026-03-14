@@ -165,6 +165,7 @@ class ContentSyncer {
       readingTime,
       filename: outputFilename,
       originalFilename: filename,
+      series: frontmatter.series || undefined,
     };
   }
 
@@ -255,6 +256,7 @@ class ContentSyncer {
         tags: post.tags,
         description: post.description || "",
         readingTime: post.readingTime,
+        ...(post.series && { series: post.series }),
       }))
     };
 
