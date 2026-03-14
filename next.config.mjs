@@ -6,6 +6,7 @@ import rehypePrettyCode from "rehype-pretty-code";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkCallout from "@r4ai/remark-callout";
 import remarkFlexibleMarkers from "remark-flexible-markers";
+import rehypeImageSize from "./scripts/rehype-image-size.mjs";
 
 /** @type {import('rehype-pretty-code').Options} */
 const options = {
@@ -61,6 +62,7 @@ const withMDX = createMDX({
     rehypePlugins: [
       [rehypePrettyCode, options],
       rehypeSlug,
+      rehypeImageSize,
     ],
   },
 });

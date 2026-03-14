@@ -2,6 +2,20 @@ import type { MDXComponents } from "mdx/types";
 import { ImageProps } from "next/image";
 import { AnimatedImage } from "./src/app/_components/AnimatedImage";
 import { CodeBlock } from "./src/app/_components/CodeBlock";
+import { Mermaid } from "./src/app/_components/Mermaid";
+
+function extractText(node: React.ReactNode): string {
+  if (typeof node === "string") return node;
+  if (typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(extractText).join("");
+  if (node && typeof node === "object" && "props" in node) {
+    return extractText(
+      (node as React.ReactElement<{ children?: React.ReactNode }>).props
+        .children
+    );
+  }
+  return "";
+}
 
 let mdxImageIndex = 0;
 
@@ -29,9 +43,24 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       mdxImageIndex++;
       return <AnimatedImage priority={isFirst} {...(props as ImageProps)} />;
     },
-    pre: ({ children, ...rest }) => (
-      <CodeBlock {...rest}>{children}</CodeBlock>
-    ),
+    pre: ({ children, ...rest }) => {
+      const child = Array.isArray(children) ? children[0] : children;
+      if (
+        child &&
+        typeof child === "object" &&
+        "props" in child &&
+        (child as React.ReactElement<{ "data-language"?: string }>).props[
+          "data-language"
+        ] === "mermaid"
+      ) {
+        const chart = extractText(
+          (child as React.ReactElement<{ children: React.ReactNode }>).props
+            .children
+        );
+        return <Mermaid chart={chart} />;
+      }
+      return <CodeBlock {...rest}>{children}</CodeBlock>;
+    },
     code: ({ children, className, ...rest }) => {
       // rehype-pretty-code가 처리한 코드 블록 내부 code는 그대로 패스
       if (

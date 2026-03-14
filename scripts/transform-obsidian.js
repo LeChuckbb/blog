@@ -62,6 +62,9 @@ class ObsidianTransformer {
       transformedContent = this.processImages(transformedContent);
     }
 
+    // 코드 펜스 언어 태그 정규화 (``` mermaid → ```mermaid)
+    transformedContent = this.normalizeCodeFenceLanguage(transformedContent);
+
     // MDX 특수문자 이스케이프 (코드 블록 바깥의 <, {}, <!-- --> 처리)
     transformedContent = this.escapeMdxSpecialChars(transformedContent);
 
@@ -141,6 +144,16 @@ class ObsidianTransformer {
    * @param {string} content 
    * @returns {string}
    */
+  /**
+   * 코드 블록 언어 태그 정규화 (공백 제거)
+   * Obsidian이 ``` mermaid 형태로 쓰는 경우를 ```mermaid로 정규화
+   * @param {string} content
+   * @returns {string}
+   */
+  normalizeCodeFenceLanguage(content) {
+    return content.replace(/^(```)\s+(\w)/gm, '$1$2');
+  }
+
   processImages(content) {
     // Obsidian 이미지 경로를 Next.js public 경로로 변환
     // ![alt](Attached file/image.png) → ![alt](/images/image.png)

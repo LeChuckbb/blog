@@ -3,17 +3,31 @@
 import Image, { ImageProps } from "next/image";
 import { motion } from "motion/react";
 
-export function AnimatedImage({ priority, className, ...props }: ImageProps) {
+type AnimatedImageProps = Omit<ImageProps, "width" | "height"> & {
+  width?: ImageProps["width"];
+  height?: ImageProps["height"];
+};
+
+export function AnimatedImage({
+  priority,
+  className,
+  width: _width,
+  height: _height,
+  ...imageProps
+}: AnimatedImageProps) {
   if (priority) {
     return (
-      <Image
-        sizes="100vw"
-        className={`w-full h-auto rounded-lg${className ? ` ${className}` : ""}`}
-        width={600}
-        height={300}
-        priority
-        {...props}
-      />
+      <span style={{ display: "block" }}>
+        <Image
+          width={_width ?? 1920}
+          height={_height ?? 1080}
+          className={`h-auto max-w-full rounded-lg${className ? ` ${className}` : ""}`}
+          style={{ width: "100%", height: "auto" }}
+          sizes="(max-width: 768px) 100vw, 768px"
+          priority
+          {...imageProps}
+        />
+      </span>
     );
   }
 
@@ -26,11 +40,12 @@ export function AnimatedImage({ priority, className, ...props }: ImageProps) {
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       <Image
-        sizes="100vw"
-        className={`w-full h-auto rounded-lg${className ? ` ${className}` : ""}`}
-        width={600}
-        height={300}
-        {...props}
+        width={_width ?? 1920}
+        height={_height ?? 1080}
+        className={`h-auto max-w-full rounded-lg${className ? ` ${className}` : ""}`}
+        style={{ width: "100%", height: "auto" }}
+        sizes="(max-width: 768px) 100vw, 768px"
+        {...imageProps}
       />
     </motion.span>
   );

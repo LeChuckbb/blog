@@ -16,11 +16,19 @@ export function Mermaid({ chart }: MermaidProps) {
     if (!containerRef.current) return;
 
     const id = `mermaid-${Math.random().toString(36).slice(2)}`;
-
     import("mermaid").then(({ default: mermaid }) => {
       mermaid.initialize({
         startOnLoad: false,
         theme: resolvedTheme === "dark" ? "dark" : "default",
+        ...(resolvedTheme === "dark" && {
+          themeVariables: {
+            primaryColor: "#3b2066",
+            primaryBorderColor: "#8b5cf6",
+            primaryTextColor: "#f0eaf8",
+            secondaryColor: "#2d1f4e",
+            tertiaryColor: "#1e1635",
+          },
+        }),
       });
       mermaid
         .render(id, chart.trim())
@@ -44,7 +52,7 @@ export function Mermaid({ chart }: MermaidProps) {
   }
 
   return (
-    <div className="my-7 rounded-lg border border-border bg-muted p-4 overflow-x-auto">
+    <div className="my-7 rounded-lg border border-border dark:border-primary/20 bg-muted p-4 overflow-x-auto">
       <div ref={containerRef} className="flex justify-center" />
     </div>
   );

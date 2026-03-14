@@ -11,6 +11,7 @@ import { ScrollToTop } from "@/src/app/_components/ScrollToTop";
 import { Button } from "@/components/ui/button";
 import { Github, FileText } from "lucide-react";
 import { siteConfig } from "@/src/app/siteConfig";
+import { GoogleAnalytics } from "@/src/app/_components/GoogleAnalytics";
 
 const maruBuri = localFont({
   src: [
@@ -82,6 +83,7 @@ export default function RootLayout({
       <body
         className={`${maruBuri.variable} ${d2Coding.variable} antialiased bg-background text-foreground`}
       >
+        <GoogleAnalytics />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
