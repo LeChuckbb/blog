@@ -117,3 +117,17 @@ npm run lint         # Next.js 규칙과 Prettier로 ESLint 실행
 ### Google Drive 통합
 - Obsidian Vault가 Google Drive와 동기화되어 있으면 어디서든 글 작성 가능
 - 파일 변경 시 자동으로 블로그에 반영 (sync:watch 모드 사용 시)
+
+## 하네스: 원티드 채용공고 크롤러
+
+**목표:** 원티드(wanted.co.kr) 채용공고를 내부 API로 크롤링하고 직군 분류·코딩테스트 유형·경력 분포를 포함한 분석 엑셀을 생성한다.
+
+**트리거:** "원티드 크롤링", "채용공고 데이터 수집/분석", "직군별 분포", "코딩테스트 통계" 관련 요청 시 `wanted-job-crawler` 스킬을 사용한다. 후속 수정·확장 요청에도 동일 스킬로 처리.
+
+**산출물 위치:** `output/` 디렉토리 (data/raw_cards.json, data/details.json, wanted_seoul_dev_jobs.xlsx)
+
+**변경 이력:**
+| 날짜 | 변경 내용 | 대상 | 사유 |
+|------|----------|------|------|
+| 2026-05-20 | 초기 구성 — wanted-job-crawler 스킬 + 번들 스크립트 | ~/.claude/skills/wanted-job-crawler | 본 세션의 크롤링 노하우를 재사용 가능한 스킬로 응축 |
+| 2026-05-20 | 개발 전체 수집(`--all-dev`/`--all-categories`) 추가, 코딩테스트 분류 정책 변경(코딩테스트/알고리즘 명시 우선·코드리뷰 면접 제외·실무과제 보강) | crawl_wanted.py + classification-rules.md (output & 스킬) | job_group_id=518 전체 분석 요청 + 분류 오분류 3건(센트비/모티프/미리디) 교정 |

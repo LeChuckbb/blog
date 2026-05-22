@@ -58,7 +58,7 @@ export default async function Page({
     throw new Error(`Content file not found for slug: ${slug}`);
   }
 
-  const filePath = `${post.title}.mdx`;
+  const filePath = (post as any).filename || `${post.title}.mdx`;
   const jsonLd = generateBlogPostingJsonLd(post);
 
   try {

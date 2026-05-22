@@ -1,6 +1,20 @@
 {
   "posts": [
     {
+      "slug": "wanted-highfive-2026-conference-review",
+      "date": "2026-05-19",
+      "title": "원티드 하이파이브 2026 후기 - AI 시대에 살아남기",
+      "tags": [
+        "conference",
+        "AI",
+        "developer",
+        "culture",
+        "career"
+      ],
+      "description": "원티드 하이파이브 2026 컨퍼런스 참석 후기. AI 시대에 개발자의 역할 변화, 토스의 메이커 문화, 에이전트 플랫폼 구축 노하우, 디자이너의 본질에 대한 성찰을 담았습니다.",
+      "readingTime": 5
+    },
+    {
       "slug": "200-ok",
       "date": "2026-03-14",
       "title": "서버 에러가 200 OK로 내려오는 상황에서 에러 설계하기",
