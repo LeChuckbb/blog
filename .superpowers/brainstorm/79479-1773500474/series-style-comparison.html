@@ -1,0 +1,83 @@
+<h2>시리즈 UI 스타일 비교</h2>
+<p class="subtitle">게시글 상세 페이지에 표시될 시리즈 네비게이션 UI를 선택해주세요</p>
+
+<div class="cards">
+  <!-- 토스 테크 스타일 -->
+  <div class="card" data-choice="toss" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#f8f9fa;border-radius:12px;padding:24px;font-family:system-ui;">
+        <div style="color:#999;font-size:12px;margin-bottom:8px;">시리즈</div>
+        <div style="font-size:20px;font-weight:700;margin-bottom:6px;">Redux 완벽 가이드</div>
+        <div style="color:#666;font-size:14px;margin-bottom:16px;">React 상태관리의 핵심 개념부터 실전까지</div>
+        <div style="border-top:1px solid #eee;padding-top:16px;">
+          <div style="padding:10px 0;"><span style="color:#3b82f6;font-size:13px;margin-right:8px;">04</span><span style="font-size:15px;font-weight:600;color:#3b82f6;">Redux(4) - 미들웨어</span></div>
+          <div style="padding:10px 0;"><span style="color:#3b82f6;font-size:13px;margin-right:8px;">03</span><span style="font-size:15px;text-decoration:underline;">Redux(3) - 비동기 처리</span></div>
+          <div style="padding:10px 0;"><span style="color:#3b82f6;font-size:13px;margin-right:8px;">02</span><span style="font-size:15px;text-decoration:underline;">Redux(2) - 활용 예시</span></div>
+          <div style="padding:10px 0;"><span style="color:#3b82f6;font-size:13px;margin-right:8px;">01</span><span style="font-size:15px;text-decoration:underline;">Redux(1) - 개념 및 구조</span></div>
+          <div style="text-align:center;margin-top:16px;">
+            <span style="display:inline-block;background:#3b82f6;color:white;padding:8px 20px;border-radius:20px;font-size:14px;">시리즈 전체보기</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 토스 테크 스타일</h3>
+      <p>시리즈 제목 + 설명 + 번호 리스트 + 전체보기 버튼. 깔끔하고 정보가 풍부함</p>
+    </div>
+  </div>
+
+  <!-- 벨로그 스타일 -->
+  <div class="card" data-choice="velog" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#f8f9fa;border-radius:12px;padding:24px;font-family:system-ui;">
+        <div style="font-size:18px;font-weight:700;margin-bottom:16px;">Redux 완벽 가이드</div>
+        <div style="padding:0;">
+          <div style="padding:6px 0;"><span style="color:#888;margin-right:8px;">1.</span> Redux(1) - 개념 및 구조</div>
+          <div style="padding:6px 0;"><span style="color:#888;margin-right:8px;">2.</span> Redux(2) - 활용 예시</div>
+          <div style="padding:6px 0;font-weight:700;color:#3b82f6;"><span style="margin-right:8px;">3.</span> Redux(3) - 비동기 처리 ← 현재 글</div>
+          <div style="padding:6px 0;"><span style="color:#888;margin-right:8px;">4.</span> Redux(4) - 미들웨어</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
+          <span style="color:#888;font-size:13px;cursor:pointer;">▲ 숨기기</span>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="color:#888;font-size:13px;">3/4</span>
+            <span style="color:#ccc;font-size:16px;">◀</span>
+            <span style="color:#3b82f6;font-size:16px;">▶</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 벨로그 스타일</h3>
+      <p>시리즈명 + 번호 리스트 + 현재 글 하이라이트 + 이전/다음 화살표 + 접기/펼치기. 컴팩트하고 네비게이션 중심</p>
+    </div>
+  </div>
+
+  <!-- 조합 스타일 -->
+  <div class="card" data-choice="hybrid" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#f8f9fa;border-radius:12px;padding:24px;font-family:system-ui;">
+        <div style="font-size:18px;font-weight:700;margin-bottom:4px;">Redux 완벽 가이드</div>
+        <div style="color:#666;font-size:13px;margin-bottom:16px;">React 상태관리의 핵심 개념부터 실전까지</div>
+        <div style="border-top:1px solid #eee;padding-top:12px;">
+          <div style="padding:6px 0;"><span style="color:#888;margin-right:8px;">1.</span> Redux(1) - 개념 및 구조</div>
+          <div style="padding:6px 0;"><span style="color:#888;margin-right:8px;">2.</span> Redux(2) - 활용 예시</div>
+          <div style="padding:6px 0;font-weight:700;color:#3b82f6;"><span style="margin-right:8px;">3.</span> Redux(3) - 비동기 처리 ← 현재</div>
+          <div style="padding:6px 0;"><span style="color:#888;margin-right:8px;">4.</span> Redux(4) - 미들웨어</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid #eee;">
+          <span style="color:#888;font-size:13px;cursor:pointer;">▲ 숨기기</span>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="color:#888;font-size:13px;">3/4</span>
+            <span style="color:#ccc;">◀</span>
+            <span style="color:#3b82f6;">▶</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. 조합 스타일</h3>
+      <p>토스의 시리즈 설명 + 벨로그의 현재 글 하이라이트/접기/네비게이션을 조합. 두 스타일의 장점을 결합</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,115 @@
+<h2>시리즈 기능 최종 디자인</h2>
+<p class="subtitle">접근법 A (posts.json 기반) + 벨로그 스타일 UI + 글 상단 배치</p>
+
+<div class="section">
+  <h3>1. Obsidian Frontmatter</h3>
+  <div class="mockup">
+    <div class="mockup-header">Redux(3) - 비동기 처리.md</div>
+    <div class="mockup-body" style="font-family:monospace;font-size:14px;line-height:1.8;">
+      <div style="color:#888;">---</div>
+      <div>publish_date: 2024-03-15</div>
+      <div>tags:</div>
+      <div>&nbsp;&nbsp;- Redux</div>
+      <div>slug: redux-3</div>
+      <div style="color:#3b82f6;font-weight:bold;">series: Redux 완벽 가이드</div>
+      <div style="color:#888;">---</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>2. 데이터 흐름</h3>
+  <div class="mockup">
+    <div class="mockup-header">Obsidian → sync → posts.json → UI</div>
+    <div class="mockup-body" style="font-family:monospace;font-size:13px;line-height:1.6;padding:16px;">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="background:#e8f4fd;padding:8px 16px;border-radius:8px;border:1px solid #90caf9;">
+          Obsidian .md<br><small style="color:#666;">series: "Redux 완벽 가이드"</small>
+        </div>
+        <div style="color:#888;">→</div>
+        <div style="background:#e8f5e9;padding:8px 16px;border-radius:8px;border:1px solid #a5d6a7;">
+          sync-content.js<br><small style="color:#666;">frontmatter에서 series 추출</small>
+        </div>
+        <div style="color:#888;">→</div>
+        <div style="background:#fff3e0;padding:8px 16px;border-radius:8px;border:1px solid #ffcc80;">
+          posts.json<br><small style="color:#666;">{ series: "Redux 완벽 가이드" }</small>
+        </div>
+        <div style="color:#888;">→</div>
+        <div style="background:#f3e5f5;padding:8px 16px;border-radius:8px;border:1px solid #ce93d8;">
+          page.tsx<br><small style="color:#666;">같은 series 필터 → UI 렌더링</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>3. 시리즈 UI (벨로그 스타일)</h3>
+  <div class="mockup">
+    <div class="mockup-header">게시글 상세 페이지 — header 아래, 본문 위</div>
+    <div class="mockup-body" style="max-width:680px;margin:0 auto;">
+      <!-- 게시글 헤더 -->
+      <div style="margin-bottom:20px;">
+        <h2 style="font-size:28px;font-weight:800;margin-bottom:8px;">Redux(3) - 비동기 처리</h2>
+        <div style="color:#888;font-size:14px;">2024-03-15 · 7분 읽기</div>
+      </div>
+
+      <!-- 시리즈 컴포넌트 (벨로그 스타일) -->
+      <div style="background:#f8f9fa;border-radius:12px;padding:20px 24px;margin-bottom:24px;border:1px solid #e9ecef;">
+        <div style="font-size:17px;font-weight:700;margin-bottom:14px;color:#333;">Redux 완벽 가이드</div>
+        <div style="padding:0;">
+          <div style="padding:5px 0;color:#666;"><span style="color:#aaa;margin-right:10px;font-size:13px;">1.</span><a style="color:#666;text-decoration:none;" href="#">Redux(1) - 개념 및 구조</a></div>
+          <div style="padding:5px 0;color:#666;"><span style="color:#aaa;margin-right:10px;font-size:13px;">2.</span><a style="color:#666;text-decoration:none;" href="#">Redux(2) - 활용 예시</a></div>
+          <div style="padding:5px 0;font-weight:700;color:#3b82f6;"><span style="color:#3b82f6;margin-right:10px;font-size:13px;">3.</span>Redux(3) - 비동기 처리</div>
+          <div style="padding:5px 0;color:#666;"><span style="color:#aaa;margin-right:10px;font-size:13px;">4.</span><a style="color:#666;text-decoration:none;" href="#">Redux(4) - 미들웨어</a></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid #e9ecef;">
+          <span style="color:#888;font-size:13px;cursor:pointer;">▲ 숨기기</span>
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="color:#888;font-size:13px;">3/4</span>
+            <span style="color:#ccc;cursor:pointer;font-size:18px;">◀</span>
+            <span style="color:#3b82f6;cursor:pointer;font-size:18px;">▶</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 본문 시작 미리보기 -->
+      <div style="color:#888;font-style:italic;border-top:1px dashed #ddd;padding-top:16px;">
+        (본문 시작...)
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>4. 접힌 상태</h3>
+  <div class="mockup">
+    <div class="mockup-header">시리즈 카드를 접었을 때</div>
+    <div class="mockup-body" style="max-width:680px;margin:0 auto;">
+      <div style="background:#f8f9fa;border-radius:12px;padding:16px 24px;margin-bottom:24px;border:1px solid #e9ecef;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <span style="font-size:16px;font-weight:700;color:#333;">Redux 완벽 가이드</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="color:#888;font-size:13px;">3/4</span>
+            <span style="color:#888;font-size:13px;cursor:pointer;">▼ 목록</span>
+            <span style="color:#ccc;cursor:pointer;font-size:18px;">◀</span>
+            <span style="color:#3b82f6;cursor:pointer;font-size:18px;">▶</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>5. 변경 파일 요약</h3>
+  <div style="font-family:monospace;font-size:13px;line-height:2;padding:16px;background:#f8f9fa;border-radius:8px;">
+    <div><span style="color:#22c55e;">+</span> src/app/_components/<strong>SeriesNav.tsx</strong> — 새 컴포넌트</div>
+    <div><span style="color:#f59e0b;">~</span> src/app/types.ts — Post 인터페이스에 series? 추가</div>
+    <div><span style="color:#f59e0b;">~</span> scripts/sync-content.js — series 필드 전달</div>
+    <div><span style="color:#f59e0b;">~</span> src/app/posts/[slug]/page.tsx — SeriesNav 삽입</div>
+    <div><span style="color:#f59e0b;">~</span> Obsidian 파일들 — series frontmatter 추가</div>
+  </div>
+</div>
