@@ -1,5 +1,5 @@
 ---
-updated_at: 2026-03-15T00:00:00.000Z
+updated_at: 2026-05-27T00:00:00.000Z
 tags:
   - RESTful
   - ErrorHandling
@@ -69,8 +69,6 @@ title: 서버 에러가 200 OK로 내려오는 상황에서 에러 설계하기
       class NetworkError{
       }
 ```
-
-불합리함 속에서 피어난 에러 객체 구조는 대략 이런 형태였다. 내부 에러와 외부 에러 추상 클래스를 두고 하위에 구현체를 배치했다. Axios response interceptor에서 fulfilled 콜백에선 내부 에러를, rejected 콜백에선 외부 에러를 분류해야 했다는 구조적 제약이다.
 
 불합리함속에서 피어난 에러 객체 구조는 위와 같았다. 내부 에러와 외부 에러 추상 클래스를 두고 하위에 구현체를 배치했다. HTTP 401 인증 오류를 별도 처리하기 위해`AuthError`를, 외부 에러 유형으로 `NetworkError`를 명시했다. Axios response interceptor에서 fulfilled 콜백에선 내부 에러를, rejected 콜백에선 외부 에러를 분류했다.
 
