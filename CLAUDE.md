@@ -118,6 +118,17 @@ npm run lint         # Next.js 규칙과 Prettier로 ESLint 실행
 - Obsidian Vault가 Google Drive와 동기화되어 있으면 어디서든 글 작성 가능
 - 파일 변경 시 자동으로 블로그에 반영 (sync:watch 모드 사용 시)
 
+## 하네스: Obsidian 파일 안전 삭제
+
+**목표:** Obsidian Vault 내 파일을 삭제할 때 `rm` 대신 macOS 휴지통으로 이동시켜 복구 가능하게 한다.
+
+**트리거:** Obsidian Vault 경로(`~/Library/Mobile Documents/iCloud~md~obsidian/`) 내 파일을 삭제·제거·정리하는 모든 작업 시 `obsidian-safe-delete` 스킬을 사용한다. `rm` 명령어 사용 절대 금지.
+
+**변경 이력:**
+| 날짜 | 변경 내용 | 대상 | 사유 |
+|------|----------|------|------|
+| 2026-05-22 | 초기 구성 | obsidian-safe-delete 스킬 | rm으로 원본 메모 파일 영구 삭제한 사고 재발 방지 |
+
 ## 하네스: 원티드 채용공고 크롤러
 
 **목표:** 원티드(wanted.co.kr) 채용공고를 내부 API로 크롤링하고 직군 분류·코딩테스트 유형·경력 분포를 포함한 분석 엑셀을 생성한다.
