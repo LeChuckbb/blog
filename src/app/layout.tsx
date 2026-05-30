@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Github, FileText } from "lucide-react";
 import { siteConfig } from "@/src/app/siteConfig";
 import { GoogleAnalytics } from "@/src/app/_components/GoogleAnalytics";
+import { generateWebsiteJsonLd } from "@/src/app/lib/jsonLd";
 
 const maruBuri = localFont({
   src: [
@@ -80,6 +81,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateWebsiteJsonLd()),
+          }}
+        />
+      </head>
       <body
         className={`${maruBuri.variable} ${d2Coding.variable} antialiased bg-background text-foreground`}
       >
