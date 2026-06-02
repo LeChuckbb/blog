@@ -14,9 +14,9 @@ series: 블로그 후기
 date: '2026-06-02'
 ---
 
-블로그를 또 개편했다. 네이버 블로그를 시작으로 [Jbee template](https://lechuck.blog/posts/blog-making-retrospection-1), velog, [Velog-like](https://github.com/LeChuckbb/blog)를 거쳐 옵시디언 마크다운에 최적화된 형태로 변경했다. 8년간 4번째 바꾼 셈이다. '리빌딩 중독자인가?' '도구를 탓하는 편인가?' 라고 생각할 수 있지만, 그럴 만한 사정이 있었다.
+블로그를 또 개편했다. 네이버 블로그를 시작으로 [Jbee template](https://lechuck.blog/posts/blog-making-retrospection-1), velog, [Velog-like](https://github.com/LeChuckbb/blog)를 거쳐 옵시디언 마크다운에 최적화된 형태로 변경했다. 8년간 4번째 바꾼 셈이다. '리빌딩 중독자인가?' '글 쓸 때 도구를 탓하는 편인가?' 라고 생각할 수 있지만, 그럴 만한 사정이 있었다.
 
-옵시디언을 사용하고 메모나 지식을 관리하는 방식에 어느정도 [체계](https://lechuck.blog/posts/second-brain)가 잡히면서 마크다운 파일이 엄청나게 늘었다. 내가 쓰는 모든 글을 마크다운 형식으로 통일하고 싶었다. 글 쓰는 에디터도 옵시디언만 통하고 싶었다. 그래서 새로운 워크플로우에 맞게 블로그를 개편했다.
+옵시디언을 사용하고 메모나 지식을 관리하는 방식에 어느정도 [체계](https://lechuck.blog/posts/second-brain)가 잡히면서 마크다운 파일이 엄청나게 늘었다. 내가 쓰는 모든 글을 마크다운 형식으로 통일하고 싶었다. 글 쓰는 에디터도 옵시디언만 통하고 싶었다. 그래서 새로운 워크플로우에 맞게 블로그를 개편했다.
 
 기본적인 구조는 [Next.js 블로그 모범 사례 탐구: Vercel 리더십 블로그 아키텍처 파헤치기│인프콘2024](https://www.youtube.com/watch?v=LlG-B2TF_Ug)를 참고했다. 그리고 [Next.js의 MDX docs](https://nextjs.org/docs/app/guides/mdx#install-dependencies)도 유용했다. 엄청 특별할 건 없고, Next.js의 SSG로 운용한다. 마크다운 파일 한 개가 글 한 편이고, 상단 프론트 매터로 제목·날짜·태그 같은 메타데이터를 관리한다. 따로 DB를 운용하진 않고 있다.
 
