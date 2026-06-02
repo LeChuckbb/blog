@@ -91,10 +91,17 @@ class ContentSyncer {
    */
   async processPublishedFiles() {
     console.log('📝 Published 폴더 처리 중...');
-    
+
     const publishedFiles = this.getPublishedFiles();
+
+    // 1차 패스: 블로그에 실제 존재하게 될 글들의 slug 집합 수집
+    // (위키링크 변환 시 볼트 전용 글을 가리키는 깨진 링크를 제거하기 위함)
+    const existingSlugs = this.collectExistingSlugs(publishedFiles);
+    this.transformer.options.existingSlugs = existingSlugs;
+
     const posts = [];
 
+    // 2차 패스: 실제 변환 (위키링크는 existingSlugs 기준으로 처리)
     for (const file of publishedFiles) {
       try {
         const post = await this.processFile(file);
@@ -107,6 +114,35 @@ class ContentSyncer {
     }
 
     return posts;
+  }
+
+  /**
+   * published 파일들의 frontmatter slug(없으면 파일명 기반 slug)를 미리 수집
+   * @param {string[]} publishedFiles
+   * @returns {Set<string>} 블로그에 존재하게 될 글들의 slug 집합
+   */
+  collectExistingSlugs(publishedFiles) {
+    const matter = require('gray-matter');
+    const slugs = new Set();
+
+    for (const file of publishedFiles) {
+      try {
+        const sourcePath = path.join(this.config.publishedPath, file);
+        const raw = fs.readFileSync(sourcePath, 'utf-8');
+        const { data } = matter(raw);
+        // cleanFrontmatter와 동일한 규칙으로 실제 게시 slug 결정:
+        // frontmatter에 slug가 있으면 그대로(가공 X), 없으면 파일명에서 생성
+        slugs.add(data.slug ? String(data.slug) : this.transformer.generateSlug(file));
+        // 위키링크는 항상 파일명을 generateSlug한 값으로 링크를 만든다.
+        // frontmatter slug가 파일명과 다른 경우에도 위키링크가 매칭되도록
+        // 파일명 기반 slug도 존재 집합에 함께 등록한다.
+        slugs.add(this.transformer.generateSlug(file));
+      } catch (error) {
+        console.error(`⚠️  slug 수집 실패 (${file}):`, error.message);
+      }
+    }
+
+    return slugs;
   }
 
   /**

@@ -380,5 +380,17 @@ code[data-line-numbers] .line::before {
 
 /* ==============================
    텍스트 하이라이트 (remark-flexible-markers)
-   → mark 컴포넌트로 이전됨. dark 모드 오버라이드만 유지
+   플러그인이 <mark>에 .flexible-marker 클래스를 강제 부여하므로
+   (MDX 컴포넌트 className이 덮어써짐) 여기서 스타일을 정의한다.
+   형광펜 배경 대신 테마 강조색(primary) 밑줄로 강조한다.
    ============================== */
+.prose mark,
+.flexible-marker {
+  background: transparent;
+  color: inherit;
+  font-weight: 500;
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in oklch, var(--primary) 70%, transparent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}

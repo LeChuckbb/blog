@@ -91,14 +91,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </blockquote>
     ),
-    mark: ({ children, ...rest }) => (
-      <mark
-        className="bg-[oklch(0.9_0.12_90/60%)] dark:bg-[oklch(0.4_0.12_90/50%)] text-inherit px-[0.2em] py-[0.1em] rounded-sm"
-        {...rest}
-      >
-        {children}
-      </mark>
-    ),
     table: ({ children, ...rest }) => (
       <div className="overflow-x-auto rounded-lg border border-border my-7">
         <table className="border-spacing-0" {...rest}>
@@ -127,6 +119,20 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       className,
       ...rest
     }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+      // 아직 블로그에 게시되지 않은 글(옵시디언 볼트 전용)을 가리키던 위키링크.
+      // 클릭 불가능한 비활성 텍스트로 표현한다 (위키의 red link 패턴).
+      if (href?.startsWith("unresolved:")) {
+        return (
+          <span
+            className="text-muted-foreground/70 underline decoration-dotted decoration-from-font underline-offset-2 cursor-not-allowed"
+            title="아직 공개되지 않은 글입니다"
+            aria-disabled="true"
+            role="link"
+          >
+            {children}
+          </span>
+        );
+      }
       const isExternal = href?.startsWith("http");
       return (
         <a
