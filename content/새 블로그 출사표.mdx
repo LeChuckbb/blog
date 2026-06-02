@@ -1,0 +1,33 @@
+---
+updated_at: 2026-06-02T00:00:00.000Z
+tags:
+  - 회고
+  - 블로그
+  - Next.js
+  - Obsidian
+slug: new-blog-again
+description: >-
+  네이버 블로그·velog를 거쳐 Obsidian 마크다운에 최적화된 Next.js 블로그로 또 한 번 개편했다. SSG·S3 이미지·옵시디언
+  동기화로 이어지는 새 워크플로우와 그 사정에 대한 기록.
+series: 블로그 후기
+date: '2026-06-02'
+title: 새 블로그 출사표
+---
+
+블로그를 또 개편했다. 네이버 블로그를 시작으로 [Jbee template](https://lechuck.blog/posts/blog-making-retrospection-1), velog, [Velog-like](https://github.com/LeChuckbb/blog)를 거쳐 옵시디언 마크다운에 최적화된 형태로 변경했다. 8년간 4번째 바꾼 셈이다. '리빌딩 중독자인가?' '도구를 탓하는 편인가?' 라고 생각할 수 있지만, 그럴 만한 사정이 있었다.
+
+옵시디언을 사용하고 메모나 지식을 관리하는 방식에 어느정도 [체계](https://lechuck.blog/posts/second-brain)가 잡히면서 마크다운 파일이 엄청나게 늘었다. 내가 쓰는 모든 글을 마크다운 형식으로 통일하고 싶었다. 글 쓰는 에디터도 옵시디언만 통하고 싶었다. 그래서 새로운 워크플로우에 맞게 블로그를 개편했다.
+
+기본적인 구조는 [Next.js 블로그 모범 사례 탐구: Vercel 리더십 블로그 아키텍처 파헤치기│인프콘2024](https://www.youtube.com/watch?v=LlG-B2TF_Ug)를 참고했다. 그리고 [Next.js의 MDX docs](https://nextjs.org/docs/app/guides/mdx#install-dependencies)도 유용했다. 엄청 특별할 건 없고, Next.js의 SSG로 운용한다. 마크다운 파일 한 개가 글 한 편이고, 상단 프론트 매터로 제목·날짜·태그 같은 메타데이터를 관리한다. 따로 DB를 운용하진 않고 있다.
+
+나는 여기에 옵시디언과 싱크를 맞추는 스크립트만 좀 추가했다. 옵시디언 볼트는 iCloud에 올라가 있어서 어디서든 글을 작성할 수 있다. 이후 볼트 내 특정 경로에 있는, blog에 게시할 .md 파일들을 .mdx로 변환해서 레포지토리에 저장한다. 이후 배포하면 끝이다. 
+
+![obsidian image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/1780397090140-p7hvhs.png)
+
+이미지는 S3에 저장하고 있다. 옵시디언 [플러그인](https://github.com/LeChuckbb/obsidian-plugin-s3-images)을 만들어서 클립보드의 이미지를 붙여넣으면 S3 bucket으로 업로드되고 해당 URL로 이미지를 불러오게 해두었다. 예전에 Cloudflare Images 결제한것을 관성적으로 사용하고 있었는데, 비용 절감 차원에서 이번 기회에 바꿨다. 옵시디언 커뮤니티에 플러그인을 게재하려 했으나, 심사 과정이 꽤나 지지부진해서 그냥 혼자 잘 쓰고 있다.
+
+디자인은 [tania.dev](https://www.taniarascia.com/redesign-version-7/)를 주로 참고했다. 지금까지는 항상 썸네일 형태의 게시글 목록을 고집했는데 이번엔 심플한 게 예뻐보였다. 근래 본 양질의 글이 게시된 블로그들이 대체로 이런 형태여서 채택한 것도 있다. 좋은 글을 게시하겠다는 나름의 포부다. 그 외 [surfside](https://mag.surfit.io/)나 [토스 기술블로그](https://toss.tech/) 등을 참고했다.
+
+회사 업무에 치여 차일피일 미루다가 Claude Code와 함께 단번에 끝낼 수 있었다. 쾌감이 상당했다. Obsidian publish 외에도 [quartz](https://quartz.jzhao.xyz/) 같은 선택지를 개발 도중에 발견했으나 딱히 구미가 당기지는 않았다. CC가 내 취향에 맞고 빠르게 만들어 줄 수 있으므로. 참고만 했다.
+
+이제는 정착할 수 있을까? 도메인을 1-2년 단위로 갱신하고 있는데 언제까지 지속할 수 있을지는 모르겠다. 비용이 비싼건 아닌데, 브런치나 미디움 같은 플랫폼에 속해보고 싶단 생각도 가끔 한다. 내가 이 도메인을 이용해서 막 브랜딩에 힘 쓰는것도 아니다보니. 그래도 아직까진 자유롭게 운용하는 게 좋다.
