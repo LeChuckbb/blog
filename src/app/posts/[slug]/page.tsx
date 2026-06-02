@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import postsData from "@/src/app/posts.json";
-import { generateTocFromFile } from "@/src/app/tocUtil";
+import { generateTocFromFile } from "@/src/app/lib/tocUtil";
 import TableOfContents from "@/src/app/_components/TableOfContents";
 import SeriesNav, { SeriesData } from "@/src/app/_components/SeriesNav";
-import { siteConfig } from "@/src/app/siteConfig";
+import { siteConfig } from "@/src/app/config/siteConfig";
 import { generateBlogPostingJsonLd } from "@/src/app/lib/jsonLd";
-import { Post } from "@/src/app/types";
+import { Post } from "@/src/app/config/types";
 
 export async function generateMetadata({
   params,
@@ -61,51 +61,54 @@ export default async function Page({
   const filePath = (post as any).filename || `${post.title}.mdx`;
   const jsonLd = generateBlogPostingJsonLd(post);
 
+  let tocItems;
+  let Post;
   try {
-    const tocItems = await generateTocFromFile(`./content/${filePath}`);
-    const { default: Post } = await import(`@/content/${filePath}`);
-    const seriesData = getSeriesData(post);
-
-    return (
-      <div className="pt-16 pb-24 px-4 md:px-6 xl:px-0 xl:flex xl:gap-[var(--toc-gap)]">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        {/* Main Content */}
-        <article className="min-w-0 w-full max-w-[var(--content-max-width)]">
-          <header className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2">
-              {post.title}
-            </h1>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground font-serif">
-              <time>{post.date}</time>
-              {post.readingTime && (
-                <>
-                  <span>·</span>
-                  <span>{post.readingTime} min to read</span>
-                </>
-              )}
-            </div>
-          </header>
-          {seriesData && <SeriesNav {...seriesData} />}
-          <div className="prose dark:prose-invert max-w-none [word-break:keep-all] break-words">
-            <Post />
-          </div>
-        </article>
-
-        {/* Sidebar: 1440px 이상에서만 표시 */}
-        <aside className="hidden min-[1440px]:block shrink-0 w-[var(--sidebar-width)]">
-          <div className="sticky top-20">
-            <TableOfContents items={tocItems} />
-          </div>
-        </aside>
-      </div>
-    );
+    tocItems = await generateTocFromFile(`./content/${filePath}`);
+    ({ default: Post } = await import(`@/content/${filePath}`));
   } catch (error) {
     console.error(error);
     throw new Error(`Content file not found for slug: ${slug}`);
   }
+
+  const seriesData = getSeriesData(post);
+
+  return (
+    <div className="pt-16 pb-24 px-4 md:px-6 xl:px-0 xl:flex xl:gap-[var(--toc-gap)]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      {/* Main Content */}
+      <article className="min-w-0 w-full max-w-[var(--content-max-width)]">
+        <header className="mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2">
+            {post.title}
+          </h1>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground font-serif">
+            <time>{post.date}</time>
+            {post.readingTime && (
+              <>
+                <span>·</span>
+                <span>{post.readingTime} min to read</span>
+              </>
+            )}
+          </div>
+        </header>
+        {seriesData && <SeriesNav {...seriesData} />}
+        <div className="prose dark:prose-invert max-w-none [word-break:keep-all] break-words">
+          <Post />
+        </div>
+      </article>
+
+      {/* Sidebar: 1440px 이상에서만 표시 */}
+      <aside className="hidden min-[1440px]:block shrink-0 w-[var(--sidebar-width)]">
+        <div className="sticky top-20">
+          <TableOfContents items={tocItems} />
+        </div>
+      </aside>
+    </div>
+  );
 }
 
 function getPostBySlug(slug: string): Post | null {

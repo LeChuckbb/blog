@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { cn } from "../util";
+import { cn } from "../lib/util";
 import { CopyButton } from "./CopyButton";
 
 interface CodeBlockProps {

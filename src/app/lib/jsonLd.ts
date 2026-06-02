@@ -1,5 +1,5 @@
-import { siteConfig } from "@/src/app/siteConfig";
-import { Post } from "@/src/app/types";
+import { siteConfig } from "@/src/app/config/siteConfig";
+import { Post } from "@/src/app/config/types";
 
 export function generateBlogPostingJsonLd(post: Post) {
   return {

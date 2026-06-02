@@ -1,6 +1,6 @@
 import postsData from "./posts.json";
 import Link from "next/link";
-import { Post } from "@/src/app/types";
+import { Post } from "@/src/app/config/types";
 import { generateWebsiteJsonLd } from "@/src/app/lib/jsonLd";
 
 function formatDate(dateStr: string): string {

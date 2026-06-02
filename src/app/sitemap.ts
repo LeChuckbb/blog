@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import postsData from "@/src/app/posts.json";
-import { siteConfig } from "@/src/app/siteConfig";
+import { siteConfig } from "@/src/app/config/siteConfig";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const postUrls: MetadataRoute.Sitemap = postsData.posts.map((post) => ({

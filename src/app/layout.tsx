@@ -10,7 +10,7 @@ import { ThemeToggle } from "@/src/app/_components/ThemeToggle";
 import { ScrollToTop } from "@/src/app/_components/ScrollToTop";
 import { Button } from "@/components/ui/button";
 import { Github, FileText } from "lucide-react";
-import { siteConfig } from "@/src/app/siteConfig";
+import { siteConfig } from "@/src/app/config/siteConfig";
 import { GoogleAnalytics } from "@/src/app/_components/GoogleAnalytics";
 import { generateWebsiteJsonLd } from "@/src/app/lib/jsonLd";
 
