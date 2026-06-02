@@ -4,7 +4,7 @@ tags:
 slug: redux-3
 description: null
 series: Redux
-updated_at: 2026-03-15T00:00:00.000Z
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2021-06-20'
 title: Redux(3) - 미들웨어 redux-thunk
 ---
@@ -102,7 +102,9 @@ Thunk는 **특정 작업을 나중에 할 수 있도록 미루기 위해 함수 
 ```jsx
 const addOne = x => x + 1;
 addOne(1); // 2
-```addOne을 호출했을 때 바로 1+1이 연산되는 것을 볼 수 있다. 그런데 이 연산 작업을 나중으로 미루고(thunk) 싶다면?
+```
+
+addOne을 호출했을 때 바로 1+1이 연산되는 것을 볼 수 있다. 그런데 이 연산 작업을 나중으로 미루고(thunk) 싶다면?
 
 ```jsx
 const addOne = x => x + 1;
@@ -116,7 +118,9 @@ setTimeout(() => {
     const value = fn(); // fn이 실행되는 시점에 연산
     console.log(value);
 }, 1000);
-```1초가 지나면 fn() -> addOneThunk(1)의 return값인 thunk -> addOne(x)가 호출되는 구조다.
+```
+
+1초가 지나면 fn() -> addOneThunk(1)의 return값인 thunk -> addOne(x)가 호출되는 구조다.
 이를 화살표 함수로만 작성한다면 아래와 같다.
 
 ```jsx
@@ -212,7 +216,9 @@ const counter = handleActions(
 );
 
 export default counter;
-```Thunk 생성 함수를 아래와 같이 CounterContainer 컴포넌트에 적용한다. 그러면 카운터의 +1, -1 버튼을 눌렀을 때 1초 뒤에 적용되는 것을 볼 수 있다.
+```
+
+Thunk 생성 함수를 아래와 같이 CounterContainer 컴포넌트에 적용한다. 그러면 카운터의 +1, -1 버튼을 눌렀을 때 1초 뒤에 적용되는 것을 볼 수 있다.
 
 ```jsx
 // container/CounterContainer.js
@@ -546,13 +552,9 @@ export default connect(
 동작 과정을 정리해보자면 다음과 같다.
 
 1. Container Component에서 렌더링이 되자마자 useEffect에 의해 `getPost`, `getUsers` thunk 함수를 호출한다. (connect 함수로 store와 연결되어 있기 때문에 호출이 가능한 것.)
-
 2. getPost 함수가 실행되면 API 요청이 시작했음을 알리는 `GET_POST` 액션을 먼저 dispatch한다.
-
 3. 리듀서에 정의된 `GET_POST` 액션의 동작은 loading state를 true로 변경하는 것이다.
-
 4. 이후 비동기 API 함수 처리 과정이 진행된다. 처리가 끝나면, 성공/실패 여부에 따라 `GET_POST_SUCCESS` 액션 혹은 `GET_POST_FAILURE` 액션을 dispatch한다. GET_POST와 마찬가지로 리듀서에 정의된대로 상태 변화를 수행.
-
 5. `getUsers` thunk 함수 또한 이와 같은 방식으로, 거의 동시적으로 수행된다.
 
 ## 5) 리팩토링
@@ -821,11 +823,8 @@ export default sample;
 동작 과정을 정리해보면 다음과 같다.
 
 1. `SampleContainer`에서 useEffect에 의해 `getPost`, `getUsers` thunk 함수가 호출된다. 
-
 2. modules/sample.js 에 정의된 getPost와 getUsers는 `createRequsetThunk` 함수를 가리킨다.
-
 3. `createRequestThunk` 함수는 API 요청을 위한 dispatch를 수행하면서, 로딩 상태 관리를 위한 dispatch도 수행한다. 리듀서는 이 액션을 받아 상태를 변화한 후 스토어에 저장한다.
-
 4. 스토어에 저장된 상태를 `SampleContainer`에서 connect 함수를 통해 갱신해온다. loadingPost와 loadingUsers는 로딩 상태를 관리하기 위한 type 외에도 payload라는 별도의 값을 가져서 어떤 API 요청에 관한 로딩 상태인지를 표시한다. 
  ex) \{type: "loading/START_LOADING", payload: "sample/GET_POST"\}
 
@@ -833,8 +832,6 @@ export default sample;
 
 # References
 
-[리덕스 미들웨어는 무엇인가? (1)](https://velog.io/@youthfulhps/%EB%A6%AC%EB%8D%95%EC%8A%A4-%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80)
-
-\<리액트를 다루는 기술 개정판>(김민준, 2019)
-
-\<리액트 실전 프로그래밍 개정판>(이재승, 2020)
+- [리덕스 미들웨어는 무엇인가? (1)](https://velog.io/@youthfulhps/%EB%A6%AC%EB%8D%95%EC%8A%A4-%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80)
+- \<리액트를 다루는 기술 개정판>(김민준, 2019)
+- \<리액트 실전 프로그래밍 개정판>(이재승, 2020)

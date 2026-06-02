@@ -5,11 +5,11 @@ tags:
   - reverseProxy
 slug: nginx-reverse-proxy
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2022-04-07'
 title: AWS EC2에 NGINX reverse-proxy 구축하기 ( https - http mixed content error 해결하기 )
 ---
 * `apt install nginx`
-
 * `vim /etc/nginx/nginx.conf`
 
 # Docker-compose에 NGINX 적용하기
@@ -21,11 +21,8 @@ React, Node, Flask 환경을 구동하는 세 개의 컨테이너를 하나로 �
 ## 도커를 이용한 NGINX 설치 및 가동
 
 * `docker pull nginx` (NGINX 도커 이미지를 받는다)
-
 * `docker container run --name nginxServer -d -p 8080:80 nginx` (NGINX는 80번 포트를 사용한다)
-
 * `docker build --tag nginx-test:1.0 .` (도커 이미지 생성)
-
 * `docker run nginx-test:1.0` 
 
 ## NGINX 
@@ -35,7 +32,6 @@ nginx는 마스터 프로세스와 여러 개의 워커 프로세스로 구성�
 ## start, stop, and reload config
 
 * start (run excutable file) `nginx -s start(signal)`
-
 * `nginx -s stop/quit/reload/reopen(signal)`
 
 configuration file에 적용된 변화는 reload되어야만 nginx에 반영된다. 마스터 프로세스가 reload signal을 전달받으면, configuration file 내 변화된 문법을 체크하고 적용한다. 적용에 성공하면 새로운 워커 프로세스를 시작하고 이전의 워커 프로세스에는 메시지를 보내 shutting donw 시킨다.
@@ -45,7 +41,6 @@ configuration file에 적용된 변화는 reload되어야만 nginx에 반영된�
 nginx는 config file에 지정된 지시문(Directives)에 의해 제어되는 모듈들로 구성된다. directives는 simple directives와 block directives로 나뉜다.
 
 * simple directives : `name parameter;` 형식
-
 * block directives : `http {} server{} location paramter {}`
 
 ### Serving Static Content
@@ -70,7 +65,6 @@ location / {
 ### Setting Up a Simple Proxy Server
 
 * proxy_pass : `location` 블록에 protocol, name and port로 이루어진 proxied server를 명시한다. ex) http://localhost:8080;
-
 * server name : `server_name` directive로 정의되고, 주어진 요청에 사용되는 server block을 결정한다.
 
 ```nginx

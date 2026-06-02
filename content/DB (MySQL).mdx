@@ -4,6 +4,7 @@ tags:
   - MySQL
 slug: mySQL
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2022-03-13'
 title: DB (MySQL)
 ---
@@ -48,14 +49,14 @@ CREATE TABLE nodejs.users (
     COMMENT = '사용자 정보'
     DEFAULT CHARACTER SET = utf8
     ENGINE = InnoDB;
-```nodejs 데이터베이스에 users라는 테이블을 만든다. 이 테이블은 id, name, age, married, comment, create_at 컬럼을 갖는다. TINYINT는 -128~127까지의 정수를 저장할 때 사용하는 자료형이고, COMMENT 옵션으로 테이블에 대한 설명을 덧붙였다. DEFAULT CHARACTER SET을 utf8으로 해서 한글 입력이 가능하게끔 했다.
+```
+
+nodejs 데이터베이스에 users라는 테이블을 만든다. 이 테이블은 id, name, age, married, comment, create_at 컬럼을 갖는다. TINYINT는 -128~127까지의 정수를 저장할 때 사용하는 자료형이고, COMMENT 옵션으로 테이블에 대한 설명을 덧붙였다. DEFAULT CHARACTER SET을 utf8으로 해서 한글 입력이 가능하게끔 했다.
 
 테이블을 조작할 수 있는 명령어는 아래와 같다.
 
 * CREATE TABLE \{database name.table name(컬럼 및 옵션)\}
-
 * DROP TABLE \{table name\}
-
 * DESC \{table name\}
 
 > DESC는 describe(묘사하다)의 약자다. 
@@ -159,9 +160,7 @@ users 테이블과 comments 테이블 간 관계를 정의하자. user 한 명�
 MySQL의 JOIN으로 여러 테이블 간 관계를 파악해 결과를 도출해낼 수 있다. sequlize는 이 JOIN 기능도 알아서 구현한다. 대신 테이블 간 어떤 관계가 있는지 sequlize에 알려주어야 한다.
 
 * 1:1 사용자 - 사용자에 대한 정보 테이블 (hasOne/belongsTo)
-
 * 1:N 사용자 - 댓글 (hasMany/belongsTo)
-
 * N:N 게시글 - 해시태그 (belongsToMany)
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-37b3f000-7da9-42d5-89cc-dfbd54bbefc8-image.png)
@@ -181,9 +180,7 @@ sequlize로 CRUD 작업을 수행하기 위해선 sequlize query를 알아야 �
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-5d762314-50e1-4d9b-8663-312543ed4f8e-image.png)
 
 * User.findOne()
-
 * User.findAll() -> `SELECT * FROM users`
-
 * User.findAll(\{ attributes : ['name', 'married']\}); -> `SELECT name, married FROM users` 
 
 sequlize query를 사용하기 싫을 땐 아래와 같이 SQL 쿼리를 사용하면 된다.

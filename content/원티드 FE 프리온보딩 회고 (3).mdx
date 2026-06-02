@@ -9,18 +9,15 @@ tags:
 slug: wanted-fe-preonboard-3
 description: null
 series: 원티드 FE 프리온보딩 회고
-updated_at: 2026-03-15T00:00:00.000Z
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2023-05-22'
 title: 원티드 FE 프리온보딩 회고 (3)
 ---
 # 5. ErrorBoundary를 활용한 에러 핸들링
-[토스ㅣSLASH 21 - 프론트엔드 웹 서비스에서 우아하게 비동기 처리하기](https://www.youtube.com/watch?v=FvRtoViujGg)
-
-[Sentry를 이용한 에러 추적기, React의 선언적 에러 처리 / if(kakao)2022](https://www.youtube.com/watch?v=012IPbMX_y4&t=1214s)
-
-[React Query와 함께 Concurrent UI Pattern을 도입하는 방법](https://tech.kakaopay.com/post/react-query-2/)
-
-[How to handle errors in React: full guide](https://www.developerway.com/posts/how-to-handle-errors-in-react)
+- [토스ㅣSLASH 21 - 프론트엔드 웹 서비스에서 우아하게 비동기 처리하기](https://www.youtube.com/watch?v=FvRtoViujGg)
+- [Sentry를 이용한 에러 추적기, React의 선언적 에러 처리 / if(kakao)2022](https://www.youtube.com/watch?v=012IPbMX_y4&t=1214s)
+- [React Query와 함께 Concurrent UI Pattern을 도입하는 방법](https://tech.kakaopay.com/post/react-query-2/)
+- [How to handle errors in React: full guide](https://www.developerway.com/posts/how-to-handle-errors-in-react)
 
 우아한 에러 처리 방법의 핵심은 `성공한 경우`와 `실패한 경우`를 분리하는 것이라고 생각한다.
 
@@ -259,7 +256,9 @@ const SearchProvider = ({ children, setTodos }: SearchProps) => {
   )
 }
 
-```Reducer를 적용하니 코드가 깔끔해졌다. 이전에는 setTodos...setIsSearchLoading과 같이 각기 다른 명칭으로 상태 업데이트 함수가 호출되었는데, 이제는 dispatch라는 일관된 명칭으로 함수를 호출하니 가독성이 좋아졌다. 
+```
+
+Reducer를 적용하니 코드가 깔끔해졌다. 이전에는 setTodos...setIsSearchLoading과 같이 각기 다른 명칭으로 상태 업데이트 함수가 호출되었는데, 이제는 dispatch라는 일관된 명칭으로 함수를 호출하니 가독성이 좋아졌다. 
 
 또한 여러가지 상태와 상태 업데이트 함수가 state, dispatch로 통합되니 Context Provider의 value로 전달하는 인자의 개수가 줄었고, 이로인해 각종 이벤트 핸들러를 UI 컴포넌트 내부에서 무리없이 정의 및 사용할 수 있게 되었다. 그 전에는 UI 컴포넌트에서 이벤트 핸들러 정의를 위해 여러가지 상태, 상태 업데이트 함수를 받아오는 게 부담되어서 `SearchProvider`에서 그냥 이벤트 핸들러를 정의하고 내려주었던 부분이 있었다. 
 
@@ -336,7 +335,9 @@ const searchReducer = (
       return state
   }
 }
-```Search와 관련된 UI 컴포넌트를 Compound Compound 패턴으로 작성했다. Context로 Search를 감싸서 Search에서 사용될 상태와 함수를 Props Drilling없이 공유할 수 있어서 편리하다. 이런 구조를 활용하기 전에는 하나의 컴포넌트에 5~10개의 Props를 전달해주는 경우가 잦았는데, 이는 굉장히 읽기 힘들고 리팩토링하기 어려운 구조라고 생각한다.
+```
+
+Search와 관련된 UI 컴포넌트를 Compound Compound 패턴으로 작성했다. Context로 Search를 감싸서 Search에서 사용될 상태와 함수를 Props Drilling없이 공유할 수 있어서 편리하다. 이런 구조를 활용하기 전에는 하나의 컴포넌트에 5~10개의 Props를 전달해주는 경우가 잦았는데, 이는 굉장히 읽기 힘들고 리팩토링하기 어려운 구조라고 생각한다.
 
 Compound Componet 패턴을 활용하면 UI 컴포넌트를 레고 블록처럼 끼워넣고 뺄 수 있어서 확장에 용이한 구조를 가져갈 수 있다. 또한 리액트 선언형 패러다임에 적합한 패턴으로 보여진다.
 
@@ -374,9 +375,8 @@ export default Search
 
 # 7. React Memoization
 
-[Should You Really Use useMemo in React? Let’s Find Out.](https://medium.com/swlh/should-you-use-usememo-in-react-a-benchmarked-analysis-159faf6609b7)
-
-[무지성 useMemo, 멈춰!](https://snack.wiki/react-usememo/)
+- [Should You Really Use useMemo in React? Let’s Find Out.](https://medium.com/swlh/should-you-use-usememo-in-react-a-benchmarked-analysis-159faf6609b7)
+- [무지성 useMemo, 멈춰!](https://snack.wiki/react-usememo/)
 
 React에서 Memoization은 늘 골칫거리였다. 이걸 써야 해 말아야 해? React.memo, useMemo, useCallback의 개념도 모호했다. 그래서 다시 찾아봤다. 결론은 웬만해선 사용하지 않는다. 
 
@@ -404,17 +404,11 @@ React에서 Memoization은 늘 골칫거리였다. 이걸 써야 해 말아야 �
 [React 18 memo](https://react-ko.dev/reference/react/memo)
 
 * React는 기본적으로 상위 컴포넌트가 리렌더링되면 모든 하위 컴포넌트가 리렌더링된다
-
 * `React.memo`를 이용하여 컴포넌트를 감싸면 이전 Props와 현재 Props를 비교하여 props가 변경되지 않은 경우 리렌더링을 건너뛴다
-
 * `state`가 변경되거나 사용중인 `Context`가 변경되면 여지없이 리렌더링된다. 즉, React.memo는 부모에서 전달되는 Props만 비교하여 수행.
-
 * 또한 React.memo는 컴포넌트에 전달되는 props가 항상 다른 경우 완전히 무용지물이다. 그래서 `useMemo`, `useCallback`을 상위 컴포넌트에 사용해서 고정된 props을 내려주면 React.memo로 감싼 하위 컴포넌트에서 이를 활용하는 식으로 자주 쓴다.
-
 * Props 비교에는 `Object.is()` 연산이 사용된다. Object.is()는 `===` 비교연산자와 동작이 유사하다.
-
 * 자바스크립트는 기본적으로 비교연산자를 수행할 때 해당 데이터의 값이 아닌 메모리 주소를 통해 일치 여부를 판단한다. 그래서 객체는 비교가 까다롭다.
-
 * prop이 객체(혹은 배열)면 객체는 매 렌더링마다 새로 생성되어 React는 이전 Prop에서 변경된 것으로 간주한다. 객체 요소가 전과 동일한 건 아무런 소용이 없다. **따라서 객체를 prop으로 전달할 땐 단순화(원시값으로 변환)하거나 메모화(useMemo, useCallback)해야 한다.**
 
 ```jsx
@@ -451,13 +445,9 @@ function TodoList({ todos, tab }) {
 ```
 
 * useMemo의 첫 번째 인자로는 값을 반환하는 함수가 전달되어야 한다. 여기서 반한된 값은 캐싱(메모이제이션)된다.
-
 * 이후, 의존성에 변경이 없는 한 계속해서 캐싱된 값을 사용한다. 의존성에 변경이 발생하면 다시 첫 번째 함수를 호출하고 캐싱한다.
-
 * useMemo로 함수를 메모화하려면 함수를 반환하는 함수를 첫 번째 인자로 전달해야 하는데 이는 장황하다.
-
 * 함수를 메모화 할 땐 `useCallabck` 사용하면 간결한 코드를 유지할 수 있다.
-
 * `useCallabck`은 리렌더링 사이에 함수 정의를 캐시할 수 있는 훅이다.
 
 # 8. Husky로 프로젝트 초기 설정하기
@@ -467,9 +457,7 @@ function TodoList({ todos, tab }) {
 git에서 특정 이벤트(pre-commit, pre-push) 발생시 각각 prettier와 lint가 반드시 실행되도록 강제하고자 한다. git hook을 사용하면 git pre-commit, pre-push 시점에 위와 같은 동작을 설정할 수 있지만 조금 복잡하다. 그래서 git hook 기반의 라이브러리 husky를 사용하여 위 설정을 적용한다.
 
 1. `npm install husky --save-dev`
-
 2. `npx husky install` 명령어를 통해 스크립트 생성, git hook install. 이 명령은 처음 husky를 프로젝트에 세팅하는 사람만 수행하면 된다.
-
 3. `package.json` 파일에 `postinstall` 스크립트 추가. 모든 깃 레포 사용자는 반드시 npm install 명령을 수행하기 때문에, 이 때 husky 명령을 수행하도록 강제한다.
 
 ```JSON
@@ -481,8 +469,10 @@ git에서 특정 이벤트(pre-commit, pre-push) 발생시 각각 prettier와 li
 		"lint": "eslint --cache .",
   },
 }
-```4. husky를 통해 git`pre-commit`, `pre-push` hook 이벤트를 추가한다.
 
+```
+
+4. husky를 통해 git`pre-commit`, `pre-push` hook 이벤트를 추가한다.
 * `npx husky add .husky/pre-commit "npm run format"`
 * `npx husky add .husky/pre-push "npm run lint"`
 
@@ -505,8 +495,6 @@ UI 테스트보다는 Storybook을 이용한 컴포넌트 단위의 재사용성
 
 # 그 외
 
-[Refactoring React(리팩토링 리액트) : Folder Structure(폴더 구조)](https://itchallenger.tistory.com/900)
-
-[React Folder Structure in 5 Steps [2022]](https://www.robinwieruch.de/react-folder-structure/)
-
-[Evolution of a React folder structure and why to group by features right away](https://profy.dev/article/react-folder-structure)
+- [Refactoring React(리팩토링 리액트) : Folder Structure(폴더 구조)](https://itchallenger.tistory.com/900)
+- [React Folder Structure in 5 Steps [2022]](https://www.robinwieruch.de/react-folder-structure/)
+- [Evolution of a React folder structure and why to group by features right away](https://profy.dev/article/react-folder-structure)

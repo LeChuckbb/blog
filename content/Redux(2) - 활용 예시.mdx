@@ -4,7 +4,7 @@ tags:
 slug: redux-2
 description: null
 series: Redux
-updated_at: 2026-03-15T00:00:00.000Z
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2021-06-18'
 title: Redux(2) - 활용 예시
 ---
@@ -51,7 +51,9 @@ CRA로 리액트 프로젝트를 생성한 뒤 `redux`, `react-redux` 라이브�
 yarn create react-app react-redux-tutorial
 cd react-redux-tutorial
 yarn add redux react-redux
-```Todos.js 파일에 `<TodoItem>`, `<Todos>` 두 개 컴포넌트를 작성하였는데 취향에 따라 파일 두 개로 분리해도 좋다. `<Counter>`, `<Todos>` 컴포넌트를 작성한 후 `<App>` 컴포넌트에 렌더링한다. 이후 브라우저에 정상 출력된 것을 확인.
+```
+
+Todos.js 파일에 `<TodoItem>`, `<Todos>` 두 개 컴포넌트를 작성하였는데 취향에 따라 파일 두 개로 분리해도 좋다. `<Counter>`, `<Todos>` 컴포넌트를 작성한 후 `<App>` 컴포넌트에 렌더링한다. 이후 브라우저에 정상 출력된 것을 확인.
 
 ```jsx
 // components/Counter.js
@@ -368,7 +370,8 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps,
 )(CounterContainer);
-```CounterContainer 컴포넌트는 `react-redux`에서 제공하는 `connect` 함수를 사용해서 리덕스와 연동한다. 앞서 `<Provider>` 컴포넌트로 감싸준 컴포넌트 안에서 connect 함수를 사용하여 실질적인 연결을 해주는 구조인 것으로 보인다. react-redux에서 제공하는 `Hooks`를 사용해서 connect 함수를 대체할 수 있다고 한다. 하지만 본 게시글에서는 connect만 다루도록 하겠다.
+```
+CounterContainer 컴포넌트는 `react-redux`에서 제공하는 `connect` 함수를 사용해서 리덕스와 연동한다. 앞서 `<Provider>` 컴포넌트로 감싸준 컴포넌트 안에서 connect 함수를 사용하여 실질적인 연결을 해주는 구조인 것으로 보인다. react-redux에서 제공하는 `Hooks`를 사용해서 connect 함수를 대체할 수 있다고 한다. 하지만 본 게시글에서는 connect만 다루도록 하겠다.
 
 > The connect() function connects a React component to a Redux store.
 
@@ -408,9 +411,7 @@ export default App;
 여기까지 코드를 작성했다면 카운터의 +1, -1버튼이 정상 작동하는 것을 확인할 수 있다. 버튼을 눌렀을 때의 작동 과정을 추론해보자면 다음과 같다. 
 
 1. modules/counter.js에서 작성한 액션과 리듀서 함수는 modeuls/index.js의 루트 리듀서에 담겨진다. 이 루트 리듀서는 ./index.js에서 스토어를 생성할 때 스토어의 파라미터로 전달되고, 해당 스토어가 `<Provider>` 컴포넌트를 통해 `<App>` 컴포넌트의 상위에 위치하게 됨으로써(리액트 프로젝트에 리덕스를 연동), 그리고 `connect()`됨으로써 모든 컴포넌트에서 스토어를 참조할 수 있게 된다. 
-
 2. components/Counter.js에 작성되어 있는 +1, -1 button을 누르면 버튼에 할당되어 있는 onincrease 함수를 통해서 스토어에 `dispatch(action)` 동작을 취한다.
-
 3. 스토어의 리듀서가 상태 변화를 야기하여 스토어의 상태가 업데이트되면, 스토어와 `connect`되어 있는 `<CounterContainer>`가 mapStateToProps를 통해 전달받은 상태를 다시 modules/counter.js에 전달하고, 리렌더링 되어 화면에 출력되는 과정을 생각해볼 수 있다.
 
 ### connect 함수 간략화하기

@@ -4,6 +4,7 @@ tags:
   - CSS
 slug: BEM
 description: BAM!이 아닌 BEM
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2021-12-06'
 title: BEM
 ---
@@ -24,7 +25,6 @@ Element는 Block과 유사한 기능을 수행하면서도 Element 독립적으�
 BEM은 기본적으로 `Block__Element--Modifer`, 즉 `tab__item--focused(boolean)`와 같은 형태로 쓰인다. `form__login--theme-normal(key-value)`와 같이 'Modifier-value' 형태로도 사용된다.
 
 * BEM에 (HTML) ID Attribute는 사용되지 않는다. Class만 사용한다.
-
 * 어떻게 보이는가(x) 어떤 목적인가(o)
 화면에 빨간색 에러 메시지를 띄우고 싶다면, .red가 아닌 .error라는 명칭을 부여해야 한다. 추후 에러 메시지의 색상을 빨강이 아닌 다른 색으로 변경할 수 있기 때문이다.
 
@@ -46,7 +46,9 @@ case 1)
 <div class='header'> // Block
   <div class='header__nav'> </div> // Block__Element
 </div>
-```case 2)
+```
+
+case 2)
 ```html
 // Bad case
 <form class='search-form'> // Block
@@ -64,7 +66,9 @@ case 1)
   <div class='search-form__content'> // Block__Element1
     <input class='search-form__input'> // Block__Element2
     <button class='search-form__button'> // Block__Element3
-```case 3)
+```
+
+case 3)
 ```html
 // Bad case
 <figure class='photo'>
@@ -80,7 +84,9 @@ case 1)
 <figure class='photo'>
   <img class='photo__img'>
   <figcaption class='photo__caption'>
-```case 4)
+```
+
+case 4)
 ```html
 // Bad case
 <button class='btn--submit'>
@@ -91,7 +97,9 @@ case 1)
 // 이때 Modifier는 btn을 대체하기 위함이 아닌 확장하는 용도다.
 // 따라서 btn--submit을 단독으로 사용해선 안 된다.
 <button class='btn btn--submit'>
-```case 5)
+```
+
+case 5)
 ```html
 // BEM은 kebab-case, camelCase를 허용한다
 <div class='some-thesis some-thesis--fast-read'> // Block, Block--Modifier
@@ -104,14 +112,9 @@ case 1)
 
 ### References
 
-[CSS 공부 어떻게 해야 하나요? - 이론편 (feat. figma)](https://velog.io/@teo/CSS-%EA%B3%B5%EB%B6%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%95%B4%EC%95%BC-%ED%95%98%EB%82%98%EC%9A%94-%EC%9D%B4%EB%A1%A0%ED%8E%B8-feat.-figma)
-
-[[CSS 방법론] BEM 방식](https://nykim.work/15)
-
-[BEM](http://getbem.com/introduction/)
-
-[예제로 이해하는 BEM.](https://naradesign.github.io/bem-by-example.html)
-
-[CSS 역사로 알아보는 CSS가 어려워진 이유](https://velog.io/@teo/css-history-1)
-
-[MDN - CSS 명시도(Specificity)](https://developer.mozilla.org/ko/docs/Web/CSS/Specificity)
+- [CSS 공부 어떻게 해야 하나요? - 이론편 (feat. figma)](https://velog.io/@teo/CSS-%EA%B3%B5%EB%B6%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%95%B4%EC%95%BC-%ED%95%98%EB%82%98%EC%9A%94-%EC%9D%B4%EB%A1%A0%ED%8E%B8-feat.-figma)
+- [[CSS 방법론] BEM 방식](https://nykim.work/15)
+- [BEM](http://getbem.com/introduction/)
+- [예제로 이해하는 BEM.](https://naradesign.github.io/bem-by-example.html)
+- [CSS 역사로 알아보는 CSS가 어려워진 이유](https://velog.io/@teo/css-history-1)
+- [MDN - CSS 명시도(Specificity)](https://developer.mozilla.org/ko/docs/Web/CSS/Specificity)

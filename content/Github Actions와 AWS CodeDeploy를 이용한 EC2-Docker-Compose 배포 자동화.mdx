@@ -6,7 +6,7 @@ tags:
   - GithubActions
 slug: github-actions와-aws-codedeploy를-이용한-ec2-docker-compose-배포-자동화
 description: null
-updated_at: 2026-02-28T00:00:00.000Z
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2022-03-30'
 title: Github Actions와 AWS CodeDeploy를 이용한 EC2-Docker-Compose 배포 자동화
 ---
@@ -41,7 +41,6 @@ AWS EC2에 React/Node/flask로 이루어진 Docker-Compose 서버 환경을 구�
 S3/CodeDeply에 대한 Full Access를 갖는 사용자를 생성한다.
 
 * `AmazonS3FullAccess`
-
 * `AWSCodeDeployFullAccess`
 
 생성 후 해당 사용자의 '액세스 키 ID'와 '비밀 액세스 키'를 Github repository - settings - secrets에 입력한다.
@@ -53,17 +52,11 @@ S3/CodeDeply에 대한 Full Access를 갖는 사용자를 생성한다.
 
 ### EC2 인스턴스에서 프로그램 설치
 * aws corretto 다운로드 : `sudo wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.rpm -0 java11.rpm`
-
 * jdk 11 설치 : `Sudo apt localinstall jdk11.rpm`
-
 * ruby 설치 : `sudo apt install ruby`
-
 * 서울 리전의 codeDeploy-resource-kit 다운로드 : `cd /home/ec2-user` `wget https://aws-codedploy-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/latest/install`
-
 * 실행 권한 부여 : `chmod +x ./install`
-
 * codeDeploy agent 설치 : `sudo ./install auto`
-
 * agent 설치 확인 : `sudo service codedeploy-agent status`
 
 ### CodeDeploy 설정

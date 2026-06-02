@@ -3,6 +3,7 @@ tags:
   - Nodejs
 slug: npm
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2022-02-21'
 title: npm으로 노드 패키지 관리하기
 ---
@@ -19,20 +20,15 @@ title: npm으로 노드 패키지 관리하기
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-8da36a26-c64d-473f-9b11-6b6dbb56cfc5-image.png)
 
 * 개발용 패키지 (--save-dev or -D) : 실제 배포 시에는 사용되지 않고, 개발 중에만 사용되는 패키지. `npm install --save-dev [패키지명]`
-
 * 전역 설치 (--global or -g) : 패키지를 현재 프로젝트의 node_modules 폴더에 설치하는 것이 아닌, npm이 설치되어 있는 폴더(C:\Users\사용자이름\AppData\Roaming\npm)에 설치하는 것을 말한다. 이 경로는 보통 시스템 환경 변수에 등록되어 있으므로, 전역 설치한 패키지는 콘솔의 **명령어**로 사용할 수 있다.
 
 ### SemVer 버전 넘버링
 SemVer는 Semantic Versioning의 약어다. SemVer를 준수하는 노드 패키지들의 버전은 항상 세 자리로 구성된다.
 
 * major 버전 : 하위 호환이 안 될 정도로 패키지의 내용이 수정되었을 때 버전을 올린다. 0.x.x는 초기 개발중임을 뜻한다.
-
 * minor 버전 : 하위 호환이 되는 기능 업데이트를 할 때 올린다.
-
 * patch 버전 : 새 기능이 추가되었다기 보다는 기존 기능에 문제가 있어 수정한 경우에 patch 버전을 올린다.
-
 * ^Sem_Ver : minor 버전까지만 설치하거나 업데이트 한다는 의미. `npm i express@&1.1.1` 명령은 major 버전이 1을 초과한 2.x.x가  설치되지 않음을 뜻한다.
-
 * ~Sem_Ver : patch 버전까지만 설치되거나 업데이트한다.
 
 ### nodemon 

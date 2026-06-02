@@ -4,7 +4,7 @@ tags:
 slug: redux-4
 description: null
 series: Redux
-updated_at: 2026-03-15T00:00:00.000Z
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2021-06-21'
 title: Redux(4) - 미들웨어 redux-saga
 ---
@@ -83,7 +83,9 @@ watch.next( {type: 'HELLO' });
 // 이전 액션: {type: TEST}
 // 안녕하세요!
 // { value: unedfined, done: false} 
-```redux-saga는 위 코드와 비슷한 원리로 작동한다. redux-saga는 우리가 디스패치하는 액션을 모니터링해서 그에 따라 필요한 작업을 따로 수행할 수 있는 미들웨어다.
+```
+
+redux-saga는 위 코드와 비슷한 원리로 작동한다. redux-saga는 우리가 디스패치하는 액션을 모니터링해서 그에 따라 필요한 작업을 따로 수행할 수 있는 미들웨어다.
 
 # 2. redux-saga 사용해보기 (기본)
 
@@ -205,7 +207,9 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-```App 컴포넌트에서 CounterContainer를 렌더링 하게끔 지정해주고 결과를 확인해보자. counter 리덕스 모듈을 변경하기는 했지만 CounterContainer에서 수정할 것은 없다. 기존에 사용 중이던 thunk 함수와 똑같은 이름으로 액션 생성 함수를 만들었기 때문이다.
+```
+
+App 컴포넌트에서 CounterContainer를 렌더링 하게끔 지정해주고 결과를 확인해보자. counter 리덕스 모듈을 변경하기는 했지만 CounterContainer에서 수정할 것은 없다. 기존에 사용 중이던 thunk 함수와 똑같은 이름으로 액션 생성 함수를 만들었기 때문이다.
 
 ![image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/b155a093-2c41-42ba-0546-69822f86e200.jpg)
 
@@ -218,9 +222,7 @@ ReactDOM.render(
 동작 과정을 정리해보면 다음과 같다.
 
 1. +1 버튼이 눌리면 components/Counter의 onIncrease 함수가 호출된다.
-
 2. onIncrease 함수는 /containers/CounterContainer에서 전달받은 것이다. CounterContainer는 connect 함수를 통해 store로부터 상태와 디스패치를 실시간으로 받고 있었고, onIncrease 함수는 스토어에서 전달받은 `increaseAsync` 액션 생성 함수다. (매개변수로 전달된 이름만 다른것)
-
 3. increaseAsync 액션 생성 함수는 ./modules/counter에서 정의되었다. 루트 사가에 담겨서 스토어에 포함되었기 때문에 CounterContainer에서도 호출할수가 있었던 것이다.
 increaseAsync 액션 생성 함수가 생성한 `INCREASE_ASYNC`
  액션 객체에 의해서 `counterSaga` 제네레이터 함수가 호출된다. `takeEverey`에 의해서 `INCREASE_ASYNC` 액션이 들어오면 
@@ -401,8 +403,6 @@ export default sample;
 
 # References
 
-\<리액트를 다루는 기술 개정판>(김민준, 2019)
-
-\<리액트 실전 프로그래밍 개정판>(이재승, 2020)
-
-\<모던 자바스크립트 Deep Dive>(이웅모, 2020)
+- \<리액트를 다루는 기술 개정판>(김민준, 2019)
+- \<리액트 실전 프로그래밍 개정판>(이재승, 2020)
+- \<모던 자바스크립트 Deep Dive>(이웅모, 2020)

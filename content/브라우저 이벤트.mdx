@@ -1,7 +1,9 @@
 ---
 tags: null
 slug: browser-events
+series: 브라우저 동작 원리
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2021-11-21'
 title: 브라우저 이벤트
 ---
@@ -214,7 +216,9 @@ target과 currentTarget이 헷갈릴 수 있기 때문에 아래와 같은 코�
     <li id="banana">Banana</li>
     <li id="orange">Orange</li>
 </ul>
-```id가 banana인 `<li>` 태그를 클릭해서 클릭 이벤트가 발생한 상황을 가정해보자. 이때 생성된 이벤트 객체는 이벤트를 발생시킨 DOM 요소인 이벤트 타깃을 중심으로 DOM 트리를 통해 전파된다. \<span style="color:#ffdce0">캡처링 단계\</span>는 이벤트가 상위 요소에서 하위 요소 방향으로 전파되는 것을 뜻하고, \<span style="color:#ffdce0">타깃 단계\</span>는 이벤트가 이벤트 타깃에 도달된 것을 의미하며 \<span style="color:#ffdce0;">버블링 단계\</span>는 이벤트가 하위 요소에서 상위 요소 방향으로 전파되는 것을 말한다.
+```
+
+id가 banana인 `<li>` 태그를 클릭해서 클릭 이벤트가 발생한 상황을 가정해보자. 이때 생성된 이벤트 객체는 이벤트를 발생시킨 DOM 요소인 이벤트 타깃을 중심으로 DOM 트리를 통해 전파된다. \<span style="color:#ffdce0">캡처링 단계\</span>는 이벤트가 상위 요소에서 하위 요소 방향으로 전파되는 것을 뜻하고, \<span style="color:#ffdce0">타깃 단계\</span>는 이벤트가 이벤트 타깃에 도달된 것을 의미하며 \<span style="color:#ffdce0;">버블링 단계\</span>는 이벤트가 하위 요소에서 상위 요소 방향으로 전파되는 것을 말한다.
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-11793345-abb0-4de0-ae9c-96af52bc7ead-image.png)
 
@@ -260,9 +264,7 @@ target과 currentTarget이 헷갈릴 수 있기 때문에 아래와 같은 코�
 대부분의 이벤트는 캡처링과 버블링을 통해 전파되지만, 아래의 이벤트는 버블링을 통해 전파되지 않는 성질을 지닌다. 이벤트 객체의 공통 프로퍼티인 `event.bubbles`의 값이 false다. 하지만 아래 이벤트를 상위 요소인 캡처링 단계에서 꼭 캐치해야할 경우는 잘 없다. 이벤트 타깃에서 캐치해도 무방할 것. 
 
 * 포커스 이벤트 : focus/blur
-
 * 리소스 이벤트: load/unload/abort/error
-
 * 마우스 이벤트: mouseenter/mouseleave
 
 > 캡처링 단계에서 이벤트를 캐치해서 처리하는 경우는 거의 없다고 한다.
@@ -412,6 +414,5 @@ DOM 요소는 저마다의 기본 동작이 있다. `<a>` 요소를 클릭하면
 
 ### Reference
 
-\<모던 자바스크립트 Deep Dive> 이웅모
-
-프론트엔드 필수 브라우저 101 (드림코딩)
+- \<모던 자바스크립트 Deep Dive> 이웅모
+- 프론트엔드 필수 브라우저 101 (드림코딩)

@@ -1,7 +1,9 @@
 ---
 tags: null
 slug: dom-api
+series: 브라우저 동작 원리
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2021-11-07'
 title: DOM API
 ---
@@ -166,7 +168,9 @@ HTML을 조작하기 위해서는 요소 노드 취득이 선행되어야 한다
 <script>
 	console.log(document.getElemntById('foo').textContent); // Hello world!
 </script>
-```nodeValue 프로퍼티는 텍스트 노드에 사용해야만 효과가 있기 때문에 활용하기가 좀 더 까다롭다. 단 textContente를 사용할때는 원하는 텍스트 노드만 조작할 수 있도록 자손 관계에 주의해야한다. `foo.firstChild.nodeValue === foo.textContent`
+```
+
+nodeValue 프로퍼티는 텍스트 노드에 사용해야만 효과가 있기 때문에 활용하기가 좀 더 까다롭다. 단 textContente를 사용할때는 원하는 텍스트 노드만 조작할 수 있도록 자손 관계에 주의해야한다. `foo.firstChild.nodeValue === foo.textContent`
 
 > `textContet`와 유사한 동작을 하는 `innerText` 프로퍼티가 있지만, 사용하지 않는 게 좋다. innerText는 CSS에 순종적이어서 CSS에 의해 비표시(vsibility:hidden)로 지정된 요소 노드의 텍스트를 반환하지 못한다. 또한 CSS를 고려해야 하므로 textContent 프로퍼티보다 느리다.
 
@@ -191,7 +195,9 @@ HTML을 조작하기 위해서는 요소 노드 취득이 선행되어야 한다
         // 새로 작성한 HTML 마크업이 파싱되어 요소 노드의 자식 노드로 DOM에 반영된다.
     	foo.innerHTML = 'Hi <span>there!</span>;
 </script>
-```innerHTML 프로퍼티에 set한 HTML 마크업 문자열은 렌더링 엔진에 의해 파싱된다. 여기서 문제는, 사용자로부터 입력받은 데이터를 그대로 innerHTML 프로퍼티에 할당할 경우 크로스 사이트 스크립팅 공격(XSS)에 취약하므로 위험하다.
+```
+
+innerHTML 프로퍼티에 set한 HTML 마크업 문자열은 렌더링 엔진에 의해 파싱된다. 여기서 문제는, 사용자로부터 입력받은 데이터를 그대로 innerHTML 프로퍼티에 할당할 경우 크로스 사이트 스크립팅 공격(XSS)에 취약하므로 위험하다.
 
 HTML5는 innerHTML 프로퍼티로 삽인된 `<script>` 요소 내의 JS 코드를 실행하지 않는다. 하지만 조금만 방법을 달리해도 모던 브라우저에서도 동작하는 XSS 공격을 시행할 수 있다.
 
@@ -529,7 +535,9 @@ CSS class를 미리 정의해둔 다음 HTML 요소의 class 어트리뷰트 값
   // .box 요소의 class 어트리뷰트 값 중에서 'red'만 'blue'로 변경
   box.classList.replace('red', 'blue');
 </script>
-```DOMTokenList 객체는 다음과 같이 class 어트리뷰트를 제어하는 유용한 메서드들을 제공한다. add(), remove(), item(), contains(), replace(), toggle() 등.
+```
+
+DOMTokenList 객체는 다음과 같이 class 어트리뷰트를 제어하는 유용한 메서드들을 제공한다. add(), remove(), item(), contains(), replace(), toggle() 등.
 
 #### 요소에 적용되어 있는 CSS 스타일 참조
 style 프로퍼티는 인라인 스타일만 반환한다. 따라서 클래스를 적용한 스타일이나 상속을 통해 암묵적으로 적용된 스타일은 참조할 수 없다. HTML 요소에 적용되어 있는 모든 CSS 스타일을 참조해야 할 경우 `window.getComputedStyle` 메서드를 사용한다.

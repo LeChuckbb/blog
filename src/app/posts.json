@@ -56,7 +56,8 @@
         "활동"
       ],
       "description": "글또는 '글쓰는 또라이가 세상을 바꾼다'의 준말이다. 오래전 '나는 개발자다'라는 책에서 글또를 처음 접했고, 이후 염탐만 해오다가 이번 기수가 마지막이라는 소식에 마침내 신청하게 되었다. 막차에나마 타볼 수  있게 되어서 다행이라는 심정이다.",
-      "readingTime": 4
+      "readingTime": 4,
+      "series": "글또 10기"
     },
     {
       "slug": "apply-geultto",
@@ -67,7 +68,8 @@
         "활동"
       ],
       "description": "명절에 부모님을 뵙게 되면 어렸을 적 나의 무용담을 들려주시곤 한다. 근래 자주 듣는 레퍼토리는 서너살 때 MS-DOS를 만지작 거렸다는 이야기다. 대단한 행위를 했던 것은 아니고 아마 디렉토리를 오고가며 재미있는 응용프로그램을 실행할 줄 아는 정도였을 것이다.",
-      "readingTime": 7
+      "readingTime": 7,
+      "series": "글또 10기"
     },
     {
       "slug": "2024-05",
@@ -180,7 +182,8 @@
         "회고"
       ],
       "description": "기존에 velog를 잘 쓰고 있었지만 직접 만들어 보고 싶었다. 블로그를 만들고 유지보수하면 많은 공부가 될 것 같았다. 앞으로 10년은 작문하고 코딩하지 않을까? 이런 생각이 들자 블로그는 내게 최고의 사이드 프로젝트 소재가 되었다.",
-      "readingTime": 4
+      "readingTime": 4,
+      "series": "블로그 후기"
     },
     {
       "slug": "wanted-fe-preonboard-3",
@@ -465,7 +468,8 @@
       "title": "브라우저 이벤트",
       "tags": [],
       "description": "이벤트가 발생했을 때 브라우저에 의해서 호출될 함수를 이벤트 핸들러event Handler라 하고, 이벤트가 발생했을 때 브라우저에게 이벤트 핸들러의 호출을 위임하는 것을 이벤트 핸들러 등록이라 한다.",
-      "readingTime": 18
+      "readingTime": 18,
+      "series": "브라우저 동작 원리"
     },
     {
       "slug": "dom-api",
@@ -473,7 +477,8 @@
       "title": "DOM API",
       "tags": [],
       "description": "브라우저 렌더링 과정에서 브라우저의 렌더링 엔진은 HTML 문서를 파싱하여 브라우저가 이해할 수 있는 DOM 자료구조를 생성한다. \\<span style=\"color:red\">DOM(Documnet Object Model)\\</span>은 HTML 문서의 계층적 구조와 정...",
-      "readingTime": 24
+      "readingTime": 24,
+      "series": "브라우저 동작 원리"
     },
     {
       "slug": "2021-10-read",
@@ -494,18 +499,20 @@
         "rendering"
       ],
       "description": "layout : 요소들의 기하학적인 구조를 찾는 과정. 위치와 크기를 계산.",
-      "readingTime": 3
+      "readingTime": 3,
+      "series": "브라우저 동작 원리"
     },
     {
       "slug": "critical-rendering-path",
-      "date": "2021-10-25",
+      "date": "2021-10-24",
       "title": "브라우저의 렌더링 과정(Critical Rendering Path)",
       "tags": [
         "browser",
         "rendering"
       ],
       "description": "브라우저의 주소창에 URL을 입력하고 엔터 키를 눌렀을 때 발생하는 일련의 과정을 알아보자.",
-      "readingTime": 8
+      "readingTime": 8,
+      "series": "브라우저 동작 원리"
     },
     {
       "slug": "redux",
@@ -546,7 +553,7 @@
         "SSR"
       ],
       "description": "대부분의 React 앱은 Webpack, Rollup 또는 Browserify 같은 툴을 사용하여 여러 파일을 하나로 병합한 번들 된 파일을 웹 페이지에 포함하여 한 번에 전체 앱을 로드하는 방식이다. CRA, Next.js 혹은 Gatsby 같은 도구를 사용하는 프로젝트...",
-      "readingTime": 17,
+      "readingTime": 18,
       "series": "React SSR"
     },
     {
@@ -635,7 +642,8 @@
         "회고"
       ],
       "description": "블로그를 만들기 위해서 gatsby + netlify 조합을 선택했다.",
-      "readingTime": 3
+      "readingTime": 3,
+      "series": "블로그 후기"
     },
     {
       "slug": "jamstack-and-static-web",
@@ -648,7 +656,7 @@
         "staticWeb"
       ],
       "description": "블로그를 만들면서 사용한 웹 호스팅 서비스 Netlify에 관해 알아보던 중 JAMstack이란 키워드가 눈에 들어왔다.",
-      "readingTime": 4
+      "readingTime": 5
     },
     {
       "slug": "ssr-csr-ssg",

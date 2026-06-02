@@ -5,6 +5,7 @@ tags:
   - Nodejs
 slug: mongo-db
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2022-03-14'
 title: DB(MongoDB)
 ---
@@ -46,9 +47,7 @@ db.system.users.find()
 #### db 관련 명령어
 
 * `use 데이터베이스명` -> db 생성
-
 * `show dbs` -> db 목록 확인 (최소 한 개 이상의 데이터가 포함된 db)
-
 * `db` -> 현재 사용중인 db 확인
 
 #### collection 관련 명령어
@@ -56,7 +55,6 @@ db.system.users.find()
 collection 생성 과정은 건너뛰어도 된다. document를 넣는 순간 collection도 자동으로 생성되기 때문이다.
 
 * `db.createCollection(컬렉션명)`
-
 * `show collections`
 
 > MongoDB에서는 하나의 데이터를 documnet라 부른다.
@@ -72,17 +70,11 @@ MongoDB는 기본적으로 js의 자료형을 따르고, 그 외 Binary Data, Ob
 ## Read
 
 * `db.collection.find(query, projection)`
-
 * 두 번쨰 인자인 projection에는 query 필터에 매칭되는 문서 중에서 따로 반환할 부분을 명시. 즉, query를 만족하면서 projection을 만족하는 조건만 출력됨.
-
 * `db.컬렉션명.find()` -> 컬렉션 내 모든 다큐먼트 조회
-
 * `db.users.find({ name:'zero'})` -> 컬렉션 내 name이 zero인 다큐먼트 조회
-
 * `db.users.find({}, {_id: 0, name: 1})` -> 컬렉션 내 다큐먼트들 중에서 name만 조회 
-
 * `db.users.find({ age: { $gt: 30 }, married: true }, {_id: 0, name: 1, age: 1});` -> age가 30 초과, married가 true인 다큐먼트의 name과 age를 조회
-
 * `db.users.find({}, {_id: 0, name: 1, age: 1}).sort({age: -1})` -> sort()에서 -1은 내림차순, 1은 오름차순이다.
 
 > MongoDB는 js 객체를 이용해서 명령어 쿼리를 작성하므로, $gt같은 특수한 연산자가 사용된다. sequelize query와 비슷하다.
@@ -90,7 +82,6 @@ MongoDB는 기본적으로 js의 자료형을 따르고, 그 외 Binary Data, Ob
 ## Update
 
 * `db.collection.update(query,update)`
-
 * query를 update에 명시한 대로 수정한다.
 
 ## Delete

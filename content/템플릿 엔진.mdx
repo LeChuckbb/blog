@@ -3,6 +3,7 @@ tags:
   - Nodejs
 slug: template-engine
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2022-02-24'
 title: 템플릿 엔진
 ---
@@ -23,17 +24,11 @@ title: 템플릿 엔진
 HTML과의 비교를 통한 pug의 특징 :
 
 * 화살괄호\<>를 사용하지 않는다.
-
 * 닫는 태그가 없다.
-
 * 탭 또는 스페이스로만 태그의 부모-자식 관계를 규정한다.
-
 * 속성은 태그명 뒤에 소괄호로 묶어서 적용한다. `link(rel='stylesheet', href=...)`
-
 * 속성 중 아이디와 클래스는 아래와 같이 선택자를 이용하여 적용할 수 있다. div 태그는 태그명의 생략이 가능하다.`#login-button`, `.post-image`, `p.hidden.full`
-
 * HTML 텍스트는 태그 또는 속성 뒤에 한 칸을 띄고 입력한다. `button(type=submit) 전송`
-
 * 텍스트를 여러 줄 입력하려면 파이프(|)를 넣는다. HTML 코드에선 한 줄로 나온다.
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-a5a2c0d7-9224-4169-801c-75c922a21f4d-image.png)
@@ -57,9 +52,7 @@ HTML과의 비교를 통한 pug의 특징 :
 넌적스의 특징 : 
 
 * 변수는 \{\{ \}\}로 감싼다
-
 * 변수 선언은 \{% set 변수 = '값' %\} 와 같은 형태로 이뤄진다.
-
 * 반복문, 조건문 같은 특수한 구문은 \{% %\} 안에 사용한다.
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-bf2dc61e-0c2c-437b-9205-18485fad6464-image.png)
@@ -69,9 +62,7 @@ HTML과의 비교를 통한 pug의 특징 :
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-ec61338c-d4ae-4389-a7d7-5771e3f1b95a-image.png)
 
 * `extends`와 `block`을 이용해서 레이아웃을 지정할 수 있다. 이를 템플릿 상속(Template Inheritance)라 한다.
-
 * main.html에서 `extends 'layout.html'` 키워드를 사용하면 main(자식) - layout(부모) 관계가 형성된다.
-
 * 템플릿 상속 관계에서는 부모(base template)에서 block을 정의해서 자식(child template)이 새 콘텐츠로 재정의(override)할 수 있다.
 
 >  Base templates can specify blocks and child templates can override them with new content.

@@ -3,6 +3,7 @@ tags:
   - Nodejs
 slug: http-module
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2022-02-21'
 title: http Module로 서버 만들기
 ---
@@ -30,13 +31,9 @@ http.createServer((req, res) => {
 ```
 
 * `http.createServer()` : 새로운 http.Server 인스턴스를 반환한다. 이때 요청과 응답을 상징하는 req와 res는 stream이다.
-
 * `response.writeHead()` : 요청에 대한 응답 헤더 정보를 작성한다. 첫 번째 인수로 성공적인 요청을 의미하는 200을, 두 번째 인수로 응답에 대한 정보를 포함하는데, 여기서는 콘텐츠 형식이 HTML임을 알리고 있다.
-
 * `response.write()` : This sends a chunk of the response body. 데이터가 기록되는 부분을 본문(body)이라 한다. write()의 인자로는 문자열 혹은 버퍼가 전달될 수 있다. 여러 번 호출해서 여러 개 데이터를 보낼 수 있다.
-
 * `response.end()` : This method signals to the server that all of the response headers and body have been sent; The method, response.end(), MUST be called on each response. 에러가 발생했을 경우에도 응답해서 요청이 마무리되었음을 알려야 한다. 요청을 생략해선 안된다. 만약 `end` 메소드에 전달된 인수가 있다면 그 데이터도 클라이언트로 보낸 후 응답을 종료한다.
-
 * `http.listen()` : 8080 포트에서 요청이 오기를 기다린다. 요청이 들어오면 수행할 콜백 함수를 인자로 전달했다.
 
 > 포트는 서버 내에서 프로세스를 구분하는 번호다. 서버는 프로세스에 포트를 다르게 할당하여 들어오는 요청을 구분한다. 21(FTP), 80(HTTP), 443(HTTPS), 3306(MYSQL)와 같은 포트를 사용한다.
@@ -47,17 +44,17 @@ write(), end()에 일일이 HTML 코드를 작성하는 것은 불편하므로, 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-7732fbd5-53f7-45e0-bed5-4e373856240b-image.png)
 
 ## REST와 라우팅
- 
+
  주소에는 요청의 내용이 담겨있다. 서버에 요청할 때는 REST를 (명사를 사용할 것 등) 준수한 주소를 HTTP 요청 메서드와 함께 보낸다. 똑같은 주소에 GET 요청을 보낼 때와 POST 요청을 보낼 때의 동작을 달리 규정하는 방식으로 활용할 수 있다.
 
  ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-a7e3726a-d06d-4feb-bc5a-d848146a7caa-image.png)
- 
+
  클라이언트에서 수정 버튼을 눌러서 DB에 저장된 '이순신'이라는 이름을 '안중근'으로 변경하는 내용의 HTTP 요청을 보내는 상황을 가정해보자. 이때 클라이언트는 다음과 같이 요청할 수 있다.
- 
+
  `await axios.put('/user/' + key, {name})`
- 
+
  이에 서버는 아래와 같이 응답한다.
- 
+
  ``` html
  <script>
  	http.createServer(async (req, res) => {
@@ -79,17 +76,15 @@ write(), end()에 일일이 HTML 코드를 작성하는 것은 불편하므로, 
     }
  </script>
  ```
- 
+
  1. `req.method()`로 HTTP 요청 메서드(GET, POST, PUT 등) 구분.
 2. `req.url`로 요청 주소 구분.
 3. `req.on()` 으로 요청에 대한 응답 이벤트를 지정. 여기서 req는 stream이고, 스트림 이벤트 리스너인 .on()메소드를 사용한 모습이다.
-
 * stream Event 'data' : emits a Buffer or a string
-
 * stream Event 'end' : Emmited when the stream has received an EOF.
 
  Node.js 서버에서 요청과 응답은 이벤트 방식이다. 따라서 이벤트 리스터를 미리 등록해두면 클라이언트가 보낸 요청에 적절히 응답할 수 있게 된다
- 
+
 ## https 모듈
 
 https란 http의 암호화된 버전이다. https는 클라이언트와 서버 간의 모든 커뮤니케이션을 암호화 하기 위해서 SSL(Secure Sockets Layer)이나 TLS(Transport Layer Security)를 사용한다. 즉, GET이나 POST 요청 등을 할 때 오가는 데이터를 암호화하는것.
@@ -134,8 +129,6 @@ HTTP/1.1은 TCP 연결이 설정되면서 요청과 응답이 진행되고, 이�
 
 ## References
 
-[SSL vs. TLS - 차이점은 무엇인가?](https://smartits.tistory.com/209)
-
-[MDN - HTTP/1.x의 커넥션 관리](https://developer.mozilla.org/ko/docs/Web/HTTP/Connection_management_in_HTTP_1.x)
-
-[[HTTP] HTTP 2의 탄생 배경과 특징](https://americanopeople.tistory.com/115)
+- [SSL vs. TLS - 차이점은 무엇인가?](https://smartits.tistory.com/209)
+- [MDN - HTTP/1.x의 커넥션 관리](https://developer.mozilla.org/ko/docs/Web/HTTP/Connection_management_in_HTTP_1.x)
+- [[HTTP] HTTP 2의 탄생 배경과 특징](https://americanopeople.tistory.com/115)

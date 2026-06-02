@@ -5,6 +5,7 @@ tags:
   - SSR
 slug: study-react18
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2023-05-30'
 title: 리액트 최신 동향 살펴보기
 ---
@@ -65,7 +66,9 @@ const handleClick = () => {
 });
 
 // 총 세 번 리렌더링 됨.
-```React 18부터는 이벤트 핸들러 외부에서도 batch update가 적용된다. `createRoot()` API를 적용하기만 하면 자동으로 상태 업데이트가 일괄 처리된다.
+```
+
+React 18부터는 이벤트 핸들러 외부에서도 batch update가 적용된다. `createRoot()` API를 적용하기만 하면 자동으로 상태 업데이트가 일괄 처리된다.
 
 앞으로 소개할 동시성을 비롯한 React 18의 추가적인 기능을 활용하기 위해서는 `createRoot()` API를 통해 앱을 렌더해야 한다.
 
@@ -112,7 +115,6 @@ Blocking Rendering 문제는 React 18의 동시성 개념을 통해 해결할 �
 ![image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/5b14dd07-1f1b-4c64-4d59-71f82ab33a00.jpg)
 
 * `isPending` : pending transition 존재 여부를 알려주는 플래그
-
 * `startTransition` : state update를 transition으로 기능하게 해주는 함수
 
 지금까지 설명한 동시성 개념을 startTransition 함수를 통해 코드에 적용할 수 있다. startTransition을 이용해서 일부 상태 업데이트를 긴급하지 않은 것(not urgent)로 표시한다. startTransition이 적용되지 않은 상태 업데이트 함수는 긴급한 것으로 간주된다.  긴급한 상태 업데이트는 긴급하지 않은 상태 업데이트를 중단할 수 있다.
@@ -157,7 +159,9 @@ const DetailsComponent = () => (
     <AvatarComponent />
   </Suspense>
 )
-```Suspense와 lazy로 처리된 코드가 chunk.js로 코드 분할 처리된 모습이다.
+```
+
+Suspense와 lazy로 처리된 코드가 chunk.js로 코드 분할 처리된 모습이다.
 
 ![image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/2b360330-7c18-4931-3534-0d92f526a700.jpg)
 
@@ -174,13 +178,9 @@ React 18에서 Suspense는 코드 스플리팅 목적 외에도 Data fetching �
 기존의 SSR은 다음의 단계를 거쳐야만 사용자가 페이지와 인터랙션할 수 있게 된다.
 
 1. 서버에서 data fetch를 수행
-
 2. 서버에서 HTML 생성 (with data)
-
 3. HTML, CSS, JS파일을 클라이언트로 전송
-
 4. 클라이언트에서 HTML, CSS를 이용해서 non-interactive UI 렌더링
-
 5. React가 Hydrate를 통해 페이지를 interactive 하게 만듦
 
 >  fetch -> render -> load -> hydrate (waterfall)
@@ -335,7 +335,7 @@ Hydration이 진행중임에도 클릭 이벤트는 정상적으로 처리된다
 위에서 설명한 기능들은 모두 `<Suspense>`를 적용하면 React 내부에서 자동적으로 최적화되어 처리되는 기능들이다.  
 
 if(isLoading)이라는 명령형 코드를 `<Suspense>`라는 선언형 코드로 변경하는 게 코드의 유지보수성을 증진시킬 뿐 아니라 UX적으로도 굉장히 많은 이점을 준다는 걸 명심하자. Suspense는 React 18의 `useDeferredValue`, `startTransition`과 함께 사용될 수 있다.
- 
+
 # React Server Components(RSC)
 
 [React 18: 리액트 서버 컴포넌트 준비하기](https://tech.kakaopay.com/post/react-server-components/)
@@ -358,17 +358,11 @@ function KakaopayHome({ memberId }) {
 ```
 
 * 부모 컴포넌트인 `<MemberDetails>`와 자식 컴포넌트인 `<MoneyBalance>`, `<PaymentHistory>` 컴포넌트 모두에서 API 응답값인 memeberId에 의존하고 있다.
-
 * 이때, 개발자는 아래 두 가지 방법 중 하나를 선택해야만 한다
-
   1. 부모 컴포넌트에서 한 번 받아온 API 정보를 자식에 내려준다.
-
   2. 컴포넌트에 필요한 API를 각 컴포넌트에서 매번 호출한다.
-  
 * 첫 번째 방법은 API 요청 횟수를 줄일 수 있지만 부모와 자식 컴포넌트 간 결합도가 높아져서 유지보수가 어려워진다.
-
 * 두 번째 방법은 API 요청 횟수가 늘어난다. 또한 부모 컴포넌트가 렌더링 된 후 API 호출을 통해 데이터를 받아올 동안 자식 컴포넌트의 렌더링 및 API 호출이 지연된다. 이런식의 waterfall은 UX를 저하시킨다.
-
 * RSC는 이와 같은 data fetching의 단점을 보완한다.
 
 > Next.js 13에서는 2번과 같은 방식의 data fetching을 권장하는 것 같다. 같은 API가 반복적으로 호출될 경우 background에서 cache and dedupe을 통해 API 호출 횟수를 한 번으로 제한해주기 때문이다. 물론 Next.js의 fetch() API를 사용해야 한다.
@@ -402,7 +396,6 @@ function Note(props) {
 ### 2) 자유로운 서버 리소스 접근
 
 * RSC는 서버에서 동작하기 때문에 DB, File System 같은 서버 리소스에 자유롭게 접근할 수 있다.
-
 * 서버에서 fetching한 데이터는 JSON 형식으로 props에 전달할 수 있다.
 
 ```jsx
@@ -439,7 +432,6 @@ function NoteWithMarkdown({text}) {
 ```
 
 * RSC 코드는 브라우저에 다운로드되지 않고 서버에서 렌더링 된 static content를 브라우저에 전달하는 형식이기 때문에 패키지의 추가가 번들 사이즈에 영향을 끼치지 않는다.
-
 * 위 컴포넌트처럼 유저 인터랙션이 없는 컴포넌트를 RSC로 마이그레이션하면 동일한 뷰를 제공하면서도 번들 사이즈와 초기 로딩 시간을 감소시킬 수 있다.\
 
 ```jsx
@@ -476,13 +468,9 @@ function Photo(props) {
 ```
 
 * 코드 스플리팅의 두 가지 단점
-
 1. lazy loading이 필요한 컴포넌트에 일일이 React.lazy와 dynamic import를 적용해야 한다.
-
 2. 부모 컴포넌트가 렌더링 된 이후 로딩을 시작하기 때문에 화면에 보이기 까지의 딜레이가 존재한다
-
 * RSC는 위 두 가지 단점을 해결한다.
-
 1. RSC에서 import되는 모든 클라이언트 컴포넌트는 code splitting 포인트로 간주되기 때문에 일일이 React.lazy를 명시할 필요가 없다.
 
 ```jsx
@@ -508,7 +496,6 @@ function Photo(props) {
 ![image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/69fde50f-ab51-4138-8349-a1b8fe0af900.jpg)
 
 * 미래에는 목적에 따라 컴포넌트를 분리할 수 있을 것이다. 서버 컴포넌트(data fetchin), 클라이언트 컴포넌트(유저 인터랙션) 등.
-
 * 관심사에 따라 서버/클라이언트 로직을 분리할 수 있을 것이다.
 
 ```jsx
@@ -555,10 +542,7 @@ export default function Note({ selectedId }) {
 ## RSC는 SSR의 대체재가 아니다
 
 * SSR의 주요 목적은 non-interactive한 HTML을 클라이언트에 가능한 빨리 전달하여 초기 페이지의 First Contentful Paint, Largest Contentful Paint 속도를 향상시키는 것이다.
-
 * RSC의 코드는 클라이언트로 전달되지 않지만, SSR 컴포넌트 코드는 자바스크립트 번들에 포함되어 클라이언트로 전송된다.
-
 * RSC는 클라이언트의 상태를 유지한 채 refetch될 수 있다. 반면 SSR은 refetch가 필요한 경우 새로고침을 통해 전체 HTML을 리렌더링해야 하므로 클라이언트 상태 유지가 불가능하다.
-
 * SSR로 초기 렌더링 속도를 단축시키고, RSC로 클라이언트에 전송되는 자바스크립트 번들 사이즈를 감소시키는 방향으로 활용할 수 있을 것.
 

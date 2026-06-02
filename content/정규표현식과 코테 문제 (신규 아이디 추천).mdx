@@ -5,6 +5,7 @@ tags:
   - 코테
 slug: coding-test-regexp
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2021-12-16'
 title: 정규표현식과 코테 문제 (신규 아이디 추천)
 ---
@@ -37,44 +38,40 @@ const exp2 = new RegExp('ab+c', 'g');
 
 * \*: 앞의 표현식이 0회 이상 연속으로 반복되는 부분과 대응. \{0,\}과 같다.
 	ex) `/ab*c/`는 문자열 'abbbbc'에서 abbbbc에 대응된다. a와 c사이에서 반복되는 b여야만한다.
-    
+
 * \+ : 앞의 표현식이 1회 이상 연속으로 반복되는 부분과 대응. \{1,\}과 같다.
 	ex) `/a+/는 문자열 'caaaaandy'의 모든 a에 대응된다.
 
 * ? : 앞의 표현식이 0 또는 1회 등장하는 부분에 대응. \{0,1\}과 같다.
 	ex) `/e?le?/`는 문자열 'angel'의 el, 'oslo'의 l에 대응된다.
-    
+
 * ^ : 입력의 첫 글자에 대응.
 	ex) `/^A/`는 문자열 'An E'의 A에 대응된다.
 
 *  $  : 입력의 끝 글자에 대응.
 	ex) `/t$/`는 문자열 'eat'의 t에 대응된다.
-    
+
 > `/^$/`는 빈 문자열을 의미한다.
 
 * . : 개행 문자를 제외한 모든 단일 문자와 대응.
 	ex) `/.n/`는 문자열 'nay, an apple is on the tree'에서 an과 on에 대응된다.
 
 * (x) (소괄호) : 그룹화, 캡처 기능을 갖는다.
-
 * x | y : x 또는 y에 대응
-
 * \{ n, m\} : 앞 문자가 최소 n번, 최대 m번 반복되는 부분에 대응. 이때 n과 m은 양의 정수여야 하고 n\<=m을 만족해야 한다.
-
 * [xyz] : 문자셋(character set). 문자셋 내부에서는 특수 문자가 일반 문자로 대응된다. 따라서 이스케이프할 필요가 없다. 문자셋 내부에서는 하이픈을 이용해서 문자의 범위를 지정할 수 있다.
 	ex) `/[a-d]/`는 `/[abcd]/`와 동일하다. 문자열 'brisket'의 b, 'city'의 c에 대응한다. `/[a-z.]+/`는 문자열 'test.i.ng'에서 전체와 대응된다.
-    
+
 * [^xyz] : 부정 문자셋(negated) 또는 보충 문자셋(complemented)으로 불린다. 대괄호 내부에 등장하지 않는 모든 문자와 대응.
 	ex) `/[^a-c]/g`는 문자열 'brisket'에서 risket에 대응된다.
 
 * [\b] : 백스페이스. \b와 혼동하지 말 것.
-
 * \b : 단어 경계. 단어 문자인 `/[A-Za-z0-9_]/` 에 해당하는 단어들 사이에서 경계(공백 등)에 대응.
 	ex) `/\b[a-z]/g`는 문자열 'you like me'에서 y, l, m에 대응된다.
 
 * \w : 단어 문자. 밑줄 문자를 포함한 영문자와 숫자에 대응. 
 	ex) `/\w/g`는 문자열 '$5.28,'에서 5 2 8에 대응된다.
-    
+
 ## 메서드
 
 #### String.replace() 
@@ -173,6 +170,5 @@ function solution(new_id){
 
 # 📚 Reference
 
-[MDN - 정규표현식 ](https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Regular_Expressions)
-
-[MDN - RegExp](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+- [MDN - 정규표현식 ](https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Regular_Expressions)
+- [MDN - RegExp](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/RegExp)

@@ -3,7 +3,9 @@ tags:
   - browser
   - rendering
 slug: browser-rendering
+series: 브라우저 동작 원리
 description: null
+updated_at: 2026-06-02T00:00:00.000Z
 date: '2021-10-25'
 title: 브라우저 렌더링 최적화
 ---
@@ -51,7 +53,8 @@ layout과 paint가 필요 없는 CSS 속성을 변경해서 브라우저가 comp
 
 ```jsx
 	<img loading="lazy" src="something" />
-```HTML `<img>` 태그의 loading 속성값을 lazy로 지정하면 이미지가 뷰포트의 일정 거리 안으로 들어와야 이미지를 불러온다. 초기 로딩시간을 단축시킨다.
+```
+HTML `<img>` 태그의 loading 속성값을 lazy로 지정하면 이미지가 뷰포트의 일정 거리 안으로 들어와야 이미지를 불러온다. 초기 로딩시간을 단축시킨다.
 
 # 3. 개발자 도구 활용하기
 
@@ -62,14 +65,9 @@ layout과 paint가 필요 없는 CSS 속성을 변경해서 브라우저가 comp
 
 # Reference
 
-[모던 웹 브라우저 들여다보기 파트3](https://developers.google.com/web/updates/2018/09/inside-browser-part3?hl=ko)
-
-[렌더링 성능](https://developers.google.com/web/fundamentals/performance/rendering)
-
-[Reflow, Repaint Chromium 입장에서 살펴보기 (왜 transform은 빠를까?)](https://devsdk.github.io/ko/development/2021/03/08/ReflowRepaint.html)
-
-[Chromium Composition과 Layer](https://devsdk.github.io/ko/development/2021/03/29/blink-render-composition.html)
-
-[Lifa of a pixel](https://docs.google.com/presentation/d/1boPxbgNrTU0ddsc144rcXayGA_WF53k96imRH8Mp34Y/edit#slide=id.ga884fe665f_64_6)
-
-[브라우저 렌더링 과정과 최적화](https://velog.io/@bumsu0211/%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80-%EB%A0%8C%EB%8D%94%EB%A7%81-%EA%B3%BC%EC%A0%95%EA%B3%BC-%EC%B5%9C%EC%A0%81%ED%99%94#2-image-lazy-loading)
+- [모던 웹 브라우저 들여다보기 파트3](https://developers.google.com/web/updates/2018/09/inside-browser-part3?hl=ko)
+- [렌더링 성능](https://developers.google.com/web/fundamentals/performance/rendering)
+- [Reflow, Repaint Chromium 입장에서 살펴보기 (왜 transform은 빠를까?)](https://devsdk.github.io/ko/development/2021/03/08/ReflowRepaint.html)
+- [Chromium Composition과 Layer](https://devsdk.github.io/ko/development/2021/03/29/blink-render-composition.html)
+- [Lifa of a pixel](https://docs.google.com/presentation/d/1boPxbgNrTU0ddsc144rcXayGA_WF53k96imRH8Mp34Y/edit#slide=id.ga884fe665f_64_6)
+- [브라우저 렌더링 과정과 최적화](https://velog.io/@bumsu0211/%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80-%EB%A0%8C%EB%8D%94%EB%A7%81-%EA%B3%BC%EC%A0%95%EA%B3%BC-%EC%B5%9C%EC%A0%81%ED%99%94#2-image-lazy-loading)
