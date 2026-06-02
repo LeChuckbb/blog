@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>blog-nextjs · 아키텍처 문서</title>
+<style>
+  :root {
+    --bg: #1e1e2e;
+    --bg-soft: #181825;
+    --surface: #313244;
+    --surface-2: #45475a;
+    --text: #cdd6f4;
+    --text-muted: #a6adc8;
+    --subtle: #6c7086;
+    --mauve: #cba6f7;
+    --blue: #89b4fa;
+    --green: #a6e3a1;
+    --peach: #fab387;
+    --pink: #f5c2e7;
+    --red: #f38ba8;
+    --yellow: #f9e2af;
+    --teal: #94e2d5;
+    --border: #45475a;
+    --radius: 12px;
+    --mono: "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", "Apple SD Gothic Neo", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .layout { display: flex; max-width: 1280px; margin: 0 auto; }
+
+  /* ── Sidebar ── */
+  nav.toc {
+    position: sticky; top: 0;
+    height: 100vh; overflow-y: auto;
+    width: 260px; flex-shrink: 0;
+    padding: 28px 18px;
+    background: var(--bg-soft);
+    border-right: 1px solid var(--border);
+  }
+  nav.toc h2 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--subtle); margin-bottom: 14px;
+  }
+  nav.toc a {
+    display: block; color: var(--text-muted); text-decoration: none;
+    font-size: 14px; padding: 6px 10px; border-radius: 8px;
+    transition: background .15s, color .15s;
+  }
+  nav.toc a:hover { background: var(--surface); color: var(--text); }
+  nav.toc a.sub { padding-left: 24px; font-size: 13px; color: var(--subtle); }
+  nav.toc a.related { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); color: var(--peach); font-size: 13px; }
+  nav.toc a.related:hover { background: var(--surface); }
+
+  /* ── Main ── */
+  main { flex: 1; min-width: 0; padding: 48px 56px 120px; }
+  @media (max-width: 900px) {
+    nav.toc { display: none; }
+    main { padding: 32px 20px 80px; }
+  }
+
+  header.hero {
+    margin-bottom: 56px; padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  header.hero .eyebrow {
+    color: var(--mauve); font-family: var(--mono); font-size: 13px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  header.hero h1 {
+    font-size: 40px; font-weight: 700; margin: 10px 0 16px;
+    background: linear-gradient(120deg, var(--mauve), var(--blue), var(--teal));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  header.hero p { color: var(--text-muted); font-size: 17px; max-width: 720px; }
+  .badges { margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    font-family: var(--mono); font-size: 12px;
+    background: var(--surface); color: var(--blue);
+    padding: 4px 12px; border-radius: 999px; border: 1px solid var(--border);
+  }
+
+  section { margin-bottom: 64px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  h2.section-title .num {
+    font-family: var(--mono); font-size: 15px; color: var(--mauve);
+    background: var(--surface); width: 34px; height: 34px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 9px; flex-shrink: 0;
+  }
+  .section-lead { color: var(--text-muted); margin: 4px 0 24px; }
+  h3 { font-size: 19px; margin: 28px 0 12px; color: var(--text); }
+  p { margin-bottom: 14px; color: var(--text); }
+  ul, ol { margin: 0 0 16px 22px; color: var(--text-muted); }
+  li { margin-bottom: 6px; }
+  code.inline {
+    font-family: var(--mono); font-size: 0.88em;
+    background: var(--surface); color: var(--peach);
+    padding: 2px 6px; border-radius: 5px;
+  }
+
+  /* ── Cards ── */
+  .grid { display: grid; gap: 16px; }
+  .grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .card {
+    background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px;
+  }
+  .card h4 {
+    font-size: 15px; margin-bottom: 8px; color: var(--blue);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h4 .ico { font-size: 18px; }
+  .card p { font-size: 14px; color: var(--text-muted); margin-bottom: 0; }
+  .card .file {
+    font-family: var(--mono); font-size: 12px; color: var(--green);
+    margin-top: 10px; display: block;
+  }
+
+  /* ── Code blocks ── */
+  pre {
+    background: #11111b; border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 20px;
+    overflow-x: auto; margin: 16px 0;
+    font-family: var(--mono); font-size: 13.5px; line-height: 1.6;
+  }
+  pre code { color: var(--text); }
+  .tok-key { color: var(--mauve); }
+  .tok-str { color: var(--green); }
+  .tok-fn { color: var(--blue); }
+  .tok-com { color: var(--subtle); font-style: italic; }
+  .tok-num { color: var(--peach); }
+  .tok-punc { color: var(--text-muted); }
+  .tok-tag { color: var(--red); }
+  pre .filebar {
+    display: block; font-family: var(--mono); font-size: 12px;
+    color: var(--subtle); margin-bottom: 12px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── Tables ── */
+  table {
+    width: 100%; border-collapse: collapse; margin: 16px 0;
+    font-size: 14px; background: var(--bg-soft);
+    border-radius: var(--radius); overflow: hidden;
+  }
+  th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface); color: var(--text); font-weight: 600; font-size: 13px; }
+  td { color: var(--text-muted); }
+  td code, td .mono { font-family: var(--mono); font-size: 12.5px; color: var(--peach); }
+  tr:last-child td { border-bottom: none; }
+
+  /* ── Pipeline diagram ── */
+  .pipeline { display: flex; flex-direction: column; gap: 0; margin: 24px 0; }
+  .stage {
+    background: var(--bg-soft); border: 1px solid var(--border);
+    border-left: 4px solid var(--blue); border-radius: 10px;
+    padding: 16px 20px; position: relative;
+  }
+  .stage .label {
+    font-family: var(--mono); font-size: 12px; color: var(--blue);
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .stage .name { font-size: 16px; font-weight: 600; margin: 4px 0; color: var(--text); }
+  .stage .desc { font-size: 13.5px; color: var(--text-muted); }
+  .stage code { font-family: var(--mono); font-size: 12px; color: var(--green); }
+  .arrow {
+    text-align: center; color: var(--subtle); font-size: 22px;
+    line-height: 1; padding: 6px 0;
+  }
+  .stage.s-obsidian { border-left-color: var(--mauve); }
+  .stage.s-obsidian .label { color: var(--mauve); }
+  .stage.s-transform { border-left-color: var(--peach); }
+  .stage.s-transform .label { color: var(--peach); }
+  .stage.s-output { border-left-color: var(--green); }
+  .stage.s-output .label { color: var(--green); }
+  .stage.s-build { border-left-color: var(--yellow); }
+  .stage.s-build .label { color: var(--yellow); }
+  .stage.s-runtime { border-left-color: var(--teal); }
+  .stage.s-runtime .label { color: var(--teal); }
+
+  .note {
+    background: rgba(137,180,250,0.08); border: 1px solid rgba(137,180,250,0.3);
+    border-radius: 10px; padding: 14px 18px; margin: 16px 0;
+    font-size: 14px; color: var(--text-muted);
+  }
+  .note strong { color: var(--blue); }
+  .note.warn { background: rgba(243,139,168,0.08); border-color: rgba(243,139,168,0.3); }
+  .note.warn strong { color: var(--red); }
+
+  /* ── md vs mdx compare ── */
+  .vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; align-items: stretch; margin: 20px 0; }
+  .vs .col {
+    background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px;
+  }
+  .vs .col.md { border-top: 3px solid var(--subtle); }
+  .vs .col.mdx { border-top: 3px solid var(--mauve); }
+  .vs .col h4 { font-family: var(--mono); font-size: 14px; margin-bottom: 12px; }
+  .vs .col.md h4 { color: var(--text-muted); }
+  .vs .col.mdx h4 { color: var(--mauve); }
+  .vs .col ul { margin: 0 0 0 18px; font-size: 13.5px; }
+  .vs .mid {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; color: var(--peach); padding: 0 16px;
+  }
+  @media (max-width: 700px) { .vs { grid-template-columns: 1fr; gap: 12px; } .vs .mid { padding: 4px; } }
+
+  /* ── library group legend ── */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin: 8px 0 20px; font-size: 13px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); }
+  .dot { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; }
+  .dot.a { background: var(--blue); }
+  .dot.b { background: var(--peach); }
+  .dot.c { background: var(--teal); }
+  .dot.d { background: var(--pink); }
+  .libgroup { border-left: 4px solid var(--border); }
+  .libgroup.a { border-left-color: var(--blue); }
+  .libgroup.b { border-left-color: var(--peach); }
+  .libgroup.c { border-left-color: var(--teal); }
+  .libgroup.d { border-left-color: var(--pink); }
+  .libgroup h4 .tagwhen {
+    font-family: var(--mono); font-size: 11px; font-weight: 400;
+    color: var(--subtle); margin-left: auto;
+  }
+  .libgroup h4 { justify-content: space-between; }
+  .pill {
+    display: inline-block; font-family: var(--mono); font-size: 12px;
+    background: var(--surface); color: var(--text); padding: 3px 9px;
+    border-radius: 6px; margin: 3px 4px 3px 0; border: 1px solid var(--border);
+  }
+  .pill.hl { background: rgba(250,179,135,0.15); border-color: var(--peach); color: var(--peach); }
+
+  /* ── script execution flow ── */
+  .flowdiag { margin: 24px 0; }
+  .phase-box {
+    background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 0; overflow: hidden; margin-bottom: 18px;
+  }
+  .phase-box .phase-head {
+    padding: 12px 18px; font-family: var(--mono); font-size: 13px;
+    display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border);
+  }
+  .phase-box.sync .phase-head { background: rgba(250,179,135,0.12); color: var(--peach); }
+  .phase-box.build .phase-head { background: rgba(249,226,175,0.12); color: var(--yellow); }
+  .phase-box .phase-head .cmd { color: var(--green); }
+  .phase-box .phase-body { padding: 18px; }
+  .step-row { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; }
+  .step-row .step-n {
+    font-family: var(--mono); font-size: 12px; color: var(--bg);
+    background: var(--peach); min-width: 22px; height: 22px; border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700;
+  }
+  .phase-box.build .step-row .step-n { background: var(--yellow); }
+  .step-row .step-txt { font-size: 14px; color: var(--text-muted); }
+  .step-row .step-txt strong { color: var(--text); }
+  .step-row .step-txt .fn {
+    font-family: var(--mono); font-size: 12px; color: var(--green);
+    background: var(--surface); padding: 1px 6px; border-radius: 4px;
+  }
+  .filechip {
+    font-family: var(--mono); font-size: 11.5px; padding: 2px 7px;
+    border-radius: 5px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--blue);
+  }
+  .uses-line { font-size: 12px; color: var(--subtle); margin-top: 4px; font-family: var(--mono); }
+  .phase-sep { text-align: center; color: var(--subtle); font-size: 13px; margin: 14px 0; font-family: var(--mono); }
+
+  /* dependency map for the 5 scripts */
+  .deptree { font-family: var(--mono); font-size: 13px; line-height: 1.9; }
+  .deptree .root { color: var(--peach); font-weight: 600; }
+  .deptree .child { color: var(--blue); }
+  .deptree .lib { color: var(--green); }
+  .deptree .sep { color: var(--subtle); }
+  .deptree .iso { color: var(--yellow); font-weight: 600; }
+
+  /* ── SVG diagrams ── */
+  .svg-wrap {
+    background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px; margin: 20px 0;
+  }
+  svg.diagram { width: 100%; height: auto; display: block; }
+  svg.diagram .node rect { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; }
+  svg.diagram .node[data-c="mauve"] rect { stroke: var(--mauve); }
+  svg.diagram .node[data-c="peach"] rect { stroke: var(--peach); }
+  svg.diagram .node[data-c="green"] rect { stroke: var(--green); }
+  svg.diagram .node[data-c="yellow"] rect { stroke: var(--yellow); }
+  svg.diagram .node[data-c="teal"] rect { stroke: var(--teal); }
+  svg.diagram .node[data-c="blue"] rect { stroke: var(--blue); }
+  svg.diagram .ic { font-size: 22px; text-anchor: middle; }
+  svg.diagram .nt { fill: var(--text); font-size: 15px; font-weight: 600; text-anchor: middle; font-family: var(--sans); }
+  svg.diagram .nt.sm { font-size: 13.5px; font-family: var(--mono); }
+  svg.diagram .ns { fill: var(--text-muted); font-size: 11.5px; text-anchor: middle; font-family: var(--sans); }
+  svg.diagram .ns2 { fill: var(--subtle); font-size: 11px; font-weight: 400; }
+  svg.diagram .edge { stroke: var(--subtle); stroke-width: 2; fill: none; }
+  svg.diagram .edge.thick { stroke-width: 3; stroke: var(--text-muted); }
+  svg.diagram .edge.dashed { stroke-dasharray: 4 4; }
+  svg.diagram .zone { font-size: 12px; font-weight: 600; text-anchor: middle; font-family: var(--mono); }
+  svg.diagram .zone-peach { fill: var(--peach); }
+  svg.diagram .zone-yellow { fill: var(--yellow); }
+  svg.diagram .zoneline { stroke-width: 1.5; }
+  svg.diagram .zl-peach { stroke: var(--peach); opacity: .4; }
+  svg.diagram .zl-yellow { stroke: var(--yellow); opacity: .4; }
+  svg.diagram .grp { fill: none; stroke-width: 1.5; stroke-dasharray: 6 5; opacity: .7; }
+  svg.diagram .grp-peach { stroke: var(--peach); }
+  svg.diagram .grp-yellow { stroke: var(--yellow); }
+  svg.diagram .grp-label { font-size: 12.5px; font-weight: 700; font-family: var(--mono); }
+  svg.diagram .gl-peach { fill: var(--peach); }
+  svg.diagram .gl-yellow { fill: var(--yellow); }
+  svg.diagram .handoff { fill: var(--text-muted); font-size: 11px; text-anchor: middle; font-family: var(--mono); }
+  svg.diagram .iso-note { fill: var(--subtle); font-size: 11px; text-anchor: middle; font-style: italic; }
+
+  .cap { font-size: 13.5px; color: var(--text-muted); margin: 4px 0 0; }
+  .cap b { color: var(--text); }
+  .cap .hl-txt { color: var(--peach); }
+
+  /* ── two-lane library compare ── */
+  .two-lane { display: flex; align-items: stretch; gap: 0; margin: 20px 0; }
+  .two-lane .lane {
+    flex: 1; background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px;
+  }
+  .two-lane .lane-b { border-top: 3px solid var(--peach); }
+  .two-lane .lane-a { border-top: 3px solid var(--blue); }
+  .two-lane .lane-when { font-family: var(--mono); font-size: 12px; color: var(--subtle); margin-bottom: 8px; }
+  .two-lane .lane-b .lane-when { color: var(--peach); }
+  .two-lane .lane-a .lane-when { color: var(--blue); }
+  .two-lane .lane-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+  .two-lane .lane-pills { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .two-lane .lane-note { font-size: 12.5px; color: var(--text-muted); margin-top: 12px; }
+  .two-lane .lane-note b { color: var(--peach); }
+  .two-lane .lane-arrow { display: flex; align-items: center; padding: 0 14px; color: var(--subtle); font-size: 22px; }
+  .tag-rk {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    color: var(--bg); background: var(--green); padding: 2px 8px; border-radius: 5px;
+  }
+  .tag-rk.rh { background: var(--mauve); }
+  @media (max-width: 700px) {
+    .two-lane { flex-direction: column; gap: 10px; }
+    .two-lane .lane-arrow { justify-content: center; padding: 2px; transform: rotate(90deg); }
+  }
+
+  footer {
+    margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border);
+    color: var(--subtle); font-size: 13px; text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ───── Sidebar TOC ───── -->
+  <nav class="toc">
+    <h2>목차</h2>
+    <a href="#overview">개요</a>
+    <a href="#stack">기술 스택</a>
+    <a href="#dataflow">전체 데이터 흐름</a>
+    <a href="#mdvsmdx">md vs mdx</a>
+    <a href="#libs">마크다운 라이브러리 & 파이프라인</a>
+    <a href="#scripts-flow">스크립트 실행 흐름</a>
+    <a href="#sync">동기화 시스템</a>
+    <a href="#sync-config" class="sub">config.js</a>
+    <a href="#sync-transform" class="sub">transform-obsidian.js</a>
+    <a href="#sync-main" class="sub">sync-content.js</a>
+    <a href="#render">포스트 렌더링</a>
+    <a href="#toc">목차 생성 & 추적</a>
+    <a href="#reading">읽기 시간 계산</a>
+    <a href="#fonts">한글 폰트</a>
+  </nav>
+
+  <!-- ───── Main ───── -->
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Architecture Documentation</div>
+      <h1>blog-nextjs</h1>
+      <p>
+        Obsidian에서 작성한 마크다운을 자동으로 MDX로 변환해 게시하는
+        <strong>Next.js 15 정적 블로그</strong>입니다.
+        <em>Obsidian → Google Drive → 변환 스크립트 → MDX → 정적 페이지</em>로 이어지는
+        완전 자동화 콘텐츠 파이프라인을 중심으로 설계되었습니다.
+      </p>
+      <div class="badges">
+        <span class="badge">Next.js 15.3</span>
+        <span class="badge">App Router</span>
+        <span class="badge">MDX 3.1</span>
+        <span class="badge">SSG</span>
+        <span class="badge">Tailwind CSS 4</span>
+        <span class="badge">TypeScript</span>
+      </div>
+    </header>
+
+    <!-- 개요 -->
+    <section id="overview">
+      <h2 class="section-title"><span class="num">1</span>개요</h2>
+      <p class="section-lead">이 프로젝트가 풀어내는 핵심 문제와 설계 철학</p>
+      <p>
+        블로그 글을 작성하는 곳(<strong>Obsidian</strong>)과 게시하는 곳(<strong>Next.js</strong>)을 분리하고,
+        그 사이를 변환 스크립트가 메꿉니다. 작성자는 평소처럼 Obsidian에서 노트를 쓰고,
+        파일은 Google Drive로 동기화되며, 빌드 시점에 변환 스크립트가 Obsidian 고유 문법을
+        MDX로 정리한 뒤 정적 페이지로 굳힙니다.
+      </p>
+      <div class="grid cols-3">
+        <div class="card">
+          <h4><span class="ico">✍️</span> 이중 워크플로우</h4>
+          <p>작성은 Obsidian(<code class="inline">.md</code>), 게시는 Next.js(<code class="inline">.mdx</code>). 변환 스크립트가 둘을 연결.</p>
+        </div>
+        <div class="card">
+          <h4><span class="ico">⚡</span> 정적 생성(SSG)</h4>
+          <p>모든 포스트를 빌드 시점에 미리 생성. 빠른 로딩과 SEO 최적화.</p>
+        </div>
+        <div class="card">
+          <h4><span class="ico">🔄</span> 자동 동기화</h4>
+          <p><code class="inline">sync:watch</code>로 파일 변경을 감지해 실시간 변환.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 기술 스택 -->
+    <section id="stack">
+      <h2 class="section-title"><span class="num">2</span>기술 스택</h2>
+      <p class="section-lead">핵심 의존성과 각각의 역할</p>
+      <table>
+        <thead><tr><th>패키지</th><th>버전</th><th>역할</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">next</span></td><td>15.3.8</td><td>App Router 기반 프레임워크</td></tr>
+          <tr><td><span class="mono">@mdx-js/mdx · @next/mdx</span></td><td>3.1 · 15.3</td><td>MDX 컴파일 및 Next.js 통합</td></tr>
+          <tr><td><span class="mono">remark-gfm</span></td><td>4.0</td><td>GitHub Flavored Markdown (표·체크박스)</td></tr>
+          <tr><td><span class="mono">remark-frontmatter</span></td><td>5.0</td><td>YAML/TOML frontmatter 파싱</td></tr>
+          <tr><td><span class="mono">@r4ai/remark-callout</span></td><td>0.6</td><td>Obsidian 콜아웃 <code>[!tip]</code> 블록</td></tr>
+          <tr><td><span class="mono">remark-toc</span></td><td>9.0</td><td>본문 내 목차 생성</td></tr>
+          <tr><td><span class="mono">rehype-pretty-code</span></td><td>0.14</td><td>Shiki 코드 하이라이팅</td></tr>
+          <tr><td><span class="mono">rehype-slug</span></td><td>6.0</td><td>헤딩 ID(앵커) 자동 생성</td></tr>
+          <tr><td><span class="mono">gray-matter</span></td><td>4.0</td><td>frontmatter 추출</td></tr>
+          <tr><td><span class="mono">github-slugger</span></td><td>2.0</td><td>한글 지원 slug 생성</td></tr>
+          <tr><td><span class="mono">mermaid</span></td><td>11.1</td><td>다이어그램 렌더링</td></tr>
+          <tr><td><span class="mono">probe-image-size</span></td><td>7.2</td><td>이미지 크기 자동 감지</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 데이터 흐름 -->
+    <section id="dataflow">
+      <h2 class="section-title"><span class="num">3</span>전체 데이터 흐름</h2>
+      <p class="section-lead">한 편의 글이 Obsidian 노트에서 웹 페이지가 되기까지</p>
+
+      <div class="svg-wrap">
+      <svg viewBox="0 0 880 200" class="diagram" role="img" aria-label="데이터 흐름 다이어그램">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#6c7086"/>
+          </marker>
+        </defs>
+        <!-- nodes -->
+        <g class="node" data-c="mauve">
+          <rect x="20" y="60" width="120" height="80" rx="12"/>
+          <text x="80" y="92" class="ic">✍️</text>
+          <text x="80" y="116" class="nt">Obsidian</text>
+          <text x="80" y="133" class="ns">.md 작성</text>
+        </g>
+        <g class="node" data-c="peach">
+          <rect x="200" y="60" width="120" height="80" rx="12"/>
+          <text x="260" y="92" class="ic">🔧</text>
+          <text x="260" y="116" class="nt">sync 변환</text>
+          <text x="260" y="133" class="ns">.md → .mdx</text>
+        </g>
+        <g class="node" data-c="green">
+          <rect x="380" y="60" width="120" height="80" rx="12"/>
+          <text x="440" y="92" class="ic">📦</text>
+          <text x="440" y="116" class="nt">.mdx + json</text>
+          <text x="440" y="133" class="ns">산출물</text>
+        </g>
+        <g class="node" data-c="yellow">
+          <rect x="560" y="60" width="120" height="80" rx="12"/>
+          <text x="620" y="92" class="ic">⚡</text>
+          <text x="620" y="116" class="nt">next build</text>
+          <text x="620" y="133" class="ns">정적 생성</text>
+        </g>
+        <g class="node" data-c="teal">
+          <rect x="740" y="60" width="120" height="80" rx="12"/>
+          <text x="800" y="92" class="ic">🌐</text>
+          <text x="800" y="116" class="nt">브라우저</text>
+          <text x="800" y="133" class="ns">렌더링</text>
+        </g>
+        <!-- arrows -->
+        <line x1="140" y1="100" x2="198" y2="100" class="edge" marker-end="url(#ar)"/>
+        <line x1="320" y1="100" x2="378" y2="100" class="edge" marker-end="url(#ar)"/>
+        <line x1="500" y1="100" x2="558" y2="100" class="edge" marker-end="url(#ar)"/>
+        <line x1="680" y1="100" x2="738" y2="100" class="edge" marker-end="url(#ar)"/>
+        <!-- phase brackets -->
+        <text x="260" y="40" class="zone zone-peach">① 빌드 전 · npm run sync</text>
+        <line x1="200" y1="48" x2="500" y2="48" class="zoneline zl-peach"/>
+        <text x="710" y="40" class="zone zone-yellow">② next build / 런타임</text>
+        <line x1="560" y1="48" x2="860" y2="48" class="zoneline zl-yellow"/>
+      </svg>
+      </div>
+      <p class="cap">Obsidian에 글을 쓰면 — <b>sync가 변환</b>하고 → <b>next가 정적 페이지로 굳혀</b> → 브라우저가 띄웁니다. 자세한 단계는 §7.</p>
+    </section>
+
+    <!-- md vs mdx -->
+    <section id="mdvsmdx">
+      <h2 class="section-title"><span class="num">4</span>md vs mdx — 왜 변환하는가</h2>
+      <p class="section-lead">Obsidian은 <code class="inline">.md</code>로 쓰고, 스크립트가 <code class="inline">.mdx</code>로 바꾸는 이유</p>
+      <div class="vs">
+        <div class="col md">
+          <h4>.md · Markdown</h4>
+          <ul>
+            <li>순수 텍스트 마크업</li>
+            <li>결과물은 <strong>HTML 문자열</strong></li>
+            <li>React 컴포넌트 삽입 ❌</li>
+            <li><code class="inline">import / export</code> ❌</li>
+            <li><code class="inline">&lt;</code>, <code class="inline">{ }</code>가 그냥 문자</li>
+          </ul>
+        </div>
+        <div class="mid">→</div>
+        <div class="col mdx">
+          <h4>.mdx · Markdown + JSX</h4>
+          <ul>
+            <li>마크다운 <strong>+ React(JSX)</strong></li>
+            <li>결과물은 <strong>React 컴포넌트</strong></li>
+            <li><code class="inline">&lt;Mermaid /&gt;</code> 등 컴포넌트 삽입 ✅</li>
+            <li><code class="inline">import / export</code> 실행 ✅</li>
+            <li><code class="inline">&lt;</code>, <code class="inline">{ }</code>는 JSX로 해석 → 이스케이프 필요</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note">
+        <strong>변환하는 이유.</strong> <code class="inline">.mdx</code>라야 본문을 <strong>React 컴포넌트로 import</strong>해
+        Mermaid·코드복사 버튼 같은 인터랙션을 끼울 수 있습니다. 대신 <code class="inline">&lt;</code>, <code class="inline">{ }</code>가 JSX로 해석되므로
+        변환 단계에서 이스케이프가 필요합니다. (<code class="inline">transform-obsidian.js</code>)
+      </div>
+    </section>
+
+    <!-- 라이브러리 지도 -->
+    <section id="libs">
+      <h2 class="section-title"><span class="num">5</span>마크다운 라이브러리 &amp; 처리 파이프라인</h2>
+      <p class="section-lead">어떤 라이브러리가 <strong>언제</strong> 쓰이고, MDX가 <strong>어떻게</strong> HTML이 되는가</p>
+
+      <div class="two-lane">
+        <div class="lane lane-b">
+          <div class="lane-when">⏱ npm run sync · 빌드 <u>전</u></div>
+          <div class="lane-title">동기화 스크립트가 쓰는 도구</div>
+          <div class="lane-pills">
+            <span class="pill hl">gray-matter</span><span class="pill">github-slugger</span><span class="pill">glob</span>
+          </div>
+          <div class="lane-note">MDX 엔진 <b>아님</b>. 그냥 Node 스크립트의 도구.</div>
+        </div>
+
+        <div class="lane-arrow">→</div>
+
+        <div class="lane lane-a">
+          <div class="lane-when">⚙️ next build · MDX → HTML</div>
+          <div class="lane-title">MDX 변환 파이프라인 (next.config.mjs)</div>
+          <div class="lane-pills">
+            <span class="tag-rk">remark</span>
+            <span class="pill">frontmatter</span><span class="pill">gfm</span><span class="pill">callout</span><span class="pill">toc</span>
+          </div>
+          <div class="lane-pills" style="margin-top:6px">
+            <span class="tag-rk rh">rehype</span>
+            <span class="pill">pretty-code</span><span class="pill">slug</span><span class="pill">image-size</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="cap">
+        <b class="hl-txt">gray-matter</b>는 frontmatter를 파싱하지만 MDX와 무관 — <code class="inline">transform-obsidian.js</code>·<code class="inline">tocUtil.ts</code>가 씀.
+        빌드 때는 <code class="inline">remark-frontmatter</code>가 따로 또 처리합니다.
+      </p>
+
+      <h3>MDX 파이프라인 — remark → rehype 2단계</h3>
+      <p>
+        빌드 시 <code class="inline">.mdx</code>는 두 단계를 거쳐 HTML이 됩니다.
+        <strong>remark</strong>가 마크다운 의미 구조를, <strong>rehype</strong>가 최종 HTML 표현을 다룹니다.
+      </p>
+      <div class="grid cols-2">
+        <div class="card">
+          <h4>📝 remark 단계 <span style="font-size:11px;color:var(--subtle)">(마크다운 AST)</span></h4>
+          <p>frontmatter 제거 · GFM · Obsidian 콜아웃 · 강조 마커 · 목차. <strong>의미 구조</strong>를 가공.</p>
+        </div>
+        <div class="card">
+          <h4>🎨 rehype 단계 <span style="font-size:11px;color:var(--subtle)">(HTML AST)</span></h4>
+          <p>Shiki 코드 하이라이팅 · 헤딩 앵커 ID · 이미지 크기 주입. <strong>표현</strong>을 가공.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 스크립트 실행 흐름 -->
+    <section id="scripts-flow">
+      <h2 class="section-title"><span class="num">6</span>스크립트 5개는 어떻게 도는가</h2>
+      <p class="section-lead"><code class="inline">npm run dev/build</code> = <code class="inline">sync</code> <b>먼저</b> → <code class="inline">next</code> <b>나중</b>. 5개가 <b>2그룹</b>으로 나뉩니다.</p>
+
+      <div class="svg-wrap">
+      <svg viewBox="0 0 880 380" class="diagram" role="img" aria-label="스크립트 실행 흐름">
+        <defs>
+          <marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#6c7086"/>
+          </marker>
+        </defs>
+
+        <!-- GROUP 1 box -->
+        <rect x="10" y="34" width="500" height="332" rx="14" class="grp grp-peach"/>
+        <text x="30" y="60" class="grp-label gl-peach">그룹 1 · npm run sync (Node, 빌드 전)</text>
+
+        <!-- entry -->
+        <g class="node" data-c="peach">
+          <rect x="150" y="78" width="220" height="46" rx="10"/>
+          <text x="260" y="106" class="nt">sync-content.js <tspan class="ns2">(엔트리)</tspan></text>
+        </g>
+        <!-- requires -->
+        <line x1="200" y1="124" x2="120" y2="160" class="edge" marker-end="url(#ar2)"/>
+        <line x1="260" y1="124" x2="260" y2="160" class="edge" marker-end="url(#ar2)"/>
+        <line x1="320" y1="124" x2="400" y2="160" class="edge" marker-end="url(#ar2)"/>
+        <g class="node sm" data-c="blue">
+          <rect x="30" y="162" width="170" height="62" rx="10"/>
+          <text x="115" y="186" class="nt sm">config.js</text>
+          <text x="115" y="206" class="ns">Vault 경로 감지</text>
+        </g>
+        <g class="node sm" data-c="blue">
+          <rect x="215" y="162" width="170" height="62" rx="10"/>
+          <text x="300" y="186" class="nt sm">transform-obsidian</text>
+          <text x="300" y="206" class="ns">문법 변환 · gray-matter</text>
+        </g>
+        <g class="node sm" data-c="blue">
+          <rect x="320" y="244" width="170" height="62" rx="10"/>
+          <text x="405" y="268" class="nt sm">reading-time.js</text>
+          <text x="405" y="288" class="ns">읽기 시간 계산</text>
+        </g>
+        <line x1="405" y1="224" x2="405" y2="242" class="edge" marker-end="url(#ar2)"/>
+
+        <!-- output -->
+        <g class="node" data-c="green">
+          <rect x="30" y="300" width="260" height="48" rx="10"/>
+          <text x="160" y="322" class="nt sm">📦 content/*.mdx + posts.json</text>
+          <text x="160" y="339" class="ns">산출물 (날짜순)</text>
+        </g>
+        <line x1="115" y1="224" x2="140" y2="298" class="edge dashed"/>
+
+        <!-- handoff arrow -->
+        <line x1="512" y1="200" x2="568" y2="200" class="edge thick" marker-end="url(#ar2)"/>
+        <text x="540" y="190" class="handoff">그 다음</text>
+
+        <!-- GROUP 2 box -->
+        <rect x="570" y="34" width="300" height="332" rx="14" class="grp grp-yellow"/>
+        <text x="590" y="60" class="grp-label gl-yellow">그룹 2 · next build</text>
+
+        <g class="node" data-c="yellow">
+          <rect x="600" y="100" width="240" height="46" rx="10"/>
+          <text x="720" y="128" class="nt sm">next.config.mjs · MDX 파이프</text>
+        </g>
+        <line x1="720" y1="146" x2="720" y2="178" class="edge" marker-end="url(#ar2)"/>
+        <g class="node sm" data-c="yellow">
+          <rect x="600" y="180" width="240" height="62" rx="10"/>
+          <text x="720" y="204" class="nt sm">rehype-image-size.mjs</text>
+          <text x="720" y="224" class="ns">이미지 width/height 주입</text>
+        </g>
+        <text x="720" y="262" class="iso-note">⑤번째 파일 — 여기서만 동작</text>
+        <line x1="720" y1="278" x2="720" y2="298" class="edge" marker-end="url(#ar2)"/>
+        <g class="node sm" data-c="teal">
+          <rect x="600" y="300" width="240" height="48" rx="10"/>
+          <text x="720" y="322" class="nt sm">정적 페이지 생성</text>
+          <text x="720" y="339" class="ns">generateStaticParams()</text>
+        </g>
+      </svg>
+      </div>
+      <p class="cap">
+        <b>그룹 1</b>(config·transform·reading-time)은 <code class="inline">sync-content.js</code>가 <code class="inline">require</code> → Next 시작 전 끝.
+        <b>그룹 2</b>의 <code class="inline">rehype-image-size.mjs</code>만 빌드 도중 따로 동작 — 같은 폴더라도 실행 주체가 다릅니다.
+      </p>
+    </section>
+
+    <!-- 동기화 시스템 -->
+    <section id="sync">
+      <h2 class="section-title"><span class="num">7</span>동기화 시스템 상세</h2>
+      <p class="section-lead"><code class="inline">scripts/</code> 폴더 — 파이프라인의 심장 (역할 요약은 §3 참고)</p>
+
+      <!-- config.js -->
+      <h3 id="sync-config">7.1 · config.js — 경로 자동 감지</h3>
+      <p>
+        Vault 경로를 하드코딩하지 않고 <strong>환경변수 → macOS Google Drive → Windows → 프로젝트 상위</strong> 순으로
+        탐색합니다. 덕분에 환경(맥/윈도우, 로컬/Drive)이 달라도 같은 코드가 동작합니다.
+      </p>
+      <table>
+        <thead><tr><th>경로</th><th>용도</th></tr></thead>
+        <tbody>
+          <tr><td><code>blog-content/published/</code></td><td>게시할 글 (입력)</td></tr>
+          <tr><td><code>blog-content/drafts/</code></td><td>작성 중인 글 (무시)</td></tr>
+          <tr><td><code>content/</code></td><td>변환된 MDX (출력)</td></tr>
+          <tr><td><code>src/app/posts.json</code></td><td>메타데이터 (출력)</td></tr>
+        </tbody>
+      </table>
+
+      <!-- transform -->
+      <h3 id="sync-transform">7.2 · transform-obsidian.js — 문법 변환</h3>
+      <p>Obsidian에서만 의미 있는 문법들을 MDX가 이해할 수 있는 형태로 바꾸거나 제거합니다.</p>
+      <table>
+        <thead><tr><th>함수</th><th>변환 (Obsidian → MDX)</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">removeObsidianComments</span></td><td><code>%% 주석 %%</code> → 제거</td></tr>
+          <tr><td><span class="mono">removeBlockIds</span></td><td><code>^블록ID</code> → 제거 (코드블록 보호)</td></tr>
+          <tr><td><span class="mono">convertWikilinks</span></td><td><code>[[파일|텍스트]]</code> → <code>[텍스트](/posts/slug)</code></td></tr>
+          <tr><td><span class="mono">processImages</span></td><td><code>![](Attached file/x.png)</code> → <code>![](/images/x.png)</code></td></tr>
+          <tr><td><span class="mono">normalizeCodeFenceLanguage</span></td><td><code>``` mermaid</code> → <code>```mermaid</code></td></tr>
+          <tr><td><span class="mono">escapeMdxSpecialChars</span></td><td><code>&lt;</code>, <code>{ }</code> 등 JSX 충돌 문자 이스케이프</td></tr>
+        </tbody>
+      </table>
+      <p>
+        frontmatter도 정규화합니다 — <code class="inline">publish_date</code>를 <code class="inline">date</code>로 통일하고,
+        slug가 없으면 파일명에서 생성합니다 (소문자화·공백→하이픈·한글 유지).
+        예: <code class="inline">"React Hooks 완벽 가이드.md"</code> → <code class="inline">react-hooks-완벽-가이드</code>
+      </p>
+      <div class="note warn">
+        <strong>주의 · 코드블록 보호.</strong>
+        블록 ID(<code class="inline">^id</code>)나 콜아웃을 제거할 때 코드 펜스 안의 내용은 건드리지 않도록
+        정규식이 라인 단위로 신중하게 매칭합니다.
+      </div>
+
+      <!-- sync main -->
+      <h3 id="sync-main">7.3 · sync-content.js — 동기화 오케스트레이션</h3>
+      <p>
+        전체 흐름을 지휘합니다. 핵심은 <strong>2-pass 설계</strong> —
+        ① 먼저 게시 글의 slug 집합을 모은 뒤(위키링크 연결 대상 판별), ② 파일을 변환하며 메타데이터를 수집합니다.
+        결과는 <code class="inline">content/*.mdx</code> 파일과, 각 글의
+        <code class="inline">slug·title·date·tags·description·readingTime·series</code>를 담은
+        <code class="inline">posts.json</code>(날짜순)으로 출력됩니다.
+      </p>
+    </section>
+
+    <!-- 렌더링 -->
+    <section id="render">
+      <h2 class="section-title"><span class="num">8</span>포스트 렌더링</h2>
+      <p class="section-lead"><code class="inline">src/app/posts/[slug]/page.tsx</code> — 정적 페이지 생성과 동적 MDX import</p>
+      <ul>
+        <li><b>정적 생성</b> — <code class="inline">generateStaticParams()</code>가 <code class="inline">posts.json</code>의 모든 slug에 대해 페이지를 미리 생성 (<code class="inline">dynamicParams=false</code> → 미생성 slug는 404)</li>
+        <li><b>동적 import</b> — slug로 해당 <code class="inline">.mdx</code>를 컴포넌트로 불러와 <code class="inline">&lt;Post /&gt;</code>로 렌더링</li>
+        <li><b>조합</b> — 제목 + 시리즈 네비(<code class="inline">SeriesNav</code>) + 본문 + 목차 사이드바(<code class="inline">TableOfContents</code>)</li>
+      </ul>
+      <div class="note">
+        <strong>SEO.</strong> 각 페이지는 <code class="inline">JSON-LD</code> 구조화 데이터를 함께 출력하고,
+        목차 사이드바는 1440px 이상 화면에서만 <code class="inline">sticky</code>로 표시됩니다.
+      </div>
+    </section>
+
+    <!-- 목차 -->
+    <section id="toc">
+      <h2 class="section-title"><span class="num">9</span>목차 생성 &amp; 스크롤 추적</h2>
+      <p class="section-lead">서버에서 트리를 만들고, 클라이언트에서 현재 위치를 강조</p>
+
+      <h3>서버 — 헤딩 추출 후 트리 구성 (<code class="inline">tocUtil.ts</code>)</h3>
+      <p>
+        MDX에서 헤딩을 정규식으로 뽑아 <code class="inline">#</code> 개수로 레벨(h1~h6)을 정하고, 스택으로 부모–자식 관계를 추적해
+        중첩 트리를 만듭니다. ID는 <code class="inline">github-slugger</code>가 생성해 한글도 안전합니다
+        (예: <code class="inline">"React 비교"</code> → <code class="inline">react-비교</code>).
+      </p>
+
+      <h3>클라이언트 — 스크롤 위치 추적 (<code class="inline">TableOfContents.tsx</code>)</h3>
+      <p>
+        스크롤할 때마다 현재 위치 바로 위의 가장 가까운 헤딩을 찾아 해당 목차 항목을 활성화합니다.
+        <code class="inline">scroll</code> 이벤트(passive)로 가볍게 처리하고, 동적 콘텐츠 높이도 250ms 간격으로 추적합니다.
+      </p>
+    </section>
+
+    <!-- 읽기 시간 -->
+    <section id="reading">
+      <h2 class="section-title"><span class="num">10</span>읽기 시간 계산</h2>
+      <p class="section-lead"><code class="inline">scripts/reading-time.js</code> — 한글과 영문을 분리 계산</p>
+      <p>한글(CJK)과 라틴 문자는 읽기 속도가 다릅니다. 코드 블록은 별도 가중치를 둡니다.</p>
+      <div class="grid cols-3">
+        <div class="card"><h4>🈶 CJK</h4><p>분당 <strong>500자</strong> (한글·한자·가나)</p></div>
+        <div class="card"><h4>🔤 Latin</h4><p>분당 <strong>200단어</strong> (영문)</p></div>
+        <div class="card"><h4>💻 Code</h4><p>분당 <strong>30줄</strong></p></div>
+      </div>
+      <p class="cap">
+        frontmatter·코드를 분리한 뒤 위 세 속도로 각각 나눠 합산하고, 올림 처리(최소 1분)합니다.
+      </p>
+    </section>
+
+    <!-- 한글 폰트 -->
+    <section id="fonts">
+      <h2 class="section-title"><span class="num">11</span>한글 폰트</h2>
+      <p class="section-lead">3종 체계 — 본문(산세리프) + 인용(세리프) + 코드(모노). 본문은 <code class="inline">layout.tsx</code>의 <code class="inline">localFont</code>로 연동.</p>
+
+      <table>
+        <thead><tr><th>역할</th><th>현재 폰트</th><th>분류 · 성격</th></tr></thead>
+        <tbody>
+          <tr><td><b>본문 · UI</b></td><td><code>Pretendard</code></td><td>산세리프 — 획이 균일·깔끔, 화면 가독성 높음. 교체 대상.</td></tr>
+          <tr><td><b>인용 · 헤딩</b></td><td><code>마루 부리</code></td><td>세리프 — 획 끝 장식, 전통적·문학적. 유지.</td></tr>
+          <tr><td><b>코드</b></td><td><code>D2Coding</code></td><td>모노스페이스 — 동일 너비, 코드 정렬·가독성. 유지.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>본문 폰트 교체 시 후보 조합</h3>
+      <p>Pretendard 자리에 넣을 산세리프 1종만 고르면 됩니다(인용·코드는 유지). 제목과 본문은 같은 폰트를 쓰고 굵기·크기로 위계를 표현합니다.</p>
+      <table>
+        <thead><tr><th>성격</th><th>추천 폰트</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>안정적·범용</td><td><code>Noto Sans KR</code></td><td>완성도 최고. <b>Pretendard와 가장 유사.</b></td></tr>
+          <tr><td>기술적·현대적</td><td><code>IBM Plex Sans KR</code></td><td>개발 문서 같은 신뢰감, 영문과 통일감.</td></tr>
+          <tr><td>가볍고 친근</td><td><code>Gothic A1</code></td><td>가는 획·둥근 끝, 개인 블로그에 어울림.</td></tr>
+          <tr><td>깔끔·미니멀</td><td><code>Nanum Barun Gothic</code></td><td>나눔 고딕 개선판, 균형감 우수.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>한글 타이포그래피 권장값</h3>
+      <p>한글은 영문과 행간·자간·줄바꿈 기준이 다릅니다.</p>
+      <pre><code><span class="tok-fn">body</span> {
+  <span class="tok-prop">line-height</span>: <span class="tok-num">1.7</span>;            <span class="tok-com">/* 한글 본문은 넓게 1.6–1.8 */</span>
+  <span class="tok-prop">letter-spacing</span>: <span class="tok-num">-0.01em</span>;     <span class="tok-com">/* 산세리프는 약간 좁게 */</span>
+  <span class="tok-prop">word-break</span>: keep-all;          <span class="tok-com">/* 한글 어절 단위 줄바꿈 */</span>
+}
+<span class="tok-fn">h1, h2, h3</span> { <span class="tok-prop">line-height</span>: <span class="tok-num">1.3</span>; <span class="tok-prop">letter-spacing</span>: <span class="tok-num">-0.02em</span>; }  <span class="tok-com">/* 제목은 좁게 */</span>
+<span class="tok-fn">blockquote</span> { <span class="tok-prop">line-height</span>: <span class="tok-num">1.8</span>; <span class="tok-prop">letter-spacing</span>: <span class="tok-num">0</span>; }        <span class="tok-com">/* 인용은 넓게 */</span></code></pre>
+      <div class="note">
+        <strong>교체 방법.</strong> <code class="inline">layout.tsx</code>의 폰트 import·설정만 바꾸고 <code class="inline">variable</code>명을 유지하면
+        <code class="inline">globals.css</code>(<code class="inline">--font-sans</code>)는 수정이 거의 필요 없습니다.
+        Google Fonts 한글 폰트는 <code class="inline">subsets: ["latin"]</code>만 지정해도 한글이 자동 포함됩니다(<code class="inline">"korean"</code> subset 없음).
+      </div>
+    </section>
+
+    <footer>
+      blog-nextjs · Architecture Documentation · 생성일 2026-06-02
+    </footer>
+  </main>
+</div>
+</body>
+</html>
