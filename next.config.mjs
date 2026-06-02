@@ -41,10 +41,13 @@ const nextConfig = {
   // Optionally, add any other Next.js config below
   images: {
     remotePatterns: [
-      new URL("https://imagedelivery.net/**"),
       new URL("https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/**"),
-      new URL("https://media.vlpt.us/**"),
+      new URL("https://media.vlpt.us/**"), // velog 이전 이미지 (구 글에 잔존 가능)
     ],
+    // S3 객체에 Cache-Control 헤더가 없어 기본 TTL(60초)이 그대로 적용됐다.
+    // 블로그 이미지는 한 번 올리면 거의 안 바뀌므로 31일로 늘려 S3 재요청·재변환을 줄인다.
+    // 캐시 무효화 수단은 없으나, 이미지 교체 시 S3 URL이 바뀌면 새 캐시 키라 문제없다.
+    minimumCacheTTL: 2678400, // 31일
   },
 };
 
