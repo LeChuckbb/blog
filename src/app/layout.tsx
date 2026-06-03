@@ -70,6 +70,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  verification: {
+    other: {
+      "naver-site-verification": "5f8dbbc872022d2a4036eb1b82722c3002db84f0",
+    },
+  },
 };
 
 const GITHUB_URL = "https://github.com/LeChuckbb";
