@@ -5,7 +5,7 @@ tags:
 slug: critical-rendering-path
 series: 브라우저 동작 원리
 description: null
-updated_at: 2026-06-02T00:00:00.000Z
+updated_at: 2026-06-03T00:00:00.000Z
 date: '2021-10-24'
 title: 브라우저의 렌더링 과정(Critical Rendering Path)
 ---
@@ -14,28 +14,28 @@ title: 브라우저의 렌더링 과정(Critical Rendering Path)
 ![image](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/f4d861cb-7bac-4830-b3d5-629b3b6ada00.jpg)
 
 ## 1. Request & Response
-브라우저 렌더링은 유저가 서버에 \<span style="color: red;">**요청(request)**\</span>하는 것으로부터 출발한다.  velog를 이용하고 싶은 유저가 웹 브라우저 주소창에 velog.io를 입력해서 요청을 보내면, velog 서버는 요청에 대한 \<span style="color:red;">**응답(response)**\</span>으로써 리소스 파일(HTML, CSS, JS, 이미지, 폰트 등)을 제공한다.  브라우저는 이 리소스를 파싱하여 렌더링하는 것이다.
+브라우저 렌더링은 유저가 서버에 **요청(request)**하는 것으로부터 출발한다.  velog를 이용하고 싶은 유저가 웹 브라우저 주소창에 velog.io를 입력해서 요청을 보내면, velog 서버는 요청에 대한 **응답(response)**으로써 리소스 파일(HTML, CSS, JS, 이미지, 폰트 등)을 제공한다.  브라우저는 이 리소스를 파싱하여 렌더링하는 것이다.
 
-velog.io와 같은 루트 요청\<sup id="a1">[1](#footnote1)\</sup>은 일반적으로 서버 내 루트 폴더에 존재하는 index.html을 요청하는식으로 작동한다. velog.io라는 URL 뒤에 /assets/data/data.json과 같은 식으로 부언을하여 특정 파일을 요청하는 방법도 있다.
+velog.io와 같은 루트 요청<sup id="a1">[1](#footnote1)</sup>은 일반적으로 서버 내 루트 폴더에 존재하는 index.html을 요청하는식으로 작동한다. velog.io라는 URL 뒤에 /assets/data/data.json과 같은 식으로 부언을하여 특정 파일을 요청하는 방법도 있다.
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-8a745636-0ccb-491a-bb61-64f023cd471a-11.png)
 
 위 그림은 velog.io 루트 요청에 대한 응답 결과다. [개발자 도구] - [네트워크] 패널에서 위와 같이 확인해볼 수 있다. 그런데 루트 요청의 응답 결과로 추정되는 **velog.io(index.html)** 파일 외에도 무수히 많은 CSS, JS, 이미지 파일 또한 응답된 것을 볼 수 있다. 요청도 하지 않은 이 리소스들은 왜 응답되었을까?
 
-이는 브라우저의 \<span style="color: red;">**렌더링 엔진**\</span>이 velog.io(index.html) 파일을 파싱하는 도중에 `<link>`, `<img>`, `<script>`와 같은 태그를 만나서 외부 리소스를 로드해왔기 때문이다. 자세한 내용은 차차 알아갈 것이다.
+이는 브라우저의 **렌더링 엔진**이 velog.io(index.html) 파일을 파싱하는 도중에 `<link>`, `<img>`, `<script>`와 같은 태그를 만나서 외부 리소스를 로드해왔기 때문이다. 자세한 내용은 차차 알아갈 것이다.
 
-> \<b id="footnote1">1.\</b> https와 같은 Scheme(Protocol), www.velog.io와 같은 Host(domain)만으로 구성된 요청을 뜻한다. [↩](#a1)
+> <b id="footnote1">1.</b> https와 같은 Scheme(Protocol), www.velog.io와 같은 Host(domain)만으로 구성된 요청을 뜻한다. [↩](#a1)
 
 ## 2. HTML 파싱과 DOM 생성
-브라우저 요청에대한 응답으로써 서버가 내놓은 HTML 문서는 영문자 나열(텍스트)에 불과하다. 텍스트인 HTML 문서를 브라우저에 시각적으로 렌더링하기 위해서는 텍스트를 브라우저가 이해할 수 있는 자료구조(객체)로 변환해야한다. 이 변환 과정이 \<span style="color: red;">**파싱parsing**\</span>이고, HTML 파싱의 결과로 브라우저가 이해할 수 있는 자료구조인 \<span style="color: red;">**DOM**\</span>\<sup id="a1">[2](#footnote2)\</sup>이 생성된다.
+브라우저 요청에대한 응답으로써 서버가 내놓은 HTML 문서는 영문자 나열(텍스트)에 불과하다. 텍스트인 HTML 문서를 브라우저에 시각적으로 렌더링하기 위해서는 텍스트를 브라우저가 이해할 수 있는 자료구조(객체)로 변환해야한다. 이 변환 과정이 **파싱parsing**이고, HTML 파싱의 결과로 브라우저가 이해할 수 있는 자료구조인 **DOM**<sup id="a1">[2](#footnote2)</sup>이 생성된다.
 
 파싱 과정은 아래와 같다.
 
-1. velog.io 요청에 대한 응답으로 서버는 서버 내 HTML 파일을 반환한다. 이때 HTML 파일은 \<span style="color: red;">**바이트(2진수)**\</span>형태로 인터넷을 경유하여 사용자 브라우저에 도달한다.
-2. 응답된 바이트 형태의 HTML 문서는 meta 태그의 charset 어트리뷰트에 의해 지정된 인코딩 방식(UTF-8 등)을 기준으로하여 \<span style="color: red;">**문자열**\</span>로 변환된다.
-3. 문자열 형식(개발자가 작성한 형식)의 HTML 문서를 읽어 들여 문법적 의미를 갖는 코드의 최소 단위인 \<span style="color: red;">**토큰token**\</span>들로 분해한다.
-4. 각 토큰들을 객체로 변환하여 \<span style="color: red;">**노드node**\</span>들을 생성한다. 토큰에 따라 문서 노드, 요소 노드 등으로 변환된다. 노드는 DOM을 구성하는 기본 요소가 된다.
-5. HTML 요소 간의 부자 관계를 반영하여 모든 노드들을 트리 자료구조로 구성한다. 이 노드들로 구성된 트리 자료구조를 \<span style="color: red;">**DOM(Document Object Model)**\</span>이라 부른다.
+1. velog.io 요청에 대한 응답으로 서버는 서버 내 HTML 파일을 반환한다. 이때 HTML 파일은 **바이트(2진수)**형태로 인터넷을 경유하여 사용자 브라우저에 도달한다.
+2. 응답된 바이트 형태의 HTML 문서는 meta 태그의 charset 어트리뷰트에 의해 지정된 인코딩 방식(UTF-8 등)을 기준으로하여 **문자열**로 변환된다.
+3. 문자열 형식(개발자가 작성한 형식)의 HTML 문서를 읽어 들여 문법적 의미를 갖는 코드의 최소 단위인 **토큰token**들로 분해한다.
+4. 각 토큰들을 객체로 변환하여 **노드node**들을 생성한다. 토큰에 따라 문서 노드, 요소 노드 등으로 변환된다. 노드는 DOM을 구성하는 기본 요소가 된다.
+5. HTML 요소 간의 부자 관계를 반영하여 모든 노드들을 트리 자료구조로 구성한다. 이 노드들로 구성된 트리 자료구조를 **DOM(Document Object Model)**이라 부른다.
 
 ```html
 <!DOCTYPE html>
@@ -57,7 +57,7 @@ velog.io와 같은 루트 요청\<sup id="a1">[1](#footnote1)\</sup>은 일반�
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-300ac33e-8e9d-4b85-bceb-8e6d42cda263-DOM.png)
 
-> \<b id="footnote2">2.\</b> DOM은 HTML 문서의 계층적 구조와 정보를 표현하며 이를 제어할 수 있는 API, 즉 프로퍼티와 메서드를 제공하는 트리 자료구조다. [↩](#a1)
+> <b id="footnote2">2.</b> DOM은 HTML 문서의 계층적 구조와 정보를 표현하며 이를 제어할 수 있는 API, 즉 프로퍼티와 메서드를 제공하는 트리 자료구조다. [↩](#a1)
 
 ## 3. CSS 파싱과 CSSOM 생성
 HTML 파일은 렌더링 엔진에 의해 한 줄씩 순차적으로 파싱된다. 렌더링 엔진은 이처럼 DOM을 생성해 나가다가, CSS를 로드하는 link 태그나 style 태그를 만나면 DOM 생성을 일시 중단하고 서버에 CSS 파일을 요청한다. 로드한 CSS파일 역시 HTML과 동일한 파싱 과정(바이트 -> 문자 -> 토큰 -> 노드 -> CSSOM)을 거쳐 해석하고, CSSOM을 만들어낸다. CSS 파싱이 끝나면 렌더링 엔진은 HTML 파싱이 중단된 지점부터 DOM 생성을 재개한다.
@@ -76,37 +76,37 @@ ul {
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-a73e7877-37d1-4b8d-9e4d-39bcfb44f1ca-CSSOM.png)
 
 ## 4. 렌더 트리 생성
-렌더링 엔진이 HTML/CSS 파일을 파싱하여 생성된 DOM과 CSSOM은 렌더링을 위해서 \<span style="color: red;">**렌더 트리render tree**\</span>로 결합된다.
+렌더링 엔진이 HTML/CSS 파일을 파싱하여 생성된 DOM과 CSSOM은 렌더링을 위해서 **렌더 트리render tree**로 결합된다.
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-82b17f20-626a-48ce-825d-f0f8066601fe-renderTree.png)
 
 렌더 트리는 렌더링을 위한 트리 형태의 자료구조이므로, 브라우저 화면에 렌더링되지 않는 노드(meta, script 태그 등)와 CSS에 의해 비표시(display:none)되는 노드들은 렌더 트리에 포함되지 않는다.
 
-완성된 렌더 트리는 각 요소의 \<span style="color: red;">**레이아웃(위치와 크기)**\</span>을 계산하는 데 사용되며 브라우저 화면에 픽셀을 렌더링하는 \<span style="color: red;">**페인팅painting**\</span> 처리에 입력된다.
+완성된 렌더 트리는 각 요소의 **레이아웃(위치와 크기)**을 계산하는 데 사용되며 브라우저 화면에 픽셀을 렌더링하는 **페인팅painting** 처리에 입력된다.
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-1db1920e-b84d-4d02-9dd0-c5168cb2d32d-render.png)
 
-레이아웃 계산과 페인팅 작업을 다시 수행하는 것을 \<span style="color: red;">**리렌더링**\</span>이라 한다. 리렌더링은 성능에 악영향을 주므로 빈번하게 발생하지 않도록 주의할 필요가 있다. 리렌더링은 다음과 같은 상황에서 발생한다.
+레이아웃 계산과 페인팅 작업을 다시 수행하는 것을 **리렌더링**이라 한다. 리렌더링은 성능에 악영향을 주므로 빈번하게 발생하지 않도록 주의할 필요가 있다. 리렌더링은 다음과 같은 상황에서 발생한다.
 
 * 자바스크립트에 의한 노드 추가 또는 삭제
 * 브라우저 창의 리사이징에 의한 뷰포트 크기 변경
 * HTML 요소의 레이아웃(위치, 크기)에 변경을 발생시키는 width/height, margin, padding, border, display, position, top/right/bottom/left 등의 스타일 변경
 
 ## 5. 자바스크립트 파싱과 실행
-DOM은 HTML 문서의 구조와 정보뿐만 아니라 HTML 요소와 스타일 등을 변경할 수 있는 프로그래밍 인터페이스로서 \<span style="color: red;">**DOM API**\</span>를 제공한다. **즉, 자바스크립트 코드에서 DOM API를 사용하면 이미 생성된 DOM을 동적으로 조작할 수 있다. **
+DOM은 HTML 문서의 구조와 정보뿐만 아니라 HTML 요소와 스타일 등을 변경할 수 있는 프로그래밍 인터페이스로서 **DOM API**를 제공한다. **즉, 자바스크립트 코드에서 DOM API를 사용하면 이미 생성된 DOM을 동적으로 조작할 수 있다. **
 
 CSS 파싱과 마찬가지로, 자바스크립트 파싱은 렌더링 엔진이 HTML 파일을 파싱하며 DOM을 생성해나가다가 `<script>`태그를 만나서 DOM 생성을 일시 중단하고 자바스크립트 엔진에 제어권이 넘어간 시점에 시작된다.
 
-자바스크립트 코드의 파싱과 실행은 렌더링 엔진이 아닌 \<span style="color: red;">**자바스크립트 엔진**\</span>이 처리한다. 자바스크립트 엔진은 자바스크립트 코드를 파싱하여 CPU가 이해할 수 있는 저수준 언어로 변환하고 실행하는 역할을 한다.
+자바스크립트 코드의 파싱과 실행은 렌더링 엔진이 아닌 **자바스크립트 엔진**이 처리한다. 자바스크립트 엔진은 자바스크립트 코드를 파싱하여 CPU가 이해할 수 있는 저수준 언어로 변환하고 실행하는 역할을 한다.
 
-자바스크립트 엔진은 자바스크립트 코드를 해석하여 \<span style="color: red;">**AST(Abstract Syntax Tree; 추상적 구문 트리)**\</span>를 생성한다. 그리고 AST를 기반으로 인터프리터가 실행할 수 있는 중간 코드intermediate code인 바이트코드\<sup id="a3">[3](#footnote3)\</sup>를 생성하여 실행한다.
+자바스크립트 엔진은 자바스크립트 코드를 해석하여 **AST(Abstract Syntax Tree; 추상적 구문 트리)**를 생성한다. 그리고 AST를 기반으로 인터프리터가 실행할 수 있는 중간 코드intermediate code인 바이트코드<sup id="a3">[3](#footnote3)</sup>를 생성하여 실행한다.
 
 ![](https://my-personal-image-bucket.s3.ap-northeast-2.amazonaws.com/obsidian/images/velog-61fb0d20-5ce3-4a8d-8c6d-a3b067c3c0f5-jsparsing.jpeg)
 
-> \<b id="footnote3">3.\</b> 바이너리 코드가 0과 1로만 이루어진 이진코드여서 CPU가 이해할 수 있는 수준의 언어라면, 바이트 코드는 Virutal Machine이 이해할 수 있는 코드를 말한다. [↩](#a3)
+> <b id="footnote3">3.</b> 바이너리 코드가 0과 1로만 이루어진 이진코드여서 CPU가 이해할 수 있는 수준의 언어라면, 바이트 코드는 Virutal Machine이 이해할 수 있는 코드를 말한다. [↩](#a3)
 
 ## 6. 리플로우와 리페인트
-만약 자바스크립트 코드에서 DOM API가 사용되어 DOM이나 CSSOM이 변경된 경우, 변경된 DOM과 CSSOM을 기반으로 렌더 트리를 재생성한다. 이후 새로운 렌더 트리로 레이아웃과 페인트 과정을 거쳐 브라우저의 화면에 다시 렌더링하는데, 이를 \<span style="color: red;">**리플로우reflow**\</span>, \<span style="color: red;">**리페인트repaint**\</span>라 한다.
+만약 자바스크립트 코드에서 DOM API가 사용되어 DOM이나 CSSOM이 변경된 경우, 변경된 DOM과 CSSOM을 기반으로 렌더 트리를 재생성한다. 이후 새로운 렌더 트리로 레이아웃과 페인트 과정을 거쳐 브라우저의 화면에 다시 렌더링하는데, 이를 **리플로우reflow**, **리페인트repaint**라 한다.
 
 리플로우는 레이아웃 계산을 다시 하는 작업을 말한다. 노드 추가/삭제, 요소의 크기/위치 변경, 윈도우 리사이징 등 레이아웃에 영향을 주는 변경이 발생한 경우에 한하여 실행된다.
 

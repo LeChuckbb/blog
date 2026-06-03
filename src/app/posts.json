@@ -490,7 +490,7 @@
       "date": "2021-11-07",
       "title": "DOM API",
       "tags": [],
-      "description": "브라우저 렌더링 과정에서 브라우저의 렌더링 엔진은 HTML 문서를 파싱하여 브라우저가 이해할 수 있는 DOM 자료구조를 생성한다. \\<span style=\"color:red\">DOM(Documnet Object Model)\\</span>은 HTML 문서의 계층적 구조와 정...",
+      "description": "브라우저 렌더링 과정에서 브라우저의 렌더링 엔진은 HTML 문서를 파싱하여 브라우저가 이해할 수 있는 DOM 자료구조를 생성한다. DOM(Documnet Object Model)은 HTML 문서의 계층적 구조와 정보를 표현한다. DOM은 개발자들이 해당 웹 문서를 쉽게 조...",
       "readingTime": 24,
       "series": "브라우저 동작 원리"
     },

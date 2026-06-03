@@ -172,6 +172,34 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2356b87a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
 }
 
+/* caption — 이미지 설명문 전용.
+   일반 콜아웃 박스(테두리/배경/패딩)를 걷어내고, 회색 이탤릭 가운데정렬
+   작은 글씨로 렌더한다. 타이틀("Caption" 자동 생성분)과 아이콘은 숨긴다. */
+[data-callout-type="caption"] {
+  border: none;
+  border-radius: 0;
+  background: none;
+  padding: 0;
+  margin: 0.5rem 0 1.75rem;
+}
+[data-callout-type="caption"] [data-callout-title] {
+  display: none;
+}
+[data-callout-type="caption"] [data-callout-body] {
+  margin-top: 0;
+  /* 이미지가 왼쪽 정렬이므로 캡션도 왼쪽 정렬해 이미지 왼쪽 가장자리에 맞춘다.
+     본문 전체 폭 기준 중앙 정렬을 쓰면 이미지보다 캡션 영역이 넓어 중심축이
+     어긋난다(특히 작은 이미지). */
+  text-align: left;
+  font-style: italic;
+  font-size: 0.8rem;
+  color: oklch(0.55 0 0); /* 중간 회색 (#808080 근사) */
+  opacity: 1;
+}
+.dark [data-callout-type="caption"] [data-callout-body] {
+  color: oklch(0.65 0 0);
+}
+
 /* question */
 [data-callout-type="question"] {
   border-color: oklch(0.6 0.16 280 / 40%);

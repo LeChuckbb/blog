@@ -376,6 +376,71 @@ ${body}
   }
 
   /**
+   * 코드 보호 구간 바깥의 < 를 선택적으로 이스케이프한다.
+   *
+   * 표준 HTML 태그(여는/닫는/self-closing) 형태의 < 는 보존하여 MDX가 JSX 엘리먼트로
+   * 렌더하게 두고, 그 외의 < (부등호, 책 제목 `<...>`, URL, 커스텀 컴포넌트명 등)는
+   * `\<` 로 이스케이프하여 JSX 파싱 에러와 의도치 않은 태그 해석을 막는다.
+   *
+   * 보존 판정: KNOWN_HTML_TAGS 화이트리스트에 속한 태그명으로 시작하고, 유효한 태그
+   * 문법(여는: `<tag>` / `<tag ...속성>` / `<tag/>`, 닫는: `</tag>`)을 따를 때만 보존.
+   * @param {string} content
+   * @returns {string}
+   */
+  escapeAngleBrackets(content) {
+    // 본문에서 의도적으로 쓰일 수 있는 표준 HTML 태그 화이트리스트.
+    // 화이트리스트 밖(예: 한글 태그명, 커스텀 컴포넌트 <Suspense>, <https://...>)은
+    // 보존하지 않고 이스케이프되어 안전하게 텍스트로 남는다.
+    const KNOWN_HTML_TAGS = [
+      'a', 'abbr', 'b', 'br', 'code', 'del', 'div', 'em', 'i', 'img',
+      'ins', 'kbd', 'mark', 'p', 'pre', 'q', 's', 'small', 'span',
+      'strong', 'sub', 'sup', 'u', 'wbr',
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+      'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
+      'blockquote', 'figure', 'figcaption', 'hr', 'details', 'summary',
+    ];
+    // void 요소(자식·닫는 태그가 없는 요소)는 닫는 태그 `</br>`, `</hr>` 등이
+    // 문법적으로 무효하다(MDX/JSX가 "open tag 없는 closing slash" 에러를 냄).
+    // 따라서 void 요소의 닫는 태그는 보존하지 않고 이스케이프되도록 닫는 태그
+    // 화이트리스트에서 제외한다.
+    const VOID_HTML_TAGS = new Set(['br', 'hr', 'img', 'wbr']);
+    const tagAlternation = KNOWN_HTML_TAGS.join('|');
+    const closeTagAlternation = KNOWN_HTML_TAGS
+      .filter((tag) => !VOID_HTML_TAGS.has(tag))
+      .join('|');
+
+    // 여는/self-closing 태그: <tag>, <tag/>, <tag 속성...>, <tag 속성... />
+    //   - 태그명 뒤는 즉시 >, /> 이거나, 공백으로 시작하는 속성부([^<>]* 로 단순 매칭)
+    //   - 속성부에서 < 와 > 는 허용하지 않아 인접한 다른 토큰을 삼키지 않게 한다.
+    const openTagRe = new RegExp(
+      `^<(?:${tagAlternation})(?:\\s[^<>]*?)?/?>`,
+      'i'
+    );
+    // 닫는 태그: </tag> (void 요소 제외)
+    const closeTagRe = new RegExp(`^</(?:${closeTagAlternation})\\s*>`, 'i');
+
+    let result = '';
+    for (let i = 0; i < content.length; i++) {
+      if (content[i] !== '<') {
+        result += content[i];
+        continue;
+      }
+      const rest = content.slice(i);
+      const m = rest.match(openTagRe) || rest.match(closeTagRe);
+      if (m) {
+        // 유효한 표준 HTML 태그 → 그대로 보존
+        result += m[0];
+        i += m[0].length - 1;
+      } else {
+        // 태그가 아닌 < → 이스케이프
+        result += '\\<';
+      }
+    }
+    return result;
+  }
+
+  /**
    * MDX 특수문자 이스케이프 처리
    * 코드 블록/인라인 코드 바깥의 <, {}, <!-- --> 를 이스케이프한다.
    * @param {string} content
@@ -403,11 +468,17 @@ ${body}
     content = content.replace(/<!--[\s\S]*?-->/g, '');
 
     // 4단계: < 이스케이프
-    // MDX는 유효한 HTML 태그도 JSX 규칙으로 파싱하므로, 속성이 있거나 닫히지 않는 태그는
-    // 에러를 일으킨다. 가장 안전한 전략: 모든 < 를 이스케이프하되, 마크다운 링크와
-    // 이미지([text](url), ![alt](src))의 URL 부분은 이미 처리됨.
-    // 단, 닫는 태그(</tag>)의 </ 도 이스케이프.
-    content = content.replace(/</g, '\\<');
+    // MDX는 < 를 JSX 태그 시작으로 파싱하므로, 태그가 아닌 < (부등호 `a < b`,
+    // 책 제목 `<소년이 온다>`, 제네릭 `List<String>` 등)는 이스케이프해야 컴파일이
+    // 깨지지 않는다. 반면 사용자가 의도적으로 작성한 표준 HTML 태그(<p>, <a>, <br/>,
+    // </p> 등)는 MDX가 JSX 엘리먼트로 정상 렌더하므로 이스케이프하면 안 된다(안 그러면
+    // \<p ...> 같은 리터럴 텍스트로 노출됨).
+    //
+    // 전략: 표준 HTML 태그 형태로 인식되는 < 만 보존하고 나머지 < 는 모두 이스케이프.
+    // 태그 판별은 화이트리스트(KNOWN_HTML_TAGS)로 제한한다. <소년이 온다>(한글 태그명),
+    // <Suspense>(커스텀 컴포넌트명), <https://...>(URL)처럼 화이트리스트에 없는 형태는
+    // 그대로 이스케이프되어 안전하게 텍스트로 남는다.
+    content = this.escapeAngleBrackets(content);
 
     // 5단계: { } 이스케이프
     content = content.replace(/\{/g, '\\{');
