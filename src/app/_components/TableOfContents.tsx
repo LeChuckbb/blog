@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { trackEvent } from "@/src/app/lib/gtag";
 
 interface TocItem {
   id: string;
@@ -180,6 +181,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
   const handleItemClick = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
+      trackEvent("toc_navigate", { heading_id: id });
       element.scrollIntoView({
         behavior: "smooth",
         block: "start",

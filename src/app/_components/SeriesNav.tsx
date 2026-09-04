@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { trackEvent } from "@/src/app/lib/gtag";
 
 export interface SeriesPost {
   slug: string;
@@ -54,6 +55,7 @@ export default function SeriesNav({
               {currentIndex + 1} / {posts.length}
             </span>
             <NavArrows
+              seriesName={seriesName}
               prevPost={prevPost}
               nextPost={nextPost}
               compact={false}
@@ -72,7 +74,12 @@ export default function SeriesNav({
             >
               목록
             </button>
-            <NavArrows prevPost={prevPost} nextPost={nextPost} compact={true} />
+            <NavArrows
+              seriesName={seriesName}
+              prevPost={prevPost}
+              nextPost={nextPost}
+              compact={true}
+            />
           </div>
         )}
       </div>
@@ -99,6 +106,13 @@ export default function SeriesNav({
                 ) : (
                   <Link
                     href={`/posts/${encodeURIComponent(post.slug)}`}
+                    onClick={() =>
+                      trackEvent("series_navigate", {
+                        series: seriesName,
+                        via: "list",
+                        to_slug: post.slug,
+                      })
+                    }
                     className={cn(
                       "flex items-start gap-3 px-4 py-2",
                       "hover:bg-muted/60 dark:hover:bg-muted/30 transition-colors",
@@ -121,10 +135,12 @@ export default function SeriesNav({
 }
 
 function NavArrows({
+  seriesName,
   prevPost,
   nextPost,
   compact,
 }: {
+  seriesName: string;
   prevPost: SeriesPost | null;
   nextPost: SeriesPost | null;
   compact: boolean;
@@ -140,6 +156,13 @@ function NavArrows({
       {prevPost ? (
         <Link
           href={`/posts/${encodeURIComponent(prevPost.slug)}`}
+          onClick={() =>
+            trackEvent("series_navigate", {
+              series: seriesName,
+              via: "prev",
+              to_slug: prevPost.slug,
+            })
+          }
           aria-label={`이전 글: ${prevPost.title}`}
           title={compact ? prevPost.title : undefined}
           className={cn(baseClass, activeClass)}
@@ -154,6 +177,13 @@ function NavArrows({
       {nextPost ? (
         <Link
           href={`/posts/${encodeURIComponent(nextPost.slug)}`}
+          onClick={() =>
+            trackEvent("series_navigate", {
+              series: seriesName,
+              via: "next",
+              to_slug: nextPost.slug,
+            })
+          }
           aria-label={`다음 글: ${nextPost.title}`}
           title={compact ? nextPost.title : undefined}
           className={cn(baseClass, activeClass)}
