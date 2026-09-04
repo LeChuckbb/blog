@@ -11,8 +11,10 @@ import { ScrollToTop } from "@/src/app/_components/ScrollToTop";
 import { Button } from "@/components/ui/button";
 import { Github, FileText } from "lucide-react";
 import { siteConfig } from "@/src/app/config/siteConfig";
+import Script from "next/script";
 import { GoogleAnalytics } from "@/src/app/_components/GoogleAnalytics";
 import { generateWebsiteJsonLd } from "@/src/app/lib/jsonLd";
+import { gaBootstrapScript } from "@/src/app/lib/gaBootstrap";
 
 const maruBuri = localFont({
   src: [
@@ -84,6 +86,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaBootstrap = gaBootstrapScript();
+
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
@@ -97,6 +101,13 @@ export default function RootLayout({
       <body
         className={`${maruBuri.variable} ${d2Coding.variable} antialiased bg-background text-foreground`}
       >
+        {/* gtag/js보다 먼저 실행돼야 호스트·옵트아웃 판정이 첫 히트에 반영된다.
+            DOM 순서가 곧 실행 순서라 GoogleAnalytics보다 위에 있어야 한다. */}
+        {gaBootstrap && (
+          <Script id="google-analytics-bootstrap" strategy="afterInteractive">
+            {gaBootstrap}
+          </Script>
+        )}
         <GoogleAnalytics />
         <ThemeProvider
           attribute="class"
