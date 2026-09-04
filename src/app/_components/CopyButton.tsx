@@ -22,7 +22,9 @@ export function CopyButton({ preRef }: CopyButtonProps) {
       setCopied(true);
       // rehype-pretty-code가 pre에 남긴 언어를 함께 보낸다 — 어떤 언어의 코드가
       // 실제로 쓰이는지가 글감 판단에 쓸모 있는 유일한 부가 정보다.
-      trackEvent("code_copy", { language: pre.dataset.language ?? "unknown" });
+      trackEvent("code_copy", {
+        code_language: pre.dataset.language ?? "unknown",
+      });
       setTimeout(() => setCopied(false), 3000);
     } catch {
       // clipboard API not available
