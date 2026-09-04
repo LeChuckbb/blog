@@ -14,8 +14,11 @@ import { readdirSync } from "node:fs";
 
 const HOST = "lechuck.blog";
 const SITEMAP = `https://${HOST}/sitemap.xml`;
+// 네이버 엔드포인트는 공식 가이드(searchadvisor.naver.com/guide/indexnow-request)에
+// 명시된 주소다. 일부 블로그가 안내하는 api.searchadvisor.naver.com은 존재하지 않는
+// 호스트라 DNS 해석부터 실패한다.
 const ENDPOINTS = [
-  ["네이버", "https://api.searchadvisor.naver.com/indexnow"],
+  ["네이버", "https://searchadvisor.naver.com/indexnow"],
   ["빙/기타", "https://api.indexnow.org/indexnow"],
 ];
 const dryRun = process.argv.includes("--dry");
@@ -49,14 +52,23 @@ if (dryRun) {
   process.exit(0);
 }
 
+let failed = 0;
 for (const [name, endpoint] of ENDPOINTS) {
-  const res = await fetch(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json; charset=utf-8" },
-    body: JSON.stringify({ host: HOST, key, keyLocation, urlList }),
-  });
-  const body = await res.text();
-  // IndexNow는 200(수락)과 202(수락, 키 검증 대기) 모두 성공으로 본다.
-  const ok = res.status === 200 || res.status === 202;
-  console.log(`${ok ? "✅" : "❌"} ${name.padEnd(7)} HTTP ${res.status} ${body.slice(0, 120)}`);
+  // 한 엔드포인트가 죽어도 나머지는 제출되어야 한다.
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({ host: HOST, key, keyLocation, urlList }),
+    });
+    const body = (await res.text()).trim();
+    // IndexNow는 200(수락)과 202(수락, 키 검증 대기)를 모두 성공으로 본다.
+    const ok = res.status === 200 || res.status === 202;
+    if (!ok) failed++;
+    console.log(`${ok ? "✅" : "❌"} ${name.padEnd(7)} HTTP ${res.status} ${body.slice(0, 160)}`);
+  } catch (e) {
+    failed++;
+    console.log(`❌ ${name.padEnd(7)} 요청 실패: ${e.cause?.code ?? e.message}`);
+  }
 }
+process.exit(failed === ENDPOINTS.length ? 1 : 0);
