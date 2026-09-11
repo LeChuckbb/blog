@@ -47,7 +47,7 @@ export function ScrollToTop() {
           }}
           onClick={scrollToTop}
           aria-label="맨 위로 이동"
-          className="fixed bottom-4 right-6 z-50 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background/80 backdrop-blur-sm text-primary clickable press-icon"
+          className="fixed bottom-4 standalone:bottom-[calc(2rem+env(safe-area-inset-bottom))] right-6 z-50 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background/80 backdrop-blur-sm text-primary clickable press-icon"
         >
           <ArrowUp className="h-5 w-5" />
         </motion.button>

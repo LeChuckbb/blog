@@ -3,6 +3,8 @@
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
+/* 홈 화면에 추가한 PWA(standalone): 브라우저 툴바가 없어 하단 컨트롤이 화면 바닥에 붙는다. */
+@custom-variant standalone (@media (display-mode: standalone));
 
 @theme inline {
   --color-background: var(--background);
