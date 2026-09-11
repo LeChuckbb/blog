@@ -115,10 +115,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="xl:grid xl:grid-cols-[var(--sidebar-width)_1fr] xl:min-h-screen xl:max-w-[var(--layout-max-width)] xl:mx-auto">
-            <header className="fixed top-0 left-0 right-0 z-50 h-[var(--nav-height)] bg-background/80 backdrop-blur-md border-b border-border xl:static xl:sticky xl:top-0 xl:col-start-1 xl:row-start-1 xl:h-screen xl:self-start xl:z-auto xl:bg-background xl:backdrop-blur-none xl:border-b-0 xl:border-r xl:border-border">
+          <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_var(--content-max-width)_minmax(0,1fr)] xl:min-h-screen">
+            <header className="fixed top-0 left-0 right-0 z-50 h-[var(--nav-height)] bg-background/80 backdrop-blur-md border-b border-border xl:static xl:sticky xl:top-0 xl:col-start-1 xl:row-start-1 xl:justify-self-end xl:w-[var(--sidebar-width)] xl:mr-[var(--sidebar-gap)] xl:h-screen xl:self-start xl:z-auto xl:bg-background xl:backdrop-blur-none xl:border-b-0 xl:border-r xl:border-border">
               {/* 모바일: 수평 배치 (xl 미만) */}
-              <div className="xl:hidden mx-auto max-w-[var(--layout-max-width)] h-full px-4 md:px-6 flex items-center justify-between">
+              <div className="xl:hidden h-full px-4 md:px-6 flex items-center justify-between">
                 <Link
                   href="/"
                   className={`${maruBuri.className} font-semibold text-primary hover:text-primary/80 transition-[color,transform] active:scale-95`}
@@ -186,7 +186,8 @@ export default function RootLayout({
                 </div>
               </div>
             </header>
-            <main className="pt-[var(--nav-height)] xl:pt-0 xl:pl-16 xl:pr-10 xl:col-start-2 xl:row-start-1">
+            {/* 본문 열(680)과 우측 여백 열을 함께 차지한다 — 글 페이지의 목차가 우측 여백에 들어간다. */}
+            <main className="pt-[var(--nav-height)] xl:pt-0 xl:col-start-2 xl:col-span-2 xl:row-start-1">
               {children}
             </main>
           </div>

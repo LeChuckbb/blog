@@ -26,7 +26,7 @@ export default function Home() {
   const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
 
   return (
-    <div className="max-w-[var(--content-max-width)] px-4 md:px-6 xl:px-0 py-12">
+    <div className="max-w-[var(--content-max-width)] mx-auto xl:mx-0 px-4 md:px-6 xl:px-0 py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
