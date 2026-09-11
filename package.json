@@ -11,6 +11,7 @@
     "build:vercel": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "node --test \"scripts/**/*.test.js\"",
     "sync": "node scripts/sync-content.js",
     "sync:watch": "node scripts/sync-content.js --watch"
   },
