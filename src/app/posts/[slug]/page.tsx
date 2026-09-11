@@ -74,13 +74,13 @@ export default async function Page({
   const seriesData = getSeriesData(post);
 
   return (
-    <div className="pt-16 pb-24 px-4 md:px-6 xl:px-0 xl:flex xl:gap-[var(--toc-gap)]">
+    <div className="pt-16 pb-24 px-4 md:px-6 xl:px-0 xl:grid xl:grid-cols-[var(--content-max-width)_minmax(0,1fr)]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Main Content */}
-      <article className="min-w-0 w-full max-w-[var(--content-max-width)]">
+      <article className="min-w-0 w-full max-w-[var(--content-max-width)] mx-auto xl:mx-0">
         <header className="mb-8">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2">
             {post.title}
@@ -101,8 +101,8 @@ export default async function Page({
         </div>
       </article>
 
-      {/* Sidebar: 1440px 이상에서만 표시 */}
-      <aside className="hidden min-[1440px]:block shrink-0 w-[var(--sidebar-width)]">
+      {/* 목차: xl 이상에서 우측 여백(최소 300px)에 60px 간격으로 붙는다 */}
+      <aside className="hidden xl:block xl:ml-[var(--sidebar-gap)] xl:w-[var(--toc-width)]">
         <div className="sticky top-20">
           <TableOfContents items={tocItems} />
         </div>

@@ -83,12 +83,15 @@
   --sidebar-border: oklch(0.913 0.007 89);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Layout tokens */
+  /* Layout tokens
+     xl 이상: [1fr | 본문 680 | 1fr] 그리드로 본문을 뷰포트 정중앙에 고정하고,
+     사이드바(240)와 목차(200)는 양옆 여백 안에서 본문 쪽으로 60px 간격을 두고 붙는다.
+     xl 하한 1280에서 여백 = (1280-680)/2 = 300 = 240 + 60 으로 딱 맞는다. */
   --content-max-width: 680px;
-  --layout-max-width: 1400px;
   --nav-height: 56px;
   --sidebar-width: 240px;
-  --toc-gap: 5rem;
+  --sidebar-gap: 60px;
+  --toc-width: 200px;
   --line-height-body: 1.75;
 }
 
@@ -124,6 +127,13 @@
   --sidebar-accent-foreground: oklch(0.942 0.005 107);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* 짧은 글은 세로형 모니터에서 한 화면에 들어가 스크롤바가 사라지고, 그만큼 뷰포트가
+   넓어져 가운데 정렬된 본문이 7.5px 밀린다. 스크롤바 자리를 항상 예약해 글마다 본문
+   x좌표가 흔들리지 않게 한다. */
+html {
+  scrollbar-gutter: stable;
 }
 
 body {
