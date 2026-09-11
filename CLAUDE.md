@@ -4,7 +4,7 @@ MDX 기반 Next.js 15 블로그. Obsidian에서 작성한 마크다운(.md)을 �
 
 ## 명령어
 
-이 프로젝트는 **pnpm**을 사용한다 (`packageManager: pnpm@9` 고정). npm/yarn 금지.
+이 프로젝트는 **pnpm**을 사용한다 (`engines.pnpm >=10`). npm/yarn 금지.
 
 ```bash
 pnpm sync         # Obsidian → MDX 한 번 동기화
@@ -12,6 +12,7 @@ pnpm sync:watch   # 파일 변경 감지 자동 동기화
 pnpm dev          # 동기화 후 개발 서버 (http://localhost:3000)
 pnpm build        # 동기화 후 프로덕션 빌드
 pnpm lint         # ESLint (Next.js 규칙 + Prettier)
+pnpm test         # 동기화 스크립트 단위 테스트 (node --test)
 ```
 
 > `dev`/`build`는 내부적으로 `sync`를 먼저 돌린다.
@@ -34,7 +35,7 @@ OBSIDIAN_VAULT_PATH="/path/to/your/obsidian/vault"
 
 ## 콘텐츠 흐름
 
-`published/*.md` → 동기화 스크립트(`scripts/`) → `content/*.mdx` + `src/app/posts.json`(메타데이터 자동 생성) → `/posts/[slug]` 라우팅. Obsidian 문법(`%% %%`, `[[ ]]`)은 변환기가 처리.
+`published/*.md` → 동기화 스크립트(`scripts/`) → `content/*.mdx` + `src/app/posts.json`(메타데이터) + `src/app/link-previews.json`(외부 링크 OG 캐시, 증분·커밋 대상) → `/posts/[slug]` 라우팅. Obsidian 문법(`%% %%`, `[[ ]]`)은 변환기가 처리.
 
 > 아키텍처·관례 상세는 코드와 `nextjs-blog-dev`(앱)·`obsidian-sync`(동기화)·`blog-content-authoring`(글 작성) 스킬에 있다.
 

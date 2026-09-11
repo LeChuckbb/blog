@@ -318,7 +318,11 @@ class ContentSyncer {
 
     let cache = {};
     if (fs.existsSync(this.config.linkPreviewsJsonPath)) {
-      cache = JSON.parse(fs.readFileSync(this.config.linkPreviewsJsonPath, 'utf-8'));
+      try {
+        cache = JSON.parse(fs.readFileSync(this.config.linkPreviewsJsonPath, 'utf-8'));
+      } catch (error) {
+        console.warn(`⚠️  link-previews.json 파싱 실패, 전체 재수집합니다: ${error.message}`);
+      }
     }
 
     const next = await collectLinkPreviews({ urls: [...urls], cache, log: console.log });

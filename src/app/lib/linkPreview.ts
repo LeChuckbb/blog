@@ -23,7 +23,15 @@ export function getLinkPreview(
   href: string | undefined,
 ): LinkPreviewData | null {
   if (!href) return null;
+  try {
+    return lookup(href);
+  } catch {
+    // 잘못된 URL·인코딩 등으로 파싱이 실패해도 페이지 빌드는 살린다
+    return null;
+  }
+}
 
+function lookup(href: string): LinkPreviewData | null {
   if (href.startsWith("/posts/")) {
     const slug = decodeURIComponent(
       href.slice("/posts/".length).split(/[#?]/)[0],
