@@ -1,0 +1,130 @@
+{
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "최종 · 카드형"
+    },
+    {
+      "id": "page-2",
+      "name": "1차 탐색 (A/B/C)"
+    }
+  ],
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "title": "시리즈 글 — 데스크톱",
+      "x": 0,
+      "y": 0,
+      "w": 760,
+      "h": 560
+    },
+    {
+      "file": "Main-Mobile.dc.html",
+      "title": "시리즈 글 — 모바일 390",
+      "x": 860,
+      "y": 0,
+      "w": 390,
+      "h": 720
+    },
+    {
+      "file": "SeriesExpanded.dc.html",
+      "title": "전체 목록 펼침 — 데스크톱",
+      "x": 1350,
+      "y": 0,
+      "w": 760,
+      "h": 760
+    },
+    {
+      "file": "NoSeries.dc.html",
+      "title": "시리즈 없는 글 — 데스크톱",
+      "x": 0,
+      "y": 880,
+      "w": 760,
+      "h": 520
+    },
+    {
+      "file": "NoSeries-Mobile.dc.html",
+      "title": "시리즈 없는 글 — 모바일 390",
+      "x": 860,
+      "y": 880,
+      "w": 390,
+      "h": 640
+    },
+    {
+      "file": "DirectionA.dc.html",
+      "title": "A · 구분선형 — 데스크톱",
+      "x": 0,
+      "y": 0,
+      "w": 760,
+      "h": 520,
+      "page": "page-2"
+    },
+    {
+      "file": "A-Mobile.dc.html",
+      "title": "A · 구분선형 — 모바일",
+      "x": 860,
+      "y": 0,
+      "w": 390,
+      "h": 640,
+      "page": "page-2"
+    },
+    {
+      "file": "DirectionB.dc.html",
+      "title": "B · 카드형 — 데스크톱",
+      "x": 0,
+      "y": 800,
+      "w": 760,
+      "h": 520,
+      "page": "page-2"
+    },
+    {
+      "file": "B-Mobile.dc.html",
+      "title": "B · 카드형 — 모바일",
+      "x": 860,
+      "y": 800,
+      "w": 390,
+      "h": 640,
+      "page": "page-2"
+    },
+    {
+      "file": "DirectionC.dc.html",
+      "title": "C · 목록형 — 데스크톱",
+      "x": 0,
+      "y": 1600,
+      "w": 760,
+      "h": 520,
+      "page": "page-2"
+    },
+    {
+      "file": "C-Mobile.dc.html",
+      "title": "C · 목록형 — 모바일",
+      "x": 860,
+      "y": 1600,
+      "w": 390,
+      "h": 640,
+      "page": "page-2"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "note-final",
+      "x": 0,
+      "y": -190,
+      "w": 760,
+      "page": "page-1",
+      "text": "하단 내비 규칙\n· 시리즈 글: 카드가 시리즈 내 이웃 편을 가리킴. 카드 위 한 줄에 시리즈명 · n/m · [전체 목록] — 누르면 그 자리에서 펼쳐져 위로 올라갈 필요 없음(상단 SeriesNav와 같은 목록 스타일).\n· 시리즈 첫/마지막 편: 없는 쪽은 시간순 이전/다음 글로 대체하고 라벨만 '이전 글'/'다음 글'.\n· 시리즈 없는 글: 한 줄 없이 카드 둘만.\n· 모바일: 카드 1열, 다음 카드도 왼쪽 정렬 유지(오른쪽 정렬은 2열일 때만).\n· dark 토글로 다크 모드 확인. 폰트는 시스템 대체 서체."
+    },
+    {
+      "id": "note-p2",
+      "x": 0,
+      "y": -120,
+      "w": 700,
+      "page": "page-2",
+      "text": "1차 시안 보관. B 카드형을 골라 1페이지에서 시리즈 인지형으로 발전시킴."
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "page-1"
+  }
+}

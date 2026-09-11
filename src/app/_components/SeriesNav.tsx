@@ -16,12 +16,18 @@ export interface SeriesData {
   currentIndex: number;
 }
 
+/** header: 글 상단, 접을 수 있고 화살표로 이동. footer: 글 하단, 항상 펼침 — 이동은 바로 아래 PostNav 카드가 맡는다. */
+type SeriesNavVariant = "header" | "footer";
+
 export default function SeriesNav({
   seriesName,
   posts,
   currentIndex,
-}: SeriesData) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  variant = "header",
+}: SeriesData & { variant?: SeriesNavVariant }) {
+  const isFooter = variant === "footer";
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const isExpanded = isFooter || !isCollapsed;
 
   const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
   const nextPost =
@@ -30,7 +36,10 @@ export default function SeriesNav({
   return (
     <nav
       aria-label={`${seriesName} 시리즈 네비게이션`}
-      className="my-8 rounded-lg border border-border bg-muted/40 dark:bg-muted/20"
+      className={cn(
+        "rounded-lg border border-border bg-muted/40 dark:bg-muted/20",
+        isFooter ? "m-0" : "my-8",
+      )}
     >
       {/* 헤더 */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border">
@@ -41,10 +50,14 @@ export default function SeriesNav({
           <span className="font-semibold text-sm truncate">{seriesName}</span>
         </div>
 
-        {isExpanded ? (
+        {isFooter ? (
+          <span className="text-xs text-muted-foreground shrink-0 ml-4">
+            {currentIndex + 1} / {posts.length}
+          </span>
+        ) : isExpanded ? (
           <div className="flex items-center gap-3 shrink-0 ml-4">
             <button
-              onClick={() => setIsExpanded(false)}
+              onClick={() => setIsCollapsed(true)}
               aria-expanded={true}
               aria-label="시리즈 목록 숨기기"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
@@ -67,7 +80,7 @@ export default function SeriesNav({
               {currentIndex + 1} / {posts.length}
             </span>
             <button
-              onClick={() => setIsExpanded(true)}
+              onClick={() => setIsCollapsed(false)}
               aria-expanded={false}
               aria-label="시리즈 목록 보기"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
@@ -109,7 +122,7 @@ export default function SeriesNav({
                     onClick={() =>
                       trackEvent("series_navigate", {
                         series: seriesName,
-                        via: "list",
+                        via: isFooter ? "footer_list" : "list",
                         to_slug: post.slug,
                       })
                     }

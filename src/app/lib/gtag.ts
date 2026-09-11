@@ -41,6 +41,7 @@ export type GaEventName =
   | "toc_navigate"
   | "toc_sheet_open"
   | "series_navigate"
+  | "post_navigate"
   | "theme_change";
 
 type GaParams = Record<string, string | number | boolean>;
