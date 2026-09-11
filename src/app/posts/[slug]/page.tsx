@@ -4,6 +4,7 @@ import { generateTocFromFile } from "@/src/app/lib/tocUtil";
 import TableOfContents from "@/src/app/_components/TableOfContents";
 import { MobileToc } from "@/src/app/_components/MobileToc";
 import SeriesNav, { SeriesData } from "@/src/app/_components/SeriesNav";
+import PostNav, { PostNavData } from "@/src/app/_components/PostNav";
 import { siteConfig } from "@/src/app/config/siteConfig";
 import { generateBlogPostingJsonLd } from "@/src/app/lib/jsonLd";
 import { Post } from "@/src/app/config/types";
@@ -73,6 +74,7 @@ export default async function Page({
   }
 
   const seriesData = getSeriesData(post);
+  const postNavData = getPostNavData(post, seriesData);
 
   return (
     <div className="pt-16 pb-24 px-4 md:px-6 xl:px-0 xl:grid xl:grid-cols-[var(--content-max-width)_minmax(0,1fr)]">
@@ -100,6 +102,11 @@ export default async function Page({
         <div className="prose dark:prose-invert max-w-none [word-break:keep-all] break-words">
           <Post />
         </div>
+        {/* 다 읽은 독자가 위로 올라가지 않도록 시리즈 목록(항상 펼침)과 이전/다음 카드를 하단에도 둔다 */}
+        <footer className="mt-16 flex flex-col gap-3">
+          {seriesData && <SeriesNav {...seriesData} variant="footer" />}
+          <PostNav {...postNavData} />
+        </footer>
       </article>
 
       {/* 목차: xl 이상에서 우측 여백(최소 300px)에 60px 간격으로 붙고, 남는 여백을 상한까지 채운다 */}
@@ -143,6 +150,41 @@ function getSeriesData(post: Post): SeriesData | null {
     seriesName: post.series,
     posts: seriesPosts.map((p) => ({ slug: p.slug, title: p.title })),
     currentIndex,
+  };
+}
+
+/**
+ * 하단 이전/다음 대상. 시리즈 글은 시리즈 안의 이웃 편이 우선이고,
+ * 시리즈 첫/마지막 편처럼 그쪽이 비면 시간순 이웃 글로 채운다.
+ * posts.json은 최신순이라 "이전 글" = 더 오래된 글(index + 1).
+ */
+function getPostNavData(
+  post: Post,
+  seriesData: SeriesData | null,
+): PostNavData {
+  const posts = postsData.posts as Post[];
+  const index = posts.findIndex((p) => p.slug === post.slug);
+  const older = index >= 0 ? (posts[index + 1] ?? null) : null;
+  const newer = index > 0 ? (posts[index - 1] ?? null) : null;
+
+  const seriesPrev = seriesData
+    ? (seriesData.posts[seriesData.currentIndex - 1] ?? null)
+    : null;
+  const seriesNext = seriesData
+    ? (seriesData.posts[seriesData.currentIndex + 1] ?? null)
+    : null;
+
+  return {
+    prev: seriesPrev
+      ? { ...seriesPrev, label: "시리즈 이전 글" }
+      : older
+        ? { slug: older.slug, title: older.title, label: "이전 글" }
+        : null,
+    next: seriesNext
+      ? { ...seriesNext, label: "시리즈 다음 글" }
+      : newer
+        ? { slug: newer.slug, title: newer.title, label: "다음 글" }
+        : null,
   };
 }
 
