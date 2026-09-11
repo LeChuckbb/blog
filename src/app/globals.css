@@ -421,3 +421,75 @@ code[data-line-numbers] .line::before {
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
+
+/* ==============================
+   페이지 전환 (View Transitions API)
+   next-view-transitions가 라우팅을 startViewTransition으로 감싼다.
+   앞으로 갈 때 새 화면이 오른쪽 24px에서 페이드 인, 이전 화면은 왼쪽으로 페이드 아웃.
+   뒤로가기(html[data-nav="pop"], PageTransitionDirection가 찍는다)는 방향 반전.
+   px 기준이라 폰·PC에서 같은 거리·같은 시간으로 움직인다. 미지원 브라우저는 즉시 전환.
+   ============================== */
+@supports (view-transition-name: root) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 260ms;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    mix-blend-mode: normal;
+  }
+  ::view-transition-old(root) {
+    animation-name: vt-fade-out, vt-slide-out-left;
+  }
+  ::view-transition-new(root) {
+    animation-name: vt-fade-in, vt-slide-in-right;
+  }
+  html[data-nav="pop"]::view-transition-old(root) {
+    animation-name: vt-fade-out, vt-slide-out-right;
+  }
+  html[data-nav="pop"]::view-transition-new(root) {
+    animation-name: vt-fade-in, vt-slide-in-left;
+  }
+
+  /* 헤더·하단 고정 버튼은 화면과 함께 밀리지 않고 제자리에 있는다 */
+  .site-header {
+    view-transition-name: site-header;
+  }
+  ::view-transition-group(site-header) {
+    animation-duration: 0ms;
+  }
+
+  /* 목록의 제목 → 글 h1: 같은 이름이라 위치·크기가 이어진다 */
+  ::view-transition-group(*) {
+    animation-duration: 260ms;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    html[data-nav="pop"]::view-transition-old(root) {
+      animation-name: vt-fade-out;
+    }
+    ::view-transition-new(root),
+    html[data-nav="pop"]::view-transition-new(root) {
+      animation-name: vt-fade-in;
+    }
+  }
+}
+
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+}
+@keyframes vt-fade-out {
+  to { opacity: 0; }
+}
+@keyframes vt-slide-in-right {
+  from { transform: translateX(24px); }
+}
+@keyframes vt-slide-in-left {
+  from { transform: translateX(-24px); }
+}
+@keyframes vt-slide-out-left {
+  to { transform: translateX(-24px); }
+}
+@keyframes vt-slide-out-right {
+  to { transform: translateX(24px); }
+}

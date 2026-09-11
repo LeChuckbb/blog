@@ -1,0 +1,50 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "title": "인터랙션 시트 — 데스크톱",
+      "x": 0,
+      "y": 0,
+      "w": 960,
+      "h": 1180,
+      "is_interactive": true
+    },
+    {
+      "file": "Mobile.dc.html",
+      "title": "인터랙션 시트 — 모바일 390",
+      "x": 1060,
+      "y": 0,
+      "w": 390,
+      "h": 1000,
+      "is_interactive": true
+    },
+    {
+      "file": "PageTransition.dc.html",
+      "title": "페이지 전환 프로토타입 — 폰 · PC 나란히",
+      "x": 0,
+      "y": 1340,
+      "w": 1264,
+      "h": 860,
+      "is_interactive": true
+    }
+  ],
+  "annotations": [
+    {
+      "id": "rule",
+      "x": 0,
+      "y": -260,
+      "w": 960,
+      "text": "통일 규칙 (권장 = scale)\n· 모든 클릭 요소: 색 150ms · 변형 200ms(누를 때 100ms) · 키보드 포커스 링 2px\n· hover: 콘텐츠 면(글 목록·시리즈·카드)은 중립 muted, 크롬(사이드바·아이콘·목차)은 accent\n· press: 브랜드 accent 틴트 + 면적별 축소 — 아이콘·알약 0.95 / 링크·칩·목차 0.97 / 넓은 행·카드 0.985\n· 텍스트 링크·텍스트 버튼: 축소 없음, hover 밑줄, press 60% 불투명\n· prefers-reduced-motion: 변형 제거, 틴트만\n\n대안 토글: tint(움직임 0, 틴트 2단계만) · lift(hover 1px 떠오름+그림자, press 가라앉음)"
+    },
+    {
+      "id": "transition-rule",
+      "x": 0,
+      "y": 1110,
+      "w": 1264,
+      "text": "페이지 전환 규칙 (권장 = slide)\n· 앞으로(목록→글, 이전/다음 카드): 새 화면 오른쪽 24px에서 페이드 인 260ms, 이전 화면 왼쪽 24px로 페이드 아웃. 뒤로가기는 방향 반전.\n· 폰과 PC가 같은 px 거리·같은 시간 — 화면 폭 % 기반이 아니라서 어느 기기에서도 같은 느낌.\n· 스크롤·목차·헤더는 전환에 참여하지 않음(헤더는 고정처럼 보이게 하려면 별도 view-transition-name).\n· reduced-motion: 크로스페이드로 강등.\n\nios 토글은 '화면 전체 밀기'가 블로그에서 어떻게 과해 보이는지 비교하려고 둔 것."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}
