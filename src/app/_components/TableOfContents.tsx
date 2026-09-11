@@ -134,12 +134,10 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
       .find((headingTop) => scrollTop >= headingTop.top - 10);
 
     if (currentHeading) {
-      const activeLink = document.querySelector(
-        `[data-toc-id="${currentHeading.id}"]`,
-      );
-      if (activeLink) {
-        activeLink.setAttribute("data-active", "true");
-      }
+      // 데스크톱 aside와 모바일 시트에 같은 목차가 동시에 있을 수 있어 전부에 표시한다.
+      document
+        .querySelectorAll(`[data-toc-id="${currentHeading.id}"]`)
+        .forEach((link) => link.setAttribute("data-active", "true"));
     }
   }, []);
 

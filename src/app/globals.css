@@ -137,6 +137,22 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* xl 미만 글 페이지: 300px 넘게 읽어 내려가면 MobileToc가 html[data-reading-chrome="hidden"]을
+   켜고, 헤더는 transform만으로 위로 빠진다(레이아웃 변화 없음). 위로 스크롤하면 바로 돌아온다. */
+@media (max-width: 79.99rem) {
+  .site-header {
+    transition: transform 200ms ease-out;
+  }
+  html[data-reading-chrome="hidden"] .site-header {
+    transform: translateY(-100%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-header {
+      transition: none;
+    }
+  }
+}
+
 body {
   line-height: var(--line-height-body);
   font-family: var(--font-sans);

@@ -116,7 +116,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_var(--content-max-width)_minmax(0,1fr)] xl:min-h-screen">
-            <header className="fixed top-0 left-0 right-0 z-50 h-[var(--nav-height)] bg-background/80 backdrop-blur-md border-b border-border xl:static xl:sticky xl:top-0 xl:col-start-1 xl:row-start-1 xl:justify-self-end xl:w-[var(--sidebar-width)] xl:mr-[var(--sidebar-gap)] xl:h-screen xl:self-start xl:z-auto xl:bg-background xl:backdrop-blur-none xl:border-b-0 xl:border-r xl:border-border">
+            <header className="site-header fixed top-0 left-0 right-0 z-50 h-[var(--nav-height)] bg-background/80 backdrop-blur-md border-b border-border xl:static xl:sticky xl:top-0 xl:col-start-1 xl:row-start-1 xl:justify-self-end xl:w-[var(--sidebar-width)] xl:mr-[var(--sidebar-gap)] xl:h-screen xl:self-start xl:z-auto xl:bg-background xl:backdrop-blur-none xl:border-b-0 xl:border-r xl:border-border">
               {/* 모바일: 수평 배치 (xl 미만) */}
               <div className="xl:hidden h-full px-4 md:px-6 flex items-center justify-between">
                 <Link
