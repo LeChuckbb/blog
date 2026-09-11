@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "next-auth-session-management",
+      "date": "2026-09-12",
+      "title": "Next.js에서 인증-인가 구현하기 (2)",
+      "tags": [
+        "Nextjs",
+        "인증/인가",
+        "세션관리",
+        "BFF",
+        "Auth.js"
+      ],
+      "description": "세션 관리를 '세션 상태(stateful·stateless)'와 '브라우저 토큰 노출 정도(RFC 10017)' 두 축으로 정리하고, Browser-Based·Token-Mediating·BFF 세 패턴을 비교한 뒤 Auth.js로 BFF를 구현한 기록.",
+      "readingTime": 5,
+      "series": "Next.js에서 인증-인가 구현하기"
+    },
+    {
       "slug": "new-blog-again",
       "date": "2026-06-02",
       "title": "블로그 후기만 세 번째 - Obsidian 기반 블로그 만들기",

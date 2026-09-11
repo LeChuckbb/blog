@@ -72,6 +72,13 @@
     "siteName": "CSS Triggers",
     "fetchedAt": "2026-09-11T03:42:18.362Z"
   },
+  "https://datatracker.ietf.org/doc/html/rfc10017": {
+    "title": "RFC 10017: OAuth 2.0 for Browser-Based Applications",
+    "description": "This specification details the threats, attack consequences, security considerations, and best practices that must be taken into account when developing browser-based applications that use OAuth 2.0.",
+    "image": "https://static.ietf.org/dt/12.75.0/ietf/images/ietf-logo-card.png",
+    "siteName": "IETF Datatracker",
+    "fetchedAt": "2026-09-11T23:08:16.729Z"
+  },
   "https://developer.mozilla.org/ko/docs/Glossary/CSS_preprocessor": {
     "title": "CSS 전처리기 - MDN Web Docs 용어 사전: 웹 용어 정의 | MDN",
     "description": "CSS 전처리기는 전처리기가 가진 특별한 syntax으로 CSS를 생성하도록 하는 프로그램입니다.",
@@ -208,6 +215,13 @@
     "image": "https://lh7-us.googleusercontent.com/docs/AHkbwyIswifRIZhRMWCm-20zXyasllNJA7CS-rA3Z9j0E5hdwxvDiJPTJImxbQ9gCv1IWKD0T5Os4qGGi0Rlw21vowZjeQRHiOStrxUBq9nHgw3PdfjWRBFb=w1200-h630-p",
     "siteName": "Google Docs",
     "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://en.wikipedia.org/wiki/No_Silver_Bullet": {
+    "title": "No Silver Bullet - Wikipedia",
+    "description": null,
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T23:08:16.729Z"
   },
   "https://expressjs.com/ko/guide/writing-middleware.html": {
     "title": "Writing middleware for use in Express apps · Express.js",
@@ -539,6 +553,13 @@
     "image": "https://nextjs.org/api/docs-og?title=File-system%20conventions:%20Parallel%20Routes&sig=1ecba2b25756eb9e",
     "siteName": null,
     "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://nextjs.org/docs/app/guides/authentication": {
+    "title": "Guides: Authentication | Next.js",
+    "description": "Learn how to implement authentication in your Next.js application.",
+    "image": "https://nextjs.org/api/docs-og?title=Guides:%20Authentication&sig=7159515b8a5d3aa8",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T23:08:16.729Z"
   },
   "https://nextjs.org/docs/app/guides/mdx#install-dependencies": {
     "title": "Guides: MDX | Next.js",

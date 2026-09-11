@@ -4,7 +4,7 @@ tags:
   - 인증/인가
 slug: next-auth
 description: null
-updated_at: 2026-04-14T00:00:00.000Z
+updated_at: 2026-09-07T00:00:00.000Z
 date: '2024-03-13'
 title: Next.js에서 인증-인가 구현하기 (1)
 ---
@@ -44,13 +44,13 @@ SEO를 목전에 둔 프로젝트 말미에 이르러서야 전말을 알게 되
 
 # 그래서 결론은? BFF? Proxy?
 
-결론은 next.js의 API Route를 통해 Next.js 서버를 일종의 proxy로 활용하고, 백엔드에서 내려준 JWT를 httpOnly + sameSite 쿠키로만 관리하는 방식을 택했다. 쿠키의 httpOnly 속성은 [XSS](unresolved:xss)를 방지하고, [sameSite](unresolved:동일-사이트) 속성은 [CSRF](unresolved:csrf)를 방지할 수 있기 때문에 쿠키야말로 memory 못지 않게 안전하면서도 편리한 방식이 아닐까라는 결론을 내렸다. [hasura](https://hasura.io/blog/best-practices-of-using-jwt-with-graphql#how-does-the-ssr-server-know-if-the-user-is-logged-in)를 참고했다.
+결론은 next.js의 API Route를 통해 Next.js 서버를 일종의 proxy로 활용하고, 백엔드에서 내려준 JWT를 httpOnly + sameSite 쿠키로만 관리하는 방식을 택했다. 쿠키의 httpOnly 속성은 [XSS](unresolved:xss)를 방지하고, [sameSite](unresolved:동일-사이트-정책) 속성은 [CSRF](unresolved:csrf)를 방지할 수 있기 때문에 쿠키야말로 memory 못지 않게 안전하면서도 편리한 방식이 아닐까라는 결론을 내렸다. [hasura](https://hasura.io/blog/best-practices-of-using-jwt-with-graphql#how-does-the-ssr-server-know-if-the-user-is-logged-in)를 참고했다.
 x
 그리고 [BFF](unresolved:bff) 구조는 아래와 같은 자료들을 참고했다. 
 - [# Next.js: Using HTTP-Only Cookies for Secure Authentication (2023)](https://maxschmitt.me/posts/next-js-http-only-cookie-auth-tokens)
 - [# JWT Authentication with NextJS BFF (Backend-For-Frontend)](https://www.devgould.com/jwt-authentication-with-nextjs-bff-backend-for-frontend/)
 - [Best way to store tokens in Next.js for authentication](https://stackoverflow.com/questions/76375969/best-way-to-store-tokens-in-next-js-for-authentication)
 
-처음에는 위 구조가 프론트-백엔드가 서로 다른 도메인에서 운용될 때 쿠키의 [sameSite](unresolved:동일-사이트) 옵션을 활용하기 위한 용도로 proxy를 두는 것이라고만 생각했다. 하지만 생각해보면 프론트-백엔드의 도메인이 같은 경우더라도 백엔드에서 httpOnly 쿠키로 내려주는 refreshToken을 제어하려면 Next.js 서버를 반드시 거쳐야 한다. 그래서 cookie를 통한 session management가 보안과 편의성 모두를 어느정도 충족시켜주는 best practice라는 결론을 내렸다. 
+처음에는 위 구조가 프론트-백엔드가 서로 다른 도메인에서 운용될 때 쿠키의 [sameSite](unresolved:동일-사이트-정책) 옵션을 활용하기 위한 용도로 proxy를 두는 것이라고만 생각했다. 하지만 생각해보면 프론트-백엔드의 도메인이 같은 경우더라도 백엔드에서 httpOnly 쿠키로 내려주는 refreshToken을 제어하려면 Next.js 서버를 반드시 거쳐야 한다. 그래서 cookie를 통한 session management가 보안과 편의성 모두를 어느정도 충족시켜주는 best practice라는 결론을 내렸다. 
 
 결론에 대한 검증은 현재진행형이다. 다음에는 좀 더 구체적인 구조와 코드를 가지고 와서 자가검증하는 시간을 가져 보겠다.
