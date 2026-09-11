@@ -19,11 +19,15 @@ const previews = linkPreviews as Record<string, ExternalEntry>;
  * 본문 링크의 미리보기 데이터. 서버(MDX 렌더)에서만 호출한다.
  * 데이터가 없으면 null — 호출자는 일반 링크로 렌더링한다.
  */
-export function getLinkPreview(href: string | undefined): LinkPreviewData | null {
+export function getLinkPreview(
+  href: string | undefined,
+): LinkPreviewData | null {
   if (!href) return null;
 
   if (href.startsWith("/posts/")) {
-    const slug = decodeURIComponent(href.slice("/posts/".length).split(/[#?]/)[0]);
+    const slug = decodeURIComponent(
+      href.slice("/posts/".length).split(/[#?]/)[0],
+    );
     const post = posts.find((p) => p.slug === slug);
     if (!post) return null;
     return {
