@@ -51,3 +51,7 @@ next-env.d.ts
 
 # local design references
 post-xl.png
+
+# 디자인 캔버스 산출물(2MB+). 작업 파일(*.dc.html, canvas.json, gen*.mjs)은 추적한다.
+docs/design/**/*.html
+!docs/design/**/*.dc.html
