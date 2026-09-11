@@ -1,8 +1,16 @@
 /**
  * HTML 문자열에서 Open Graph 메타를 추출한다. 네트워크 없음.
- * <head>만 보면 되므로 앞 200KB만 검사한다(대용량 페이지 방어).
+ * 검사 범위는 </head>까지(상한 2MB). </head>가 없으면 앞 200KB만 본다.
+ * YouTube처럼 <head> 안에 수백 KB 인라인 스크립트를 두는 사이트가 있어
+ * 고정 200KB로 자르면 og:* 를 놓친다.
  */
 const HEAD_LIMIT = 200 * 1024;
+const HEAD_HARD_LIMIT = 2 * 1024 * 1024;
+
+function headSection(html) {
+  const end = html.search(/<\/head\s*>/i);
+  return end === -1 ? html.slice(0, HEAD_LIMIT) : html.slice(0, Math.min(end, HEAD_HARD_LIMIT));
+}
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' };
 
@@ -48,7 +56,7 @@ function toAbsolute(url, base) {
 }
 
 function parseOpenGraph(html, pageUrl) {
-  const head = html.slice(0, HEAD_LIMIT);
+  const head = headSection(html);
   return {
     title: readMeta(head, 'og:title') ?? readTitleTag(head),
     description: readMeta(head, 'og:description') ?? readMeta(head, 'description'),

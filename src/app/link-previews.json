@@ -1,0 +1,1033 @@
+{
+  "http://expressjs.com/en/4x/api.html#app.use": {
+    "title": "4.x API Reference · Express.js 4.x",
+    "description": "API Reference for version 4.x Documentation for Express.js 4.x.",
+    "image": "https://expressjs.com/og/4x-api.png",
+    "siteName": "Express.js",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "http://getbem.com/introduction/": {
+    "error": "timeout",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://ajaxlab.github.io/deview2021/blocking/": {
+    "title": "Blocking",
+    "description": null,
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://ajaxlab.github.io/deview2021/concurrent/": {
+    "title": "Concurrent",
+    "description": null,
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://andrew-barnes.medium.com/bem-and-sass-a-perfect-match-5e48d9bc3894": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://app-router.vercel.app/patterns/search-params": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://blog.daum.net/followyourdream/10086854": {
+    "error": "fetch failed",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://blog.lgcns.com/2336": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://blog.outsider.ne.kr/580": {
+    "title": "iptables로 80포트 리다이렉트 하기 :: Outsider's Dev Story",
+    "description": "리눅스나 OSX같은 UNIX계열의 OS에서 1024포트 아래의 포트는 privileged 포트로 root계정이 아니면 사용할 수 없습니다.(Windows계열에서는 상관없습니다.) Apache같은 웹서버를 앞에 두고 있다면 상관없지만 Tomcat이나 그외의 서버에서 80포트를 사용하려고 하면 sudo등을 사용해서 root계정으로 실행해야만 80포트를 사용할…",
+    "image": "https://blog.outsider.ne.kr/og/580.jpg",
+    "siteName": "Outsider",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://blog.toycrane.xyz/%EB%B9%B5%EA%B3%BC-%EB%84%B7%ED%94%8C%EB%A6%AD%EC%8A%A4%EB%A1%9C-%EC%95%8C%EC%95%84%EB%B3%B4%EB%8A%94-%EC%BA%90%EC%8B%B1-78e35c01fe9d": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://buildui.com/posts/how-to-control-a-react-component-with-the-url#introduction": {
+    "title": "How to control a React component with the URL",
+    "description": null,
+    "image": "https://buildui.com/api/og?postTitle=How%20to%20control%20a%20React%20component%20with%20the%20URL",
+    "siteName": "Build UI",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://buildui.com/posts/instant-search-params-with-react-server-components": {
+    "title": "Instant Search Params with React Server Components",
+    "description": null,
+    "image": "https://buildui.com/api/og?postTitle=Instant%20Search%20Params%20with%20React%20Server%20Components",
+    "siteName": "Build UI",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://csstriggers.com": {
+    "title": "CSS Triggers List - What Kind of Changes You Can Make",
+    "description": "Check out our ultimate list of CSS triggers and learn which changes you can make on your website and it will affect your properties.",
+    "image": "https://csstriggers.com/wp-content/uploads/2022/11/css-Triggers-List-2.png",
+    "siteName": "CSS Triggers",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developer.mozilla.org/ko/docs/Glossary/CSS_preprocessor": {
+    "title": "CSS 전처리기 - MDN Web Docs 용어 사전: 웹 용어 정의 | MDN",
+    "description": "CSS 전처리기는 전처리기가 가진 특별한 syntax으로 CSS를 생성하도록 하는 프로그램입니다.",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png",
+    "siteName": "MDN Web Docs",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developer.mozilla.org/ko/docs/Web/CSS/Specificity": {
+    "title": "명시도 - CSS: Cascading Style Sheets | MDN",
+    "description": "명시도란 브라우저가 어느 요소와 가장 연관된 속성을 찾는 수단으로, 이렇게 찾은 속성이 해당 요소에 적용됩니다. 명시도는 여러 종류의 CSS 선택자로 구성된 일치 규칙에 기반합니다.",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png",
+    "siteName": "MDN Web Docs",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developer.mozilla.org/ko/docs/Web/Events": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developer.mozilla.org/ko/docs/Web/HTTP/Basics_of_HTTP/MIME_types": {
+    "title": "MIME 타입 (IANA 미디어 타입) - HTTP | MDN",
+    "description": "미디어 타입 (Multipurpose Internet Mail Extensions 또는 MIME type로도 알려져 있음)이란 문서, 파일 또는 바이트 집합의 성격과 형식을 나타냅니다. MIME 타입은 IETF의 RFC 6838에 정의 및 표준화되어 있습니다.",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png",
+    "siteName": "MDN Web Docs",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developer.mozilla.org/ko/docs/Web/HTTP/CORS": {
+    "title": "교차 출처 리소스 공유 (CORS) - HTTP | MDN",
+    "description": "교차 출처 리소스 공유(Cross-Origin Resource Sharing, CORS)는 브라우저가 자신의 출처가 아닌 다른 어떤 출처(도메인, 스킴 혹은 포트)로부터 자원을 로딩하는 것을 허용하도록 서버가 허가 해주는 HTTP 헤더 기반 메커니즘입니다. 또한 CORS 는 교차 출처 리소스를 호스팅하는 서버가 실제 요청을 허가할 것인지 확인하기 위해 브라우저가 보내는 \"사전 요청(프리플라이트, Preflight)\" 메커니즘에 의존합니다. 이 사전 요청에서 브라우저는 실제 요청에서 사용할 HTTP 메서드와 헤더들에 대한 정보가 표시된 헤더에 담아 보냅니다.",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png",
+    "siteName": "MDN Web Docs",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developer.mozilla.org/ko/docs/Web/HTTP/Connection_management_in_HTTP_1.x": {
+    "title": "HTTP/1.x의 커넥션 관리 - HTTP | MDN",
+    "description": "커넥션 관리는 HTTP의 주요 주제입니다: 대규모로 커넥션을 열고 유지하는 것은 웹 사이트 혹은 웹 애플리케이션의 성능에 많은 영향을 줍니다. HTTP/1.x에는 몇 가지 모델이 존재합니다: 단기 커넥션, 영속적인 커넥션, 그리고 HTTP 파이프라이닝.",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png",
+    "siteName": "MDN Web Docs",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Regular_Expressions": {
+    "title": "정규 표현식 - JavaScript | MDN",
+    "description": "정규 표현식, 또는 정규식은 문자열에서 특정 문자 조합을 찾기 위한 패턴입니다. JavaScript에서는 정규 표현식도 객체로서, RegExp의 exec()와 test() 메서드를 사용할 수 있습니다. String의 match(), matchAll(), replace(), replaceAll(), search(), split() 메서드와도 함께 사용할 수 있습니다. 이 장에서는 JavaScript의 정규 표현식을 설명합니다.",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png",
+    "siteName": "MDN Web Docs",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/RegExp": {
+    "title": "RegExp - JavaScript | MDN",
+    "description": "RegExp 생성자는 패턴을 사용해 텍스트를 판별할 때 사용합니다.",
+    "image": "https://developer.mozilla.org/mdn-social-image.46ac2375.png",
+    "siteName": "MDN Web Docs",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developers.google.com/web/fundamentals/performance/rendering": {
+    "title": "Rendering performance | Articles | web.dev",
+    "description": "Users notice if sites and apps don&#39;t run well, so optimizing rendering performance is crucial!",
+    "image": null,
+    "siteName": "web.dev",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developers.google.com/web/updates/2018/09/inside-browser-part3?hl=ko": {
+    "title": "최신 웹브라우저 들여다보기 (3부) | Blog | Chrome for Developers",
+    "description": "브라우저 렌더링 엔진의 내부 작동",
+    "image": null,
+    "siteName": "Chrome for Developers",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://developers.google.com/web/updates/2019/02/rendering-on-the-web?hl=ko": {
+    "title": "웹에서 렌더링 | Articles | web.dev",
+    "description": "앱에서 로직 및 렌더링을 구현하기 위한 권장사항",
+    "image": null,
+    "siteName": "web.dev",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://devsdk.github.io/ko/development/2021/03/08/ReflowRepaint.html": {
+    "title": "Reflow, Repaint Chromium 입장에서 살펴보기 (왜 transform은 빠를까?)",
+    "description": "Overview",
+    "image": null,
+    "siteName": "Seokho’s blog",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://devsdk.github.io/ko/development/2021/03/29/blink-render-composition.html": {
+    "title": "Chromium Composition과 Layer",
+    "description": "웹 브라우져의 화면은 다양한 스테이지를 거쳐 화면에 나오게 된다.",
+    "image": null,
+    "siteName": "Seokho’s blog",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-server": {
+    "title": "AppSpec 'hooks' section - AWS CodeDeploy",
+    "description": "Learn about the",
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/deployment-steps-server.html": {
+    "title": "EC2/온프레미스 컴퓨팅 플랫폼의 배포 - AWS CodeDeploy",
+    "description": "이 항목에서는 EC2/온프레미스 컴퓨팅 플랫폼을 사용하는 CodeDeploy 배포의 워크플로 및 구성 요소에 대해 설명합니다. 블루/그린 배포에 대한 자세한 내용은 단원을 참조하세요.",
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/reference-appspec-file-structure-files.html": {
+    "title": "AppSpec 'files' 섹션(EC2/온프레미스 배포만 해당) - AWS CodeDeploy",
+    "description": "EC2/온프레미스 컴퓨팅 플랫폼에 배포하기 위한 CodeDeploy 애플리케이션 사양 파일의",
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://docs.docker.com/compose/compose-file/": {
+    "title": "Compose file reference",
+    "description": "Find the latest recommended version of the Docker Compose file format for defining multi-container applications.",
+    "image": "https://docs.docker.com/images/thumbnail.webp",
+    "siteName": "Docker Documentation",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://docs.docker.com/engine/reference/builder/": {
+    "title": "Dockerfile reference",
+    "description": "Find all the available commands you can use in a Dockerfile and learn how to use them, including COPY, ARG, ENTRYPOINT, and more.",
+    "image": "https://docs.docker.com/images/thumbnail.webp",
+    "siteName": "Docker Documentation",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://docs.docker.com/language/nodejs/develop/": {
+    "title": "Node.js language-specific guide",
+    "description": "Containerize and develop Node.js applications using Docker",
+    "image": "https://docs.docker.com/images/thumbnail.webp",
+    "siteName": "Docker Documentation",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://docs.google.com/presentation/d/1boPxbgNrTU0ddsc144rcXayGA_WF53k96imRH8Mp34Y/edit#slide=id.ga884fe665f_64_6": {
+    "title": "Life of a Pixel",
+    "description": "This is the evergreen copy of \"Life of a Pixel\". Video of the presentation at Chromium University (Nov 2020): http://bit.ly/loap-2020-video LIFE OF A Steve Kobes skobes@chromium.org Nov 2020 slides: bit.ly/lifeofapixel with special thanks to past presenters dknox@, chrishtr@, pdr@ \"The unexamined...",
+    "image": "https://lh7-us.googleusercontent.com/docs/AHkbwyIswifRIZhRMWCm-20zXyasllNJA7CS-rA3Z9j0E5hdwxvDiJPTJImxbQ9gCv1IWKD0T5Os4qGGi0Rlw21vowZjeQRHiOStrxUBq9nHgw3PdfjWRBFb=w1200-h630-p",
+    "siteName": "Google Docs",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://expressjs.com/ko/guide/writing-middleware.html": {
+    "title": "Writing middleware for use in Express apps · Express.js",
+    "description": "Learn how to write custom middleware functions for Express.js applications, including examples and best practices for enhancing request and response handling.",
+    "image": "https://expressjs.com/og/ko-guide-writing-middleware.png",
+    "siteName": "Express.js",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://expressjs.com/ko/starter/static-files.html": {
+    "title": "Serving static files in Express · Express.js",
+    "description": "Understand how to serve static files like images, CSS, and JavaScript in Express.js applications using the built-in",
+    "image": "https://expressjs.com/og/ko-starter-static-files.png",
+    "siteName": "Express.js",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://fe-developers.kakaoent.com/2022/220609-storybookwise-component-refactoring/": {
+    "title": "스토리북 작성을 통해 얻게 되는 리팩토링 효과 | 카카오엔터테인먼트 테크블로그",
+    "description": "스토리북으로 UI 컴포넌트를 독립적으로 그려보면서 자연스럽게 마주하게 되었던 리팩토링 경험을 소개합니다.",
+    "image": "https://fe-developers.kakaoent.com/static/a03ae0d1c05d49e154420a3c5d1cf2c9/afa5c/thumbnail.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://fe-developers.kakaoent.com/2022/220731-composition-component/": {
+    "title": "합성 컴포넌트로 재사용성 극대화하기 | 카카오엔터테인먼트 테크블로그",
+    "description": "합성 컴포넌트를 사용해 재사용성이 높은 컴포넌트를 만드는 방식을 소개합니다.",
+    "image": "https://fe-developers.kakaoent.com/static/ed73cda4b33aa617d31c9f2ce9b02209/afa5c/thumbnail.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://fe-developers.kakaoent.com/2022/221020-component-abstraction/": {
+    "title": "React 컴포넌트와 추상화 | 카카오엔터테인먼트 테크블로그",
+    "description": "React 컴포넌트를 어떻게 더 잘 추상화할 수 있을지 이야기하려 합니다.",
+    "image": "https://fe-developers.kakaoent.com/static/251bbf698ec1fd4b72bc41f06eeaf61a/afa5c/thumbnail.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://fe-developers.kakaoent.com/2022/221110-ioc-pattern/": {
+    "title": "이제부터 이 컴포넌트는 제 겁니다 | 카카오엔터테인먼트 테크블로그",
+    "description": "컴포넌트를 컨트롤하기 위한 여러 가지 IoC 패턴들을 정리해 봅니다.",
+    "image": "https://fe-developers.kakaoent.com/static/d49ffbf9ab138f3604e5082b10de2de2/afa5c/thumbnail.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://fe-developers.kakaoent.com/2023/230330-frontend-solid/": {
+    "title": "프론트엔드와 SOLID 원칙 | 카카오엔터테인먼트 테크블로그",
+    "description": "컴포넌트 설계의 이정표라 할 수 있는 SOLID 원칙을 설명하고 카카오페이지 실무에 어떻게 적용했는지 적어보았습니다",
+    "image": "https://fe-developers.kakaoent.com/static/e3754ca67e7c1d7699bc1b90fa54eb90/afa5c/thumbnail.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://fixmemory.tistory.com/entry/%EC%9E%85%EB%AC%B8-SASSSCSS-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EC%9E%91%EC%84%B1-%EB%B0%A9%EB%B2%95%EB%A1%A0-BEM": {
+    "title": "입문 Sass(SCSS), 그리고 작성 방법론 BEM",
+    "description": "Sass(SCSS) Sass를 알아가기 전에 잡썰 잠깐 풀어 보겠습니다. 마이크로 프로젝트에 CSS를 작성하는 건 그리 어려운 일도 아닐뿐더러 딱히 Less, Sass 등의 전처리기를 고려할 필요도 없을 것입니다. 하지만 추후 서비스가 확장되거나 규모가 큰 협업 프로젝트에서 CSS 코드가 기하급수적으로 늘어나는 상황이라면.. 변경/추가 사항이 생기거나 디자인이 바뀔 경우, 상당한 단순노동의 수고를 해야 하거나 디버깅이 어려운 CSS의 늪에 빠지게 되고 결국 중복된 오버라이딩과 !important를 남발하게 됩니다. Sass는 이러한 문제를 해결해 줄까요? 두말 하면 잔소리, 충분히 가려운 부분을 긁어줄 수 있을 뿐만 아니라 더 재미있는 코딩생활 가능! 장점 CSS의 재활용성을 높여줍니다. 코드의 계층과 ..",
+    "image": "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FAWSgb%2FbtqHAWvIHXJ%2FAAAAAAAAAAAAAAAAAAAAALY_yqkv3lQFFXeBasywjm7DRxM3zNULw28gWzfAdPka%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1790780399%26allow_ip%3D%26allow_referer%3D%26signature%3Du3G9vh8iOH19%252FmGhRxmJFHgyUrw%253D",
+    "siteName": "웹의 기억을 붙잡기",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://frontend-fundamentals.com/code-quality/": {
+    "title": "Frontend Fundamentals",
+    "description": "Guidelines for easily modifiable frontend code",
+    "image": "https://static.toss.im/illusts/ff-meta.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://gist.github.com/npearce/6f3c7826c7499587f00957fee62f8ee9": {
+    "title": "Amazon Linux 2 - install docker & docker-compose using 'sudo amazon-linux-extras' command",
+    "description": "Amazon Linux 2 - install docker & docker-compose using 'sudo amazon-linux-extras' command - install-docker.md",
+    "image": "https://github.githubassets.com/assets/gist-og-image-54fd7dc0713e.png",
+    "siteName": "Gist",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://github.com/LeChuckbb/blog": {
+    "title": "GitHub - LeChuckbb/blog",
+    "description": "Contribute to LeChuckbb/blog development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/85e8ffe7f86cf1e69af4b2826cf169d5dfc3c977f311af553cdc1b8941bcc630/LeChuckbb/blog",
+    "siteName": "GitHub",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://github.com/LeChuckbb/obsidian-plugin-s3-images": {
+    "title": "GitHub - LeChuckbb/obsidian-plugin-s3-images",
+    "description": "Contribute to LeChuckbb/obsidian-plugin-s3-images development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/68e77f77ac4bf2a7e89d32beab3fb5ecf794288b2ca6d552483e5c26428d5698/LeChuckbb/obsidian-plugin-s3-images",
+    "siteName": "GitHub",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://github.com/reactjs/react.dev/pull/5487": {
+    "title": "Replace Create React App recommendation with Vite by t3dotgg · Pull Request #5487 · reactjs/react.dev",
+    "description": "Create React App is not a great recommendation to be making, especially for newer developers. As an educator, I run into countless issues w/ new React devs running into unnecessary issues due to th...",
+    "image": "https://opengraph.githubassets.com/6d1ec83ca654281be034aff110b88084aaebd27566d7768b0628206f11a89e6a/reactjs/react.dev/pull/5487",
+    "siteName": "GitHub",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://github.com/reactwg/react-18/discussions/37": {
+    "title": "New Suspense SSR Architecture in React 18 · reactwg react-18 · Discussion #37",
+    "description": "Overview React 18 will include architectural improvements to React server-side rendering (SSR) performance. These improvements are substantial and are the culmination of several years of work. Most...",
+    "image": "https://opengraph.githubassets.com/0d076892a49229a864c6f71d565ba1e66ae78852ffbe3c6178dddb707e060a12/reactwg/react-18/discussions/37",
+    "siteName": "GitHub",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://google.com": {
+    "title": "Google",
+    "description": null,
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://has3ong.github.io/webwas/": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://hasura.io/blog/best-practices-of-using-jwt-with-graphql#how-does-the-ssr-server-know-if-the-user-is-logged-in": {
+    "title": "Your GraphQL guide to handling JWTs on frontend clients",
+    "description": "JWTs are a popular way of handling auth. Learn what a JWT is, pros/cons, and best practices in implementing JWT on the client-side with security in mind.",
+    "image": "https://res.cloudinary.com/dh8fp23nd/image/upload/c_fit,l_text:arial_80_medium_letter_spacing_1_line_height_1.5:The%20Ultimate%20Guide%20to%20handling%20JWTs%20on%20frontend%20clients%20(GraphQL),co_rgb:fff,w_1100,x_-320,y_200/v1709018001/v3-blog/og-templates/og-tue_i7e44k.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://helloinyong.tistory.com/297": {
+    "title": "웹 성능 최적화를 위한 Image Lazy Loading 기법",
+    "description": "현재 화면에 보여지지 않는 lazy loading된 이미지들은 웹 페이지 초기의 로딩 시간을 단축하여 웹 성능을 향상시킵니다. 이 글은 lazy loading 처리 기법과 관련된 모든 것들을 깊게 다루게 됩니다. 해당 글은 작성자 imagekit.io 의 동의하에",
+    "image": "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FnUKUG%2FbtqOFikUozU%2FAAAAAAAAAAAAAAAAAAAAAFD1pS5hiJWJkaHSOmMKrOa0SZiL9CksN7ya6qPHkzGX%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1790780399%26allow_ip%3D%26allow_referer%3D%26signature%3DhKjjeJKXmJKu1QoEwWyi1jKK3uk%253D",
+    "siteName": "이뇽의세상",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://hexdrinker.dev/": {
+    "title": "hexdrinker's devlog",
+    "description": "재밌게 살고 즐겁게 개발 하고 싶은 한 개발자의 이야기",
+    "image": "https://hexdrinker.dev/img/meta/image.png",
+    "siteName": "hexdrinker's devlog",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://httptoolkit.com/blog/cors-proxies/": {
+    "title": "What are CORS proxies, and when are they safe?",
+    "description": "CORS can be complicated. If you're struggling with it, you might discover the concept of a 'CORS proxy' that promises to solve this, like cors-anywhere or one...",
+    "image": "https://httptoolkit.com/images/header-images/broken-paperclip.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://interconnection.tistory.com/74": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://itchallenger.tistory.com/646": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://itchallenger.tistory.com/649": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://itchallenger.tistory.com/900": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://junghan92.medium.com/%EB%B2%88%EC%97%AD-next-js%EC%9D%98-app-%EB%94%94%EB%A0%89%ED%84%B0%EB%A6%AC-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0-28672980d765": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://junilhwang.github.io/TIL/Review/2020-year/10-October/#_4-%E1%84%87%E1%85%AE%E1%84%89%E1%85%B3%E1%84%90%E1%85%B3%E1%84%8F%E1%85%A2%E1%86%B7%E1%84%91%E1%85%B3-%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2%E1%84%8B%E1%85%A5-%E1%84%80%E1%85%B3%E1%84%85%E1%85%B5%E1%84%80%E1%85%A9-%E1%84%87%E1%85%A1%E1%86%AF%E1%84%91%E1%85%AD": {
+    "title": "2020년 10월 회고",
+    "description": "개발자 황준일의 2020년 10월 회고입니다.",
+    "image": "https://user-images.githubusercontent.com/18749057/172794025-b1f23db1-66d1-44dc-95b2-162defe116df.png",
+    "siteName": "개발자 황준일",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://kiranworkspace.com/sass-architecture/#abstracts": {
+    "title": "KEYTOTO - Situs Judi Online Terlengkap Seluruh Permainan di Asia #1",
+    "description": "KEYTOTO merupakan salah satu situs yang memiliki permainan yang sangat lengkap, dari permainan slot, live casino, dan togel. KEYTOTO memiliki pasaran togel yang sangat lengkap dan hadiah terbesar.",
+    "image": null,
+    "siteName": "keytoto",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://ko.react.dev/reference/react/Suspense#preventing-already-revealed-content-from-hiding": {
+    "title": "<Suspense> – React",
+    "description": "The library for web and native user interfaces",
+    "image": "https://ko.react.dev/images/og-reference.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://ko.reactjs.org/docs/code-splitting.html": {
+    "title": "코드 분할 – React",
+    "description": "A JavaScript library for building user interfaces",
+    "image": "https://legacy.reactjs.org/logo-og.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://ko.reactjs.org/docs/react-dom-server.html": {
+    "title": "ReactDOMServer – React",
+    "description": "A JavaScript library for building user interfaces",
+    "image": "https://legacy.reactjs.org/logo-og.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://ksrae.github.io/javascript/jamstackssg/": {
+    "title": "Definition of JAMStack and SSG",
+    "description": "1. Overview",
+    "image": null,
+    "siteName": "The Developer",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://lahuman.github.io/nginx_location_options/": {
+    "title": "TIP] Nginx location 설정 옵션 정보",
+    "description": "별겨 아닌데 몰라서 삽질한 Nginx 설정",
+    "image": "https://lahuman.github.io/assets/img/logo.png",
+    "siteName": "lahuman",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://lechuck.blog/posts/apply-geultto": {
+    "title": "글또 10기 지원 - 내 삶의 지도",
+    "description": "명절에 부모님을 뵙게 되면 어렸을 적 나의 무용담을 들려주시곤 한다. 근래 자주 듣는 레퍼토리는 서너살 때 MS-DOS를 만지작 거렸다는 이야기다. 대단한 행위를 했던 것은 아니고 아마 디렉토리를 오고가며 재미있는 응용프로그램을 실행할 줄 아는 정도였을 것이다.",
+    "image": "https://lechuck.blog/og.jpg",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://lechuck.blog/posts/blog-making-retrospection-1": {
+    "title": "블로그 제작 일지(1)",
+    "description": "블로그를 만들기 위해서 gatsby + netlify 조합을 선택했다.",
+    "image": "https://lechuck.blog/og.jpg",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://lechuck.blog/posts/second-brain": {
+    "title": "세컨드 브레인과 PARA",
+    "description": "세컨드 브레인의 기조는 두뇌가 짊어지고 있는 짐을 외부로 덜어내는 것이다. 머리는 아이디어를 생산하는 곳이지 보관하는 곳이어선 안 된다. 우리의 두뇌에게 창의적이고 생산성 높은 작업을 맡기려면 머릿속에서 불필요하게 점유하고 있는 공간을 내어주어야 한다. 정보를 보관하는 일...",
+    "image": "https://lechuck.blog/og.jpg",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://lechuck.netlify.app/study/CSRSSG": {
+    "title": "📝 SSR/CSR, 그리고 SSG",
+    "description": "블로그를 만들면서 사용한 gatsby SSG가 무엇인지, SSG는 왜 생겨났는지 알아보도록 하자. SSG를 이해하기 위해 MPA/SPA, SSR/CSR을 먼저 살펴볼 것이다. 1. MPA/SPA 웹 애플리케이션 구조 MPA(Multiple Page Applicaiton)는 다수의 페이지로 구성되어 요청이 들어올 때마다 정적 리소스를 반환해주는 방식의 웹 애플리케이션이다. 버튼 클릭과 같은 사소한 요청이 들어와도 페이지 전체를 리렌더링 해야하며, 이 과정에서 화면 깜빡임 현상이 발생한다. SPA…",
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://lechuck.netlify.app/study/CSRSSG/": {
+    "title": "📝 SSR/CSR, 그리고 SSG",
+    "description": "블로그를 만들면서 사용한 gatsby SSG가 무엇인지, SSG는 왜 생겨났는지 알아보도록 하자. SSG를 이해하기 위해 MPA/SPA, SSR/CSR을 먼저 살펴볼 것이다. 1. MPA/SPA 웹 애플리케이션 구조 MPA(Multiple Page Applicaiton)는 다수의 페이지로 구성되어 요청이 들어올 때마다 정적 리소스를 반환해주는 방식의 웹 애플리케이션이다. 버튼 클릭과 같은 사소한 요청이 들어와도 페이지 전체를 리렌더링 해야하며, 이 과정에서 화면 깜빡임 현상이 발생한다. SPA…",
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://lechuck.netlify.com/study/Redux2": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://lena-chamna.netlify.app/post/http_multipart_form-data/": {
+    "title": "HTTP multipart/form-data 이해하기",
+    "description": "Understanding about HTTP multipart/form-data",
+    "image": "https://lena-chamna.netlify.app/images/whatis-how_http_works_mobile.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://m3.material.io/": {
+    "title": "Material Design",
+    "description": "Material Design 3 - Google",
+    "image": null,
+    "siteName": "Material Design",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://mag.surfit.io/": {
+    "title": "Surfside - 서핏 매거진",
+    "description": "지식을 나누고 함께 성장합니다.",
+    "image": "https://storage.ghost.io/c/01/4c/014cfdd2-a50d-44fc-9553-614de7a69e87/content/images/2025/02/og.png",
+    "siteName": "Surfside - 서핏 매거진",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://maxschmitt.me/posts/next-js-http-only-cookie-auth-tokens": {
+    "title": "Next.js: Using HTTP-Only Cookies for Secure Authentication (2023)",
+    "description": null,
+    "image": "https://maxschmitt.me/api/og?title=Next.js%3A%20Using%20HTTP-Only%20Cookies%20for%20Secure%20Authentication%20(2023)",
+    "siteName": "Max Schmitt",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://medium.com/backticks-tildes/the-s-o-l-i-d-principles-in-pictures-b34ce2f1e898": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://medium.com/hexlant/attribute-%EC%99%80-property-%EC%9D%98-%EC%B0%A8%EC%9D%B4-c6f1c91ba91": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://medium.com/prnd/%ED%97%A4%EC%9D%B4%EB%94%9C%EB%9F%AC-%EA%B0%9C%EB%B0%9C%ED%8C%80-%EB%AA%A8%EB%91%90%EA%B0%80-%ED%96%89%EB%B3%B5%ED%95%9C-%EA%B0%9C%EB%B0%9C-pr%EA%B4%80%EB%A6%AC-%EB%B0%A9%EB%B2%95-7%EA%B0%80%EC%A7%80-1d4cd5d091f0": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://medium.com/swlh/should-you-use-usememo-in-react-a-benchmarked-analysis-159faf6609b7": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://michan1027.tistory.com/m/2183": {
+    "title": "일본 살면 하게 되는 반장이란 감투",
+    "description": "도쿄 변두리 한적한 마을의 단독 주택으로 이사를 온 다음 해에 뭐가 뭔지도 잘 모르는 상태에서 반장이란 걸 했다 요즘 한국은 어떤지 잘 모르겠지만 내가 어렸을 때는 마을에 통 반이란 게 있었고 통반 활동도 활발했었던 기억이 난다 초등학교 때 아파트에 살았었는데 이번달엔 누구 집에서 반상회를 한다는 연락이 오면 할머니나 엄마가 참석을 하곤 했었다 우리집에서도 반상회란 걸 했었는데 사람들이 우리 집에 모여들면 과일이랑 차를 내놓았던 기억이 지금도 남아있다 일본은 지금도 통반 활동이 아주 활발하다 이름과 전화번호가 나와서 조직도 사진을 올릴수는 없는데 회장부터 쭈욱 조직표가 있다 반장은 돌아가면서 하는데 이사 온 다음해 정말 아무것도 모르는 상태에서 반장을 했었다 그리고 18년 만에 다시 반장이 되었다 원래는..",
+    "image": "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FebJlnG%2Fbtr8vJbR50o%2FAAAAAAAAAAAAAAAAAAAAADqhYRL50gzbjga7Ng8FKjRLrWlbxnbiO-8Mf9rGUtqJ%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1790780399%26allow_ip%3D%26allow_referer%3D%26signature%3D8g9zsNvUBJT6M3lQCQwgcAny2nc%253D",
+    "siteName": "미짱의 나 여기에 ... 미짱의 동경 생활",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://mongoosejs.com/docs/queries.html": {
+    "title": "Queries - Mongoose v9.10.0",
+    "description": null,
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://naradesign.github.io/bem-by-example.html": {
+    "title": "예제로 이해하는 BEM.",
+    "description": "HTML, CSS(flex/grid), UI/UX, Accessibility, 정찬명",
+    "image": null,
+    "siteName": "정찬명",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://nextjs.org/docs/app/building-your-application/data-fetching": {
+    "title": "Getting Started: Fetching Data | Next.js",
+    "description": "Learn how to fetch data and stream content that depends on data.",
+    "image": "https://nextjs.org/api/docs-og?title=Getting%20Started:%20Fetching%20Data&sig=fee4642e0bb426f8",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://nextjs.org/docs/app/building-your-application/routing": {
+    "title": "Getting Started: Layouts and Pages | Next.js",
+    "description": "Learn how to create your first pages and layouts, and link between them with the Link component.",
+    "image": "https://nextjs.org/api/docs-og?title=Getting%20Started:%20Layouts%20and%20Pages&sig=61968289776f48fa",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://nextjs.org/docs/app/building-your-application/routing/parallel-routes#modals": {
+    "title": "File-system conventions: Parallel Routes | Next.js",
+    "description": "Simultaneously render one or more pages in the same view that can be navigated independently. A pattern for highly dynamic applications.",
+    "image": "https://nextjs.org/api/docs-og?title=File-system%20conventions:%20Parallel%20Routes&sig=1ecba2b25756eb9e",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://nextjs.org/docs/app/guides/mdx#install-dependencies": {
+    "title": "Guides: MDX | Next.js",
+    "description": "Learn how to configure MDX and use it in your Next.js apps.",
+    "image": "https://nextjs.org/api/docs-og?title=Guides:%20MDX&sig=f34a3ce66e18a5eb",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://nextjs.org/docs/getting-started/react-essentials": {
+    "title": "React Foundations | Next.js",
+    "description": "Learn the fundamental JavaScript and React concepts that'll help you get started with Next.js.",
+    "image": "https://nextjs.org/api/learn-og?title=React%20Foundations&chapter=1&sig=159e95da19faec3f",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://nextjs.org/learn/dashboard-app/adding-search-and-pagination#4-updating-the-table": {
+    "title": "App Router: Adding Search and Pagination | Next.js",
+    "description": "Add search and pagination to your dashboard application using Next.js APIs.",
+    "image": "https://nextjs.org/api/learn-og?title=Adding%20Search%20and%20Pagination&chapter=10&sig=d721e4b88b1a271a",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://nextjs.org/learn/dashboard-app/adding-search-and-pagination#why-use-url-search-params": {
+    "title": "App Router: Adding Search and Pagination | Next.js",
+    "description": "Add search and pagination to your dashboard application using Next.js APIs.",
+    "image": "https://nextjs.org/api/learn-og?title=Adding%20Search%20and%20Pagination&chapter=10&sig=d721e4b88b1a271a",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://parceljs.org/languages/sass/#example-usage": {
+    "title": "Sass",
+    "description": null,
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://pks2974.medium.com/jam-stack-%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC%ED%95%98%EA%B8%B0-17dd5c34edf7": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://profy.dev/article/react-folder-structure": {
+    "error": "fetch failed",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://quartz.jzhao.xyz/": {
+    "title": "Welcome to Quartz 5",
+    "description": "Quartz is a fast, batteries-included static-site generator that transforms Markdown content into fully functional websites.",
+    "image": "https://quartz.jzhao.xyz/index-og-image.webp",
+    "siteName": "Quartz 5",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://react-ko.dev/learn/scaling-up-with-reducer-and-context": {
+    "title": "react-ko.dev",
+    "description": "Find information, resources and relevant links for react-ko.dev. This domain may be for sale.",
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://react-ko.dev/reference/react/memo": {
+    "title": "react-ko.dev",
+    "description": "Find information, resources and relevant links for react-ko.dev. This domain may be for sale.",
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://react-ko.dev/reference/react/useTransition": {
+    "title": "react-ko.dev",
+    "description": "Find information, resources and relevant links for react-ko.dev. This domain may be for sale.",
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://ridicorp.com/story/how-to-use-redux-in-ridi/": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://sass-guidelin.es/#architecture": {
+    "title": "Sass Guidelines",
+    "description": "An opinionated styleguide for writing sane, maintainable and scalable Sass.",
+    "image": "https://sass-guidelin.es/assets/images/sass-guidelines.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://sass-lang.com/documentation/at-rules/import": {
+    "title": "Sass: @import",
+    "description": "Syntactically Awesome Style Sheets",
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://smartits.tistory.com/209": {
+    "title": "SSL vs. TLS - 차이점은 무엇인가?",
+    "description": "인터넷 보안이라고 하면 SSL, TLS, ECC, SHA 등을 떠올리게 됩니다. 이러한 모든 약어는 실제로 필요한 것을 알아내는 것을 혼란스럽게 만들 수 있습니다. 아마도 가장 많이 묻는 질문은 SSL (Secure Socket Layers)과 TLS (Transport Layer Security)의 차이점입니다. 웹 사이트 (또는 다른 유형의 통신) 보안을 원하지만 SSL이 필요합니까? 아니면 TLS가 필요합니까? 아니면 모두 필요합니까? SSL과 TLS의 간략한 역사 SSL 및 TLS는 네트워크 (예 : 웹서버에 연결하는 클라이언트)를 통해 작동하는 서버, 시스템 및 응용프로그램간에 인증 및 데이터 암호화를 제공하는 암호화 프로토콜입니다. SSL은 TLS의 이전의 프로토콜입니다. 수년동안 취약성을 해..",
+    "image": "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F99FEBA3D5B8A3DCC13",
+    "siteName": "Smart ITs",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://snack.wiki/react-usememo/": {
+    "error": "fetch failed",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://soniacomp.medium.com/nginx-server-7ebf335c3fb0": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://stackoverflow.com/questions/76375969/best-way-to-store-tokens-in-next-js-for-authentication": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://tech.kakaopay.com/post/react-query-2/": {
+    "title": "React Query와 함께 Concurrent UI Pattern을 도입하는 방법 | 카카오페이 기술 블로그",
+    "description": "카카오페이에서 React Query를 활용하여 Concurrent UI Pattern을 도입한 사례에 대해 소개합니다. 이 글은 연작 중 2편에 해당합니다. 1편: 카카오페이 프론트엔드 개발자들이 React Query를 선택한 이유, 2편: React Query와 함께 Concurrent UI Pattern을 도입하는 방법",
+    "image": "https://tech.kakaopay.com/_astro/thumb.BmJd1oCP_Z1Fu8kG.webp",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://tech.kakaopay.com/post/react-server-components/": {
+    "title": "React 18: 리액트 서버 컴포넌트 준비하기 | 카카오페이 기술 블로그",
+    "description": "공식 릴리즈 전인 리액트 서버 컴포넌트에 대해 알아보고 준비해 봅니다.",
+    "image": "https://tech.kakaopay.com/_astro/thumb.Dfj3raAk_Z2291fp.webp",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://techblog.yogiyo.co.kr/%EB%8D%B0%EC%9D%B4%ED%84%B0%EA%B0%80-%EC%97%86%EC%9D%84-%EB%95%8C-200%EC%9D%B8%EA%B0%80-404%EC%9D%B8%EA%B0%80-f1c8c39ca9df": {
+    "error": "HTTP 403",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://tkdodo.eu/blog/inside-react-query": {
+    "title": "Inside React Query",
+    "description": "Taking a look under the hood of React Query",
+    "image": "https://tkdodo.eu/blog/og-images/inside-react-query.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://toss.tech/": {
+    "title": "토스 기술 블로그, 토스 테크",
+    "description": "토스 메이커들이 문제를 정의하고 해법을 찾아가는 이야기를 들려드립니다.",
+    "image": "https://static.toss.im/assets/tech-blog/og-image/techblog-og.png",
+    "siteName": "토스 기술 블로그, 토스 테크",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://toss.tech/article/smart-web-service-cache": {
+    "title": "웹 서비스 캐시 똑똑하게 다루기",
+    "description": "웹 성능을 위해 꼭 필요한 캐시, 제대로 설정하기 쉽지 않습니다. 토스 프론트엔드 챕터에서 올바르게 캐시를 설정하기 위한 노하우를 공유합니다.",
+    "image": "https://static.toss.im/assets/tech-blog/og-image:/techblog-02-webcash-og.png?v=2",
+    "siteName": "토스 기술 블로그, 토스 테크",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://tv.naver.com/v/23652451": {
+    "title": "NAVER D2",
+    "description": "Inside React(동시성을 구현하는 기술)",
+    "image": "https://phinf.pstatic.net/tvcast/20211122_210/P6C8D_16375479532654zEUy_PNG/1637547951838.png?type=f1109_624",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://velog.io/@bumsu0211/%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80-%EB%A0%8C%EB%8D%94%EB%A7%81-%EA%B3%BC%EC%A0%95%EA%B3%BC-%EC%B5%9C%EC%A0%81%ED%99%94#2-image-lazy-loading": {
+    "title": "브라우저 렌더링 과정과 최적화",
+    "description": "브라우저는 어떻게 렌더링 되고, 어떤 항목을 개선해야 최적화되었다고 말할 수 있을까?",
+    "image": "https://velog.velcdn.com/images/bumsu0211/post/68c49a17-923e-44df-8fd6-f216d1f57c9f/Untitled%2011.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://velog.io/@longroadhome/FE-CSRClient-Side-Rendering-vs-SSRServer-Side-Rendering-feat.-React%EB%A5%BC-%EC%A4%91%EC%A0%90%EC%9C%BC%EB%A1%9C": {
+    "title": "[FE] CSR(Client-Side-Rendering) vs SSR(Server-Side-Rendering) (feat. React를 중점으로)",
+    "description": "오타 및 오류 지적 등은 언제든지 댓글로 부탁드립니다.클라이언트 - 서버간 통신에서 html을 반환하는 웹 서버의 대략적인 흐름을 보자면 크게 다음과 같이 정리할 수 있을 것 같다.정적 페이지만 반환 --> DB연동 및 API 요청 필요성 대두 --> 동적 페이지 반환",
+    "image": "https://velog.velcdn.com/images/longroadhome/post/e24846f1-5cf8-461c-90fe-8433fb077a46/ssr_and_csr_3.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://velog.io/@longroadhome/FE-SSRServer-Side-Rendering-%EA%B7%B8%EB%A6%AC%EA%B3%A0-SSGStatic-Site-Generation-feat.-NEXT%EB%A5%BC-%EC%A4%91%EC%8B%AC%EC%9C%BC%EB%A1%9C": {
+    "title": "[FE] SSR(Server-Side-Rendering) 그리고 SSG(Static-Site-Generation) (feat. NEXT를 중심으로)",
+    "description": "앞전 포스트에서 CSR(Client-Side-Rendering)과 SSR(Server-Side-Rendering)에 대한 개념을 살펴보았다. 자세한 내용은 여기를 참고하자.이번 포스팅에서는 SPA 형태의 웹 서비스에서 SSR 방식을 적용하기 위해 Next.js를 간단히",
+    "image": "https://velog.velcdn.com/images/longroadhome/post/5fcb918b-4ba3-4995-9afa-e9b61be4e58e/11.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://velog.io/@teo/CSS-%EA%B3%B5%EB%B6%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%95%B4%EC%95%BC-%ED%95%98%EB%82%98%EC%9A%94-%EC%9D%B4%EB%A1%A0%ED%8E%B8-feat.-figma": {
+    "title": "CSS 공부 어떻게 해야 하나요? - 이론편 (feat. figma)",
+    "description": "제가 좋아하는 파레토의 법칙입니다. css에서 상위 20% 스펙이 전체 css 코드의 80%를 차지한다. 실제로 실전에서 자주 쓰이는 css는 몇개 되지 않습니다. 그래서 이번 글에서는 제가 쓰고 있는 현재의 Best Practice를 공유하려고 합니다.",
+    "image": "https://velog.velcdn.com/images/teo/post/ca61f04d-5a4d-448a-af6c-d0b6ccd3bcc5/CSS_%E1%84%80%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE_%E1%84%8B%E1%85%A5%E1%84%84%E1%85%A5%E1%87%82%E1%84%80%E1%85%A6_%E1%84%92%E1%85%A2%E1%84%8B%E1%85%A3_%E1%84%92%E1%85%A1%E1%84%82%E1%85%A1%E1%84%8B%E1%85%AD__-_%E1%84%8B%E1%85%B5%E1%84%85%E1%85%A9%E1%86%AB%E1%84%91%E1%85%A7%E1%86%AB_.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://velog.io/@teo/css-history-1": {
+    "title": "CSS 역사로 알아보는 CSS가 어려워진 이유",
+    "description": "저는 사실 UI 구현하는 것보다는 효율적인 CSS가 무엇인지 몰라서 늘 불만스러워요… > 구현은 어떻게든 해서라도 얼추 되겠는데... 그게 좋은 코드같아보이지않아서ㅜㅜ 프롤로그 맞습니다. CSS는 배우기 어렵지 않으며 CSS를 작성하는 것 역시 어렵지 않습니다. 하",
+    "image": "https://velog.velcdn.com/images/teo/post/460b29bb-8095-4a18-82b2-353f1aeee069/CSS_%E1%84%8B%E1%85%A7%E1%86%A8%E1%84%89%E1%85%A1%E1%84%85%E1%85%A9_%E1%84%8B%E1%85%A1%E1%86%AF%E1%84%8B%E1%85%A1%E1%84%87%E1%85%A9%E1%84%82%E1%85%B3%E1%86%AB_nCSS%E1%84%80%E1%85%A1_%E1%84%8B%E1%85%A5%E1%84%85%E1%85%A7%E1%84%8B%E1%85%AF%E1%84%8C%E1%85%B5%E1%86%AB_%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2_%F0%9F%A4%94.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://velog.io/@yesbb/%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EC%9D%98%EC%A1%B4%EC%84%B1-%EC%97%AD%EC%A0%84-%EC%9B%90%EC%B9%99%EC%9D%84-%EC%A0%81%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%95%98%EB%8B%A4feat.-%EC%A2%8B%EC%9D%80%EC%84%A4%EA%B3%84%EB%9E%80%EB%AC%B4%EC%97%87%EC%9D%BC%EA%B9%8C": {
+    "title": "리액트에서 의존성 역전 원칙 적용하기(feat. 좋은설계란무엇일까?)",
+    "description": "리액트에서 어떻게 객체지향적인 설계를 할 수 있을까? 좋은 설계란 무엇일까?",
+    "image": "https://velog.velcdn.com/images/yesbb/post/9b0d78a2-f58f-48a4-a80c-5a9eb1823606/image.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://velog.io/@youthfulhps/%EB%A6%AC%EB%8D%95%EC%8A%A4-%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://velog.io/@youthfulhps/What-is-Redux-and-why-use-it": {
+    "title": "리덕스는 무엇이고, 왜 사용하는가?",
+    "description": "🔧 리덕스 리덕스란, 자바스크립트 애플리케이션에서 상태를 효율적으로 관리할 수 있게 도와주는 도구입니다. 복잡한 상태관리가 이루어지는 SPA(Single Page Application)에서 특히 유용하게 사용됩니다. 물론, 리덕스는 리액트 뿐만 아니라 jQuery,",
+    "image": "https://velog.velcdn.com/images/youthfulhps/post/38f3f519-ece3-469f-adcf-810832b268a1/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202020-08-09%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%209.16.50.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://velopert.com/3528": {
+    "title": "리덕스(Redux)를 왜 쓸까? 그리고 리덕스를 편하게 사용하기 위한 발악 (i) | VELOPERT.LOG",
+    "description": "이 포스트는 리덕스의 리도 모르는 독자들을 대상으로 작성된 글입니다. 리덕스가 왜 필요한지 알아보고, 리덕스를 편리하게 사용하기 위한 발악을 한번 해보겠습니다. 리덕스 왜 쓸까? 리액트애서 애플리케이션을 만들 때, 기본적으로는 보통 하나의 루트 컴포넌트 (App.js) 에서",
+    "image": "https://velopert.com/wp-content/uploads/2018/02/redux.001.jpeg",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://web.dev/i18n/ko/code-splitting-suspense/": {
+    "title": "Fractionnement du code avec React.lazy et Suspense | Articles | web.dev",
+    "description": "La méthode React.lazy permet de diviser facilement le code d'une application React au niveau du composant à l'aide d'importations dynamiques. Utilisez cette fonctionnalité avec le suspense pour indiquer aux utilisateurs les états de chargement appropriés.",
+    "image": null,
+    "siteName": "web.dev",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://web.dev/i18n/ko/service-worker-caching-and-http-caching/#http-캐싱": {
+    "title": "सर्विस वर्कर कैशिंग और एचटीटीपी कैशिंग | Articles | web.dev",
+    "description": "सर्विस वर्कर कैश मेमोरी और एचटीटीपी कैश लेयर में, एक जैसे या अलग-अलग एक्सपायर होने के लॉजिक का इस्तेमाल करने के फ़ायदे और नुकसान.",
+    "image": null,
+    "siteName": "web.dev",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://web.dev/storage-for-the-web/": {
+    "title": "Storage for the web | Articles | web.dev",
+    "description": "There are many different options for storing data in the browser. Which one is best for your needs?",
+    "image": null,
+    "siteName": "web.dev",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://webhotpy.tistory.com/6": {
+    "title": "정적 페이지와 동적 페이지",
+    "description": "정적 페이지 정적페이지란 항상 같은 내용을 보여주는 웹페이지로 사용자가 URL을 통해 서버에 웹 페이지를 요청하였을 때, 서버 안에 이미 만들어져 있는 HTML 문서를 사용자에게 보여주는 경우 이를 정적 웹페이지라고 한다. ex) 백과사전의 내용과 같이 항상 같은 내용을 보여준다. 동적 페이지 동적페이지란 요청에 대해서 각각 다른 내용을 보여준다. 사용자(클라이언트)가 URL 을 통해 서버에 웹 페이지를 요청했을 때, 서버는 사용자에 맞는 HTML 문서를 생성하여 사용자에게 응답하게 된다. 이를 동적 웹 페이지라고 한다. ex) 온라인 쇼핑몰의 장바구니, 최근 본 상품, 추천 물건, 사이트의 회원가입, 로그인 등 차이점 정적 페이지 ○ 웹 서버만 있으면된다. ○ 저장되어있는 것을 보여주기때문에 속도가 빠..",
+    "image": "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fd39Ziz%2FbtqBVgsBlRt%2FAAAAAAAAAAAAAAAAAAAAAHwn7x74yhnoBZHA3Tf6phaClNxjUi6Jmy-KjQGUXeIY%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1790780399%26allow_ip%3D%26allow_referer%3D%26signature%3DfRU4ARk781rbxr7fAXu4xE4M5L4%253D",
+    "siteName": "끄적이는 애플",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://webpack.kr/guides/code-splitting/": {
+    "title": "Code Splitting | Webpack",
+    "description": "Webpack은 모듈 번들러입니다. 주요 목적은 브라우저에서 사용할 수 있도록 JavaScript 파일을 번들로 묶는 것이지만, 리소스나 애셋을 변환하고 번들링 또는 패키징할 수도 있습니다.",
+    "image": "https://webpack.js.org/icon-pwa-512x512.934507c816afbcdb.png",
+    "siteName": "Webpack 한글문서",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://writings.hongminhee.org/2026/01/ethics-of-small-actions/index.ko-hang-kr.html": {
+    "title": "왜 눈사람을 부수지 않는가",
+    "description": "겨울이 되면 X에서 이런 얘기들을 듣곤 한다. 길을 가다가 일부러 눈사람을 부수고 다니는 남자들이 있다고 한다. 눈사람을 부순다고 해서 누군가에게 실질적인 손해를 입히는 건 아니다. 하지만 그런 행동 속에서 무언가가 보인다. 어떤 윤리적 태도의 결여, 혹은 형성. 나는 같은 이유로…",
+    "image": null,
+    "siteName": "洪民憙雜記",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.chosun.com/economy/economy_general/2021/06/29/45QGN6LND5FAZDCFSG6LDBHLGI/": {
+    "title": "KBS ‘나쁜 이대남’ 그래프에 학자들이 분노하는 이유",
+    "description": "KBS 나쁜 이대남 그래프에 학자들이 분노하는 이유 5Q 경제",
+    "image": "https://www.chosun.com/resizer/v2/VYUXRG4JH5CHRIWJKLLGUVGNGA.png?auth=6540bf948c3905ad069e7efb822e589f19add2f8097df863d6064bafe8ce8e8b&width=600&height=315&focal=317,258",
+    "siteName": "조선일보",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.daleseo.com/docker-compose-networks/": {
+    "title": "Docker Compose 네트워크",
+    "description": "Docker Compose 환경에서 컨테이너 간 통신이 어떻게 이루어지는지 알아봅니다. 디폴트 네트워크부터 커스텀 네트워크 구성까지 실전 예제로 설명합니다.",
+    "image": "https://img.daleseo.com/cdn-cgi/image/width=1200,height=630,fit=cover,format=auto,onerror=redirect/1KmMQ_hl.webp",
+    "siteName": "Engineering Blog by Dale Seo",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.daleseo.com/docker-networks/": {
+    "title": "Docker 네트워크 사용법",
+    "description": "Docker 네트워크를 사용해 컨테이너 간 통신을 설정하는 방법을 알아봅니다. 네트워크 생성, 연결, 조회 등 핵심 커맨드를 실전 예제로 설명합니다.",
+    "image": "https://img.daleseo.com/cdn-cgi/image/width=1200,height=630,fit=cover,format=auto,onerror=redirect/1KmMQ_hl.webp",
+    "siteName": "Engineering Blog by Dale Seo",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.daleseo.com/dockerfile/": {
+    "title": "Dockerfile에서 자주 쓰이는 명령어",
+    "description": "Dockerfile 작성법과 자주 쓰이는 명령어를 알아봅니다. FROM, RUN, COPY, CMD 등 핵심 명령어의 역할과 올바른 사용법을 실전 예제로 설명합니다.",
+    "image": "https://i.imgur.com/HyThbHR.jpg",
+    "siteName": "Engineering Blog by Dale Seo",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.developerway.com/posts/how-to-handle-errors-in-react": {
+    "title": "How to handle errors in React: full guide",
+    "description": "Looking into how to catch and handle errors in React: usages, patterns and caveats of try/catch and ErrorBoundary, what's possible, what's not, and how to catch async errors with ErrorBoundary",
+    "image": "https://www.developerway.com/assets/how-to-handle-errors-in-react/welcome.png",
+    "siteName": "Developer Way",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.devgould.com/jwt-authentication-with-nextjs-bff-backend-for-frontend/": {
+    "error": "no title",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.freecodecamp.org/korean/news/riaegteu-18yi-singineung-dongsiseong-rendeoring-concurrent-rendering-jadong-ilgwal-ceori-automatic-batching-deung/": {
+    "title": "리액트 18의 신기능 - 동시성 렌더링(Concurrent Rendering), 자동 일괄 처리(Automatic Batching) 등",
+    "description": "> 2022년 3월에 리액트 18이 발표되었습니다. 성능 향상과 렌더링 엔진 개선에 초점이 맞춰졌습니다. 리액트 18은 향후 출시될 리액트 기능의 토대가 될 동시성 렌더링 API의 초석을 다졌습니다. 이번 튜토리얼에서는 리액트 18에 발표된 기능을 빠르게 훑으며, 동시성 렌더링과 자동 일괄 처리, 전환(transitions) 같은 몇 가지 중요한 개념을 설명하고자 합니다. 한눈에 보는",
+    "image": "https://www.freecodecamp.org/korean/news/content/images/2023/02/featured.jpg",
+    "siteName": "freeCodeCamp.org",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.geeksforgeeks.org/what-is-terminal-console-shell-and-kernel/": {
+    "title": "Understanding Terminal, Console, Shell and Kernel - GeeksforGeeks",
+    "description": "Your All-in-One Learning Portal: GeeksforGeeks is a comprehensive educational platform that empowers learners across domains-spanning computer science and programming, school education, upskilling, commerce, software tools, competitive exams, and more.",
+    "image": "https://media.geeksforgeeks.org/wp-content/uploads/20200925114227/terminal1.png",
+    "siteName": "GeeksforGeeks",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.google.co.kr": {
+    "title": "Google",
+    "description": null,
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.itworld.co.kr/news/156752?page=0,1": {
+    "title": "엔터프라이즈 애플리케이션",
+    "description": null,
+    "image": null,
+    "siteName": "ITWorld",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.jungyu.engineer/gatsby%20blog%20search%20engine%20optimization/": {
+    "error": "fetch failed",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.leafcats.com/146": {
+    "title": "Docker 개념과 Architecture 정리",
+    "description": "1. Docker docker는 컨테이너 기반 가상화 도구이다. 기존에 사용하던 가상 머신(VM)은 사용하기 위해서 항상 OS를 설치해야 했고, 이미지 안에 OS가 포함되어 있기 때문에 용량이 매우 크고 속도도 느리다.이에 비해 도커는 반가상화보다 더 경량화된 방식을 사용한다. 도커는 OS 전체를 가상화하지 않고 컨테이너라는 리눅스 커널 레벨에서 제공하는 격리된 가상 공간을 사용한다. 게스트 OS를 설치하지 않기 때문에 호스트와 속도 차이도 거의 없으며 기존의 VM에 비해서는 월등한 속도로 동작한다. 도커는 리눅스 컨테이너를 기반으로 이미지를 편리하게 관리하고 배포할 수 있다.또한 도커를 사용할 수 있는 환경만 있다면 어플리케이션에 대한 이미지를 pull 받아서 바로 사용할 수 있다. 이는 악성코드 분석..",
+    "image": "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F224FC43F58DDFF4C14",
+    "siteName": "복세편살 개발라이프",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.linkedin.com/posts/greatpolly_%EC%9B%90%ED%8B%B0%EB%93%9C%ED%95%98%EC%9D%B4%ED%8C%8C%EC%9D%B4%EB%B8%8C%EC%9D%B4%EB%AF%B8%EC%A4%80%EB%B0%9C%ED%91%9C-ugcPost-7461809390375866368-C6e9/?utm_source=share&amp;utm_medium=member_desktop&amp;rcm=ACoAACDc7HgB4Eh6mFta1Oh96CLz-4F0Ur3kiPc": {
+    "title": "원티드_하이파이브_이미준발표 | Polly Mijun Lee | 10 comments",
+    "description": "\"여러분의 팀은 AI로 인해 얼마나 변하셨나요?\" 🙋‍♀️ 5월 13일, 원티드 하이파이브 메이커스데이에서 POPM트랙의 첫번째 연사로 발표를 했었는데요. 같은 날 발표하신 정기수님이 강연자료를 링크드인에 공유하신 취지를 직접 듣고서 공감이 되어 저 역시 링크드인에 공유하고자 합니다 :) 저는 \"팀과 제품을 변화시키는 AI-powered PM\"이라는 타이틀로 신사업 서비스를 시작하면서 사업, 영업과 마케팅, 프로덕트 조직이 모두 한 팀에 있는 크로스펑셔널팀이 어떻게 AI를 통해서 기존보다 빠른 4개월만에 신규 플랫폼을 만들 수 있었는지 그 일하는 과정의 변화와 글로벌 서비스라는 문화적 어려움과 정말 타이트한 일정을 AI라는 변화를 생명줄로 부여잡고 얼마나 빠르게 할 수 있었는지 그 과정의 설계와 변화, 그리고 그 과정에서 깨달은 점들을 담았어요. 특히 그 4개월의 한가운데에서 같이 일할 동료 PO를 채용하면서 AI 사용이 중요한 환경에서는 어떤 사람을 뽑아야하는가에 대한 시니어로서의 고민도 함께 담았습니다. 결과적으로 AI 적용한 업무 프로세스가 가장 빠른 환경은 양식파괴와 절차 파괴가 가능한 레거시없는 환경이라는 점을 이야기하고 싶었어요. 발표후에 많은 분들이 와이어프레임 과정조차 AI로 그리거나 생략하는 과정에서 마음이 들지 않는 경우에 대해서 질문을 해오셨는데요. 이조차 저는 기획자들의 레거시적 사고라고 생각합니다. 디자인 UI에 대한 부분은 완료조건에 맞으면 내가 생각한 것과 완벽하게 일치하지 않아도 되거든요. 불편한 점은 없어야겠지만 내가 생각한 형태가 꼭 정답은 아니기에 위임이라는 과정에서 더 중요한 기준을 두고 어느 정도는 자유도를 두어야 한다고 생각한다고 말씀드렸네요. 발표 양식이 정해져있던 터라 이미지로 대체된 부분들이 있습니다. 자료만으로 다소 이해하기 어려운 부분은 질문으로 남겨주세요 :) 저희 팀의 경험일 뿐이기에 정답은 없지만, 16년간 이커머스를 만드는 일을 해온 저는 지금의 변화를 매우 좋아하고 즐기고 있습니다. 감사합니다. | 10 comments on LinkedIn",
+    "image": "https://static.licdn.com/aero-v1/sc/h/c45fy346jw096z9pbphyyhdz7",
+    "siteName": "LinkedIn",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.mimul.com/blog/why-we-argue-style/": {
+    "error": "HTTP 503",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.passportjs.org/": {
+    "title": "Passport.js",
+    "description": "Simple, unobtrusive authentication for Node.js",
+    "image": "https://www.passportjs.org/images/facebook-card.png",
+    "siteName": "Passport.js",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.pullrequest.com/blog/bem-and-sass-whats-the-difference-and-how-to-use-them/": {
+    "error": "HTTP 404",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.taniarascia.com/redesign-version-7/": {
+    "title": "Redesign: Version 7.0",
+    "description": "One of my favorite hobbies is tweaking my website. I've updated the design countless times thoughout the decade (!) of this site's existence…",
+    "image": "https://www.taniarascia.com/static/floppylogo-07f5a193c5a1357203c0389b1002fb71.png",
+    "siteName": "Tania Rascia's Website",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://www.youtube.com/channel/UCvc8kv-i5fvFTJBFAk6n1SA": {
+    "error": "no title",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=012IPbMX_y4&t=1214s": {
+    "title": "Sentry를 이용한 에러 추적기, React의 선언적 에러 처리 / if(kakao)2022",
+    "description": "카카오페이 프론트엔드에서 선언적 에러처리를 통한 사용자경험과 개발자경험 증대 및 Sentry를 통한 웹뷰환경에서의 에러 추적, 장애 대응, 사용자 경험 개선기 (axios interceptor와 에러바운더리를 이용해 에러핸들링을 개선해 나가고, sentry를 통해 에러데이터를 쌓아...",
+    "image": "https://i.ytimg.com/vi/012IPbMX_y4/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=6fc9NAQkcv0&ab_channel=%EC%96%84%ED%8C%8D%ED%95%9C%EC%BD%94%EB%94%A9%EC%82%AC%EC%A0%84": {
+    "title": "DNS가 뭔가요? + 도메인, A Record, CName",
+    "description": "#DNS #domain #cname= = =🏠 얄코사이트: https://www.yalco.kr🎥 제대로 파는 Git & GitHub: https://youtu.be/1I3hMwQU6GU🎥 갖고 노는 MySQL 강좌: https://youtu.be/dgpBXNa9vJc🎥 반...",
+    "image": "https://i.ytimg.com/vi/6fc9NAQkcv0/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=CR-a8upNjJ0&t=699s&ab_channel=KevinPowell": {
+    "title": "Stop using @import with Sass | @use and @forward explained",
+    "description": "Keep up to date with my Sass course: https://beyondcss.dev/?utm_campaign=OlderYouTubeVideos&utm_source=YouTubeThe use of @import has been deprecated in Sass ...",
+    "image": "https://i.ytimg.com/vi/CR-a8upNjJ0/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=FvRtoViujGg": {
+    "title": "토스ㅣSLASH 21 - 프론트엔드 웹 서비스에서 우아하게 비동기 처리하기",
+    "description": "API를 호출하거나 네이티브 앱과 통신할 때프론트엔드 웹 서비스에서는 반드시 비동기 작업이 일어나게 됩니다. 일상처럼 다루고 있지만 정작 UI에서 다루기 힘든 비동기 프로그래밍.React Suspense를 이용하여 우아하게 처리하는 이론과 실전 적용법을 공유합니다.박서진 / 토스 ...",
+    "image": "https://i.ytimg.com/vi/FvRtoViujGg/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=LlG-B2TF_Ug": {
+    "title": "Next.js 블로그 모범 사례 탐구: Vercel 리더십 블로그 아키텍처 파헤치기│인프콘2024",
+    "description": "🌱 인프런 에서 인프콘2024 강의 자료 다운로드 받고 복습해보세요.🩵 강의 자료 다운 받기 : https://inf.run/ifwWL🌱 인프런과 함께 배우고, 나누고, 성장하세요. 🩵 Next.js 블로그 모범 사례 탐구: Vercel 리더십 블로그 아키텍처 파헤치기 - ...",
+    "image": "https://i.ytimg.com/vi/LlG-B2TF_Ug/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGBEgWyhyMA8=&rs=AOn4CLBu8JhUHP8R0-gsrmGV3Ql9ceapSw",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=MSq_DCRxOxw": {
+    "title": "This is the Only Right Way to Write React clean-code - SOLID",
+    "description": "You should follow these 5 SOLID React Principles to write readable, maintainable and testable code. In this tutorial, we'll explore these 5 Principles and ho...",
+    "image": "https://i.ytimg.com/vi/MSq_DCRxOxw/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=UF2Giz9PE-E&t=522s&ab_channel=BE%EB%A1%9C%EB%A7%88": {
+    "title": "AWS CodeDeploy와 Github Actions를 이용한 CI/CD 구축",
+    "description": "AWS CodeDeploy와 Github Actions를 이용해서 CI/CD를 구축해봅시다github : https://github.com/kbsat/cicdproject",
+    "image": "https://i.ytimg.com/vi/UF2Giz9PE-E/hqdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=fR8tsJ2r7Eg&t=627s&ab_channel=토스": {
+    "title": "토스ㅣSLASH 22 - Effective Component 지속 가능한 성장과 컴포넌트",
+    "description": "우리는 왜 컴포넌트를 나누어 개발해야 할까요? 토스가 정의하는 컴포넌트의 역할과 분리 기준을 공유합니다.한재엽 / 토스 Frontend Developer발표 자료👉🏻 https://bit.ly/3HwAZHj토스 개발자 컨퍼런스 SLASH에 대한 자세한 정보는 👉🏻 https...",
+    "image": "https://i.ytimg.com/vi/fR8tsJ2r7Eg/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=h_XDmyz--0w&list=PLuHgQVnccGMCgrP_9HL3dAcvdt8qOZxjW&ab_channel=%EC%83%9D%ED%99%9C%EC%BD%94%EB%94%A9": {
+    "title": "DATABASE2 MySQL - 1.수업소개",
+    "description": "모든 수업과 소스코드는 아래 주소에 있습니다. https://opentutorials.org/course/3161DATABASE1 수업은 아래주소에 있습니다. https://opentutorials.org/course/3162",
+    "image": "https://i.ytimg.com/vi/h_XDmyz--0w/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=mGPj-pCGS2c&list=PLTmAD6MliDZ-2FBr8MTQNS0eZBUdj7cnW&index=35&t=568s": {
+    "title": "Error Handling in NodeJS (Complete Guide) | Node Tutorial",
+    "description": "In this video you'll learn about what kinds of errors to handle in NodeJS, how to best handle them, and how to create your own custom errors. Code: https://g...",
+    "image": "https://i.ytimg.com/vi/mGPj-pCGS2c/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=su-rtXzThjE&ab_channel=%EC%A0%9C%EB%AF%B8%EB%8B%88%EC%9D%98%EA%B0%9C%EB%B0%9C%EC%8B%A4%EB%AC%B4": {
+    "title": "GIT 형상 관리 + 작업 단위와 PR 코드리뷰 + 협업 잘 하는 개발자",
+    "description": "봐주셔서 감사합니다! 구독과 좋아요 댓글은 힘이 됩니다. :D모든 내용은 한 방향성/케이스일 뿐 진리의 케바케가 있다는 점 참고 부탁드립니다 :D",
+    "image": "https://i.ytimg.com/vi/su-rtXzThjE/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=tosLBcAX1vk&ab_channel=%EB%85%B8%EB%A7%88%EB%93%9C%EC%BD%94%EB%8D%94NomadCoders": {
+    "title": "세션 vs 토큰 vs 쿠키? 기초개념 잡아드림. 10분 순삭!",
+    "description": "#Token #JWT #Cookies #Sessions개발자라면 이제는 제대로 이해해야합니다.세션. 토큰. 쿠키. JWT...용어!개념정리. 차이점. 언제 뭐를 써야하는지 한방에 정리해드림!-📌 니콜라스와 무료로 코딩 공부하기 https://nomadcoders.co",
+    "image": "https://i.ytimg.com/vi/tosLBcAX1vk/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=vILEcBevj6s&ab_channel=gamesradararchive": {
+    "title": "Gears of War 2 - GDC 2008 announcement",
+    "description": "Gears of War 2 - GDC 2008 announcement",
+    "image": "https://i.ytimg.com/vi/vILEcBevj6s/hqdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=zNSaSZKnCd0&ab_channel=%EB%B8%8C%EB%A1%A0%EC%A6%88%EC%8A%A4%EB%84%A4%EC%9D%B4%ED%81%AC": {
+    "title": "주사피부염 환자에게 하지 말라는 것이 왜 이렇게 많을까?",
+    "description": "주사피부염 환자에게 하지 말라는 것이 참 많습니다.매운 거 먹지마라, 커피 먹지마라, 운동하지 마라그런데 다 하면 안되는 걸까요? 이 중에 꼭 해야하는 데 잘못 알려진 것은 없을까요? #주사피부염 #우울 #공황",
+    "image": "https://i.ytimg.com/vi/zNSaSZKnCd0/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=ziYtStkSCwA&ab_channel=AWS%EA%B0%95%EC%9D%98%EC%8B%A4": {
+    "title": "AWS 비용 폭탄 나오기 전에 알림 받으세요: AWS Budgets으로 비용 알림 받는 방법",
+    "description": "레가시 강의입니다. 최신 강의는 : https://www.youtube.com/watch?v=_QYQO8ekHtMAWS Budgets 으로 설정한 값 이상으로 비용이 발생하면 림을 받는 방법을 알아봅니다.AWS 도움이 필요하시다면: rubywave.io",
+    "image": "https://i.ytimg.com/vi/ziYtStkSCwA/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://yngmanie.space/posts/spa-mpa": {
+    "error": "fetch failed",
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://youthfulhps.dev/react/react-concurrent-mode-01/": {
+    "title": "리엑트 동시성 매커니즘들은 어떻게 구현되어 있을까 - 01",
+    "description": "5년이라는 시간을 투자한 리엑트 동시성 기능의 정식 릴리즈, 결국 george지는 건 나.",
+    "image": "https://youthfulhps.dev/banner.png",
+    "siteName": null,
+    "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://youtu.be/-zAK-fAabeY?si=wv3dD2t1kFn4Jxt2": {
+    "title": "일본 영화에는 이상한 캐릭터들이 많은 이유",
+    "description": "#일본영화",
+    "image": "https://i.ytimg.com/vi/-zAK-fAabeY/maxresdefault.jpg",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-11T03:43:28.174Z"
+  }
+}

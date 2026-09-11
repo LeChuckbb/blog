@@ -3,6 +3,7 @@ const path = require('path');
 const Config = require('./config');
 const ObsidianTransformer = require('./transform-obsidian');
 const { calculateReadingTime } = require('./reading-time');
+const { extractExternalUrls, collectLinkPreviews } = require('./link-preview/collect');
 
 /**
  * 블로그 콘텐츠 동기화 클래스
@@ -41,6 +42,9 @@ class ContentSyncer {
       
       // posts.json 업데이트
       await this.updatePostsJson(posts);
+
+      // 외부 링크 미리보기(OG) 증분 수집
+      await this.updateLinkPreviews(posts);
       
       console.log(`✅ 동기화 완료! ${posts.length}개의 게시글을 처리했습니다.\n`);
       
@@ -298,6 +302,30 @@ class ContentSyncer {
 
     fs.writeFileSync(this.config.postsJsonPath, JSON.stringify(postsData, null, 2));
     console.log(`✓ posts.json 업데이트 완료 (${posts.length}개 게시글)`);
+  }
+
+  /**
+   * 외부 링크 미리보기 캐시(link-previews.json) 갱신
+   * 변환된 content/*.mdx에서 외부 URL을 모아 OG 메타를 증분 수집한다.
+   * 네트워크 실패는 항목별 error로 기록되며 동기화 자체는 실패하지 않는다.
+   */
+  async updateLinkPreviews(posts) {
+    const urls = new Set();
+    for (const post of posts) {
+      const mdx = fs.readFileSync(path.join(this.config.contentPath, post.filename), 'utf-8');
+      extractExternalUrls(mdx).forEach((u) => urls.add(u));
+    }
+
+    let cache = {};
+    if (fs.existsSync(this.config.linkPreviewsJsonPath)) {
+      cache = JSON.parse(fs.readFileSync(this.config.linkPreviewsJsonPath, 'utf-8'));
+    }
+
+    const next = await collectLinkPreviews({ urls: [...urls], cache, log: console.log });
+    fs.writeFileSync(this.config.linkPreviewsJsonPath, JSON.stringify(next, null, 2) + '\n');
+
+    const failed = Object.values(next).filter((e) => e.error).length;
+    console.log(`✓ link-previews.json 갱신 완료 (${Object.keys(next).length}개, 실패 ${failed}개)`);
   }
 
   /**

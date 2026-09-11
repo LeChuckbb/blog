@@ -48,3 +48,14 @@ test('아무것도 없으면 전부 null', () => {
     title: null, description: null, image: null, siteName: null,
   });
 });
+
+test('<head>가 크더라도(200KB 초과 인라인 스크립트) </head> 앞의 메타는 읽는다', () => {
+  const bigScript = `<script>${'x'.repeat(300 * 1024)}</script>`;
+  const html = `<html><head>${bigScript}<meta property="og:title" content="Late"></head><body></body></html>`;
+  assert.equal(parseOpenGraph(html, 'https://a.com').title, 'Late');
+});
+
+test('</head>가 없으면 앞 200KB만 본다', () => {
+  const html = `${'y'.repeat(250 * 1024)}<meta property="og:title" content="TooLate">`;
+  assert.equal(parseOpenGraph(html, 'https://a.com').title, null);
+});
