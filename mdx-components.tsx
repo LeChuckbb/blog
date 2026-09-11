@@ -5,6 +5,7 @@ import { CodeBlock } from "./src/app/_components/CodeBlock";
 import { Mermaid } from "./src/app/_components/Mermaid";
 import { LinkPreview } from "./src/app/_components/LinkPreview";
 import { getLinkPreview } from "./src/app/lib/linkPreview";
+import { UnpublishedLink } from "./src/app/_components/UnpublishedLink";
 
 function extractText(node: React.ReactNode): string {
   if (typeof node === "string") return node;
@@ -125,14 +126,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       // 클릭 불가능한 비활성 텍스트로 표현한다 (위키의 red link 패턴).
       if (href?.startsWith("unresolved:")) {
         return (
-          <span
-            className="text-muted-foreground/70 underline decoration-dotted decoration-from-font underline-offset-2 cursor-not-allowed"
-            title="아직 공개되지 않은 글입니다"
-            aria-disabled="true"
-            role="link"
-          >
+          <UnpublishedLink className="text-muted-foreground/70 underline decoration-dotted decoration-from-font underline-offset-2 cursor-not-allowed">
             {children}
-          </span>
+          </UnpublishedLink>
         );
       }
       const isExternal = href?.startsWith("http") ?? false;
