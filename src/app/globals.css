@@ -449,7 +449,7 @@ code[data-line-numbers] .line::before {
     animation-name: vt-fade-in, vt-slide-in-left;
   }
 
-  /* 헤더·하단 고정 버튼은 화면과 함께 밀리지 않고 제자리에 있는다 */
+  /* 헤더는 화면과 함께 밀리지 않고 제자리에 있는다 */
   .site-header {
     view-transition-name: site-header;
   }
@@ -457,10 +457,9 @@ code[data-line-numbers] .line::before {
     animation-duration: 0ms;
   }
 
-  /* 목록의 제목 → 글 h1: 같은 이름이라 위치·크기가 이어진다 */
-  ::view-transition-group(*) {
-    animation-duration: 260ms;
-    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* 전환 오버레이가 클릭을 삼키지 않게 한다 — 애니메이션 중 누른 링크도 살아 있다 */
+  ::view-transition {
+    pointer-events: none;
   }
 
   @media (prefers-reduced-motion: reduce) {

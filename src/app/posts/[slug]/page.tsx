@@ -8,7 +8,6 @@ import PostNav, { PostNavData } from "@/src/app/_components/PostNav";
 import { siteConfig } from "@/src/app/config/siteConfig";
 import { generateBlogPostingJsonLd } from "@/src/app/lib/jsonLd";
 import { Post } from "@/src/app/config/types";
-import { postTitleTransitionName } from "@/src/app/lib/util";
 
 export async function generateMetadata({
   params,
@@ -86,10 +85,7 @@ export default async function Page({
       {/* Main Content */}
       <article className="min-w-0 w-full max-w-[var(--content-max-width)] mx-auto xl:mx-0">
         <header className="mb-8">
-          <h1
-            className="text-4xl md:text-5xl font-bold tracking-tight mb-2"
-            style={{ viewTransitionName: postTitleTransitionName(post.slug) }}
-          >
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2">
             {post.title}
           </h1>
           <div className="flex items-center gap-2 text-sm text-muted-foreground font-serif">

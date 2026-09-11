@@ -1,6 +1,5 @@
 import postsData from "./posts.json";
 import { Link } from "next-view-transitions";
-import { postTitleTransitionName } from "@/src/app/lib/util";
 import { Post } from "@/src/app/config/types";
 import { generateWebsiteJsonLd } from "@/src/app/lib/jsonLd";
 
@@ -54,12 +53,7 @@ export default function Home() {
                 <time className="text-sm text-muted-foreground shrink-0 w-12">
                   {formatDate(post.date)}
                 </time>
-                <span
-                  className="text-sm text-primary group-hover:underline font-semibold"
-                  style={{
-                    viewTransitionName: postTitleTransitionName(post.slug),
-                  }}
-                >
+                <span className="text-sm text-primary group-hover:underline font-semibold">
                   {post.title}
                 </span>
               </Link>
