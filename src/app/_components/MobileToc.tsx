@@ -1,17 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { List } from "lucide-react";
 import type { TocItem } from "@/src/app/lib/tocUtil";
 import TableOfContents from "@/src/app/_components/TableOfContents";
 import { trackEvent } from "@/src/app/lib/gtag";
+import { useScrollChrome } from "@/src/app/lib/useScrollChrome";
 
-// ScrollToTop과 같은 문턱·fade 규칙을 공유해 두 컨트롤이 한 몸처럼 움직인다.
-const SHOW_AFTER = 300;
-const FADE_AFTER_MS = 1000;
-// 손가락 떨림에 헤더가 깜빡이지 않도록 방향 판정에 두는 데드존.
-const DIRECTION_DEADZONE = 8;
 // 헤딩이 이 선 위로 올라가면 그 섹션을 읽는 중으로 본다.
 const ACTIVE_LINE = 80;
 
@@ -22,29 +18,31 @@ function flatten(items: TocItem[]): TocItem[] {
 /**
  * xl 미만 글 페이지의 읽기 chrome.
  * - 300px 넘게 내려가면 상단 헤더를 숨기고(html[data-reading-chrome]) 좌하단에 현재 섹션 알약을 띄운다.
+ * - 위로 스크롤하면 헤더가 돌아오고 알약은 그 즉시 빠진다 — 모바일 주소창이 펼쳐지는 순간과 겹친다.
  * - 알약을 탭하면 바텀시트로 목차를 연다. 목차 자체는 데스크톱과 같은 TableOfContents를 재사용한다.
  */
 export function MobileToc({ items }: { items: TocItem[] }) {
-  const [visible, setVisible] = useState(false);
-  const [faded, setFaded] = useState(false);
   const [open, setOpen] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const fadeTimer = useRef<ReturnType<typeof setTimeout>>(null);
-  const lastY = useRef(0);
+  const { past, down, idle } = useScrollChrome();
   const reduceMotion = useReducedMotion();
 
   const flat = flatten(items);
   const activeText = flat.find((h) => h.id === activeId)?.text ?? "목차";
+  // 하단 컨트롤은 헤더와 반대로: 헤더가 숨은 동안만 뜬다.
+  const visible = past && down;
 
-  const setHeaderHidden = useCallback((hidden: boolean) => {
+  // 헤더 숨김은 방향만 따른다(문턱은 훅이 이미 본다).
+  useEffect(() => {
     const root = document.documentElement;
-    if (hidden) root.dataset.readingChrome = "hidden";
+    if (down) root.dataset.readingChrome = "hidden";
     else delete root.dataset.readingChrome;
-  }, []);
+    return () => {
+      delete root.dataset.readingChrome;
+    };
+  }, [down]);
 
   useEffect(() => {
-    lastY.current = window.scrollY;
-
     const updateActive = () => {
       let current: string | null = null;
       for (const { id } of flat) {
@@ -56,38 +54,12 @@ export function MobileToc({ items }: { items: TocItem[] }) {
       setActiveId(current);
     };
 
-    const onScroll = () => {
-      const y = window.scrollY;
-      const delta = y - lastY.current;
-      const pastThreshold = y > SHOW_AFTER;
-
-      setVisible(pastThreshold);
-      setFaded(false);
-      if (fadeTimer.current) clearTimeout(fadeTimer.current);
-      fadeTimer.current = setTimeout(() => setFaded(true), FADE_AFTER_MS);
-
-      // 아래로: 문턱을 넘었을 때만 숨김. 위로: 데드존만 넘으면 즉시 복귀.
-      if (delta > DIRECTION_DEADZONE && pastThreshold) {
-        setHeaderHidden(true);
-        lastY.current = y;
-      } else if (delta < -DIRECTION_DEADZONE || !pastThreshold) {
-        setHeaderHidden(false);
-        lastY.current = y;
-      }
-
-      updateActive();
-    };
-
     updateActive();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (fadeTimer.current) clearTimeout(fadeTimer.current);
-      setHeaderHidden(false);
-    };
+    window.addEventListener("scroll", updateActive, { passive: true });
+    return () => window.removeEventListener("scroll", updateActive);
     // items는 글이 바뀌면 컴포넌트째 다시 마운트되므로 flat만 의존한다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items, setHeaderHidden]);
+  }, [items]);
 
   // 시트가 열린 동안 뒤 본문이 스크롤되지 않게.
   useEffect(() => {
@@ -117,16 +89,16 @@ export function MobileToc({ items }: { items: TocItem[] }) {
           <motion.button
             key="pill"
             initial={enter}
-            animate={{ opacity: faded ? 0.3 : 1, y: 0, scale: 1 }}
+            animate={{ opacity: idle ? 0.3 : 1, y: 0, scale: 1 }}
             exit={{ ...enter, transition: { duration: 0.15 } }}
             transition={{
-              duration: faded ? 0.3 : 0.2,
+              duration: idle ? 0.3 : 0.2,
               ease: "easeOut",
-              opacity: { duration: faded ? 0.3 : 0.12 },
+              opacity: { duration: idle ? 0.3 : 0.12 },
             }}
             onClick={openSheet}
             aria-label={`목차 열기 · 현재 ${activeText}`}
-            className="fixed bottom-6 left-6 z-50 flex h-10 max-w-[calc(100%-100px)] items-center gap-2 rounded-lg border border-border bg-background/80 px-3 backdrop-blur-sm text-foreground clickable press-icon"
+            className="fixed bottom-4 left-6 z-50 flex h-10 max-w-[calc(100%-100px)] items-center gap-2 rounded-lg border border-border bg-background/80 px-3 backdrop-blur-sm text-foreground clickable press-icon"
           >
             <List className="h-4 w-4 shrink-0 text-primary" />
             <AnimatePresence mode="popLayout" initial={false}>

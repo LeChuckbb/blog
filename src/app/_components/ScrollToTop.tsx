@@ -1,45 +1,53 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUp } from "lucide-react";
+import { useScrollChrome } from "@/src/app/lib/useScrollChrome";
+
+// globals.css의 읽기 chrome 브레이크포인트(xl 미만)와 같은 값.
+const NARROW = "(max-width: 79.99rem)";
 
 export function ScrollToTop() {
-  const [visible, setVisible] = useState(false);
-  const [faded, setFaded] = useState(false);
-  const fadeTimer = useRef<ReturnType<typeof setTimeout>>(null);
+  const { past, down, idle } = useScrollChrome();
+  const [narrow, setNarrow] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > 300);
-      setFaded(false);
-
-      if (fadeTimer.current) clearTimeout(fadeTimer.current);
-      fadeTimer.current = setTimeout(() => setFaded(true), 1000);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (fadeTimer.current) clearTimeout(fadeTimer.current);
-    };
+    const mq = window.matchMedia(NARROW);
+    const sync = () => setNarrow(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
+
+  // xl 미만에서는 MobileToc 알약과 한 몸으로: 위로 스크롤하면(주소창이 펼쳐지는 순간) 즉시 빠진다.
+  // 데스크톱은 주소창이 없으니 문턱만 본다.
+  const visible = past && (down || !narrow);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const enter = reduceMotion
+    ? { opacity: 0 }
+    : { opacity: 0, y: 8, scale: 0.96 };
+
   return (
     <AnimatePresence>
       {visible && (
         <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: faded ? 0.3 : 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.3 }}
+          initial={enter}
+          animate={{ opacity: idle ? 0.3 : 1, y: 0, scale: 1 }}
+          exit={{ ...enter, transition: { duration: 0.15 } }}
+          transition={{
+            duration: idle ? 0.3 : 0.2,
+            ease: "easeOut",
+            opacity: { duration: idle ? 0.3 : 0.12 },
+          }}
           onClick={scrollToTop}
           aria-label="맨 위로 이동"
-          className="fixed bottom-6 right-6 z-50 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background/80 backdrop-blur-sm text-primary clickable press-icon"
+          className="fixed bottom-4 right-6 z-50 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background/80 backdrop-blur-sm text-primary clickable press-icon"
         >
           <ArrowUp className="h-5 w-5" />
         </motion.button>
