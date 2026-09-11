@@ -39,6 +39,7 @@ function rememberPost(pathname: string) {
 export type GaEventName =
   | "code_copy"
   | "toc_navigate"
+  | "toc_sheet_open"
   | "series_navigate"
   | "theme_change";
 

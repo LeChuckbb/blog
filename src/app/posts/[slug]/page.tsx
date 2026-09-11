@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import postsData from "@/src/app/posts.json";
 import { generateTocFromFile } from "@/src/app/lib/tocUtil";
 import TableOfContents from "@/src/app/_components/TableOfContents";
+import { MobileToc } from "@/src/app/_components/MobileToc";
 import SeriesNav, { SeriesData } from "@/src/app/_components/SeriesNav";
 import { siteConfig } from "@/src/app/config/siteConfig";
 import { generateBlogPostingJsonLd } from "@/src/app/lib/jsonLd";
@@ -107,6 +108,9 @@ export default async function Page({
           <TableOfContents items={tocItems} />
         </div>
       </aside>
+
+      {/* xl 미만: 읽는 중 헤더를 숨기고 좌하단 알약 → 바텀시트로 목차 */}
+      <MobileToc items={tocItems} />
     </div>
   );
 }
