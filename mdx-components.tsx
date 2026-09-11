@@ -3,6 +3,8 @@ import { ImageProps } from "next/image";
 import { AnimatedImage } from "./src/app/_components/AnimatedImage";
 import { CodeBlock } from "./src/app/_components/CodeBlock";
 import { Mermaid } from "./src/app/_components/Mermaid";
+import { LinkPreview } from "./src/app/_components/LinkPreview";
+import { getLinkPreview } from "./src/app/lib/linkPreview";
 
 function extractText(node: React.ReactNode): string {
   if (typeof node === "string") return node;
@@ -133,7 +135,23 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           </span>
         );
       }
-      const isExternal = href?.startsWith("http");
+      const isExternal = href?.startsWith("http") ?? false;
+      const preview = getLinkPreview(href);
+
+      // 미리보기 데이터가 있는 링크만 HoverCard로. 없으면 기존과 동일한 일반 링크.
+      if (href && preview) {
+        return (
+          <LinkPreview
+            href={href}
+            external={isExternal}
+            preview={preview}
+            className={className}
+          >
+            {children}
+          </LinkPreview>
+        );
+      }
+
       return (
         <a
           href={href}

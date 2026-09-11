@@ -39,6 +39,7 @@ class Config {
     // Next.js 콘텐츠 경로
     this.contentPath = path.join(this.projectRoot, 'content');
     this.postsJsonPath = path.join(this.projectRoot, 'src/app/posts.json');
+    this.linkPreviewsJsonPath = path.join(this.projectRoot, 'src/app/link-previews.json');
   }
 
   /**
