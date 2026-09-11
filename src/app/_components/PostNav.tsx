@@ -56,8 +56,8 @@ function NavCard({
         })
       }
       className={cn(
-        "flex items-center gap-3 min-w-0 px-4 py-3.5 rounded-lg border border-border",
-        "bg-muted/40 dark:bg-muted/20 hover:bg-muted transition-colors",
+        "clickable press-row flex items-center gap-3 min-w-0 px-4 py-3.5 rounded-lg border border-border",
+        "bg-muted/40 dark:bg-muted/20 hover:bg-muted dark:hover:bg-muted",
         // 2열일 때만 다음 카드를 오른쪽 정렬 — 1열에서는 둘 다 왼쪽이 읽기 편하다
         isNext && "md:flex-row-reverse md:text-right",
       )}

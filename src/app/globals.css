@@ -82,6 +82,9 @@
   --sidebar-accent-foreground: oklch(0.35 0.18 277);
   --sidebar-border: oklch(0.913 0.007 89);
   --sidebar-ring: oklch(0.708 0 0);
+  /* 눌림 틴트: 콘텐츠 면(글 목록·카드)은 accent, 크롬(아이콘·링크)은 한 단계 진하게 */
+  --press: oklch(0.94 0.04 277);
+  --press-strong: oklch(0.9 0.06 277);
 
   /* Layout tokens
      xl 이상: [1fr | 본문 680 | 1fr] 그리드로 본문을 뷰포트 정중앙에 고정하고,
@@ -128,6 +131,8 @@
   --sidebar-accent-foreground: oklch(0.942 0.005 107);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --press: oklch(0.3 0.07 277);
+  --press-strong: oklch(0.34 0.09 277);
 }
 
 /* 짧은 글은 세로형 모니터에서 한 화면에 들어가 스크롤바가 사라지고, 그만큼 뷰포트가
@@ -423,6 +428,61 @@ code[data-line-numbers] .line::before {
 }
 
 /* ==============================
+   클릭 피드백 — 모든 클릭 요소의 공통 규칙
+   hover는 각 요소의 Tailwind 클래스(muted/accent)가 맡고, 여기서는 press만 통일한다.
+   press = 브랜드 틴트 + 면적별 축소. 넓은 면은 조금만 줄여야 과하지 않다.
+     press-icon  아이콘·알약(≤40px)   0.95
+     press-chip  링크·칩·목차 항목     0.97
+     press-row   글 목록 행·카드       0.985
+     press-text  텍스트 링크·버튼      축소 없이 60% 불투명
+   색 150ms, 변형은 놓을 때 200ms / 누를 때 100ms — 짧은 탭에도 눌림이 보인다.
+   ============================== */
+@layer utilities {
+  .clickable {
+    transition:
+      color 150ms ease,
+      background-color 150ms ease,
+      opacity 150ms ease,
+      transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .clickable:active {
+    transition-duration: 150ms, 100ms, 100ms, 100ms;
+  }
+  .clickable:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  .press-icon:active {
+    transform: scale(0.95);
+    background-color: var(--press-strong);
+  }
+  .press-chip:active {
+    transform: scale(0.97);
+    background-color: var(--press-strong);
+  }
+  .press-row:active {
+    transform: scale(0.985);
+    background-color: var(--press);
+  }
+  .press-text:active {
+    opacity: 0.6;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .press-icon:active,
+    .press-chip:active,
+    .press-row:active {
+      transform: none;
+    }
+  }
+}
+
+/* 본문 링크도 같은 규칙: 축소 없이 흐려지기만 */
+.prose :where(a):active {
+  opacity: 0.6;
+}
+
+/* ==============================
    페이지 전환 (View Transitions API)
    next-view-transitions가 라우팅을 startViewTransition으로 감싼다.
    앞으로 갈 때 새 화면이 오른쪽 24px에서 페이드 인, 이전 화면은 왼쪽으로 페이드 아웃.
@@ -448,13 +508,27 @@ code[data-line-numbers] .line::before {
   html[data-nav="pop"]::view-transition-new(root) {
     animation-name: vt-fade-in, vt-slide-in-left;
   }
+  /* 브라우저가 이미 밀어준 뒤로가기(iOS 스와이프)는 즉시 교체 — 두 번 그리면 깜빡인다 */
+  html[data-nav="ua"]::view-transition-old(root),
+  html[data-nav="ua"]::view-transition-new(root),
+  html[data-nav="ua"]::view-transition-group(*) {
+    animation-duration: 0ms;
+  }
 
-  /* 헤더는 화면과 함께 밀리지 않고 제자리에 있는다 */
+  /* 헤더는 화면과 함께 밀리지 않고 제자리에 있는다.
+     옛 스냅샷은 숨기고 새 것만 즉시 그린다 — 반투명(blur) 헤더 둘이 겹쳐 페이드되면 번쩍인다. */
   .site-header {
     view-transition-name: site-header;
   }
   ::view-transition-group(site-header) {
-    animation-duration: 0ms;
+    animation: none;
+    z-index: 100;
+  }
+  ::view-transition-old(site-header) {
+    display: none;
+  }
+  ::view-transition-new(site-header) {
+    animation: none;
   }
 
   /* 전환 오버레이가 클릭을 삼키지 않게 한다 — 애니메이션 중 누른 링크도 살아 있다 */

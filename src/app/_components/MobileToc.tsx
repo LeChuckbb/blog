@@ -126,7 +126,7 @@ export function MobileToc({ items }: { items: TocItem[] }) {
             }}
             onClick={openSheet}
             aria-label={`목차 열기 · 현재 ${activeText}`}
-            className="fixed bottom-6 left-6 z-50 flex h-10 max-w-[calc(100%-100px)] items-center gap-2 rounded-lg border border-border bg-background/80 px-3 backdrop-blur-sm text-foreground active:scale-95"
+            className="fixed bottom-6 left-6 z-50 flex h-10 max-w-[calc(100%-100px)] items-center gap-2 rounded-lg border border-border bg-background/80 px-3 backdrop-blur-sm text-foreground clickable press-icon"
           >
             <List className="h-4 w-4 shrink-0 text-primary" />
             <AnimatePresence mode="popLayout" initial={false}>
@@ -177,7 +177,7 @@ export function MobileToc({ items }: { items: TocItem[] }) {
                 </span>
                 <button
                   onClick={() => setOpen(false)}
-                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  className="clickable press-text text-xs text-muted-foreground hover:text-foreground"
                 >
                   닫기
                 </button>

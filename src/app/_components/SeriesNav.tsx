@@ -60,7 +60,7 @@ export default function SeriesNav({
               onClick={() => setIsCollapsed(true)}
               aria-expanded={true}
               aria-label="시리즈 목록 숨기기"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className="clickable press-text text-xs text-muted-foreground hover:text-foreground"
             >
               숨기기
             </button>
@@ -83,7 +83,7 @@ export default function SeriesNav({
               onClick={() => setIsCollapsed(false)}
               aria-expanded={false}
               aria-label="시리즈 목록 보기"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className="clickable press-text text-xs text-muted-foreground hover:text-foreground"
             >
               목록
             </button>
@@ -127,8 +127,8 @@ export default function SeriesNav({
                       })
                     }
                     className={cn(
-                      "flex items-start gap-3 px-4 py-2",
-                      "hover:bg-muted/60 dark:hover:bg-muted/30 transition-colors",
+                      "clickable press-row flex items-start gap-3 px-4 py-2",
+                      "hover:bg-muted/60 dark:hover:bg-muted/30",
                       "text-foreground/80 hover:text-foreground",
                     )}
                   >
@@ -159,7 +159,7 @@ function NavArrows({
   compact: boolean;
 }) {
   const baseClass =
-    "flex items-center justify-center w-6 h-6 rounded text-sm transition-colors";
+    "clickable press-icon flex items-center justify-center w-6 h-6 rounded text-sm";
   const activeClass =
     "text-foreground hover:bg-muted dark:hover:bg-muted/60 cursor-pointer";
   const disabledClass = "text-muted-foreground/30 cursor-default";

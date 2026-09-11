@@ -47,7 +47,7 @@ export default function Home() {
             {postsByYear[year].map((post) => (
               <Link
                 key={post.slug}
-                className="group flex items-baseline gap-4 py-2 -mx-3 px-3 rounded-lg hover:bg-muted transition-colors"
+                className="group clickable press-row flex items-baseline gap-4 py-2 -mx-3 px-3 rounded-lg hover:bg-muted"
                 href={`/posts/${post.slug}`}
               >
                 <time className="text-sm text-muted-foreground shrink-0 w-12">
