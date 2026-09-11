@@ -101,8 +101,8 @@ export default async function Page({
         </div>
       </article>
 
-      {/* 목차: xl 이상에서 우측 여백(최소 300px)에 60px 간격으로 붙는다 */}
-      <aside className="hidden xl:block xl:ml-[var(--sidebar-gap)] xl:w-[var(--toc-width)]">
+      {/* 목차: xl 이상에서 우측 여백(최소 300px)에 60px 간격으로 붙고, 남는 여백을 상한까지 채운다 */}
+      <aside className="hidden xl:block xl:min-w-0 xl:ml-[var(--sidebar-gap)] xl:max-w-[var(--toc-max-width)]">
         <div className="sticky top-20">
           <TableOfContents items={tocItems} />
         </div>
