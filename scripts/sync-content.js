@@ -153,8 +153,11 @@ class ContentSyncer {
    * published 폴더에서 처리 가능한 파일 목록 가져오기
    */
   getPublishedFiles() {
-    const files = fs.readdirSync(this.config.publishedPath);
-    
+    // macOS readdir은 한글 파일명을 NFD(자모 분해)로 돌려준다. 그대로 쓰면 slug에서
+    // 한글이 통째로 빠지고(`BFF로 …` → `bff`), content/*.mdx·posts.json 키가 NFD로 남아
+    // webpack import가 파일을 못 찾는다. APFS는 정규화 무관하게 열어 주므로 NFC로 통일한다.
+    const files = fs.readdirSync(this.config.publishedPath).map(f => f.normalize('NFC'));
+
     return files.filter(file => {
       // 확장자 체크
       const hasValidExtension = this.syncOptions.sourceExtensions.some(ext => 

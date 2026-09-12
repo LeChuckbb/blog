@@ -272,6 +272,7 @@ class ObsidianTransformer {
    */
   generateSlug(filename) {
     return filename
+      .normalize('NFC') // macOS readdir은 한글을 NFD(자모 분해)로 돌려줘 [가-힣]에 안 걸린다
       .replace(/\.(md|mdx)$/i, '') // 확장자 제거
       .toLowerCase()
       .trim()
