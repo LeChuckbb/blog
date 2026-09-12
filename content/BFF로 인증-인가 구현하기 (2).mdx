@@ -12,7 +12,7 @@ description: >-
   Browser-Based·Token-Mediating·BFF 세 패턴을 비교한 뒤 Auth.js로 BFF를 구현한 기록.
 series: Next.js에서 인증-인가 구현하기
 date: '2026-09-12'
-title: BFF로 인증-인가 구현하기
+title: BFF로 인증-인가 구현하기 (2)
 ---
 [Next.js 인증 문서](https://nextjs.org/docs/app/guides/authentication) 기준에 따르면, 인증/인가는 크게 세 가지 영역으로 구분할 수 있다. 사용자의 신원을 확인하는 '인증', 인증된 사용자에게 권한을 부여하고 유지하는 '세션 관리', 사용자의 권한에 걸맞는 리소스를 제공하는 '인가'.  이렇게 구분했을 때 개인적으로 설계 및 구현에 있어 제일 많은 비용이 소모되는 영역은 항상 세션 관리 쪽이었다. JWT로 운용되는 서비스의 FE 개발자라면 피해갈 수 없는 숙명이다. 따라서 이 글에서는 세션 관리를 중심으로 다룬다. 
 

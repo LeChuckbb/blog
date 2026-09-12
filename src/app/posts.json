@@ -3,7 +3,7 @@
     {
       "slug": "session-management-bff",
       "date": "2026-09-12",
-      "title": "BFF로 인증-인가 구현하기",
+      "title": "BFF로 인증-인가 구현하기 (2)",
       "tags": [
         "Nextjs",
         "인증/인가",
