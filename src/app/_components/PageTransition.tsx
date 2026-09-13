@@ -105,6 +105,39 @@ function settleAfterTransition() {
   else setTimeout(finish, TRANSITION_FALLBACK_MS);
 }
 
+/**
+ * 브라우저가 이미 화면을 밀어준 뒤로가기(iOS 가장자리 스와이프, hasUAVisualTransition)에서는
+ * 우리 뷰 전환을 건너뛴다. Safari는 제스처 동안 자기 스냅샷으로 목적지를 보여주고 손을 떼면
+ * 다음 페인트에서 걷는데, 그때 뷰 전환이 옛 화면을 캡처해 새 경로가 그려질 때까지 붙잡고 있으면
+ * "아직 글 페이지인 라이브 문서"가 한 번 보인다 — 스와이프에서만 나는 깜빡임. 0ms로 줄여도
+ * 캡처와 대기는 남아서, 라이브러리(next-view-transitions)가 이 popstate에서 부르는
+ * startViewTransition을 딱 한 번 우회해 콜백만 즉시 실행하고 라우터가 바로 그리게 한다.
+ */
+function bypassNextViewTransition() {
+  // 라이브러리는 반환값의 필드를 쓰지 않아 최소 형태만 맞춘다(ViewTransition 타입은 types 등을 요구).
+  const doc = document as unknown as {
+    startViewTransition?: (cb?: () => unknown) => unknown;
+  };
+  const original = doc.startViewTransition;
+  if (!original) return;
+  const restore = () => {
+    if (doc.startViewTransition !== original)
+      doc.startViewTransition = original;
+  };
+  doc.startViewTransition = (cb) => {
+    restore();
+    const done = Promise.resolve().then(() => void cb?.());
+    return {
+      ready: done,
+      updateCallbackDone: done,
+      finished: done,
+      skipTransition() {},
+    };
+  };
+  // 라이브러리가 이 popstate에서 부르지 않았다면(전환 미지원 경로) 다음 틱에 되돌린다.
+  setTimeout(restore, 0);
+}
+
 export function PageTransitionDirection() {
   const pathname = usePathname();
 
@@ -151,6 +184,8 @@ export function PageTransitionDirection() {
     // 뒤로/앞으로: 떠나는 위치를 기억하고, 목적지에 저장된 위치로 미리 옮긴다.
     const onTraverse = (destination: string, ua: boolean) => {
       html.dataset.nav = ua ? "ua" : "pop";
+      // 우리 리스너는 <ViewTransitions>의 자식이라 라이브러리보다 먼저 등록된다(자식 effect 우선).
+      if (ua) bypassNextViewTransition();
       rememberScroll();
       preScroll(readScrollMap()[keyOf(destination)] ?? 0);
     };
