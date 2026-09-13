@@ -14,8 +14,9 @@ import { usePathname } from "next/navigation";
  *    새 레이어보다 스크롤을 먼저 반영해 "옛 화면이 튄" 그림을 1~2프레임 그린다(iOS 깜빡임).
  *    그래서 이동이 시작되는 순간(클릭·뒤로가기) 목적지 스크롤로 먼저 옮기되, main을 그만큼
  *    translate로 되돌려 눈에는 그대로 보이게 하고, 새 경로가 그려지는 커밋에서 translate만
- *    지운다 — 커밋 시점엔 스크롤 변화가 없다. 뒤로가기의 목적지 스크롤은 우리가 저장해 둔다
- *    (브라우저 복원은 manual — 미리 옮긴 값이 저장되면 엉뚱한 곳으로 돌아간다).
+ *    지운다 — 커밋 시점엔 스크롤 변화가 없다. 떠난 페이지가 짧아 다 못 옮겼으면(clamp) 그
+ *    부족분도 translate로 받쳐 두고 전환이 끝난 뒤에 마저 간다. 뒤로가기의 목적지 스크롤은
+ *    우리가 저장해 둔다(브라우저 복원은 manual — 미리 옮긴 값이 저장되면 엉뚱한 곳으로 돌아간다).
  */
 type NavigateEvent = Event & {
   navigationType?: string;
@@ -24,7 +25,11 @@ type NavigateEvent = Event & {
 };
 
 const SCROLL_KEY = "page-transition:scroll";
-const pending = { from: 0, target: 0, active: false };
+/** 복원 스크롤을 마쳤을 때 window에 쏜다 — 스크롤 방향 훅이 이걸 읽기 동작으로 오해하지 않게. */
+export const SCROLL_RESTORED_EVENT = "page-transition:scroll-restored";
+const pending = { from: 0, target: 0, active: false, seq: 0 };
+// activeViewTransition이 없는 브라우저에서 전환(260ms)이 끝났다고 볼 여유.
+const TRANSITION_FALLBACK_MS = 400;
 
 const keyOf = (url: string) => {
   const u = new URL(url, location.href);
@@ -59,24 +64,52 @@ function preScroll(target: number) {
   pending.from = from;
   pending.target = target;
   pending.active = true;
-  if (moved !== 0) main.style.translate = `0 ${moved}px`;
+  pending.seq += 1;
+  main.style.translate = moved !== 0 ? `0 ${moved}px` : "";
 }
 
+/** 미리 옮긴 스크롤에 맞춰 두었던 translate를 걷고 이번 이동을 끝낸다. */
 function settle() {
   const main = document.querySelector("main");
   if (main) main.style.translate = "";
-  // 떠난 페이지가 짧아 목표까지 못 갔으면 새 페이지에서 마저 간다(드문 경우라 유령 프레임을 감수한다).
-  if (pending.active && window.scrollY !== pending.target)
-    window.scrollTo(0, pending.target);
   pending.active = false;
+}
+
+/**
+ * 새 경로가 그려지는 커밋. 떠난 페이지가 짧아 목표까지 못 갔으면(clamp) 부족분만큼 main을
+ * 위로 받쳐 화면은 목표 위치처럼 보이게 두고, 실제 스크롤은 전환이 끝난 뒤에 마저 간다 —
+ * 커밋 창에서 스크롤을 바꾸면 WebKit이 옛 화면을 튀게 그리는 유령 프레임이 나온다.
+ * 긴 글을 깊이 읽고 목록(짧다)으로 나갔다가 뒤로 오면 늘 여기에 걸린다.
+ */
+function settleAfterTransition() {
+  if (!pending.active) return settle();
+  const main = document.querySelector("main");
+  const deficit = pending.target - window.scrollY;
+  if (!main || deficit === 0) return settle();
+
+  main.style.translate = `0 ${-deficit}px`;
+  const seq = pending.seq;
+  const finish = () => {
+    // 그 사이 다른 이동이 시작됐으면 그쪽이 정리한다.
+    if (!pending.active || pending.seq !== seq) return;
+    window.scrollTo(0, pending.target);
+    settle();
+    window.dispatchEvent(new Event(SCROLL_RESTORED_EVENT));
+  };
+  const vt = (
+    document as Document & {
+      activeViewTransition?: { finished: Promise<void> };
+    }
+  ).activeViewTransition;
+  if (vt) vt.finished.then(finish, finish);
+  else setTimeout(finish, TRANSITION_FALLBACK_MS);
 }
 
 export function PageTransitionDirection() {
   const pathname = usePathname();
 
-  // 새 경로가 그려지는 커밋: 미리 옮겨 둔 스크롤에 맞춰 두었던 translate를 걷는다.
   useLayoutEffect(() => {
-    settle();
+    settleAfterTransition();
   }, [pathname]);
 
   useEffect(() => {

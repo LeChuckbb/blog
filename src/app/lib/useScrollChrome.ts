@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { SCROLL_RESTORED_EVENT } from "@/src/app/_components/PageTransition";
 
 // 이 문턱을 넘어야 읽기 chrome(헤더 숨김 + 하단 컨트롤)이 켜진다.
 const SHOW_AFTER = 300;
@@ -56,9 +57,16 @@ export function useScrollChrome(): ScrollChrome {
       }
     };
 
+    // 뒤로가기 복원 스크롤은 사용자의 읽기 동작이 아니다 — 기준점만 옮기고 방향은 그대로 둔다.
+    const onRestored = () => {
+      lastY.current = window.scrollY;
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener(SCROLL_RESTORED_EVENT, onRestored);
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener(SCROLL_RESTORED_EVENT, onRestored);
       if (idleTimer.current) clearTimeout(idleTimer.current);
     };
   }, []);
