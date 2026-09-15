@@ -1,6 +1,10 @@
 // utils/toc.ts
 import matter from "gray-matter";
 import GithubSlugger from "github-slugger";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import { toString } from "mdast-util-to-string";
+import { visit } from "unist-util-visit";
 
 export interface TocItem {
   id: string;
@@ -10,23 +14,20 @@ export interface TocItem {
 }
 
 // 마크다운에서 헤딩 추출
+//
+// 정규식으로 `#` 줄을 뜯지 않고 remark로 파싱한다. 헤딩 안의 링크·강조·인라인코드·
+// 이스케이프(`\<`, `\{`)를 벗긴 렌더 텍스트가 필요하기 때문이다. 헤딩 id를 붙이는
+// rehype-slug도 렌더 텍스트에 github-slugger를 적용하므로, 여기서 같은 문자열을
+// 넣어야 목차 앵커와 헤딩 id가 일치한다. 코드 펜스 안의 `# 주석`도 자연히 제외된다.
 export function extractHeadings(content: string): TocItem[] {
-  const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+  const tree = unified().use(remarkParse).parse(content);
   const headings: TocItem[] = [];
   const slugger = new GithubSlugger();
-  let match;
 
-  while ((match = headingRegex.exec(content)) !== null) {
-    const level = match[1].length;
-    const text = match[2].trim().replace(/\\([<>])/g, "$1");
-    const id = slugger.slug(text);
-
-    headings.push({
-      id,
-      text,
-      level,
-    });
-  }
+  visit(tree, "heading", (node) => {
+    const text = toString(node).trim();
+    headings.push({ id: slugger.slug(text), text, level: node.depth });
+  });
 
   return headings;
 }

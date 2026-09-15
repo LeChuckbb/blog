@@ -30,7 +30,7 @@ description: blog-nextjs Next.js 15 앱 코드의 아키텍처·관례·불변�
 - **remark**: `remark-frontmatter`(yaml/toml) → `remark-gfm` → `@r4ai/remark-callout`(콜아웃) → `remark-flexible-markers` → `remark-toc`.
 - **rehype**: `rehype-pretty-code`(Shiki, dark=catppuccin-frappe / light=github-light) → `rehype-slug` → 자체 `scripts/rehype-image-size.mjs`(원격 이미지 width/height 주입, CLS 방지).
 - **콜아웃은 여기서 렌더된다** — 동기화 변환기(transform-obsidian.js)가 아니라 이 플러그인이 처리. 콜아웃 동작을 바꾸려면 동기화가 아니라 이 체인을 본다.
-- `rehype-slug`와 `tocUtil.ts`는 **같은 slug 규칙**(github-slugger)을 써야 목차 앵커와 헤딩 id가 일치한다. 한쪽만 바꾸면 목차 링크가 깨진다.
+- `rehype-slug`와 `tocUtil.ts`는 **같은 slug 규칙**(github-slugger)을 **같은 입력 문자열**에 적용해야 목차 앵커와 헤딩 id가 일치한다. 그래서 `tocUtil.ts`는 정규식이 아니라 `remark-parse`로 파싱한 헤딩의 렌더 텍스트(`mdast-util-to-string`)를 쓴다 — 헤딩에 링크·강조·이스케이프가 있어도 rehype-slug와 같은 문자열이 된다. 한쪽만 바꾸면 목차 링크가 깨진다. 테스트: `src/app/lib/tocUtil.test.ts`(`pnpm test`).
 
 ## SEO 출력 로직 — 한 소스가 네 곳에 전파된다
 
