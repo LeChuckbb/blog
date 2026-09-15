@@ -109,15 +109,49 @@ class ObsidianTransformer {
    * @returns {string}
    */
   removeObsidianComments(content) {
-    // 여러 줄에 걸친 주석 제거
-    content = content.replace(/%%[\s\S]*?%%/g, '');
-    
-    // 인라인 주석 제거
-    content = content.replace(/%%.*?%%/g, '');
-    
-    // 빈 줄 정리
-    content = content.replace(/\n\s*\n\s*\n/g, '\n\n');
+    // 코드 블록·인라인 코드 안의 %%는 Obsidian 주석이 아니다. 특히 mermaid는 %%를
+    // 자체 주석 기호로 쓰므로, 보호하지 않으면 `%% a ... %% b` 쌍이 통째로 잘려
+    // 다이어그램 문법이 깨지고 블로그에서 파싱 에러 fallback(원문 코드)만 보인다.
+    return this.withCodeProtected(content, (text) => {
+      // 여러 줄에 걸친 주석 제거
+      text = text.replace(/%%[\s\S]*?%%/g, '');
 
+      // 인라인 주석 제거
+      text = text.replace(/%%.*?%%/g, '');
+
+      // 빈 줄 정리
+      text = text.replace(/\n\s*\n\s*\n/g, '\n\n');
+
+      return text;
+    });
+  }
+
+  /**
+   * 펜스 코드 블록(``` ```)과 인라인 코드(` `)를 placeholder로 치환한 뒤 fn을 적용하고
+   * 원문으로 복원한다. 코드 안의 텍스트를 마크다운 문법으로 오인해 변형하는 것을 막는다.
+   * @param {string} content
+   * @param {(text: string) => string} fn
+   * @returns {string}
+   */
+  withCodeProtected(content, fn) {
+    const codeBlocks = [];
+    const inlineCodes = [];
+
+    content = content.replace(/```[\s\S]*?```/g, (match) => {
+      const placeholder = `\x00CODEBLOCK${codeBlocks.length}\x00`;
+      codeBlocks.push(match);
+      return placeholder;
+    });
+    content = content.replace(/`[^`\n]+`/g, (match) => {
+      const placeholder = `\x00INLINE${inlineCodes.length}\x00`;
+      inlineCodes.push(match);
+      return placeholder;
+    });
+
+    content = fn(content);
+
+    content = content.replace(/\x00INLINE(\d+)\x00/g, (_, i) => inlineCodes[Number(i)]);
+    content = content.replace(/\x00CODEBLOCK(\d+)\x00/g, (_, i) => codeBlocks[Number(i)]);
     return content;
   }
 
@@ -502,8 +536,9 @@ ${body}
   validate(content) {
     const warnings = [];
 
-    // 남은 Obsidian 문법 체크
-    if (content.includes('%%')) {
+    // 남은 Obsidian 문법 체크 (코드 블록 안의 %%는 mermaid 주석 등 정상 문법이라 제외)
+    const proseOnly = content.replace(/```[\s\S]*?```|`[^`\n]+`/g, '');
+    if (proseOnly.includes('%%')) {
       warnings.push('Obsidian 주석이 남아있습니다: %%');
     }
 

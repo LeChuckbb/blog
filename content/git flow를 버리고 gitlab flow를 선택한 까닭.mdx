@@ -12,7 +12,7 @@ tags:
   - deployment
 date: '2026-09-15'
 ---
-## 문제 정의 : git flow 방식이 불편했다
+## [Git Flow](unresolved:git-flow) 방식이 불편했다
 
 새로운 서비스 개발을 맡게 되면서 기존에 우리팀이 관습적으로 따르던 브랜치 전략을 재고해볼 기회가 있었다. 기존 방식은 당시에 가장 유명하고 널리 쓰인 Git Flow를 큰 변형 없이 그대로 가져다 쓰는 형태였다. ([배민 개발팀의 Git-flow](https://techblog.woowahan.com/2553/)) 대중적인 전략이기에 나처럼 새로 들어온 팀원도 금세 적응할 수 있다는 장점은 있었다. 하지만 우리팀의 실질적인 개발 환경과는 맞지 않았다. 실질적 개발 환경에 적합한 브랜치 전략이라기보다는 널리 통용된 기반 지식을 일단 우리 상황에 끼워 맞춘 형국에 가까웠다. 
 
@@ -26,7 +26,7 @@ release 브랜치와 stage 서버의 생애주기를 맞추는 방식에 문제�
 
 같은 서비스를 개발하고 있는 백엔드 팀은 별 다른 문제가 없는지 궁금했다. 이 궁금증을 해결하는 과정에서 많은 힌트를 얻을 수 있었다.
 
-먼저 브랜치 전략을 branch-based, tag-based 두 종류로 구분할 수 있다는 사실을 깨달았다. AWS Amplify나 vercel은 특정 브랜치와 환경을 매핑해서 해당 브랜치가 push되면 매칭된 환경으로 배포까지 이어지는 branch-based 방식으로 운용된다. 반면 우리팀 백엔드가 활용하는 방식은 tag-based였다. Jenkins 내에 스크립트를 짜서 tag와 관련된 특정 상황에 배포를 트리거하는 파이프라인이 존재했다. git flow도 따지고 보면 branch-based보단 tag-based에 가까워서 백엔드 팀은 별다른 문제가 없었던 것이다.
+먼저 브랜치 전략을 [branch-based](unresolved:branch-based), [tag-based](unresolved:tag-based) 두 종류로 구분할 수 있다는 사실을 깨달았다. AWS Amplify나 vercel은 특정 브랜치와 환경을 매핑해서 해당 브랜치가 push되면 매칭된 환경으로 배포까지 이어지는 branch-based 방식으로 운용된다. 반면 우리팀 백엔드가 활용하는 방식은 tag-based였다. Jenkins 내에 스크립트를 짜서 tag와 관련된 특정 상황에 배포를 트리거하는 파이프라인이 존재했다. git flow도 따지고 보면 branch-based보단 tag-based에 가까워서 백엔드 팀은 별다른 문제가 없었던 것이다.
 
 일반화해서 설명하자면, 항상 최신 버전의 코드만 제공해주면 되는 웹 브라우저의 특성상 branch-based 방식이 널리 쓰인다. 반면 하위 호환성을 따져야 하는 백엔드에서나 여러 버전이 공존할 수 있는 모바일 클라이언트에서는 tag-based 방식이 선호될 수 있다.
 
@@ -50,21 +50,42 @@ gitlab flow는 우리 개발환경에 딱 맞는 선택지였다. 정형화된 [
 title: GitLab Flow - Complete Workflow
 ---
 gitGraph    
-     0-2. Staging 브랜치 생성
+    %% 0-1.init
+    checkout main
+    commit id: "Setup main"
+    
+    %% 0-2. Staging 브랜치 생성
     branch staging
     checkout staging
     commit id: "Staging setup"
     
-     1-1 v1.0.0 이후 main에서 개발 시작
+    %% 0-3. Production 브랜치 생성
+    branch production
+    checkout production
+    commit id: "v1.0.0" tag: "v1.0.0"
+    
+    %% 1-1 v1.0.0 이후 main에서 개발 시작
     checkout main
     commit id: "Post v1.0.0 development"
     
-     1-3 (git lab-finish-feature)
+    %% 1-2 일반적인 Feature 개발+QA 플로우 (git lab-start-feature)
+    checkout main
+    branch feature/user-auth
+    
+    checkout feature/user-auth
+    commit id: "Add login and validation"
+    
+    %% 1-3 (git lab-finish-feature)
     checkout main
     merge feature/user-auth
     commit id: "Merge auth"
     
-     1-5 Staging QA 중 버그 발견 (git lab-start-feature, git lab-finish-feature)
+    %% 1-4 (git lab-start-staging)
+    checkout staging
+    merge main
+    commit id: "Deploy to staging"
+    
+    %% 1-5 Staging QA 중 버그 발견 (git lab-start-feature, git lab-finish-feature)
     checkout main
     commit id: "find a bug while QA"
     branch feature/fix-qa-bug
@@ -76,17 +97,31 @@ gitGraph
     merge feature/fix-qa-bug
     commit id: "Merge bugfix"
     
-     1-7 staging 마무리하여 production에 배포 (git lab-finish-staging)
+    %% 1-6 재배포. (git lab-start-staging)
+    checkout staging
+    merge main
+    commit id: "Redeploy staging"
+    
+    %% 1-7 staging 마무리하여 production에 배포 (git lab-finish-staging)
     checkout production
     merge staging
     commit id: "v1.1.0" tag: "v1.1.0"
     
-     2-2 (git lab-start-feature)
+    %% 2-1 프로덕션 운영 중 hotfix 발생 시나리오
+    checkout main
+    commit id: "Post v1.1.0 development"
+    
+    %% 2-2 (git lab-start-feature)
     branch feature/hotfix
     checkout feature/hotfix
     commit id: "Security fix"
     
-     2-4 (git lab-start-staging)
+    %% 2-3 (git lab-finish-feature)
+    checkout main
+    merge feature/hotfix
+    commit id: "hotfix to main"
+    
+    %% 2-4 (git lab-start-staging)
     checkout staging
     merge main
     commit id: "hotfix to staging"
