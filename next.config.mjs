@@ -7,6 +7,7 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkCallout from "@r4ai/remark-callout";
 import remarkFlexibleMarkers from "remark-flexible-markers";
 import rehypeImageSize from "./scripts/rehype-image-size.mjs";
+import remarkDemoteHeadings from "./scripts/remark-demote-headings.mjs";
 
 /** @type {import('rehype-pretty-code').Options} */
 const options = {
@@ -60,6 +61,7 @@ const withMDX = createMDX({
       remarkGfm,
       remarkCallout,
       remarkFlexibleMarkers,
+      remarkDemoteHeadings, // 본문 h1 → h2 (제목 h1과 중복 방지). remarkToc보다 앞에 둔다
       [remarkToc, {}],
     ],
     rehypePlugins: [

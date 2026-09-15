@@ -44,7 +44,22 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     img: (props) => {
       const isFirst = mdxImageIndex === 0;
       mdxImageIndex++;
-      return <AnimatedImage priority={isFirst} {...(props as ImageProps)} />;
+      // Obsidian `![[파일]]`은 alt 없이 변환되어 `![](url)`로 들어온다. 빈 alt는 네이버가
+      // "Alt 속성 누락"으로 잡으므로 title → 파일명 순으로 채운다.
+      const { alt, src, title } = props as ImageProps & { title?: string };
+      const fallbackAlt =
+        title ||
+        (typeof src === "string"
+          ? decodeURIComponent(src.split("/").pop() ?? "").replace(/\.[a-z0-9]+$/i, "")
+          : "") ||
+        "본문 이미지";
+      return (
+        <AnimatedImage
+          priority={isFirst}
+          {...(props as ImageProps)}
+          alt={alt || fallbackAlt}
+        />
+      );
     },
     pre: ({ children, ...rest }) => {
       const child = Array.isArray(children) ? children[0] : children;
