@@ -1,0 +1,31 @@
+# Vercel 프로덕션 배포가 성공할 때마다 sitemap의 전체 URL을 IndexNow로 네이버·빙에 제출한다.
+#
+# IndexNow는 자동이 아니라 1회성 알림이다. 9/4에 손으로 한 번 쏜 뒤 발행한 글 2개가
+# 네이버에 전혀 알려지지 않은 채 열흘이 지났다. 발행 → 배포 → 제출이 사람 손을 거치면
+# 반드시 빠뜨리므로 배포 완료 이벤트에 묶는다.
+#
+# 구글은 IndexNow를 지원하지 않아 여기서 다루지 않는다. GSC에서 수동 요청뿐이다.
+name: IndexNow
+
+on:
+  deployment_status:
+  workflow_dispatch:
+
+jobs:
+  submit:
+    # Vercel GitHub 연동은 main 배포를 environment "Production"으로 올린다.
+    # Preview 배포마다 제출하면 프리뷰 URL이 아니라 프로덕션 sitemap을 다시 쏘게 되어
+    # 무의미한 중복이 되므로 Production 성공 시에만 돈다.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment.environment == 'Production')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # 스크립트가 라이브 sitemap을 읽고 키 파일 서빙 여부를 먼저 검증하므로
+      # 배포 직후 CDN 전파가 늦어도 실패로 드러난다. 비밀값은 없다 — IndexNow 키는 공개가 전제다.
+      - run: node scripts/indexnow-submit.mjs
