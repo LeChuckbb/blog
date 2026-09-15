@@ -1,0 +1,6 @@
+# pnpm 11부터 package.json의 "pnpm" 필드를 읽지 않는다. 빌드 스크립트 허용 여부는 여기서 관리.
+# sharp만 네이티브 빌드 허용(기존 onlyBuiltDependencies와 동일).
+allowBuilds:
+  sharp: true
+  '@tailwindcss/oxide': false
+  unrs-resolver: false
