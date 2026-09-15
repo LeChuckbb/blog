@@ -42,7 +42,8 @@ export type GaEventName =
   | "toc_sheet_open"
   | "series_navigate"
   | "post_navigate"
-  | "theme_change";
+  | "theme_change"
+  | "media_zoom";
 
 type GaParams = Record<string, string | number | boolean>;
 
