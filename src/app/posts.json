@@ -1,6 +1,19 @@
 {
   "posts": [
     {
+      "slug": "gitlab-flow",
+      "date": "2026-09-15",
+      "title": "git flow를 버리고 gitlab flow를 선택한 까닭",
+      "tags": [
+        "git",
+        "branching-strategy",
+        "gitlab-flow",
+        "deployment"
+      ],
+      "description": "AWS Amplify·Vercel 같은 branch-based 배포 환경에서 git flow의 release 브랜치가 stage 서버와 맞지 않았던 문제와, tag-based 검토를 거쳐 GitLab flow의 영구 브랜치 3개로 정리한 과정.",
+      "readingTime": 6
+    },
+    {
       "slug": "perfect-day-humor",
       "date": "2026-09-13",
       "title": "힘든 세상을 버티게 하는 유머의 힘, 〈어 퍼펙트 데이〉",

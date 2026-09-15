@@ -10,6 +10,13 @@
     "error": "timeout",
     "fetchedAt": "2026-09-11T03:42:18.362Z"
   },
+  "https://about.gitlab.com/topics/version-control/what-is-gitlab-flow/": {
+    "title": "What is GitLab Flow?",
+    "description": "Code reviews ensure developers ship the highest quality code through systematic assessments designed to identify bugs.",
+    "image": "https://about.gitlab.com/img/og?title=What%20is%20GitLab%20Flow%3F",
+    "siteName": "GitLab",
+    "fetchedAt": "2026-09-15T08:14:08.261Z"
+  },
   "https://ajaxlab.github.io/deview2021/blocking/": {
     "title": "Blocking",
     "description": null,
@@ -682,6 +689,13 @@
     "image": "https://tech.kakaopay.com/_astro/thumb.Dfj3raAk_Z2291fp.webp",
     "siteName": null,
     "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://techblog.woowahan.com/2553/": {
+    "title": "우린 Git-flow를 사용하고 있어요 | 우아한형제들 기술블로그",
+    "description": "안녕하세요. 우아한형제들 배민프론트개발팀에서 안드로이드 앱 개발을 하고 있는 나동호입니다. 오늘은 저희 안드로이드 파트에서 사용하고 있는 Git 브랜치 전략을 소개하려고 합니다. '배달의민족 안드로이드 모바일 파트에서 이렇게 브랜치를 관리하고 있구나' 정도로 봐주시면 좋을 것 같습니다. 들어가며... 2016년 1월, Github로 소스코드를 이전하면서 Github-flow를 사용하기 시작했습니다. 그러다 2017년 6월부터 Git-flow로 브랜치 전략을 바꾸게 되었습니다. 오늘 할 이야기는 저희가 브랜치",
+    "image": "https://techblog.woowahan.com/wp-content/uploads/2025/07/%EC%9A%B0%EC%95%84%ED%95%9C%ED%85%8C%ED%81%AC-%EA%B8%B0%EC%88%A0%EB%B8%94%EB%A1%9C%EA%B7%B8-%EB%B0%B0%EB%84%88.png",
+    "siteName": "우아한형제들 기술블로그 배달의민족을 만드는 기술 이야기 |",
+    "fetchedAt": "2026-09-15T08:14:08.261Z"
   },
   "https://techblog.yogiyo.co.kr/%EB%8D%B0%EC%9D%B4%ED%84%B0%EA%B0%80-%EC%97%86%EC%9D%84-%EB%95%8C-200%EC%9D%B8%EA%B0%80-404%EC%9D%B8%EA%B0%80-f1c8c39ca9df": {
     "error": "HTTP 403",
