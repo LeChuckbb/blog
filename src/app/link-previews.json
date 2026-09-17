@@ -43,6 +43,13 @@
     "error": "fetch failed",
     "fetchedAt": "2026-09-11T03:42:18.362Z"
   },
+  "https://blog.gangnamunni.com/post/saas-why-do-frontend-developers-design-api/": {
+    "title": "[SaaS] 프론트엔드 개발자가 API를 설계하는 이유",
+    "description": "IDL을 이용한 효율적인 인터페이스 관리 전략",
+    "image": "https://blog.gangnamunni.com/contents/posts/219d9338-d3d4-8072-8b7d-e9d3b5390019/cover/ae9848ed-ac0e-4b92-b878-9e6742028ffc.png",
+    "siteName": "힐링페이퍼(강남언니) 블로그",
+    "fetchedAt": "2026-09-17T06:14:47.520Z"
+  },
   "https://blog.lgcns.com/2336": {
     "error": "HTTP 403",
     "fetchedAt": "2026-09-11T03:42:18.362Z"
@@ -222,6 +229,13 @@
     "image": "https://lh7-us.googleusercontent.com/docs/AHkbwyIswifRIZhRMWCm-20zXyasllNJA7CS-rA3Z9j0E5hdwxvDiJPTJImxbQ9gCv1IWKD0T5Os4qGGi0Rlw21vowZjeQRHiOStrxUBq9nHgw3PdfjWRBFb=w1200-h630-p",
     "siteName": "Google Docs",
     "fetchedAt": "2026-09-11T03:42:18.362Z"
+  },
+  "https://editor.swagger.io/?_gl=1*sidlb6*_gcl_au*ODcwMjkwMDc4LjE3ODk1MjMwOTI.*_ga*MjA5MjQ1NTQ0Ni4xNzg5NTIzMDg1*_ga_QT2LV244BB*czE3ODk1MjMwODUkbzEkZzEkdDE3ODk1MjMxOTckajI1JGwwJGgw": {
+    "title": "SwaggerEditor",
+    "description": "SwaggerEditor",
+    "image": null,
+    "siteName": null,
+    "fetchedAt": "2026-09-17T06:14:47.520Z"
   },
   "https://en.wikipedia.org/wiki/No_Silver_Bullet": {
     "title": "No Silver Bullet - Wikipedia",
@@ -891,6 +905,13 @@
     "siteName": null,
     "fetchedAt": "2026-09-11T03:42:18.362Z"
   },
+  "https://www.inflearn.com/conf/infcon-2024/session-detail/870/": {
+    "title": "OpenAPI Generator 실전편: 효율적인 코드를 작성하는 법 - INFCON 2024",
+    "description": "효율적인 코드를 작성하는 가장 좋은 방법은 의외로 코드를 작성하지 않는 것입니다. 하지만 우리는 http api를 사용할 때마다 매번 직접 코드를 작성하고 있습니다. 서버에서 api를 개발하면, 프론트엔드에서는 각 경로(path), 파라미터, 응답을 일일이 타이핑해야 합니...",
+    "image": "https://cdn.inflearn.com/infcon/infcon-2024/infcon-2024-main/session-detail-og/basic/870.png",
+    "siteName": "인프콘",
+    "fetchedAt": "2026-09-17T06:14:47.520Z"
+  },
   "https://www.itworld.co.kr/news/156752?page=0,1": {
     "title": "엔터프라이즈 애플리케이션",
     "description": null,
@@ -1011,6 +1032,13 @@
     "image": "https://i.ytimg.com/vi/mGPj-pCGS2c/maxresdefault.jpg",
     "siteName": "YouTube",
     "fetchedAt": "2026-09-11T03:43:28.174Z"
+  },
+  "https://www.youtube.com/watch?v=mhGz8q-aOZ0": {
+    "title": "오늘도 여러분의 API는 안녕하신가요?: API First Design과 CodeGen 활용하기 | 인프콘2023",
+    "description": "🌱인프런에서 인프콘2023 강의 자료 다운로드 받고 복습해보세요.💚강의 자료 다운 받기 : https://u.inf.run/3Ftm5RL🌱미래의 동료들과 함께 성장하는 곳. 인프런💚오늘도 여러분의 API는 안녕하신가요?: API First Design과 CodeGen 활용...",
+    "image": "https://i.ytimg.com/vi/mhGz8q-aOZ0/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGCYgZShyMA8=&rs=AOn4CLC6eI0aXgv93pjvBneoIlGkNtAN7g",
+    "siteName": "YouTube",
+    "fetchedAt": "2026-09-17T06:14:47.520Z"
   },
   "https://www.youtube.com/watch?v=su-rtXzThjE&ab_channel=%EC%A0%9C%EB%AF%B8%EB%8B%88%EC%9D%98%EA%B0%9C%EB%B0%9C%EC%8B%A4%EB%AC%B4": {
     "title": "GIT 형상 관리 + 작업 단위와 PR 코드리뷰 + 협업 잘 하는 개발자",

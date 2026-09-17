@@ -1,6 +1,21 @@
 {
   "posts": [
     {
+      "slug": "oas-api-automation",
+      "date": "2026-09-17",
+      "title": "OAS로 API 자동화하기",
+      "tags": [
+        "api-first",
+        "openapi",
+        "oas",
+        "ssot",
+        "orval",
+        "codegen"
+      ],
+      "description": "백엔드를 기다리던 프론트엔드가 API-first design을 만나 OAS를 SSOT로 두는 협업을 사이드 프로젝트에서 시도한 이야기. Orval codegen이 준 편리함과, 프론트만 codegen했을 때 생긴 드리프트.",
+      "readingTime": 6
+    },
+    {
       "slug": "gitlab-flow",
       "date": "2026-09-15",
       "title": "git flow를 버리고 gitlab flow를 선택한 까닭",
