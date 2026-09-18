@@ -99,7 +99,7 @@ export default async function Page({
           </div>
         </header>
         {seriesData && <SeriesNav {...seriesData} />}
-        <div className="prose dark:prose-invert max-w-none [word-break:keep-all] break-words">
+        <div className="prose dark:prose-invert max-w-none break-words">
           <Post />
         </div>
         {/* 다 읽은 독자가 위로 올라가지 않도록 시리즈 목록(항상 펼침)과 이전/다음 카드를 하단에도 둔다 */}
