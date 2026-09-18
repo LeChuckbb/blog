@@ -3,7 +3,7 @@
     {
       "slug": "developer-turned-pm-review",
       "date": "2026-09-18",
-      "title": "답답해서 직접 PM해본 개발자의 후기",
+      "title": "답답해서 직접 PM 해본 개발자의 후기",
       "tags": [
         "pm",
         "prd",
@@ -15,7 +15,7 @@
       ],
       "description": "기획자가 떠난 리워드앱 팀에서 개발자가 만보기 PM을 맡았다. 워터폴과 애자일이 뒤섞여 기획서가 낡아가던 업무 프로세스를 PRD → 유저 스토리 → 완료 조건(AC) → Jira Story로 이어지는 SSOT 파이프라인으로 재구성한 기록.",
       "readingTime": 8,
-      "filename": "답답해서 직접 PM 해 본 개발자의 후기.mdx"
+      "filename": "답답해서 직접 PM 해본 개발자의 후기.mdx"
     },
     {
       "slug": "oas-api-automation",
