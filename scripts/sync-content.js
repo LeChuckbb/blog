@@ -299,6 +299,8 @@ class ContentSyncer {
         tags: post.tags,
         description: post.description || "",
         readingTime: post.readingTime,
+        // 앱이 import할 실제 MDX 파일명. 제목과 파일명이 달라도 import가 깨지지 않도록 명시한다.
+        filename: post.filename,
         ...(post.series && { series: post.series }),
       }))
     };

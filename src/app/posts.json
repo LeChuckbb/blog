@@ -14,7 +14,8 @@
         "agile"
       ],
       "description": "기획자가 떠난 리워드앱 팀에서 개발자가 만보기 PM을 맡았다. 워터폴과 애자일이 뒤섞여 기획서가 낡아가던 업무 프로세스를 PRD → 유저 스토리 → 완료 조건(AC) → Jira Story로 이어지는 SSOT 파이프라인으로 재구성한 기록.",
-      "readingTime": 7
+      "readingTime": 8,
+      "filename": "답답해서 직접 PM 해 본 개발자의 후기.mdx"
     },
     {
       "slug": "oas-api-automation",
@@ -29,7 +30,8 @@
         "codegen"
       ],
       "description": "백엔드를 기다리던 프론트엔드가 API-first design을 만나 OAS를 SSOT로 두는 협업을 사이드 프로젝트에서 시도한 이야기. Orval codegen이 준 편리함과, 프론트만 codegen했을 때 생긴 드리프트.",
-      "readingTime": 6
+      "readingTime": 6,
+      "filename": "OAS로 API 자동화하기.mdx"
     },
     {
       "slug": "gitlab-flow",
@@ -42,7 +44,8 @@
         "deployment"
       ],
       "description": "AWS Amplify·Vercel 같은 branch-based 배포 환경에서 git flow의 release 브랜치가 stage 서버와 맞지 않았던 문제와, tag-based 검토를 거쳐 GitLab flow의 영구 브랜치 3개로 정리한 과정.",
-      "readingTime": 6
+      "readingTime": 6,
+      "filename": "git flow를 버리고 gitlab flow를 선택한 까닭.mdx"
     },
     {
       "slug": "perfect-day-humor",
@@ -54,7 +57,8 @@
         "책"
       ],
       "description": "보스니아 내전을 다룬 영화 〈어 퍼펙트 데이〉의 맘브루가 부조리 앞에서 웃으며 물러서는 태도를 카뮈의 반항, 쿤데라의 『농담』, 김영민의 자기 희화화와 엮어 읽는다. 유머는 희망 없이 버티는 어른의 기술이다.",
-      "readingTime": 6
+      "readingTime": 6,
+      "filename": "힘든 세상을 버티게 하는 유머의 힘, 〈어 퍼펙트 데이〉.mdx"
     },
     {
       "slug": "session-management-bff",
@@ -69,6 +73,7 @@
       ],
       "description": "세션 관리를 '세션 상태(stateful·stateless)'와 '브라우저 토큰 노출 정도(RFC 10017)' 두 축으로 정리하고, Browser-Based·Token-Mediating·BFF 세 패턴을 비교한 뒤 Auth.js로 BFF를 구현한 기록.",
       "readingTime": 5,
+      "filename": "BFF로 인증-인가 구현하기 (2).mdx",
       "series": "Next.js에서 인증-인가 구현하기"
     },
     {
@@ -83,6 +88,7 @@
       ],
       "description": "네이버 블로그·velog를 거쳐 Obsidian 마크다운에 최적화된 Next.js 블로그로 또 한 번 개편했다. SSG·S3 이미지·옵시디언 동기화로 이어지는 새 워크플로우와 그 사정에 대한 기록.",
       "readingTime": 3,
+      "filename": "블로그 후기만 세 번째 - Obsidian 기반 블로그 만들기.mdx",
       "series": "블로그 후기"
     },
     {
@@ -97,7 +103,8 @@
         "career"
       ],
       "description": "원티드 하이파이브 2026 컨퍼런스 참석 후기. AI 시대에 개발자의 역할 변화, 토스의 메이커 문화, 에이전트 플랫폼 구축 노하우, 디자이너의 본질에 대한 성찰을 담았습니다.",
-      "readingTime": 5
+      "readingTime": 5,
+      "filename": "원티드 하이파이브 2026 후기 - AI 시대에서 살아남기.mdx"
     },
     {
       "slug": "200-ok",
@@ -108,7 +115,8 @@
         "ErrorHandling"
       ],
       "description": "23년 7월, 이직 후 새로운 팀 새로운 프로젝트에 합류했다. 핵심 기능까지만 구현된 기존 코드베이스를 살피다가 아쉬운 점 몇 개를 발견할 수 있었는데 그 중 하나가 바로 에러 처리였다.",
-      "readingTime": 7
+      "readingTime": 7,
+      "filename": "서버 에러가 200 OK로 내려오는 상황에서 에러 설계하기.mdx"
     },
     {
       "slug": "url-search-params",
@@ -119,7 +127,8 @@
         "URL"
       ],
       "description": "Next.js App router 관련 문서를 읽다 보면 URL Search Param 관련된 자료를 심심치 않게 찾아볼 수 있다. 공식 문서에서 제공하는 Learn, playground 페이지에는 URL Search Param 관련 섹션이 따로 있을 정도이고, 이외 Do...",
-      "readingTime": 11
+      "readingTime": 11,
+      "filename": "Next.js URL Search Params 꼭 써보세요.mdx"
     },
     {
       "slug": "5.18",
@@ -131,7 +140,8 @@
         "역사"
       ],
       "description": "<박하사탕>과 역사적 트라우마에 대하여",
-      "readingTime": 5
+      "readingTime": 5,
+      "filename": "소년이 온다를 읽고.mdx"
     },
     {
       "slug": "geultto",
@@ -142,6 +152,7 @@
       ],
       "description": "글또는 '글쓰는 또라이가 세상을 바꾼다'의 준말이다. 오래전 '나는 개발자다'라는 책에서 글또를 처음 접했고, 이후 염탐만 해오다가 이번 기수가 마지막이라는 소식에 마침내 신청하게 되었다. 막차에나마 타볼 수  있게 되어서 다행이라는 심정이다.",
       "readingTime": 4,
+      "filename": "글또 10기를 시작하며.mdx",
       "series": "글또 10기"
     },
     {
@@ -154,6 +165,7 @@
       ],
       "description": "명절에 부모님을 뵙게 되면 어렸을 적 나의 무용담을 들려주시곤 한다. 근래 자주 듣는 레퍼토리는 서너살 때 MS-DOS를 만지작 거렸다는 이야기다. 대단한 행위를 했던 것은 아니고 아마 디렉토리를 오고가며 재미있는 응용프로그램을 실행할 줄 아는 정도였을 것이다.",
       "readingTime": 7,
+      "filename": "글또 10기 지원 - 내 삶의 지도.mdx",
       "series": "글또 10기"
     },
     {
@@ -165,7 +177,8 @@
         "여행"
       ],
       "description": "친구들이랑 다녀온 3박 4일 도쿄 여행 덕분에 마음 한 켠에 충만함을 확보할 수 있었다. 특별한 사건 없이 잔잔한 여행이었지만 그래서 더 소중한 시간이었던 것 같다. 평범한 일상에 약간의 특별함만 더해져도 저 친구들이랑은 즐겁게 보낼 수 있음을 확신했다.",
-      "readingTime": 7
+      "readingTime": 7,
+      "filename": "월간 회고 - 24.05.mdx"
     },
     {
       "slug": "2024Q1",
@@ -175,7 +188,8 @@
         "일기_회고"
       ],
       "description": "회고 재밌다",
-      "readingTime": 11
+      "readingTime": 11,
+      "filename": "2024년 1분기 회고.mdx"
     },
     {
       "slug": "PR-for-code-review",
@@ -187,7 +201,8 @@
         "코드리뷰"
       ],
       "description": "A,B 두 명의 개발자가 서비스의 기반을 열심히 다졌다. 이들은 논의를 통해 나름의 코딩 스타일을 정의해서 문서화하였다. 또한 코드 리뷰를 통해 서로의 코드를 교정해주곤 했다. 하지만 바쁜 일정상 코드 리뷰는 사치에 가까웠다. 따라서 공통 로직에는 가급적 코드 리뷰를 시행...",
-      "readingTime": 3
+      "readingTime": 3,
+      "filename": "코드 리뷰에 적합한 PR 작성하기.mdx"
     },
     {
       "slug": "second-brain",
@@ -200,7 +215,8 @@
         "생산성"
       ],
       "description": "세컨드 브레인의 기조는 두뇌가 짊어지고 있는 짐을 외부로 덜어내는 것이다. 머리는 아이디어를 생산하는 곳이지 보관하는 곳이어선 안 된다. 우리의 두뇌에게 창의적이고 생산성 높은 작업을 맡기려면 머릿속에서 불필요하게 점유하고 있는 공간을 내어주어야 한다. 정보를 보관하는 일...",
-      "readingTime": 9
+      "readingTime": 9,
+      "filename": "세컨드 브레인과 PARA.mdx"
     },
     {
       "slug": "zettelkasten",
@@ -212,7 +228,8 @@
         "생산성"
       ],
       "description": "글쓰기를 좋아한다. 나처럼 내향형에, 집돌이에, 금붕어 기억력을 소유하고, 꾸준히 공부해야하는 직업을 갖고있는 사람에게는 더할나위 없는 취미라고 생각한다. 더욱이 선호하는 두 명의 SF작가, 테드 창과 켄 리우가 프로그래머 출신으로 동일한 이력을 가졌다는 우연에 매료되어 ...",
-      "readingTime": 9
+      "readingTime": 9,
+      "filename": "제텔카스텐으로 글 부자 되기.mdx"
     },
     {
       "slug": "single-bit-error",
@@ -223,7 +240,8 @@
         "SF"
       ],
       "description": "켄 리우의 '신들은 죽임당하지 않을 것이다' 중에서",
-      "readingTime": 6
+      "readingTime": 6,
+      "filename": "1비트짜리 오류.mdx"
     },
     {
       "slug": "next-auth",
@@ -235,6 +253,7 @@
       ],
       "description": "기존 Next.js 프로젝트의 인증/인가 로직에 SSR이 지원되지 않는 큰 맹점이 있었다. 그냥 '아, 지원되지 않는구나.. 나중엔 고쳐야겠다..' 정도로만 생각하고 다른 기능들을 쳐냈다. 인증/인가 로직은 내가 합류하기 전에 이미 구현된 기능이고 지금까지는 별다른 문제 ...",
       "readingTime": 5,
+      "filename": "Next.js에서 인증-인가 구현하기 (1).mdx",
       "series": "Next.js에서 인증-인가 구현하기"
     },
     {
@@ -246,7 +265,8 @@
         "RSC"
       ],
       "description": "하나의 페이지를 구상할 때, non-interactive한 부분은 서버 컴포넌트로 서버에서 렌더링한다. interactive한 부분은 클라이언트 컴포넌트를 이용한다. 이것이 Next.js의 server-first approach다.",
-      "readingTime": 6
+      "readingTime": 6,
+      "filename": "Next.js 13 App Router 살펴보기.mdx"
     },
     {
       "slug": "study-react18",
@@ -258,7 +278,8 @@
         "SSR"
       ],
       "description": "CRA가 리액트 앱 제작에 있어 비적합한 도구인 것 같다는 의견에대한 리액트 공식개발팀의 답변을 정리해봤다. 리액트 18 공식문서에도 CRA에 대한 언급은 일절 없었고 Vite를 비롯한 툴 혹은 프레임워크가 몇 차례 거론되는 것을 확인했다. 따라서 앞으로는 Vite 혹은 ...",
-      "readingTime": 22
+      "readingTime": 22,
+      "filename": "리액트 최신 동향 살펴보기.mdx"
     },
     {
       "slug": "blog-making-retrospection",
@@ -269,6 +290,7 @@
       ],
       "description": "기존에 velog를 잘 쓰고 있었지만 직접 만들어 보고 싶었다. 블로그를 만들고 유지보수하면 많은 공부가 될 것 같았다. 앞으로 10년은 작문하고 코딩하지 않을까? 이런 생각이 들자 블로그는 내게 최고의 사이드 프로젝트 소재가 되었다.",
       "readingTime": 4,
+      "filename": "블로그 제작 회고.mdx",
       "series": "블로그 후기"
     },
     {
@@ -285,6 +307,7 @@
       ],
       "description": "우아한 에러 처리 방법의 핵심은 성공한 경우와 실패한 경우를 분리하는 것이라고 생각한다.",
       "readingTime": 18,
+      "filename": "원티드 FE 프리온보딩 회고 (3).mdx",
       "series": "원티드 FE 프리온보딩 회고"
     },
     {
@@ -300,6 +323,7 @@
       ],
       "description": "기업과제 요구사항 중에 'React-Query와 같은 라이브러리 사용 없이 API 호출별로 로컬 캐싱을 구현하라'는 항목이 있었다. 검색어 입력시 API 캐싱 여부에 따라 캐싱 된 결과값을 사용하거나 API를 호출해오는 로직을 cacheStoarge로 구현했는데, 이 과정...",
       "readingTime": 24,
+      "filename": "원티드 FE 프리온보딩 회고 (2).mdx",
       "series": "원티드 FE 프리온보딩 회고"
     },
     {
@@ -311,6 +335,7 @@
       ],
       "description": "원티드에서 주관한 FE 프리온보딩 인턴십 4월 과정에 한 달간 참여했고, 수료를 코 앞에 두고 있다. 어떤 경험이었는지 기록해 두었다가 나중에 다시 읽어보면 재미있겠단 생각에  생에 첫 팀 단위 프로젝트의 회고를 작성한다.",
       "readingTime": 9,
+      "filename": "원티드 FE 프리온보딩 회고 (1).mdx",
       "series": "원티드 FE 프리온보딩 회고"
     },
     {
@@ -321,7 +346,8 @@
         "책"
       ],
       "description": "생계형 개발자 / SI에서 살아남기 / 사람이 싫다 / 피,땀,픽셀 / 최소한의 선의",
-      "readingTime": 17
+      "readingTime": 17,
+      "filename": "2022.11 독서.mdx"
     },
     {
       "slug": "grow-together",
@@ -332,7 +358,8 @@
         "조직문화"
       ],
       "description": "개발 연차가 쌓였을 때 다시 읽어봐도 많은 도움이 될 책이다",
-      "readingTime": 9
+      "readingTime": 9,
+      "filename": "함께 자라기.mdx"
     },
     {
       "slug": "programmers-brain",
@@ -343,7 +370,8 @@
         "책"
       ],
       "description": "효율이 밥 먹여준다",
-      "readingTime": 6
+      "readingTime": 6,
+      "filename": "프로그래머의 뇌.mdx"
     },
     {
       "slug": "nginx-reverse-proxy",
@@ -355,7 +383,8 @@
         "reverseProxy"
       ],
       "description": "React, Node, Flask 환경을 구동하는 세 개의 컨테이너를 하나로 묶은 Docker-compose가 있다. 여기에 NGINX를 도입해볼 것이다.",
-      "readingTime": 3
+      "readingTime": 3,
+      "filename": "AWS EC2에 NGINX reverse-proxy 구축하기 ( https - http mixed content error 해결하기 ).mdx"
     },
     {
       "slug": "aws-ec2-settings",
@@ -366,7 +395,8 @@
         "HTTPS"
       ],
       "description": "Budgets - 예산 추가 - 고정, 1달러 - 알림 임계값을 80%로 설정 및 알림받을 이메일 주소 지정. 초간단!!",
-      "readingTime": 5
+      "readingTime": 5,
+      "filename": "AWS EC2 부가 설정.mdx"
     },
     {
       "slug": "ec2-docker",
@@ -377,7 +407,8 @@
         "Docker"
       ],
       "description": "EC2 터미널에서 아래 명령어를 수행하면 된다.",
-      "readingTime": 1
+      "readingTime": 1,
+      "filename": "AWS EC2에 Docker-Compose 구축하기.mdx"
     },
     {
       "slug": "github-actions와-aws-codedeploy를-이용한-ec2-docker-compose-배포-자동화",
@@ -390,7 +421,8 @@
         "GithubActions"
       ],
       "description": "AWS EC2에 React/Node/flask로 이루어진 Docker-Compose 서버 환경을 구축했다. Docker 덕분에 1. git pull 2. docker-compose build & run과 같은 과정만으로도 간편하게 배포할 수 있게 되었지만, 좀 더 제대로 ...",
-      "readingTime": 5
+      "readingTime": 5,
+      "filename": "Github Actions와 AWS CodeDeploy를 이용한 EC2-Docker-Compose 배포 자동화.mdx"
     },
     {
       "slug": "docker",
@@ -400,7 +432,8 @@
         "Docker"
       ],
       "description": "Docker는 contianer라는 독립된 환경에서 애플리케이션을 패키징하고 실행할 수 있는 환경을 제공한다. container는 애플리케이션을 가동하는 데 필요한 모든 것을 다 포함하고 있다. 그럼에도 충분히 가벼워서 다른 사용자에게 이 container를 제공함으로써 ...",
-      "readingTime": 4
+      "readingTime": 4,
+      "filename": "Docker.mdx"
     },
     {
       "slug": "mongo-db",
@@ -412,7 +445,8 @@
         "Nodejs"
       ],
       "description": "MongoDB의 특징 중 하나는 js문법을 사용한다는 것이다. 백엔드를 node.js + MongoDB로 조합하면 js만으로 개발할 수 있다. 다만 MongoDB는 RDBMS가 아닌 NoSQL이라는 점을 유의해야 한다.",
-      "readingTime": 4
+      "readingTime": 4,
+      "filename": "DB(MongoDB).mdx"
     },
     {
       "slug": "sns-prac",
@@ -420,7 +454,8 @@
       "title": "SNS 서비스 실습",
       "tags": [],
       "description": "GET / -> render main.html",
-      "readingTime": 4
+      "readingTime": 4,
+      "filename": "SNS 서비스 실습.mdx"
     },
     {
       "slug": "mySQL",
@@ -431,7 +466,8 @@
         "MySQL"
       ],
       "description": "지금까지는 모든 데이터를 변수에 저장했다. 이는 컴퓨터 메모리에 저장했다는 뜻이다. 따라서 서버가 종료되면 메모리가 정리되면서 저장했던 데이터도 사라져버린다. 이를 방지하기 위해선 DB를 사용해야 한다.",
-      "readingTime": 6
+      "readingTime": 6,
+      "filename": "DB (MySQL).mdx"
     },
     {
       "slug": "terminal",
@@ -442,7 +478,8 @@
         "Kernel"
       ],
       "description": "cd ~ 명령어로 home directory 진입",
-      "readingTime": 3
+      "readingTime": 3,
+      "filename": "터미널.mdx"
     },
     {
       "slug": "sass",
@@ -453,7 +490,8 @@
         "Sass"
       ],
       "description": "Sass는 CSS 전처리기(preprocessor)로 CSS 사용에 편의를 돕는다. CSS 전처리기는 전처리기 자신만의 특별한 문법을 갖고, 추후에 css로 변환(생성)해서 사용하는 도구를 뜻한다.",
-      "readingTime": 7
+      "readingTime": 7,
+      "filename": "프로젝트에 Sass 적용하기 (+문법).mdx"
     },
     {
       "slug": "template-engine",
@@ -463,7 +501,8 @@
         "Nodejs"
       ],
       "description": "템플릿 엔진은 자바스크립트를 사용해서 HTML을 렌더링할 수 있게 한다.",
-      "readingTime": 3
+      "readingTime": 3,
+      "filename": "템플릿 엔진.mdx"
     },
     {
       "slug": "express",
@@ -473,7 +512,8 @@
         "Nodejs"
       ],
       "description": "앞서 Node.js에서 제공하는 http 모듈을 이용해서 서버를 구축해보았다. npm에는 서버 구축을 편리하게 해주는 koa, hapi, express 같은 패키지들이 있다.",
-      "readingTime": 8
+      "readingTime": 8,
+      "filename": "express로 서버 구축하기.mdx"
     },
     {
       "slug": "http-module",
@@ -483,7 +523,8 @@
         "Nodejs"
       ],
       "description": "Node.js에서 제공하는 http 모듈을 사용해서 웹 브라우저의 요청을 처리할 서버를 구축할 수 있다.",
-      "readingTime": 6
+      "readingTime": 6,
+      "filename": "http Module로 서버 만들기.mdx"
     },
     {
       "slug": "npm",
@@ -493,7 +534,8 @@
         "Nodejs"
       ],
       "description": "\"scripts\"는 npm 명령어를 저장해두는 부분이다. npm run [스크립트 명령어]를 입력하면 해당 스크립트가 실행된다. 보통 start 명령어에 node [파일명]을 지정해둬서 npm start와 같이 사용한다.",
-      "readingTime": 2
+      "readingTime": 2,
+      "filename": "npm으로 노드 패키지 관리하기.mdx"
     },
     {
       "slug": "cookie-session-token",
@@ -503,7 +545,8 @@
         "Nodejs"
       ],
       "description": "서버 입장에서는 클라이언트에서 보내는 무수히 많은 요청들이 누구의 것인지 분별하기가 어렵다. 쿠키와 세션은 요청을 보내는 클라이언트가 누구인지를 판별해내기 위해 사용된다. 쿠키와 세션을 통해 한 번 인증(로그인)된 사용자는 쿠키와 세션이 만료되기 전까지 새로고침 등으로 연...",
-      "readingTime": 5
+      "readingTime": 5,
+      "filename": "쿠키와 세션, 토큰.mdx"
     },
     {
       "slug": "2022-01-read",
@@ -513,7 +556,8 @@
         "책"
       ],
       "description": "달까지 가자/ 나는 주니어 개발자 / 메타버스 / 공간의 미래 / 사람, 장소, 환대 / 아주 작은 습관의 힘",
-      "readingTime": 27
+      "readingTime": 27,
+      "filename": "2022.01 독서.mdx"
     },
     {
       "slug": "coding-test-regexp",
@@ -525,7 +569,8 @@
         "코테"
       ],
       "description": "프로그래머스에서 제공하는 코딩테스트 Lv1 문제, \\<신규 아이디 추천> 을 풀기위해 정규표현식을 공부하고 실전에 바로 적용해보았더니 상당한 도움이 되었다. 학습한 내용을 정리하면서 각인시키도록 하자.",
-      "readingTime": 4
+      "readingTime": 4,
+      "filename": "정규표현식과 코테 문제 (신규 아이디 추천).mdx"
     },
     {
       "slug": "BEM",
@@ -536,7 +581,8 @@
         "CSS"
       ],
       "description": "BAM!이 아닌 BEM",
-      "readingTime": 3
+      "readingTime": 3,
+      "filename": "BEM.mdx"
     },
     {
       "slug": "2021-11-read",
@@ -546,7 +592,8 @@
         "책"
       ],
       "description": "손에 잡히는 서양 미술사 / 달리 나는 세상의 배꼽",
-      "readingTime": 4
+      "readingTime": 4,
+      "filename": "2021.11 독서.mdx"
     },
     {
       "slug": "browser-events",
@@ -555,6 +602,7 @@
       "tags": [],
       "description": "이벤트가 발생했을 때 브라우저에 의해서 호출될 함수를 이벤트 핸들러event Handler라 하고, 이벤트가 발생했을 때 브라우저에게 이벤트 핸들러의 호출을 위임하는 것을 이벤트 핸들러 등록이라 한다.",
       "readingTime": 18,
+      "filename": "브라우저 이벤트.mdx",
       "series": "브라우저 동작 원리"
     },
     {
@@ -564,6 +612,7 @@
       "tags": [],
       "description": "브라우저 렌더링 과정에서 브라우저의 렌더링 엔진은 HTML 문서를 파싱하여 브라우저가 이해할 수 있는 DOM 자료구조를 생성한다. DOM(Documnet Object Model)은 HTML 문서의 계층적 구조와 정보를 표현한다. DOM은 개발자들이 해당 웹 문서를 쉽게 조...",
       "readingTime": 24,
+      "filename": "DOM API.mdx",
       "series": "브라우저 동작 원리"
     },
     {
@@ -574,7 +623,8 @@
         "책"
       ],
       "description": "지구인만큼 지구를 사랑할 순 없어 / 나는 LINE 개발자입니다 / 실례지만, 이 책이 시급합니다",
-      "readingTime": 4
+      "readingTime": 4,
+      "filename": "2021.10 독서.mdx"
     },
     {
       "slug": "browser-rendering",
@@ -586,6 +636,7 @@
       ],
       "description": "layout : 요소들의 기하학적인 구조를 찾는 과정. 위치와 크기를 계산.",
       "readingTime": 3,
+      "filename": "브라우저 렌더링 최적화.mdx",
       "series": "브라우저 동작 원리"
     },
     {
@@ -598,6 +649,7 @@
       ],
       "description": "브라우저의 주소창에 URL을 입력하고 엔터 키를 눌렀을 때 발생하는 일련의 과정을 알아보자.",
       "readingTime": 8,
+      "filename": "브라우저의 렌더링 과정(Critical Rendering Path).mdx",
       "series": "브라우저 동작 원리"
     },
     {
@@ -609,7 +661,8 @@
         "Redux-toolkit"
       ],
       "description": "redux-actions는 리덕스의 액션 생성 함수(액션 생성자)와 리듀서를 좀 더 간편하게 작성할 때 사용되는 라이브러리다.",
-      "readingTime": 15
+      "readingTime": 15,
+      "filename": "React Redux 코드 리팩토링.mdx"
     },
     {
       "slug": "liu-book",
@@ -619,7 +672,8 @@
         "책"
       ],
       "description": "SF계의 양대 거장(?) 켄 리우와 테드 창의 이력은 흥미롭다. 둘 다 중국계 미국인이고 마이크로소프트에 근무했던 개발자 출신의 작가라는 게 흥미롭다. 더욱이 켄 리우는 다년간 변호사로 활동하기도 했는데, 그는 변호사-프로그래머-소설가라는 세 직업이 ‘현대의 기호를 다루는...",
-      "readingTime": 4
+      "readingTime": 4,
+      "filename": "어딘가 상상도 못 할 곳에, 수많은 순록 떼가.mdx"
     },
     {
       "slug": "book-new-poverty",
@@ -629,7 +683,8 @@
         "책"
       ],
       "description": "책은 이래야지",
-      "readingTime": 4
+      "readingTime": 4,
+      "filename": "새로운 가난이 온다.mdx"
     },
     {
       "slug": "ssr-2",
@@ -640,6 +695,7 @@
       ],
       "description": "대부분의 React 앱은 Webpack, Rollup 또는 Browserify 같은 툴을 사용하여 여러 파일을 하나로 병합한 번들 된 파일을 웹 페이지에 포함하여 한 번에 전체 앱을 로드하는 방식이다. CRA, Next.js 혹은 Gatsby 같은 도구를 사용하는 프로젝트...",
       "readingTime": 18,
+      "filename": "React SSR(2).mdx",
       "series": "React SSR"
     },
     {
@@ -651,6 +707,7 @@
       ],
       "description": "본 게시글은 책 \\<리액트를 다루는 기술 개정판> 20장 '서버 사이드 렌더링'를 정리한 내용입니다",
       "readingTime": 46,
+      "filename": "React SSR(1).mdx",
       "series": "React SSR"
     },
     {
@@ -661,7 +718,8 @@
         "책"
       ],
       "description": "재미없는 책을 읽은 시간은 낭비일까? 아니겠지? 그래도 화가 나는 건 어쩔 수 없다",
-      "readingTime": 4
+      "readingTime": 4,
+      "filename": "넥스트 킬러앱.mdx"
     },
     {
       "slug": "redux-4",
@@ -672,6 +730,7 @@
       ],
       "description": "본 게시글은 책 \\<리액트를 다루는 기술 개정판> 18장 '리덕스 미들웨어를 통한 비동기 작업 관리'를 정리한 내용입니다",
       "readingTime": 14,
+      "filename": "Redux(4) - 미들웨어 redux-saga.mdx",
       "series": "Redux"
     },
     {
@@ -683,6 +742,7 @@
       ],
       "description": "본 게시글은 책 \\<리액트를 다루는 기술 개정판> 18장 '리덕스 미들웨어를 통한 비동기 작업 관리'를 정리한 내용입니다",
       "readingTime": 28,
+      "filename": "Redux(3) - 미들웨어 redux-thunk.mdx",
       "series": "Redux"
     },
     {
@@ -694,6 +754,7 @@
       ],
       "description": "본 게시글은 책 \\<리액트를 다루는 기술 개정판> 17장 '리덕스를 사용하여 리액트 애플리케이션 상태 관리하기'를 정리한 내용입니다",
       "readingTime": 27,
+      "filename": "Redux(2) - 활용 예시.mdx",
       "series": "Redux"
     },
     {
@@ -705,6 +766,7 @@
       ],
       "description": "기존 리액트 프로젝트에서 A 컴포넌트가 props를 통해 B,C,D,F 컴포넌트를 거쳐서 F 컴포넌트로 state를 전달하는 복잡한 구조를 지녔다면,",
       "readingTime": 6,
+      "filename": "Redux(1) - 개념 및 구조.mdx",
       "series": "Redux"
     },
     {
@@ -715,7 +777,8 @@
         "책"
       ],
       "description": "김영민 교수의 글을 좋아한다. 유시민 작가의 글에서 볼 수 있는 논리정연함과 뛰어난 통찰력이 마찬가지로 드러나고, 문유석 판사의 글처럼 유머러스하고 연륜이 묻어나며, 권석천 기자의 것처럼 사람 냄새가 풍기는 그런 글 말이다. 뉴스를 통해 각박한 현실의 안타까운 소식이 주로...",
-      "readingTime": 3
+      "readingTime": 3,
+      "filename": "공부란 무엇인가.mdx"
     },
     {
       "slug": "blog-making-retrospection-1",
@@ -729,6 +792,7 @@
       ],
       "description": "블로그를 만들기 위해서 gatsby + netlify 조합을 선택했다.",
       "readingTime": 3,
+      "filename": "블로그 제작 일지(1).mdx",
       "series": "블로그 후기"
     },
     {
@@ -742,7 +806,8 @@
         "staticWeb"
       ],
       "description": "블로그를 만들면서 사용한 웹 호스팅 서비스 Netlify에 관해 알아보던 중 JAMstack이란 키워드가 눈에 들어왔다.",
-      "readingTime": 5
+      "readingTime": 5,
+      "filename": "JAMstack과 정적 웹.mdx"
     },
     {
       "slug": "ssr-csr-ssg",
@@ -754,7 +819,8 @@
         "SSG"
       ],
       "description": "블로그를 만들면서 사용한 gatsby SSG가 무엇인지, SSG는 왜 생겨났는지 알아보도록 하자.",
-      "readingTime": 5
+      "readingTime": 5,
+      "filename": "SSR, CSR 그리고 SSG.mdx"
     },
     {
       "slug": "markdown",
@@ -764,7 +830,8 @@
         "markdown"
       ],
       "description": "마크업 언어의 일종으로, 일반 텍스트 문서의 양식을 편집하는 데 주로 쓰인다.",
-      "readingTime": 3
+      "readingTime": 3,
+      "filename": "Markdown 문법 정리.mdx"
     }
   ]
 }
