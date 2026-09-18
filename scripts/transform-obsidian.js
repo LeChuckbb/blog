@@ -1,4 +1,6 @@
 const matter = require('gray-matter');
+// rehype-slug와 같은 알고리즘으로 헤딩 앵커를 만들기 위해(tocUtil.ts와 동일)
+const GithubSlugger = require('github-slugger').default;
 
 /**
  * Obsidian 마크다운을 MDX로 변환하는 클래스
@@ -191,6 +193,44 @@ class ObsidianTransformer {
   }
 
   /**
+   * 같은 글 안의 헤딩을 가리키는 링크를 블로그 헤딩 id(rehype-slug) 앵커로 변환한다.
+   *
+   * Obsidian에서 유효한 세 표기를 모두 받는다:
+   *   [[#헤딩]] / [[#헤딩|표시]]  →  [표시](#slug)
+   *   [표시](<#헤딩>)             →  [표시](#slug)   (꺾쇠로 공백 허용)
+   *   [표시](#헤딩%20…)           →  [표시](#slug)   (%인코딩)
+   *
+   * slug는 rehype-slug가 쓰는 github-slugger로 계산해 목차(tocUtil.ts)와 일치시킨다.
+   * 이미 slug 형태인 앵커(#a-b)는 인코딩 문자가 없으므로 손대지 않는다.
+   * 다른 글의 헤딩([[글#헤딩]])은 대상이 아니다.
+   *
+   * @param {string} content
+   * @returns {string}
+   */
+  convertHeadingLinks(content) {
+    const toAnchor = (heading) => '#' + new GithubSlugger().slug(heading.trim());
+
+    return this.withCodeProtected(content, (text) => {
+      // [[#헤딩|표시]]
+      text = text.replace(/\[\[#([^|\]]+)\|([^\]]+)\]\]/g, (m, heading, display) =>
+        `[${display}](${toAnchor(heading)})`);
+      // [[#헤딩]]
+      text = text.replace(/\[\[#([^|\]]+)\]\]/g, (m, heading) =>
+        `[${heading.trim()}](${toAnchor(heading)})`);
+      // [표시](<#헤딩>)
+      text = text.replace(/\[([^\]]*)\]\(<#([^>]+)>\)/g, (m, display, heading) =>
+        `[${display}](${toAnchor(heading)})`);
+      // [표시](#헤딩%20…) — 인코딩된 것만
+      text = text.replace(/\[([^\]]*)\]\(#([^)\s]*%[0-9A-Fa-f]{2}[^)\s]*)\)/g, (m, display, encoded) => {
+        let heading;
+        try { heading = decodeURIComponent(encoded); } catch { return m; }
+        return `[${display}](${toAnchor(heading)})`;
+      });
+      return text;
+    });
+  }
+
+  /**
    * Obsidian 위키링크 ([[링크]]) 변환
    *
    * 블로그에 실제 존재하는 글(existingSlugs에 포함)만 /posts/slug 내부 링크로
@@ -205,6 +245,10 @@ class ObsidianTransformer {
    * @returns {string}
    */
   convertWikilinks(content, existingSlugs) {
+    // 같은 글 안의 헤딩 링크([[#헤딩]])는 글 링크가 아니므로 먼저 앵커로 바꿔 둔다.
+    // 아래 일반 위키링크 규칙이 이를 "미게시 글"로 오인해 unresolved로 만드는 것을 막는다.
+    content = this.convertHeadingLinks(content);
+
     const resolve = (filename, displayText) => {
       const slug = this.generateSlug(filename);
       // existingSlugs가 주어졌고 그 안에 없으면 → 볼트 전용(아직 미게시) 글
